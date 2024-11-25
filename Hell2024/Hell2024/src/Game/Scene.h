@@ -158,6 +158,7 @@ namespace Scene
     void CleanUpBulletCasings();
 
     // Game Objects
+
     int32_t CreateGameObject();
     GameObject* GetGameObjectByIndex(int32_t index);
     GameObject* GetGameObjectByName(std::string name);

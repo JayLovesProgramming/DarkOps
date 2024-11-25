@@ -18,6 +18,7 @@
 #include "../Renderer/Raytracing/Raytracing.h"
 #include "../Timer.hpp"
 #include "../Util.hpp"
+#include "MiscObjects.h"
 
 int _volumetricBloodObjectsSpawnedThisFrame = 0;
 
@@ -342,12 +343,13 @@ int Scene::AssignNextFreeShadowMapIndex(int lightIndex)
     return -1;
 }
 
+#include "Cushions.h"
 void Scene::LoadDefaultScene()
 {
-    bool hardcoded = false;
+    bool hardcoded = true;
 
-    bool createTestLights = false;// true;
-    bool createTestCubes = false;// true;
+    bool createTestLights = false;
+    bool createTestCubes = false;
     int testLightCount = 50;
     int testCubeCount = 50;
 
@@ -647,215 +649,12 @@ void Scene::LoadDefaultScene()
     }
     */
 
-    if (true)
-    {
-        CreateGameObject();
-        GameObject* pictureFrame = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        pictureFrame->SetPosition(1.1f, 1.9f, -0.85f);
-        pictureFrame->SetScale(0.01f);
-        //pictureFrame->SetRotationY(HELL_PI / 2);
-        pictureFrame->SetModel("PictureFrame_1");
-        pictureFrame->SetMeshMaterial("LongFrame");
-        pictureFrame->SetName("PictureFrame");
-
-        float cushionHeight = 0.555f;
-        Transform shapeOffset;
-        shapeOffset.position.y = cushionHeight * 0.5f;
-        shapeOffset.position.z = 0.5f;
-        PxShape* sofaShapeBigCube = Physics::CreateBoxShape(1, cushionHeight * 0.5f, 0.4f, shapeOffset);
-        PhysicsFilterData sofaFilterData;
-        sofaFilterData.raycastGroup = RAYCAST_DISABLED;
-        sofaFilterData.collisionGroup = CollisionGroup::ENVIROMENT_OBSTACLE;
-        sofaFilterData.collidesWith = (CollisionGroup)(GENERIC_BOUNCEABLE | BULLET_CASING | PLAYER | RAGDOLL);
-
-        float sofaX = 6.3f;
-        CreateGameObject();
-        GameObject* sofa = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        sofa->SetPosition(sofaX, 0.4f, 1.89f);
-        sofa->SetRotationY(HELL_PI * -0.5f);
-        sofa->SetName("Sofa");
-        sofa->SetModel("Sofa_Cushionless");
-        sofa->SetMeshMaterial("Sofa");
-        sofa->SetKinematic(true);
-        sofa->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("Sofa_Cushionless"));
-        sofa->AddCollisionShape(sofaShapeBigCube, sofaFilterData);
-        sofa->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaBack_ConvexMesh"));
-        sofa->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaLeftArm_ConvexMesh"));
-        sofa->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaRightArm_ConvexMesh"));
-        sofa->SetModelMatrixMode(ModelMatrixMode::GAME_TRANSFORM);
-        sofa->SetCollisionType(CollisionType::STATIC_ENVIROMENT);
-        //sofa->MakeGold();
-
-        PhysicsFilterData cushionFilterData;
-        cushionFilterData.raycastGroup = RAYCAST_DISABLED;
-        cushionFilterData.collisionGroup = CollisionGroup::GENERIC_BOUNCEABLE;
-        cushionFilterData.collidesWith = CollisionGroup(ENVIROMENT_OBSTACLE | GENERIC_BOUNCEABLE);
-        float cushionDensity = 20.0f;
-
-        CreateGameObject();
-        GameObject* cushion0 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion0->SetPosition(sofaX, 0.4f, 1.89f);
-        cushion0->SetRotationY(HELL_PI * -0.5f);
-        cushion0->SetModel("SofaCushion0");
-        cushion0->SetMeshMaterial("Sofa");
-        cushion0->SetName("SofaCushion0");
-        cushion0->SetKinematic(false);
-        cushion0->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion0"));
-        cushion0->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion0_ConvexMesh"));
-        cushion0->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion0->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion0->SetCollisionType(CollisionType::BOUNCEABLE);
-
-        CreateGameObject();
-        GameObject* cushion1 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion1->SetPosition(sofaX, 0.4f, 1.89f);
-        cushion1->SetModel("SofaCushion1");
-        cushion1->SetName("SofaCushion1");
-        cushion1->SetMeshMaterial("Sofa");
-        cushion1->SetKinematic(false);
-        cushion1->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion0"));
-        cushion1->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion1_ConvexMesh"));
-        cushion1->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion1->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion1->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion1->SetRotationY(HELL_PI * -0.5f);
-
-        CreateGameObject();
-        GameObject* cushion2 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion2->SetPosition(sofaX, 0.4f, 1.89f);
-        cushion2->SetModel("SofaCushion2");
-        cushion2->SetName("SofaCushion2");
-        cushion2->SetMeshMaterial("Sofa");
-        cushion2->SetKinematic(false);
-        cushion2->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion2"));
-        cushion2->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion2_ConvexMesh"));
-        cushion2->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion2->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion2->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion2->SetRotationY(HELL_PI * -0.5f);
-
-        CreateGameObject();
-        GameObject* cushion3 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion3->SetPosition(sofaX, 0.4f, 1.89f);
-        cushion3->SetModel("SofaCushion3");
-        cushion3->SetName("SofaCushion3");
-        cushion3->SetMeshMaterial("Sofa");
-        cushion3->SetKinematic(false);
-        cushion3->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion3"));
-        cushion3->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion3_ConvexMesh"));
-        cushion3->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion3->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion3->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion3->SetRotationY(HELL_PI * -0.5f);
-
-        CreateGameObject();
-        GameObject* cushion4 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion4->SetPosition(sofaX, 0.4f, 1.89f);
-        cushion4->SetModel("SofaCushion4");
-        cushion4->SetName("SofaCushion4");
-        cushion4->SetMeshMaterial("Sofa");
-        cushion4->SetKinematic(false);
-        cushion4->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion4"));
-        cushion4->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion4_ConvexMesh"));
-        cushion4->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion4->UpdateRigidBodyMassAndInertia(15.0f);
-        cushion4->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion4->SetRotationY(HELL_PI * -0.5f);
-
-        CreateGameObject();
-        GameObject* tree = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        tree->SetPosition(-0.1f, 0.5f, 3.8f);
-        tree->SetModel("ChristmasTree");
-        tree->SetName("ChristmasTree");
-        tree->SetMeshMaterial("Tree");
-        tree->SetMeshMaterialByMeshName("Balls", "Gold");
-    }
-
-    glm::vec3 houseOrigin = glm::vec3(2, 0.5, 0);
-
-    CreateGameObject();
-    GameObject* houseRailings = GetGameObjectByIndex(GetGameObjectCount() - 1);
-    houseRailings->SetPosition(houseOrigin);
-    houseRailings->SetModel("House_Railings");
-    houseRailings->SetName("BlenderHouse");
-    houseRailings->SetMeshMaterial("Ceiling2");
-
-    CreateGameObject();
-    GameObject* houseWalls = GetGameObjectByIndex(GetGameObjectCount() - 1);
-    houseWalls->SetPosition(houseOrigin);
-    houseWalls->SetModel("House_Walls2");
-    houseWalls->SetName("BlenderHouse");
-    houseWalls->SetMeshMaterial("Ceiling2");
-
-    CreateGameObject();
-    GameObject* houseRoof = GetGameObjectByIndex(GetGameObjectCount() - 1);
-    houseRoof->SetPosition(houseOrigin);
-    houseRoof->SetModel("House_RoofA");
-    houseRoof->SetName("BlenderHouse");
-    houseRoof->SetMeshMaterial("Ceiling2");
-
-    CreateGameObject();
-    GameObject* houseRoofB = GetGameObjectByIndex(GetGameObjectCount() - 1);
-    houseRoofB->SetPosition(houseOrigin);
-    houseRoofB->SetModel("House_RoofB");
-    houseRoofB->SetName("BlenderHouse");
-    houseRoofB->SetMeshMaterial("Ceiling2");
-
-    if (hardcoded) 
-    {
-        float spacing = 0.3f;
-        for (int x = -3; x < 1; x++) 
-        {
-            for (int y = -1; y < 5; y++) 
-            {
-                for (int z = -1; z < 2; z++)
-                {
-                    CreateGameObject();
-                    GameObject* cube = GetGameObjectByIndex(GetGameObjectCount() - 1);
-                    float halfExtent = 0.1f;
-                    cube->SetPosition(2.6f + x * spacing, 1.5f + y * spacing * 1.25f, 2.1f + z * spacing);
-                    cube->SetRotationX(Util::RandomFloat(0, HELL_PI * 2));
-                    cube->SetRotationY(Util::RandomFloat(0, HELL_PI * 2));
-                    cube->SetRotationZ(Util::RandomFloat(0, HELL_PI * 2));
-                    cube->SetWakeOnStart(true);
-                    cube->SetModel("ChristmasPresent");
-                    cube->SetName("Present");
-                    int rand = Util::RandomInt(0, 3);
-                    if (rand == 0)
-                    {
-                        cube->SetMeshMaterial("PresentA");
-                    }
-                    else if (rand == 1) 
-                    {
-                        cube->SetMeshMaterial("PresentB");
-                    }
-                    else if (rand == 2) 
-                    {
-                        cube->SetMeshMaterial("PresentC");
-                    }
-                    else if (rand == 3) 
-                    {
-                        cube->SetMeshMaterial("PresentD");
-                    }
-                    cube->SetMeshMaterialByMeshName("Bow", "Gold");
-                    Transform transform;
-                    transform.position = glm::vec3(2.0f, y * halfExtent * 2 + 0.2f, 3.5f);
-                    PxShape* collisionShape = Physics::CreateBoxShape(halfExtent, halfExtent, halfExtent);
-                    PxShape* raycastShape = Physics::CreateBoxShape(halfExtent, halfExtent, halfExtent);
-                    PhysicsFilterData filterData;
-                    filterData.raycastGroup = RAYCAST_DISABLED;
-                    filterData.collisionGroup = CollisionGroup::GENERIC_BOUNCEABLE;
-                    filterData.collidesWith = (CollisionGroup)(ENVIROMENT_OBSTACLE | GENERIC_BOUNCEABLE | RAGDOLL);
-                    cube->SetKinematic(false);
-                    cube->AddCollisionShape(collisionShape, filterData);
-                    cube->SetRaycastShape(raycastShape);
-                    cube->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-                    cube->UpdateRigidBodyMassAndInertia(20.0f);
-                    cube->SetCollisionType(CollisionType::BOUNCEABLE);
-                }
-            }
-        }
-    }
+    SofaManager::CreateSofa();
+    CushionManager::CreateAllCushions();
+    MiscObjectsManager::SpawnChristmasTree();
+    MiscObjectsManager::SpawnChristmasBoxPresents();
+    MiscObjectsManager::SpawnPictureFrame();
+    //MiscObjectsManager::LoadHouseRailings();
 
     if (createTestCubes)
     {
@@ -2472,8 +2271,8 @@ void Scene::LoadHardCodedObjects() {
         glock.SetScale(0.01);
     }
 
-
-    if (true) {
+    if (true)
+    { 
         int testIndex = CreateAnimatedGameObject();
         AnimatedGameObject& object = g_animatedGameObjects[testIndex];
         object.SetFlag(AnimatedGameObject::Flag::NONE);
@@ -2630,7 +2429,6 @@ void Scene::LoadHardCodedObjects() {
         scopePickUp->SetCollisionType(CollisionType::PICKUP);
 
 
-
         /*
 
         CreateGameObject();
@@ -2649,9 +2447,6 @@ void Scene::LoadHardCodedObjects() {
 
     std::cout << "\n";
     std::cout << "\n";*/
-
-
-
 
 
         // tokarevPickup->SetKinematic(false);
@@ -2699,121 +2494,6 @@ void Scene::LoadHardCodedObjects() {
                 }
             }
         }
-
-        CreateGameObject();
-        GameObject* pictureFrame = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        pictureFrame->SetPosition(0.1f, 1.5f, 2.5f);
-        pictureFrame->SetScale(0.01f);
-        pictureFrame->SetRotationY(HELL_PI / 2);
-		pictureFrame->SetModel("PictureFrame_1");
-		pictureFrame->SetMeshMaterial("LongFrame");
-		pictureFrame->SetName("PictureFrame");
-
-        float cushionHeight = 0.555f;
-        Transform shapeOffset;
-        shapeOffset.position.y = cushionHeight * 0.5f;
-        shapeOffset.position.z = 0.5f;
-        PxShape* sofaShapeBigCube = Physics::CreateBoxShape(1, cushionHeight * 0.5f, 0.4f, shapeOffset);
-        PhysicsFilterData sofaFilterData;
-        sofaFilterData.raycastGroup = RAYCAST_DISABLED;
-        sofaFilterData.collisionGroup = CollisionGroup::ENVIROMENT_OBSTACLE;
-        sofaFilterData.collidesWith = (CollisionGroup)(GENERIC_BOUNCEABLE | BULLET_CASING | PLAYER | RAGDOLL);
-
-        CreateGameObject();
-        GameObject* sofa = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        sofa->SetPosition(2.0f, 0.1f, 0.1f);
-        sofa->SetName("Sofa");
-        sofa->SetModel("Sofa_Cushionless");
-        sofa->SetMeshMaterial("Sofa");
-        sofa->SetKinematic(true);
-        sofa->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("Sofa_Cushionless"));
-        sofa->AddCollisionShape(sofaShapeBigCube, sofaFilterData);
-        sofa->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaBack_ConvexMesh"));
-        sofa->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaLeftArm_ConvexMesh"));
-        sofa->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaRightArm_ConvexMesh"));
-        sofa->SetModelMatrixMode(ModelMatrixMode::GAME_TRANSFORM);
-        sofa->SetCollisionType(CollisionType::STATIC_ENVIROMENT);
-        //sofa->MakeGold();
-
-        PhysicsFilterData cushionFilterData;
-        cushionFilterData.raycastGroup = RAYCAST_DISABLED;
-        cushionFilterData.collisionGroup = CollisionGroup::GENERIC_BOUNCEABLE;
-        cushionFilterData.collidesWith = CollisionGroup(ENVIROMENT_OBSTACLE | GENERIC_BOUNCEABLE);
-        float cushionDensity = 20.0f;
-
-        CreateGameObject();
-        GameObject* cushion0 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion0->SetPosition(2.0f, 0.1f, 0.1f);
-        cushion0->SetModel("SofaCushion0");
-        cushion0->SetMeshMaterial("Sofa");
-        cushion0->SetName("SofaCushion0");
-        cushion0->SetKinematic(false);
-        cushion0->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion0"));
-        cushion0->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion0_ConvexMesh"));
-        cushion0->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion0->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion0->SetCollisionType(CollisionType::BOUNCEABLE);
-
-        CreateGameObject();
-        GameObject* cushion1 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion1->SetPosition(2.0f, 0.1f, 0.1f);
-        cushion1->SetModel("SofaCushion1");
-        cushion1->SetName("SofaCushion1");
-        cushion1->SetMeshMaterial("Sofa");
-        cushion1->SetKinematic(false);
-        cushion1->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion0"));
-        cushion1->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion1_ConvexMesh"));
-        cushion1->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion1->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion1->SetCollisionType(CollisionType::BOUNCEABLE);
-
-        CreateGameObject();
-        GameObject* cushion2 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion2->SetPosition(2.0f, 0.1f, 0.1f);
-        cushion2->SetModel("SofaCushion2");
-        cushion2->SetName("SofaCushion2");
-        cushion2->SetMeshMaterial("Sofa");
-        cushion2->SetKinematic(false);
-        cushion2->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion2"));
-        cushion2->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion2_ConvexMesh"));
-        cushion2->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion2->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion2->SetCollisionType(CollisionType::BOUNCEABLE);
-
-        CreateGameObject();
-        GameObject* cushion3 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion3->SetPosition(2.0f, 0.1f, 0.1f);
-        cushion3->SetModel("SofaCushion3");
-        cushion3->SetName("SofaCushion3");
-        cushion3->SetMeshMaterial("Sofa");
-        cushion3->SetKinematic(false);
-        cushion3->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion3"));
-        cushion3->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion3_ConvexMesh"));
-        cushion3->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion3->UpdateRigidBodyMassAndInertia(cushionDensity);
-        cushion3->SetCollisionType(CollisionType::BOUNCEABLE);
-
-        CreateGameObject();
-        GameObject* cushion4 = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        cushion4->SetPosition(2.0f, 0.1f, 0.1f);
-        cushion4->SetModel("SofaCushion4");
-        cushion4->SetName("SofaCushion4");
-        cushion4->SetMeshMaterial("Sofa");
-        cushion4->SetKinematic(false);
-        cushion4->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion4"));
-        cushion4->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaCushion4_ConvexMesh"));
-        cushion4->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
-        cushion4->UpdateRigidBodyMassAndInertia(15.0f);
-        cushion4->SetCollisionType(CollisionType::BOUNCEABLE);
-
-        CreateGameObject();
-        GameObject* tree = GetGameObjectByIndex(GetGameObjectCount() - 1);
-        tree->SetPosition(0.75f, 0.1f, 6.2f);
-        tree->SetModel("ChristmasTree");
-        tree->SetName("ChristmasTree");
-        tree->SetMeshMaterial("Tree");
-        tree->SetMeshMaterialByMeshName("Balls", "Gold");
-
 
 
         {
