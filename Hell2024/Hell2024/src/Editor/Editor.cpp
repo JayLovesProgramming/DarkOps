@@ -506,7 +506,7 @@ namespace Editor {
 
 
         // Check for hover
-        g_hoveredObjectType == ObjectType::UNDEFINED;
+        g_hoveredObjectType = ObjectType::UNDEFINED;
         g_hoveredObjectIndex = -1;
         glm::mat4 projection = player->GetProjectionMatrix();
         PxU32 hitFlags = RaycastGroup::RAYCAST_ENABLED;

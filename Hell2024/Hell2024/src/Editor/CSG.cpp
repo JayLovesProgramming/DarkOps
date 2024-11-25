@@ -14,8 +14,8 @@
 #include "../Renderer/GlobalIllumination.h"
 #include "../Timer.hpp"
 
-namespace CSG {
-
+namespace CSG 
+{
     std::vector<CSGObject> g_objects;
     std::vector<CSGVertex> g_vertices;
     std::vector<uint32_t> g_indices;
@@ -23,28 +23,30 @@ namespace CSG {
     uint32_t g_baseCSGVertex = 0;
     std::vector<glm::vec3> g_navMeshVertices;
 
-
     //std::vector<CSGObject> g_subtractiveObjects; // used for plane world
 
     void UpdateDisplayLists();
 
-    void Init() {
-
+    void Init() 
+    {
     }
 
-    void Update() {
-
+    void Update() 
+    {
     }
 
-    bool GeometryExists() {
+    bool GeometryExists() 
+    {
         return g_vertices.size();
     }
 
-    glm::vec2 CalculateUV(const glm::vec3& vertexPosition, const glm::vec3& faceNormal, const glm::vec3& origin) {
+    glm::vec2 CalculateUV(const glm::vec3& vertexPosition, const glm::vec3& faceNormal, const glm::vec3& origin) 
+    {
         glm::vec2 uv;
         // Find the dominant axis of the face normal
         glm::vec3 absNormal = glm::abs(faceNormal);
-        if (absNormal.x > absNormal.y && absNormal.x > absNormal.z) {
+        if (absNormal.x > absNormal.y && absNormal.x > absNormal.z) 
+        {
             // Dominant axis is X, project onto YZ plane
             uv.y = (vertexPosition.y - origin.y) / absNormal.x;
             uv.x = (vertexPosition.z - origin.z) / absNormal.x;
@@ -53,7 +55,8 @@ namespace CSG {
                 uv.x = 1.0f - uv.x;
             }
         }
-        else if (absNormal.y > absNormal.x && absNormal.y > absNormal.z) {
+        else if (absNormal.y > absNormal.x && absNormal.y > absNormal.z)
+        {
             // Dominant axis is Y, project onto XZ plane
             uv.y = (vertexPosition.x - origin.x) / absNormal.y;
             uv.x = (vertexPosition.z - origin.z) / absNormal.y;
@@ -62,7 +65,8 @@ namespace CSG {
                 uv.y = 1.0f - uv.y;
             }
         }
-        else {
+        else 
+        {
             // Dominant axis is Z, project onto XY plane
             uv.x = (vertexPosition.x - origin.x) / absNormal.z;
             uv.y = (vertexPosition.y - origin.y) / absNormal.z;
@@ -74,8 +78,10 @@ namespace CSG {
         return uv;
     }
 
-    void CleanUp() {
-        for (CSGObject& cube : g_objects) {
+    void CleanUp()
+    {
+        for (CSGObject& cube : g_objects)
+        {
             cube.CleanUpPhysicsObjects();
         }
         g_objects.clear();
@@ -84,7 +90,8 @@ namespace CSG {
 
     enum class CSGObjecType { CUBE, WALL_PLANE, FLOOR_PLANE, CEILING_PLANE };
 
-    struct CSGNew {
+    struct CSGNew 
+    {
         std::vector<CSGVertex> m_vertices;
         std::vector<uint32_t> m_indices;
         uint32_t m_materialIndex = 0;
@@ -95,7 +102,8 @@ namespace CSG {
     };
     std::vector<CSGNew> g_csgNewObjects;
 
-    void CreateCSGObjectFromBrush(Brush& brush, CSGObjecType csgObjectType, int parentIndex, int materialIndex, float textureScale, float textureOffsetX, float textureOffsetY) {
+    void CreateCSGObjectFromBrush(Brush& brush, CSGObjecType csgObjectType, int parentIndex, int materialIndex, float textureScale, float textureOffsetX, float textureOffsetY) 
+    {
         Timer timer("CreateCSGObjectFromBrush()");
         // Create new world
         csg::world_t world;
@@ -106,7 +114,8 @@ namespace CSG {
 
         // Find intersecting subtractive brushes (TODO: check for intersection!!!)
         std::vector<Brush*> subtractiveBrushPointers;
-        for (Brush& brush : g_subtractiveBrushes) {
+        for (Brush& brush : g_subtractiveBrushes)
+        {
             brush.AddToWorld(world);
             subtractiveBrushPointers.push_back(&brush);
         }
@@ -123,8 +132,10 @@ namespace CSG {
         csgNew.m_vertices.insert(csgNew.m_vertices.end(), brush.m_vertices.begin(), brush.m_vertices.end());
 
         // If a cube, get the subtracted vertices
-        if (brush.GetBrushShape() == BrushShape::CUBE) {
-            for (Brush* subtractiveBrush : subtractiveBrushPointers) {
+        if (brush.GetBrushShape() == BrushShape::CUBE) 
+        {
+            for (Brush* subtractiveBrush : subtractiveBrushPointers)
+            {
                 subtractiveBrush->update_display_list();
                 csgNew.m_vertices.insert(csgNew.m_vertices.end(), subtractiveBrush->m_vertices.begin(), subtractiveBrush->m_vertices.end());
             }
@@ -134,7 +145,8 @@ namespace CSG {
         glm::vec3 boundsMin = glm::vec3(1e30f);
         glm::vec3 boundsMax = glm::vec3(-1e30f);
         int index = 0;
-        for (CSGVertex& vertex : csgNew.m_vertices) {
+        for (CSGVertex& vertex : csgNew.m_vertices) 
+        {
             glm::vec3 origin = glm::vec3(0, 0, 0);
             origin = glm::vec3(0);
             vertex.uv = CalculateUV(vertex.position, vertex.normal, origin);
@@ -148,12 +160,14 @@ namespace CSG {
         csgNew.m_aabb = AABB(boundsMin, boundsMax);
 
         // Normals and tangents
-        for (int i = 0; i < csgNew.m_vertices.size(); i += 3) {
+        for (int i = 0; i < csgNew.m_vertices.size(); i += 3)
+        {
             Util::SetNormalsAndTangentsFromVertices(&csgNew.m_vertices[i], &csgNew.m_vertices[i + 1], &csgNew.m_vertices[i + 2]);
         }
     }
 
-    void CreateSubractiveBrushes() {
+    void CreateSubractiveBrushes()
+    {
         Timer timer("CreateSubractiveBrushes()");
         g_subtractiveBrushes.clear();
         // Subtractive cubes

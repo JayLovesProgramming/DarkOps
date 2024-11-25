@@ -10,8 +10,8 @@ constexpr static auto _propogationGridSpacing = 0.375f;
 constexpr static auto _pointCloudSpacing = 0.4f;
 constexpr static auto _maxPropogationDistance = 2.6f;
 
-constexpr static auto PLAYER_COUNT = 4;
-constexpr static auto UNDEFINED_STRING = "UNDEFINED_STRING";
+constexpr static auto inline PLAYER_COUNT = 4;
+constexpr static auto inline UNDEFINED_STRING = "UNDEFINED_STRING";
 
 constexpr static auto AUDIO_SELECT = "SELECT_2.wav";
 
@@ -21,10 +21,10 @@ constexpr static auto INTERACT_DISTANCE = 2.5f;
 constexpr static auto NEAR_PLANE = 0.0025f;
 constexpr static auto FAR_PLANE = 200.0f;
 
-constexpr static auto NOOSE_PI = 3.14159265359f;
-constexpr static auto NOOSE_HALF_PI = 1.57079632679f;
-constexpr static auto HELL_PI = 3.141592653589793f;
-constexpr static auto HELL_PHI = 1.6180f;
+constexpr static auto inline NOOSE_PI = 3.14159265359f;
+constexpr static auto inline NOOSE_HALF_PI = 1.57079632679f;
+constexpr static auto inline HELL_PI = 3.141592653589793f;
+constexpr static auto inline HELL_PHI = 1.6180f;
 
 constexpr static auto DOOR_WIDTH = 0.8f;
 constexpr static auto DOOR_HEIGHT = 2.0f;
@@ -44,19 +44,19 @@ constexpr static auto CSG_PLANE_CUBE_HACKY_OFFSET = 0.1f;
 #define ToRadian(x) (float)(((x) * HELL_PI / 180.0f))
 #define ToDegree(x) (float)(((x) * 180.0f / HELL_PI))
 
-constexpr static auto ORANGE = glm::vec3(1, 0.647f, 0);
-constexpr static auto BLACK = glm::vec3(0, 0, 0);
-constexpr static auto WHITE = glm::vec3(1, 1, 1);
-constexpr static auto RED = glm::vec3(1, 0, 0);
-constexpr static auto GREEN = glm::vec3(0, 1, 0);
-constexpr static auto BLUE = glm::vec3(0, 0, 1);
-constexpr static auto YELLOW = glm::vec3(1, 1, 0);
-constexpr static auto PURPLE = glm::vec3(1, 0, 1);
-constexpr static auto GREY = glm::vec3(0.25f);
-constexpr static auto LIGHT_BLUE = glm::vec3(0, 1, 1);
-constexpr static auto LIGHT_GREEN = glm::vec3(0.16f, 0.78f, 0.23f);
-constexpr static auto LIGHT_RED = glm::vec3(0.8f, 0.05f, 0.05f);
-constexpr static auto GRID_COLOR = glm::vec3(0.509, 0.333, 0.490) * 0.5f;
+constexpr static auto inline ORANGE = glm::vec3(1, 0.647f, 0);
+constexpr static auto inline BLACK = glm::vec3(0, 0, 0);
+constexpr static auto inline WHITE = glm::vec3(1, 1, 1);
+constexpr static auto inline RED = glm::vec3(1, 0, 0);
+constexpr static auto inline GREEN = glm::vec3(0, 1, 0);
+constexpr static auto inline BLUE = glm::vec3(0, 0, 1);
+constexpr static auto inline YELLOW = glm::vec3(1, 1, 0);
+constexpr static auto inline PURPLE = glm::vec3(1, 0, 1);
+constexpr static auto inline GREY = glm::vec3(0.25f);
+constexpr static auto inline LIGHT_BLUE = glm::vec3(0, 1, 1);
+constexpr static auto inline LIGHT_GREEN = glm::vec3(0.16f, 0.78f, 0.23f);
+constexpr static auto inline LIGHT_RED = glm::vec3(0.8f, 0.05f, 0.05f);
+constexpr static auto inline GRID_COLOR = glm::vec3(0.509, 0.333, 0.490) * 0.5f;
 
 constexpr static auto SMALL_NUMBER= (float)9.99999993922529e-9;
 constexpr static auto KINDA_SMALL_NUMBER = (float)0.00001;

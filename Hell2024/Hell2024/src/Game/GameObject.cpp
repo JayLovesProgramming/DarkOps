@@ -573,46 +573,54 @@ Material* GameObject::GetMaterial(int meshIndex) {
 
 //#include "GameData.h"
 
-
-void GameObject::SetCollectedState(bool value) {
+void GameObject::SetCollectedState(bool value) 
+{
 	//_collected = value;
 }
 
-
-BoundingBox GameObject::GetBoundingBox() {
+BoundingBox GameObject::GetBoundingBox() 
+{
 	return _boundingBox;
 }
 
-bool GameObject::IsCollected() {
+bool GameObject::IsCollected() 
+{
 	return _collected;
 }
 
-PickUpType GameObject::GetPickUpType() {
+PickUpType GameObject::GetPickUpType()
+{
 	return _pickupType;
 }
 
-const InteractType& GameObject::GetInteractType() {
+const InteractType& GameObject::GetInteractType() 
+{
 	return InteractType::NONE;
 	//return _interactType;
 }
 
-OpenState& GameObject::GetOpenState() {
+OpenState& GameObject::GetOpenState() 
+{
 	return _openState;
 }
 
-void GameObject::SetTransform(Transform& transform) {
+void GameObject::SetTransform(Transform& transform) 
+{
 	_transform = transform;
 }
 
-void GameObject::SetKinematic(bool value) {
-    if (!m_collisionRigidBody.Exists()) {
+void GameObject::SetKinematic(bool value) 
+{
+    if (!m_collisionRigidBody.Exists()) 
+    {
         m_collisionRigidBody.CreateRigidBody(_transform.to_mat4());
         m_collisionRigidBody.PutToSleep();
     }
     m_collisionRigidBody.SetKinematic(value);
 }
 
-void GameObject::DisableRespawnOnPickup() {
+void GameObject::DisableRespawnOnPickup()
+{
     _respawns = false;
 }
 

@@ -20,21 +20,22 @@ using Bvh = bvh::v2::Bvh<Node>;
 using BVHRay = bvh::v2::Ray<Scalar, 3>;
 using PrecomputedTri = bvh::v2::PrecomputedTri<Scalar>;
 
-namespace BVH {
-
+namespace BVH 
+{
     Bvh g_bvh;
     std::vector<PrecomputedTri> g_precomputed_tris;
 
     // Permuting the primitive data allows to remove indirections during traversal, which makes it faster.
     static constexpr bool should_permute = true;
 
-    void UpdateBVH(std::vector<glm::vec3>& vertices) {
-
+    void UpdateBVH(std::vector<glm::vec3>& vertices)
+    {
         Timer timer("bvh construction");
 
         std::vector<Tri> tris;
         tris.reserve(vertices.size());
-        for (int i = 0; i < vertices.size(); i += 3) {
+        for (int i = 0; i < vertices.size(); i += 3) 
+        {
             tris.emplace_back(
                 Vec3(vertices[i].x, vertices[i].y, vertices[i].z),
                 Vec3(vertices[i + 1].x, vertices[i + 1].y, vertices[i + 1].z),
@@ -48,8 +49,10 @@ namespace BVH {
         // Get triangle centers and bounding boxes (required for BVH builder)
         std::vector<BBox> bboxes(tris.size());
         std::vector<Vec3> centers(tris.size());
-        executor.for_each(0, tris.size(), [&](size_t begin, size_t end) {
-            for (size_t i = begin; i < end; ++i) {
+        executor.for_each(0, tris.size(), [&](size_t begin, size_t end)
+            {
+            for (size_t i = begin; i < end; ++i) 
+            {
                 bboxes[i] = tris[i].get_bbox();
                 centers[i] = tris[i].get_center();
             }
@@ -61,21 +64,21 @@ namespace BVH {
 
         // This precomputes some data to speed up traversal further.
         g_precomputed_tris.resize(tris.size());
-        executor.for_each(0, tris.size(), [&](size_t begin, size_t end) {
-            for (size_t i = begin; i < end; ++i) {
+        executor.for_each(0, tris.size(), [&](size_t begin, size_t end) 
+            {
+            for (size_t i = begin; i < end; ++i) 
+            {
                 auto j = should_permute ? g_bvh.prim_ids[i] : i;
                 g_precomputed_tris[i] = tris[j];
             }
         });
     }
 
-
-
-    bool AnyHit(Ray& ray) {
-
+    bool AnyHit(Ray& ray)
+    {
         Timer timer("closest hit traversal");
 
-        BVHRay bvhRay = BVHRay{
+        BVHRay bvhRay = BVHRay {
             Vec3(ray.origin.x, ray.origin.y, ray.origin.z),          // Ray origin
             Vec3(ray.direction.x, ray.direction.y, ray.direction.z), // Ray direction
             ray.minDist,                                             // Minimum intersection distance
@@ -93,9 +96,11 @@ namespace BVH {
         bvh::v2::SmallStack<Bvh::Index, stack_size> stack;
         g_bvh.intersect<true, use_robust_traversal>(bvhRay, g_bvh.get_root().index, stack,
             [&](size_t begin, size_t end) {
-            for (size_t i = begin; i < end; ++i) {
+            for (size_t i = begin; i < end; ++i)
+            {
                 size_t j = should_permute ? i : g_bvh.prim_ids[i];
-                if (auto hit = g_precomputed_tris[j].intersect(bvhRay)) {
+                if (auto hit = g_precomputed_tris[j].intersect(bvhRay)) 
+                {
                     prim_id = i;
                     std::tie(u, v) = *hit;
                 }
@@ -103,7 +108,8 @@ namespace BVH {
             return prim_id != invalid_id;
         });
 
-        if (prim_id != invalid_id) {
+        if (prim_id != invalid_id)
+        {
             std::cout
                 << "Intersection found\n"
                 << "  primitive: " << prim_id << "\n"
@@ -111,7 +117,8 @@ namespace BVH {
                 << "  barycentric coords.: " << u << ", " << v << std::endl;
             return 0;
         }
-        else {
+        else
+        {
             std::cout << "No intersection found" << std::endl;
             return 1;
         }

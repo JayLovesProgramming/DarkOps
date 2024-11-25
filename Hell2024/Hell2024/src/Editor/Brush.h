@@ -1,10 +1,12 @@
 #pragma once
+
 #include "CSGCommon.h"
 #include "RendererCommon.h"
 #include "TinyCSG/tinycsg.hpp"
 #include <span>
 
-struct Brush {
+struct Brush
+{
 public:
     Brush();
     void AddToWorld(csg::world_t& world);
@@ -19,6 +21,7 @@ public:
 
     void CreateCubeTriangles(glm::vec3 color);
     std::vector<Vertex>& GetCubeTriangles();
+
 private:
     csg::brush_t* m_brush_t;
     BrushType m_brushType = BrushType::SOLID_BRUSH;

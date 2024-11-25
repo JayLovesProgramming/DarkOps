@@ -1,41 +1,56 @@
 #include "Texture3D.h"
 #include "../../BackEnd/BackEnd.h"
 
-int Texture3D::GetWidth() {
-    if (BackEnd::GetAPI() == API::OPENGL) {
+int Texture3D::GetWidth() 
+{
+    if (BackEnd::GetAPI() == API::OPENGL)
+    {
         return glTexture3D.GetWidth();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN) 
+    {
         return vkTexture3D.GetWidth();
     }
+    return 0;
 }
 
-int Texture3D::GetHeight() {
-    if (BackEnd::GetAPI() == API::OPENGL) {
+int Texture3D::GetHeight()
+{
+    if (BackEnd::GetAPI() == API::OPENGL)
+    {
         return glTexture3D.GetHeight();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN)
+    {
         return vkTexture3D.GetHeight();
     }
-}
+    return 0;
+};
 
-int Texture3D::GetDepth() {
-    if (BackEnd::GetAPI() == API::OPENGL) {
+int Texture3D::GetDepth()
+{
+    if (BackEnd::GetAPI() == API::OPENGL)
+    {
         return glTexture3D.GetDepth();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN) 
+    {
         return vkTexture3D.GetDepth();
     }
+    return 0;
 }
 
-void Texture3D::CleanUp() {
-
-    if (BackEnd::GetAPI() == API::OPENGL) {
+void Texture3D::CleanUp() 
+{
+    if (BackEnd::GetAPI() == API::OPENGL) 
+    {
         glTexture3D.CleanUp();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN) 
+    {
         // TO DO
     }
+    return;
 }
 
 OpenGLTexture3D& Texture3D::GetGLTexture3D() {

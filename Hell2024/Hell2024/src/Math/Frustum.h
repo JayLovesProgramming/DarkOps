@@ -1,16 +1,18 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_access.hpp>
 #include "RendererCommon.h"
 
-struct Plane {
+struct Plane 
+{
     glm::vec3 normal;
     float offset;
 };
 
-struct Frustum {
-
+struct Frustum
+{
 public:
     void Update(const glm::mat4& projectionView);
     void UpdateFromTile(const glm::mat4& viewMatrix, float fov, float nearPlane, float farPlane, int x1, int y1, int x2, int y2, int viewportWidth, int viewportHeight);

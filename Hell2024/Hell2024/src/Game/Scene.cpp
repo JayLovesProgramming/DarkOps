@@ -1388,25 +1388,34 @@ void Scene::CleanUpBulletCasings() {
 
 // Game Objects
 
-int32_t Scene::CreateGameObject() {
+int32_t Scene::CreateGameObject()
+{
     g_gameObjects.emplace_back();
     return (int32_t)g_gameObjects.size() - 1;
 }
 
-GameObject* Scene::GetGameObjectByIndex(int32_t index) {
-    if (index >= 0 && index < g_gameObjects.size()) {
+GameObject* Scene::GetGameObjectByIndex(int32_t index) 
+{
+    if (index >= 0 && index < g_gameObjects.size())
+    {
         return &g_gameObjects[index];
     }
-    else {
+    else
+    {
         std::cout << "Scene::GetGameObjectByIndex() called with out of range index " << index << ", size is " << GetGameObjectCount() << "\n";
         return nullptr;
     }
+    return nullptr;
 }
 
-GameObject* Scene::GetGameObjectByName(std::string name) {
-    if (name != "undefined") {
-        for (GameObject& gameObject : g_gameObjects) {
-            if (gameObject.GetName() == name) {
+GameObject* Scene::GetGameObjectByName(std::string name) 
+{
+    if (name != "undefined") 
+    {
+        for (GameObject& gameObject : g_gameObjects) 
+        {
+            if (gameObject.GetName() == name) 
+            {
                 return &gameObject;
             }
         }
@@ -1415,17 +1424,24 @@ GameObject* Scene::GetGameObjectByName(std::string name) {
         std::cout << "Scene::GetGameObjectByName() failed, no object with name \"" << name << "\"\n";
         return nullptr;
     }
+
+    return nullptr;
 }
-const size_t Scene::GetGameObjectCount() {
+
+const size_t Scene::GetGameObjectCount()
+{
     return g_gameObjects.size();
 }
 
-std::vector<GameObject>& Scene::GetGamesObjects() {
+std::vector<GameObject>& Scene::GetGamesObjects()
+{
     return g_gameObjects;
 }
 
-void Scene::UpdateGameObjects(float deltaTime) {
-    for (GameObject& gameObject : g_gameObjects) {
+void Scene::UpdateGameObjects(float deltaTime)
+{
+    for (GameObject& gameObject : g_gameObjects) 
+    {
         gameObject.Update(deltaTime);
         gameObject.UpdateRenderItems();
     }

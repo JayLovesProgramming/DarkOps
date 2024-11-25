@@ -17,5 +17,6 @@ namespace RendererStorage {
         else {
             std::cout << "GetSkinnedVertexBufferByIndex() called with out of range index " << index << ". Size is " << gSkinnedMeshVertexBuffers.size() << "!\n";
         }
+        return nullptr;
     }
 }
