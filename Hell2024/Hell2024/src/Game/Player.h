@@ -1,4 +1,5 @@
 #pragma once
+
 #include "HellCommon.h"
 #include "../Game/WeaponManager.h"
 #include "../Game/AnimatedGameObject.h"
@@ -14,40 +15,46 @@
 #define SHOTGUN_AMMO_SIZE 8
 #define SHOTGUN_MAX_AMMO_SIZE 9999
 
-struct Ammo {
+struct Ammo 
+{
 	int clip = 0;
 	int total = 0;
 };
 
-struct Inventory {
+struct Inventory 
+{
     Ammo glockAmmo;
     Ammo aks74uAmmo;
     Ammo shotgunAmmo;
 };
 
-enum InputType {
+enum InputType 
+{
     KEYBOARD_AND_MOUSE,
     CONTROLLER
 };
 
-enum CrosshairType {
+enum CrosshairType 
+{
     NONE,
     REGULAR,
     INTERACT
 };
 
-struct PickUpText {
+struct PickUpText
+{
     std::string text;
     float lifetime;
     int count = 1;
 };
 
-
-enum class ShellEjectionState {
+enum class ShellEjectionState 
+{
     IDLE, AWAITING_SHELL_EJECTION
 };
 
-struct PlayerControls {
+struct PlayerControls
+{
     unsigned int WALK_FORWARD = HELL_KEY_W;
     unsigned int WALK_BACKWARD = HELL_KEY_S;
     unsigned int WALK_LEFT = HELL_KEY_A;
@@ -69,7 +76,8 @@ struct PlayerControls {
     unsigned int FLASHLIGHT = HELL_KEY_F;
 };
 
-struct WeaponState {
+struct WeaponState 
+{
     bool has = false;
     bool useSlideOffset = false;
     bool hasScope = false;
@@ -78,13 +86,14 @@ struct WeaponState {
     std::string name = UNDEFINED_STRING;
 };
 
-struct AmmoState {
+struct AmmoState 
+{
     std::string name = UNDEFINED_STRING;
     int ammoOnHand = 0;
 };
 
-class Player {
-
+class Player 
+{
 private:
     int32_t m_viewWeaponAnimatedGameObjectIndex = -1;
     int32_t m_characterModelAnimatedGameObjectIndex = -1;
@@ -113,7 +122,6 @@ private:
     float m_crosshairCrossSize = 0;
     float m_accuracyModifer = 0;
     bool m_firedThisFrame = false;
-
 
 public:
     glm::mat4 m_weaponSwayMatrix = glm::mat4(1);
@@ -232,7 +240,6 @@ public:
     AnimatedGameObject* GetCharacterAnimatedGameObject();
     AnimatedGameObject* GetViewWeaponAnimatedGameObject();
 
-
     std::vector<WeaponState> m_weaponStates;
     std::vector<AmmoState> m_ammoStates;
     int m_currentWeaponIndex = 0;
@@ -241,18 +248,13 @@ public:
     void CreateViewModel();
 
 public:
-
     Frustum m_frustum;
 
     InputType _inputType = KEYBOARD_AND_MOUSE;
     PlayerControls _controls;
 
-
 	//RayCastResult _cameraRayData;
 	PxController* _characterController = NULL;
-
-
-    
 
     PxShape* _itemPickupOverlapShape = NULL;
     PxShape* _meleeHitCheckOverlapShape = NULL;
@@ -260,7 +262,6 @@ public:
     float _yVelocity = 0;
 
 	//Inventory _inventory;
-
 
 	int GetCurrentWeaponMagAmmo();
 	int GetCurrentWeaponTotalAmmo();
@@ -278,7 +279,6 @@ public:
     void GiveDamageColor();
 
 	//void Init(glm::vec3 position);
-
 
 	void SetRotation(glm::vec3 rotation);
 	//void SetWeapon(Weapon weapon);
@@ -331,26 +331,20 @@ public:
 
     void PickUpShotgun();
 
-
-
     glm::mat4 GetProjectionMatrix();
     float GetZoom();
 
     bool CanEnterADS();
     bool InADS();
 
-
 	//std::string _pickUpText = "";
 	//float _pickUpTextTimer = 0;
     float _zoom = 1.0f;
-
 
     //void LoadWeaponInfo(std::string name, WeaponAction weaponAction);
 
     float finalImageContrast = 1.0f;
     glm::vec3 finalImageColorTint = glm::vec3(0);
-
-
 
     // Dev keys
     bool PressedFullscreen();
@@ -381,11 +375,9 @@ public:
     std::vector<RenderItem2D> GetHudRenderItemsHiRes(hell::ivec2 gBufferSize);
     CrosshairType GetCrosshairType();
 
-
     bool RespawnAllowed();
 
 private:
-
     glm::vec3 _displacement;
 
 	void SpawnBullet(float variance, Weapon type);
@@ -423,6 +415,6 @@ private:
     bool m_revolverNeedsCocking = false;
     int m_revolverReloadIterations = 0;
 
-    public:
+public:
     float _muzzleFlashTimer = 0;
 };

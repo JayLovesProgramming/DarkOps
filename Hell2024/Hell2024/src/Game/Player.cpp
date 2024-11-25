@@ -15,21 +15,20 @@
 #include "../Timer.hpp"
 #include "RapidHotload.h"
 
-Player::Player(int playerIndex) {
-
+Player::Player(int playerIndex)
+{
     m_playerIndex = playerIndex;
-
     CreateCharacterModel();
     CreateViewModel();
     CreateCharacterController(_position);
     CreateItemPickupOverlapShape();
-
     g_awaitingRespawn = true;
 }
 
-void Player::Update(float deltaTime) {
-
-    if (g_awaitingRespawn) {
+void Player::Update(float deltaTime) 
+{
+    if (g_awaitingRespawn)
+    {
         Respawn();
     }
 
@@ -40,14 +39,15 @@ void Player::Update(float deltaTime) {
     glm::vec3 origin = GetFeetPosition() + glm::vec3(0, 0.1f, 0);
     PxU32 raycastFlags = RaycastGroup::RAYCAST_ENABLED;
     PhysXRayResult rayResult = Util::CastPhysXRay(origin, glm::vec3(0, -1, 0), 10, raycastFlags);
-    if (rayResult.hitFound && rayResult.objectType == ObjectType::HEIGHT_MAP) {
+    if (rayResult.hitFound && rayResult.objectType == ObjectType::HEIGHT_MAP)
+    {
         m_isOutside = true;
     }
     if (rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_CUBE ||
-        rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE) {
+        rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE)
+    {
         m_isOutside = false;
     }
-
 
     UpdateRagdoll(); // updates pointers to rigids
 
@@ -77,7 +77,6 @@ void Player::Update(float deltaTime) {
 
     UpdateAttachmentRenderItems();
     UpdateAttachmentGlassRenderItems();
-
 
     glm::mat4 projectionView = GetProjectionMatrix() * GetViewMatrix();
     m_frustum.Update(projectionView);
@@ -133,15 +132,15 @@ void Player::Update(float deltaTime) {
         }
     }
     */
-    if (_isDead) {
+    if (_isDead)
+    {
         _health = 0;
     }
 
 }
 
-
-void Player::Respawn() {
-
+void Player::Respawn()
+{
     AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
     AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
 
@@ -153,18 +152,23 @@ void Player::Respawn() {
     int randomSpawnLocationIndex = Util::RandomInt(0, Scene::g_spawnPoints.size() - 1);
 
     // Debug hack to always spawn player 1 at location 0
-    if (m_playerIndex == 0) {
+    if (m_playerIndex == 0) 
+    {
         randomSpawnLocationIndex = 0;
     }
     SpawnPoint& spawnPoint = Scene::g_spawnPoints[randomSpawnLocationIndex];
 
     // Check you didn't just spawn on another player
-    if (m_playerIndex != 0) {
-        for (int i = 0; i < Game::GetPlayerCount(); i++) {
+    if (m_playerIndex != 0)
+    {
+        for (int i = 0; i < Game::GetPlayerCount(); i++)
+        {
             Player* otherPlayer = Game::GetPlayerByIndex(i);
-            if (this != otherPlayer) {
+            if (this != otherPlayer) 
+            {
                 float distanceToOtherPlayer = glm::distance(spawnPoint.position, otherPlayer->_position);
-                if (distanceToOtherPlayer < 1.0f) {
+                if (distanceToOtherPlayer < 1.0f) 
+                {
                     Respawn();
                     return;
                 }
@@ -174,7 +178,8 @@ void Player::Respawn() {
 
     // Load weapon states
     m_weaponStates.clear();
-    for (int i = 0; i < WeaponManager::GetWeaponCount(); i++) {
+    for (int i = 0; i < WeaponManager::GetWeaponCount(); i++) 
+    {
         WeaponState& state = m_weaponStates.emplace_back();
         state.name = WeaponManager::GetWeaponInfoByIndex(i)->name;
         state.has = false;
@@ -182,7 +187,8 @@ void Player::Respawn() {
     }
     // Load ammo states
     m_ammoStates.clear();
-    for (int i = 0; i < WeaponManager::GetAmmoTypeCount(); i++) {
+    for (int i = 0; i < WeaponManager::GetAmmoTypeCount(); i++)
+    {
         AmmoState& state = m_ammoStates.emplace_back();
         state.name = WeaponManager::GetAmmoInfoByIndex(i)->name;
         state.ammoOnHand = 0;
@@ -190,9 +196,9 @@ void Player::Respawn() {
 
     GiveDefaultLoadout();
     SwitchWeapon("SPAS", SPAWNING);
-//    SwitchWeapon("GoldenGlock", SPAWNING);
 
-    if (_characterController) {
+    if (_characterController) 
+    {
         PxExtendedVec3 globalPose = PxExtendedVec3(spawnPoint.position.x, spawnPoint.position.y, spawnPoint.position.z);
         _characterController->setFootPosition(globalPose);
     }
@@ -203,9 +209,8 @@ void Player::Respawn() {
     g_awaitingRespawn = false;
 }
 
-
-void Player::UpdateViewMatrix(float deltaTime) {
-
+void Player::UpdateViewMatrix(float deltaTime) 
+{
     AnimatedGameObject* viewWeapon = GetViewWeaponAnimatedGameObject();
 
     // View height
@@ -243,25 +248,27 @@ void Player::UpdateViewMatrix(float deltaTime) {
     glm::mat4 cameraBindMatrix = glm::mat4(1);
     glm::mat4 root = glm::mat4(1);
 
-
-
-
-    for (int i = 0; i < viewWeapon->m_jointWorldMatrices.size(); i++) {
-        if (Util::StrCmp(viewWeapon->m_jointWorldMatrices[i].name, "camera")) {
+    for (int i = 0; i < viewWeapon->m_jointWorldMatrices.size(); i++)
+    {
+        if (Util::StrCmp(viewWeapon->m_jointWorldMatrices[i].name, "camera")
+            ) {
             cameraMatrix = viewWeapon->m_jointWorldMatrices[i].worldMatrix;
         }
     }
-    for (int i = 0; i < viewWeapon->m_jointWorldMatrices.size(); i++) {
-        if (Util::StrCmp(viewWeapon->m_jointWorldMatrices[i].name, "Dm-Master")) {
+    for (int i = 0; i < viewWeapon->m_jointWorldMatrices.size(); i++)
+    {
+        if (Util::StrCmp(viewWeapon->m_jointWorldMatrices[i].name, "Dm-Master")) 
+        {
             dmMaster = viewWeapon->m_jointWorldMatrices[i].worldMatrix;
         }
     }
 
-
     SkinnedModel* model = viewWeapon->_skinnedModel;
 
-    for (int i = 0; i < model->m_joints.size(); i++) {
-        if (Util::StrCmp(model->m_joints[i].m_name, "camera")) {
+    for (int i = 0; i < model->m_joints.size(); i++) 
+    {
+        if (Util::StrCmp(model->m_joints[i].m_name, "camera"))
+        {
             glm::mat4 cameraBoneTransform = viewWeapon->m_jointWorldMatrices[i].worldMatrix;
             glm::mat4 cameraBindPose = model->m_joints[i].m_inverseBindTransform;
             cameraBindMatrix = model->m_joints[i].m_inverseBindTransform;
@@ -288,7 +295,8 @@ void Player::UpdateViewMatrix(float deltaTime) {
         model->_filename == "Shotgun" ||
         model->_filename == "Smith" ||
         model->_filename == "P90" ||
-        model->_filename == "SPAS") {
+        model->_filename == "SPAS")
+    {
         cameraAnimation = inverse(cameraBindMatrix) * cameraMatrix;
     }
 
@@ -310,8 +318,8 @@ void Player::UpdateViewMatrix(float deltaTime) {
         model->_filename == "Shotgun" ||
         model->_filename == "P90" ||
         model->_filename == "Smith" ||
-        model->_filename == "SPAS") {
-
+        model->_filename == "SPAS")
+    {
         worldTransform.scale = glm::vec3(0.001);
         viewWeapon->m_cameraMatrix = worldTransform.to_mat4() * glm::inverse(cameraBindMatrix);
 
@@ -322,11 +330,15 @@ void Player::UpdateViewMatrix(float deltaTime) {
     //m_casingSpawnMatrix = glm::mat4(1);
     //m_muzzleFlashMatrix = glm::mat4(1);
 
-    if (IsDead()) {
+    if (IsDead())
+    {
         AnimatedGameObject* characterModel = GetCharacterAnimatedGameObject();
-        if (characterModel) {
-            for (RigidComponent& rigidComponent : characterModel->_ragdoll._rigidComponents) {
-                if (rigidComponent.name == "rMarker_CC_Base_Head") {
+        if (characterModel)
+        {
+            for (RigidComponent& rigidComponent : characterModel->_ragdoll._rigidComponents) 
+            {
+                if (rigidComponent.name == "rMarker_CC_Base_Head")
+                {
                     PxMat44 globalPose = rigidComponent.pxRigidBody->getGlobalPose();
                     _viewMatrix = glm::inverse(Util::PxMat44ToGlmMat4(globalPose));
                     break;
@@ -337,7 +349,6 @@ void Player::UpdateViewMatrix(float deltaTime) {
 
     // This is what sets the camera of the animation
     _viewMatrix = cameraAnimation * _viewMatrix;
-
     _inverseViewMatrix = glm::inverse(_viewMatrix);
     _right = glm::vec3(_inverseViewMatrix[0]);
     _up = glm::vec3(_inverseViewMatrix[1]);
@@ -346,22 +357,28 @@ void Player::UpdateViewMatrix(float deltaTime) {
     _viewPos = _inverseViewMatrix[3];
 }
 
-void Player::UpdatePickupText(float deltaTime) {
-    for (int i = 0; i < m_pickUpTexts.size(); i++) {
+void Player::UpdatePickupText(float deltaTime)
+{
+    for (int i = 0; i < m_pickUpTexts.size(); i++)
+    {
         PickUpText& pickUpText = m_pickUpTexts[i];
-        if (pickUpText.lifetime > 0) {
+        if (pickUpText.lifetime > 0)
+        {
             pickUpText.lifetime -= deltaTime;
         }
-        else {
+        else 
+        {
             m_pickUpTexts.erase(m_pickUpTexts.begin() + i);
             i--;
         }
     }
 }
 
-void Player::CheckForAndEvaluateRespawnPress() {
+void Player::CheckForAndEvaluateRespawnPress() 
+{
     bool autoRespawn = false;
-    if (_isDead && _timeSinceDeath > 3.25) {
+    if (_isDead && _timeSinceDeath > 3.25)
+    {
         if (PressedFire() ||
             PressedReload() ||
             PressedCrouch() ||
@@ -376,15 +393,20 @@ void Player::CheckForAndEvaluateRespawnPress() {
     }
 }
 
-void Player::CheckForAndEvaluateNextWeaponPress() {
-    if (HasControl() && PressedNextWeapon()) {
+void Player::CheckForAndEvaluateNextWeaponPress()
+{
+    if (HasControl() && PressedNextWeapon())
+    {
         m_currentWeaponIndex++;
-        if (m_currentWeaponIndex == m_weaponStates.size()) {
+        if (m_currentWeaponIndex == m_weaponStates.size())
+        {
             m_currentWeaponIndex = 0;
         }
-        while (!m_weaponStates[m_currentWeaponIndex].has) {
+        while (!m_weaponStates[m_currentWeaponIndex].has) 
+        {
             m_currentWeaponIndex++;
-            if (m_currentWeaponIndex == m_weaponStates.size()) {
+            if (m_currentWeaponIndex == m_weaponStates.size())
+            {
                 m_currentWeaponIndex = 0;
             }
         }
@@ -393,45 +415,52 @@ void Player::CheckForAndEvaluateNextWeaponPress() {
     }
 }
 
-void Player::CheckForEnviromentalDamage(float deltaTime) {
-
+void Player::CheckForEnviromentalDamage(float deltaTime)
+{
     // THIS HAS BEEN BROKEN EVER SINCE YOU MOVED TO CSG GEOMETRY FOR THE MAP!
     // THIS HAS BEEN BROKEN EVER SINCE YOU MOVED TO CSG GEOMETRY FOR THE MAP!
     // THIS HAS BEEN BROKEN EVER SINCE YOU MOVED TO CSG GEOMETRY FOR THE MAP!
 
     _isOutside = false;
 
-    if (Game::GameSettings().takeDamageOutside) {
-
+    if (Game::GameSettings().takeDamageOutside)
+    {
         // Take damage outside
-        if (_isOutside) {
+        if (_isOutside)
+        {
             _outsideDamageTimer += deltaTime;
             _outsideDamageAudioTimer += deltaTime;
         }
-        else {
+        else
+        {
             _outsideDamageAudioTimer = 0.84f;
         }
-        if (_outsideDamageAudioTimer > 0.85f && !_isDead) {
+        if (_outsideDamageAudioTimer > 0.85f && !_isDead)
+        {
             _outsideDamageAudioTimer = 0.0f;
             Audio::PlayAudio("Pain.wav", 1.0f);
         }
-        if (_outsideDamageTimer > 0.15f) {
+        if (_outsideDamageTimer > 0.15f)
+        {
             _outsideDamageTimer = 0.0f;
             _health -= 1;
         }
     }
 }
 
-void Player::CheckForDeath() {
-    if (!_isDead && _health <= 0) {
+void Player::CheckForDeath()
+{
+    if (!_isDead && _health <= 0)
+    {
         Kill();
     }
 }
 
-void Player::UpdateTimers(float deltaTime) {
-
+void Player::UpdateTimers(float deltaTime) 
+{
     // Death timer
-    if (IsDead()) {
+    if (IsDead())
+    {
         _timeSinceDeath += deltaTime;
     }
     // Damage timer
@@ -441,37 +470,41 @@ void Player::UpdateTimers(float deltaTime) {
     // Muzzle flash timer
     _muzzleFlashCounter -= deltaTime * 5.0f;
     _muzzleFlashCounter = std::max(_muzzleFlashCounter, 0.0f);
-    if (_muzzleFlashTimer >= 0) {
+    if (_muzzleFlashTimer >= 0) 
+    {
         _muzzleFlashTimer += deltaTime * 5000;                            // maybe you only use one of these?
     }
 
     finalImageColorTint = glm::vec3(1, 1, 1);
     finalImageContrast = 1;
 
-    if (IsDead()) {
-
+    if (IsDead())
+    {
         _outsideDamageTimer = 0;
 
         // Make it red
-        if (_timeSinceDeath > 0) {
+        if (_timeSinceDeath > 0)
+        {
             finalImageColorTint.g *= 0.25f;
             finalImageColorTint.b *= 0.25f;
             finalImageContrast = 1.2f;
         }
         // Darken it after 3 seconds
         float waitTime = 3;
-        if (_timeSinceDeath > waitTime) {
+        if (_timeSinceDeath > waitTime)
+        {
             float val = (_timeSinceDeath - waitTime) * 10;
             finalImageColorTint.r -= val;
         }
     }
 
-    if (IsAlive()) {
-
+    if (IsAlive())
+    {
         _timeSinceDeath = 0;
 
         // Damage color
-        if ( _damageColorTimer < 1.0f) {
+        if ( _damageColorTimer < 1.0f)
+        {
             finalImageColorTint.g = _damageColorTimer + 0.75;
             finalImageColorTint.b = _damageColorTimer + 0.75;
             finalImageColorTint.g = std::min(finalImageColorTint.g, 1.0f);
@@ -483,19 +516,22 @@ void Player::UpdateTimers(float deltaTime) {
         }
 
         // Outside damage color
-        if (Game::GameSettings().takeDamageOutside && _isOutside) {
+        if (Game::GameSettings().takeDamageOutside && _isOutside)
+        {
             finalImageColorTint = RED;
             finalImageColorTint.g = _outsideDamageAudioTimer;
             finalImageColorTint.b = _outsideDamageAudioTimer;
         }
     }
-
 }
 
-void Player::UpdateMouseLook(float deltaTime) {
-    if (HasControl() && BackEnd::WindowHasFocus()) {
+void Player::UpdateMouseLook(float deltaTime) 
+{
+    if (HasControl() && BackEnd::WindowHasFocus())
+    {
         float mouseSensitivity = 0.002f;
-        if (InADS()) {
+        if (InADS()) 
+        {
             mouseSensitivity = 0.001f;
         }
         float xOffset = (float)InputMulti::GetMouseXOffset(m_mouseIndex);
@@ -507,35 +543,37 @@ void Player::UpdateMouseLook(float deltaTime) {
     }
 }
 
-
-
-
-void Player::UpdateMovement(float deltaTime) {
-
+void Player::UpdateMovement(float deltaTime)
+{
     m_crouching = false;
     m_moving = false;
 
-    if (HasControl()) {
-
+    if (HasControl())
+    {
         // Crouching
-        if (PressingCrouch()) {
+        if (PressingCrouch())
+        {
             m_crouching = true;
         }
 
         // WSAD movement
-        if (PressingWalkForward()) {
+        if (PressingWalkForward())
+        {
             _displacement -= _movementVector;
             m_moving = true;
         }
-        if (PressingWalkBackward()) {
+        if (PressingWalkBackward())
+        {
             _displacement += _movementVector;
             m_moving = true;
         }
-        if (PressingWalkLeft()) {
+        if (PressingWalkLeft())
+        {
             _displacement -= _right;
             m_moving = true;
         }
-        if (PressingWalkRight()) {
+        if (PressingWalkRight())
+        {
             _displacement += _right;
             m_moving = true;
         }
@@ -543,7 +581,8 @@ void Player::UpdateMovement(float deltaTime) {
 
     float targetSpeed = m_crouching ? _crouchingSpeed : _walkingSpeed;
     float interSpeed = 18.0f;
-    if (!IsMoving()) {
+    if (!IsMoving())
+    {
         targetSpeed = 0.0f;
         interSpeed = 22.0f;
     }
@@ -551,22 +590,26 @@ void Player::UpdateMovement(float deltaTime) {
 
     // Normalize displacement vector and include player speed
     float len = length(_displacement);
-    if (len != 0.0) {
+    if (len != 0.0)
+    {
         _displacement = (_displacement / len) * _currentSpeed * deltaTime;
     }
 
     // Jump
-    if (PresingJump() && HasControl() && _isGrounded) {
+    if (PresingJump() && HasControl() && _isGrounded)
+    {
         _yVelocity = 4.75f; // magic value for jump strength
         _yVelocity = 4.9f; // magic value for jump strength (had to change cause you could no longer jump thru window after fixing character controller height bug)
         _isGrounded = false;
     }
     // Gravity
-    if (_isGrounded) {
+    if (_isGrounded)
+    {
         _yVelocity = -0.1f; // can't be 0, or the _isGrounded check next frame will fail
         _yVelocity = -2.5f;
     }
-    else {
+    else
+    {
         float gravity = 21.75f; // 9.8 feels like the moon
         _yVelocity -= gravity * deltaTime;
     }
@@ -584,12 +627,14 @@ void Player::UpdateMovement(float deltaTime) {
     _position = Util::PxVec3toGlmVec3(_characterController->getFootPosition());
 }
 
-void Player::UpdateHeadBob(float deltaTime) {
+void Player::UpdateHeadBob(float deltaTime) 
+{
     float breatheAmplitude = 0.0004f;
     float breatheFrequency = 5;
     float headBobAmplitude = 0.008;
     float headBobFrequency = 17.0f;
-    if (m_crouching) {
+    if (m_crouching)
+    {
         breatheFrequency *= 0.5f;
         headBobFrequency *= 0.5f;
     }
@@ -599,7 +644,8 @@ void Player::UpdateHeadBob(float deltaTime) {
     m_breatheBob.y = sin(m_breatheBobTimer * breatheFrequency) * breatheAmplitude * 2;
 
     // Head bob
-    if (IsMoving()) {
+    if (IsMoving()) 
+    {
         m_headBobTimer += deltaTime / 2.25f;
         m_headBob.x = cos(m_headBobTimer * headBobFrequency) * headBobAmplitude * 1;
         m_headBob.y = sin(m_headBobTimer * headBobFrequency) * headBobAmplitude * 2;
@@ -607,8 +653,8 @@ void Player::UpdateHeadBob(float deltaTime) {
 }
 
 
-void Player::UpdateAudio(float deltaTime) {
-
+void Player::UpdateAudio(float deltaTime) 
+{
     const std::vector<const char*> indoorFootstepFilenames = {
                     "player_step_1.wav",
                     "player_step_2.wav",
@@ -623,33 +669,37 @@ void Player::UpdateAudio(float deltaTime) {
     };
 
     // Footstep audio
-    if (HasControl()) {
+    if (HasControl())
+    {
         if (!IsMoving())
             _footstepAudioTimer = 0;
-        else {
-            if (IsMoving() && _footstepAudioTimer == 0) {
+        else
+        {
+            if (IsMoving() && _footstepAudioTimer == 0)
+            {
                 // Audio
-                
                 int random = rand() % 4;
-                if (m_isOutside) {
+                if (m_isOutside)
+                {
                     Audio::PlayAudio(outdoorFootstepFilenames[random], 0.125f);
                 }
-                else {
+                else
+                {
                     Audio::PlayAudio(indoorFootstepFilenames[random], 0.5f);
                 }
             }
             float timerIncrement = m_crouching ? deltaTime * 0.75f : deltaTime;
             _footstepAudioTimer += timerIncrement;
-            if (_footstepAudioTimer > _footstepAudioLoopLength) {
+            if (_footstepAudioTimer > _footstepAudioLoopLength) 
+            {
                 _footstepAudioTimer = 0;
             }
         }
     }
 }
 
-
-
-void Player::CreateCharacterModel() {
+void Player::CreateCharacterModel()
+{
     m_characterModelAnimatedGameObjectIndex = Scene::CreateAnimatedGameObject();
     AnimatedGameObject* characterModel = GetCharacterAnimatedGameObject();
     characterModel->SetFlag(AnimatedGameObject::Flag::CHARACTER_MODEL);
@@ -676,29 +726,33 @@ void Player::CreateCharacterModel() {
     characterModel->SetMeshMaterialByMeshName("BarrelTip_low", "AKS74U_4");
 }
 
-void Player::CreateViewModel() {
+void Player::CreateViewModel()
+{
     m_viewWeaponAnimatedGameObjectIndex = Scene::CreateAnimatedGameObject();
     AnimatedGameObject* viewWeaponModel = GetViewWeaponAnimatedGameObject();
     viewWeaponModel->SetFlag(AnimatedGameObject::Flag::VIEW_WEAPON);
     viewWeaponModel->SetPlayerIndex(m_playerIndex);
 }
 
-void Player::CheckForDebugKeyPresses() {
-
-    if (!HasControl()) {
+void Player::CheckForDebugKeyPresses()
+{
+    if (!HasControl()) 
+    {
         return;
     }
 
     AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
     AnimatedGameObject* viewWeaponModel = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
 
-    if (Input::KeyPressed(HELL_KEY_7)) {
+    if (Input::KeyPressed(HELL_KEY_7))
+    {
         std::cout << "\nCURRENT WEAPON JOINTS\n";
         for (int i = 0; i < viewWeaponModel->_skinnedModel->m_joints.size(); i++) {
             std::cout << i << ": " << viewWeaponModel->_skinnedModel->m_joints[i].m_name << "\n";
         }
     }
-    if (Input::KeyPressed(HELL_KEY_8)) {
+    if (Input::KeyPressed(HELL_KEY_8))
+    {
         std::cout << "\nCURRENT WEAPON MESH NAMES\n";
         for (int i = 0; i < viewWeaponModel->_skinnedModel->GetMeshCount(); i++) {
             int meshIndex = viewWeaponModel->_skinnedModel->GetMeshIndices()[i];
@@ -707,72 +761,82 @@ void Player::CheckForDebugKeyPresses() {
         }
     }
     float amt = 0.02f;
-    if (Input::KeyDown(HELL_KEY_MINUS)) {
+    if (Input::KeyDown(HELL_KEY_MINUS))
+    {
         _viewHeightStanding -= amt;
     }
-    if (Input::KeyDown(HELL_KEY_EQUAL)) {
+    if (Input::KeyDown(HELL_KEY_EQUAL))
+    {
         _viewHeightStanding += amt;
     }
 }
 
-bool Player::HasControl() {
+bool Player::HasControl()
+{
     return !m_ignoreControl && BackEnd::WindowHasFocus(); // Let's avoid having control when we are tabbed out coding and stuff...
 }
 
-AnimatedGameObject* Player::GetCharacterAnimatedGameObject() {
+AnimatedGameObject* Player::GetCharacterAnimatedGameObject()
+{
     return Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
 }
 
-AnimatedGameObject* Player::GetViewWeaponAnimatedGameObject() {
+AnimatedGameObject* Player::GetViewWeaponAnimatedGameObject()
+{
     return Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
 }
 
-int32_t Player::GetViewWeaponAnimatedGameObjectIndex() {
+int32_t Player::GetViewWeaponAnimatedGameObjectIndex()
+{
     return m_viewWeaponAnimatedGameObjectIndex;
 }
-int32_t Player::GetCharacterModelAnimatedGameObjectIndex() {
+int32_t Player::GetCharacterModelAnimatedGameObjectIndex()
+{
     return m_characterModelAnimatedGameObjectIndex;
 }
 
-int32_t Player::GetPlayerIndex() {
+int32_t Player::GetPlayerIndex()
+{
     return m_playerIndex;
 }
 
-glm::vec3 Player::GetMuzzleFlashPosition() {
-
+glm::vec3 Player::GetMuzzleFlashPosition()
+{
     AnimatedGameObject* viewWeaponModel = GetViewWeaponAnimatedGameObject();
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
 
     // Skip for melee
-    if (weaponInfo->type == WeaponType::MELEE) {
+    if (weaponInfo->type == WeaponType::MELEE)
+    {
         return glm::vec3(0);
     }
+
     // Otherwise find it
-    if (viewWeaponModel && weaponInfo) {
+    if (viewWeaponModel && weaponInfo) 
+    {
         glm::vec3 muzzleFlashOffset = weaponInfo->muzzleFlashOffset;
         glm::vec3 position = viewWeaponModel->m_cameraSpawnMatrix * viewWeaponModel->GetAnimatedTransformByBoneName(weaponInfo->muzzleFlashBoneName) * glm::vec4(muzzleFlashOffset, 1);
         return position;
     }
-    else {
+    else 
+    {
         std::cout << "Player::GetMuzzleFlashPosition() failed because viewWeaponModel was nullptr\n";
         return glm::vec3(0);
     }
 }
 
-glm::vec3 Player::GetPistolCasingSpawnPostion() {
-
+glm::vec3 Player::GetPistolCasingSpawnPostion()
+{
     AnimatedGameObject* viewWeaponAnimatedGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
 
-    if (!viewWeaponAnimatedGameObject || !weaponInfo || GetCurrentWeaponInfo()->casingEjectionBoneName == UNDEFINED_STRING) {
+    if (!viewWeaponAnimatedGameObject || !weaponInfo || GetCurrentWeaponInfo()->casingEjectionBoneName == UNDEFINED_STRING)
+    {
         return glm::vec3(0);
     }
     glm::vec3 position = viewWeaponAnimatedGameObject->m_cameraSpawnMatrix * viewWeaponAnimatedGameObject->GetAnimatedTransformByBoneName(weaponInfo->casingEjectionBoneName) * glm::vec4(0, 0, 0, 1);
     return position;
 }
-
-
-
 
 /*
 void Player::SetWeapon(Weapon weapon) {
@@ -783,15 +847,18 @@ void Player::SetWeapon(Weapon weapon) {
 	}
 }*/
 
-PxSweepCallback* CreateSweepBuffer() {
+PxSweepCallback* CreateSweepBuffer()
+{
 	return new PxSweepBuffer;
 }
 
-bool Player::MuzzleFlashIsRequired() {
+bool Player::MuzzleFlashIsRequired()
+{
 	return (_muzzleFlashCounter > 0);
 }
 
-glm::mat4 Player::GetWeaponSwayMatrix() {
+glm::mat4 Player::GetWeaponSwayMatrix()
+{
 	return m_weaponSwayMatrix;
 }
 
@@ -815,11 +882,13 @@ glm::mat4 Player::GetWeaponSwayMatrix() {
 	}*/
 //}
 
-void Player::AddPickUpText(std::string text, int count) {
-
+void Player::AddPickUpText(std::string text, int count) 
+{
     // Did you already just pickup this type of thing?
-    for (int i = 0; i < m_pickUpTexts.size(); i++) {
-        if (m_pickUpTexts[i].text == text) {
+    for (int i = 0; i < m_pickUpTexts.size(); i++) 
+    {
+        if (m_pickUpTexts[i].text == text)
+        {
             m_pickUpTexts[i].count += count;
             m_pickUpTexts[i].lifetime = Config::pickup_text_time;
             return;
@@ -831,7 +900,6 @@ void Player::AddPickUpText(std::string text, int count) {
     pickUpText.lifetime = Config::pickup_text_time;
     pickUpText.count = count;
 }
-
 
 /*
 void Player::PickUpGlock() {
@@ -899,9 +967,8 @@ void Player::PickUpGlockAmmo() {
     _inventory.glockAmmo.total += 50; // make this a define when you see this next or else.
 }*/
 
-
-
-void Player::CheckForItemPickOverlaps() {
+void Player::CheckForItemPickOverlaps()
+{
 /*
 	if (!HasControl()) {
 		return;
@@ -975,13 +1042,15 @@ void Player::CheckForItemPickOverlaps() {
 	}*/
 }
 
-void Player::UpdateRagdoll() {
-
+void Player::UpdateRagdoll()
+{
     // Collision only if dead
-    if (_isDead) {
+    if (_isDead) 
+    {
       //  characterModel->_ragdoll.EnableCollision();
     }
-    else {
+    else
+    {
         // BROKEN
         // BROKEN
         // BROKEN
@@ -997,32 +1066,33 @@ void Player::UpdateRagdoll() {
 
     AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
 
-    for (RigidComponent& rigid : characterModel->_ragdoll._rigidComponents) {
+    for (RigidComponent& rigid : characterModel->_ragdoll._rigidComponents)
+    {
         PhysicsObjectData* physicsObjectData = (PhysicsObjectData*)rigid.pxRigidBody->userData;
         physicsObjectData->parent = this;
     }
 }
 
-
-
-WeaponState* Player::GetCurrentWeaponState() {
+WeaponState* Player::GetCurrentWeaponState()
+{
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-    if (weaponInfo) {
+    if (weaponInfo)
+    {
         return GetWeaponStateByName(weaponInfo->name);
     }
-    else {
+    else
+    {
         return nullptr;
     }
 }
 
-bool Player::IsCrouching() {
+bool Player::IsCrouching()
+{
     return m_crouching;
 }
 
-
-
-
-void Player::ForceSetViewMatrix(glm::mat4 viewMatrix) {
+void Player::ForceSetViewMatrix(glm::mat4 viewMatrix)
+{
     _viewMatrix = viewMatrix;
     _inverseViewMatrix = glm::inverse(_viewMatrix);
     _right = glm::vec3(_inverseViewMatrix[0]);
@@ -1032,50 +1102,57 @@ void Player::ForceSetViewMatrix(glm::mat4 viewMatrix) {
     _viewPos = _inverseViewMatrix[3];
 }
 
-glm::mat4 Player::GetViewMatrix() {
-
+glm::mat4 Player::GetViewMatrix() 
+{
     return  _viewMatrix;
-
     // OLD BROKEN BELOW
   //  AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
   //  return  glm::mat4(glm::mat3(viewWeaponGameObject->_cameraMatrix)) * _viewMatrix;
 }
 
-glm::mat4 Player::GetInverseViewMatrix() {
+glm::mat4 Player::GetInverseViewMatrix()
+{
 	return _inverseViewMatrix;
 }
 
-glm::vec3 Player::GetViewPos() {
+glm::vec3 Player::GetViewPos()
+{
 	return _viewPos;
 }
 
-glm::vec3 Player::GetViewRotation() {
+glm::vec3 Player::GetViewRotation()
+{
 	return _rotation;
 }
 
 
-glm::vec3 Player::GetFeetPosition() {
+glm::vec3 Player::GetFeetPosition()
+{
 	return _position;
 }
 
-glm::vec3 Player::GetCameraRight() {
+glm::vec3 Player::GetCameraRight()
+{
 	return _right;
 }
 
-glm::vec3 Player::GetCameraForward() {
+glm::vec3 Player::GetCameraForward()
+{
 	return _forward;
 }
 
-glm::vec3 Player::GetCameraUp() {
+glm::vec3 Player::GetCameraUp()
+{
 	return _up;
 }
 
-bool Player::IsMoving() {
+bool Player::IsMoving() 
+{
 	return m_moving;
 }
 
-void Player::CheckForAndEvaluateInteract() {
-
+void Player::CheckForAndEvaluateInteract()
+{
     m_interactbleGameObjectIndex = -1;
 
     // Get camera hit data
@@ -1094,10 +1171,10 @@ void Player::CheckForAndEvaluateInteract() {
         return distanceA < distanceB;
     });
 
-
     overlapList = "Overlaps: " + std::to_string(m_interactOverlapReport.hits.size()) + "\n";
 
-    for (OverlapResult& overlapResult : m_interactOverlapReport.hits) {
+    for (OverlapResult& overlapResult : m_interactOverlapReport.hits)
+    {
                 overlapList += Util::PhysicsObjectTypeToString(overlapResult.objectType);
                 overlapList += " ";
                 overlapList += Util::Vec3ToString(overlapResult.position);
@@ -1112,15 +1189,19 @@ void Player::CheckForAndEvaluateInteract() {
         //}
     }
 
-
     // Store index of gameobject if the first hit is one Clean this up
-    if (m_interactOverlapReport.hits.size()) {
+    if (m_interactOverlapReport.hits.size())
+    {
         OverlapResult& overlapResult = m_interactOverlapReport.hits[0];
-        if (overlapResult   .objectType == ObjectType::GAME_OBJECT) {
+        if (overlapResult.objectType == ObjectType::GAME_OBJECT)
+        {
             GameObject* gameObject = (GameObject*)(overlapResult.parent);
-            if (gameObject->GetName() == "PickUp") {
-                for (int i = 0; Scene::GetGamesObjects().size(); i++) {
-                    if (gameObject == &Scene::GetGamesObjects()[i]) {
+            if (gameObject->GetName() == "PickUp")
+            {
+                for (int i = 0; Scene::GetGamesObjects().size(); i++) 
+                {
+                    if (gameObject == &Scene::GetGamesObjects()[i])
+                    {
                         m_interactbleGameObjectIndex = i;
                         goto label;
                     }
@@ -1132,33 +1213,37 @@ label:
 
     overlapList += "\n" + std::to_string(m_interactbleGameObjectIndex);
 
-    if (m_interactOverlapReport.hits.size()) {
-
+    if (m_interactOverlapReport.hits.size())
+    {
         OverlapResult& overlapResult = m_interactOverlapReport.hits[0];
 
-        if (HasControl() && PressedInteract()) {
-
+        if (HasControl() && PressedInteract()) 
+        {
             // Doors
-            if (overlapResult.objectType == ObjectType::DOOR) {
+            if (overlapResult.objectType == ObjectType::DOOR)
+            {
                 Door* door = (Door*)(overlapResult.parent);
-                if (!door->IsInteractable(GetFeetPosition())) {
+                if (!door->IsInteractable(GetFeetPosition()))
+                {
                     return;
                 }
                 door->Interact();
             }
 
             // Weapon pickups
-            if (overlapResult.objectType == ObjectType::GAME_OBJECT) {
-
+            if (overlapResult.objectType == ObjectType::GAME_OBJECT) 
+            {
                 GameObject* gameObject = (GameObject*)(overlapResult.parent);
 
-                if (gameObject->GetName() == "PickUp") {
+                if (gameObject->GetName() == "PickUp")
+                {
 
                     std::cout << "picked up " << gameObject->model->GetName() << "\n";
 
-
-                    for (int i = 0; Scene::GetGamesObjects().size(); i++) {
-                        if (gameObject == &Scene::GetGamesObjects()[i]) {
+                    for (int i = 0; Scene::GetGamesObjects().size(); i++) 
+                    {
+                        if (gameObject == &Scene::GetGamesObjects()[i])
+                        {
                             Scene::RemoveGameObjectByIndex(i);
                             Audio::PlayAudio("ItemPickUp.wav", 1.0f);
                             Physics::ClearCollisionLists();
@@ -1179,22 +1264,12 @@ label:
 
 }
 
-void Player::SetPosition(glm::vec3 position) {
+void Player::SetPosition(glm::vec3 position) 
+{
     _characterController->setFootPosition(PxExtendedVec3(position.x, position.y, position.z));
 }
 
-
-
-
-
-
 // FIND ME
-
-
-
-
-
-
 /*
 glm::vec3 Player::GetGlockBarrelPosition() {
 
@@ -1220,13 +1295,16 @@ glm::vec3 Player::GetGlockBarrelPosition() {
 }
 */
 
-void Player::SpawnCasing(AmmoInfo* ammoInfo) {
+void Player::SpawnCasing(AmmoInfo* ammoInfo)
+{
     AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-    if (!weaponInfo) {
+    if (!weaponInfo) 
+    {
         return;
     }
-    if (!Util::StrCmp(ammoInfo->casingModelName, UNDEFINED_STRING)) {
+    if (!Util::StrCmp(ammoInfo->casingModelName, UNDEFINED_STRING))
+    {
         int modelIndex = AssetManager::GetModelIndexByName(ammoInfo->casingModelName);
         int meshIndex = AssetManager::GetModelByIndex(modelIndex)->GetMeshIndices()[0];
         int materialIndex = AssetManager::GetMaterialIndex(ammoInfo->casingMaterialName);
@@ -1265,25 +1343,22 @@ void Player::SpawnCasing(AmmoInfo* ammoInfo) {
         bulletCasing.m_pxShape = shape;
         Scene::g_bulletCasings.push_back(bulletCasing);
     }
-    else {
+    else 
+    {
         std::cout << "Player::SpawnCasing() failed to spawn a casing coz invalid casing model name in weapon info\n";
     }
 }
 
-
-
-void Player::SpawnShotgunShell() {
-
-
+void Player::SpawnShotgunShell()
+{
 }
 
-void Player::SpawnAKS74UCasing() {
-
-
+void Player::SpawnAKS74UCasing() 
+{
 }
 
-
-void Player::SpawnBullet(float variance, Weapon type) {
+void Player::SpawnBullet(float variance, Weapon type)
+{
     _muzzleFlashCounter = 0.0005f;
     Bullet bullet;
     bullet.spawnPosition = GetViewPos();
@@ -1294,7 +1369,8 @@ void Player::SpawnBullet(float variance, Weapon type) {
     m_firedThisFrame = true;
 
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-    if (weaponInfo) {
+    if (weaponInfo)
+    {
         bullet.damage = weaponInfo->damage;
     }
 
@@ -1307,12 +1383,9 @@ void Player::SpawnBullet(float variance, Weapon type) {
 	Scene::_bullets.push_back(bullet);
 }
 
-
-void DropAKS7UMag() {
-
-    if (true) {
-        return;
-    }
+void DropAKS7UMag()
+{
+    return;
     /*
     AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
 
@@ -1363,39 +1436,42 @@ void DropAKS7UMag() {
 	//}
 
 	std::cout << "dropped ak mag\n";
-
 }
 
-float Player::GetMuzzleFlashTime() {
+float Player::GetMuzzleFlashTime()
+{
     return _muzzleFlashTimer;
 }
 
-float Player::GetMuzzleFlashRotation() {
+float Player::GetMuzzleFlashRotation()
+{
 	return _muzzleFlashRotation;
 }
 
-
-void Player::SetRotation(glm::vec3 rotation) {
+void Player::SetRotation(glm::vec3 rotation)
+{
 	_rotation = rotation;
 }
 
-float Player::GetRadius() {
+float Player::GetRadius() 
+{
 	return m_capsuleRadius;
 }
 
-
-PxShape* Player::GetCharacterControllerShape() {
+PxShape* Player::GetCharacterControllerShape() 
+{
 	PxShape* shape;
 	_characterController->getActor()->getShapes(&shape, 1);
 	return shape;
 }
 
-PxRigidDynamic* Player::GetCharacterControllerActor() {
+PxRigidDynamic* Player::GetCharacterControllerActor()
+{
 	return _characterController->getActor();
 }
 
-void Player::CreateItemPickupOverlapShape() {
-
+void Player::CreateItemPickupOverlapShape()
+{
     // Put this somewhere else 
     Physics::Destroy(m_interactSphere);
     float sphereRadius = 0.25f;
@@ -1406,7 +1482,8 @@ void Player::CreateItemPickupOverlapShape() {
 
 
     // pickup shape
-	if (_itemPickupOverlapShape) {
+	if (_itemPickupOverlapShape)
+    {
 		_itemPickupOverlapShape->release();
 	}
     float radius = PLAYER_CAPSULE_RADIUS + 0.075;
@@ -1414,7 +1491,8 @@ void Player::CreateItemPickupOverlapShape() {
     _itemPickupOverlapShape = Physics::GetPhysics()->createShape(PxCapsuleGeometry(radius, halfHeight), *Physics::GetDefaultMaterial(), true);
 
     // melee overlap shape
-    if (_meleeHitCheckOverlapShape) {
+    if (_meleeHitCheckOverlapShape)
+    {
         _meleeHitCheckOverlapShape->release();
     }
     radius = PLAYER_CAPSULE_RADIUS + 1.5;
@@ -1422,12 +1500,13 @@ void Player::CreateItemPickupOverlapShape() {
     _meleeHitCheckOverlapShape = Physics::GetPhysics()->createShape(PxCapsuleGeometry(radius, halfHeight), *Physics::GetDefaultMaterial(), true);
 }
 
-PxShape* Player::GetItemPickupOverlapShape() {
+PxShape* Player::GetItemPickupOverlapShape()
+{
 	return _itemPickupOverlapShape;
 }
 
-void Player::CreateCharacterController(glm::vec3 position) {
-
+void Player::CreateCharacterController(glm::vec3 position)
+{
 	PxMaterial* material = Physics::GetDefaultMaterial();
 	PxCapsuleControllerDesc* desc = new PxCapsuleControllerDesc;
 	desc->setToDefault();
@@ -1449,18 +1528,20 @@ void Player::CreateCharacterController(glm::vec3 position) {
 	filterData.word1 = CollisionGroup::PLAYER;
 	filterData.word2 = CollisionGroup(ITEM_PICK_UP | ENVIROMENT_OBSTACLE);
 	shape->setQueryFilterData(filterData);
-
 }
 
-float Player::GetZoom() {
+float Player::GetZoom()
+{
     return _zoom;
 }
 
-glm::mat4 Player::GetProjectionMatrix() {
+glm::mat4 Player::GetProjectionMatrix()
+{
     float width = (float)BackEnd::GetWindowedWidth();
     float height = (float)BackEnd::GetWindowedHeight();
 
-    if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER) {
+    if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER)
+    {
         height *= 0.5f;
     }
     return glm::perspective(_zoom, width / height, NEAR_PLANE, FAR_PLANE);
@@ -1483,8 +1564,6 @@ glm::mat4 Player::GetProjectionMatrix() {
 
     return RapidHotload::computeTileProjectionMatrix(fovY, aspectRatio, nearPlane, farPlane, screenWidth, screenHeight, tileX, tileY, tileWidth, tileHeight);*/
 }
-
-
 
 bool Player::PressingWalkForward() {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) {
@@ -1745,15 +1824,15 @@ bool Player::PressedFour() {
     }
 }
 
-glm::vec3 Player::GetCameraRotation() {
+glm::vec3 Player::GetCameraRotation() 
+{
     return _rotation;
 }
 
-
-
-void Player::Kill()  {
-
-    if (_isDead) {
+void Player::Kill() 
+{
+    if (_isDead)
+    {
         return;
     }
 
@@ -1771,26 +1850,29 @@ void Player::Kill()  {
     characterModel->_animationMode = AnimatedGameObject::AnimationMode::RAGDOLL;
     characterModel->_ragdoll.EnableCollision();
 
-    for (RigidComponent& rigid : characterModel->_ragdoll._rigidComponents) {
+    for (RigidComponent& rigid : characterModel->_ragdoll._rigidComponents)
+    {
         rigid.pxRigidBody->wakeUp();
     }
 
     Audio::PlayAudio("Death0.wav", 1.0f);
 }
 
-void Player::CheckForMeleeHit() {
-
+void Player::CheckForMeleeHit()
+{
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-    if (weaponInfo) {
-        for (int i = 0; i < Game::GetPlayerCount(); i++) {
+    if (weaponInfo) 
+    {
+        for (int i = 0; i < Game::GetPlayerCount(); i++) 
+        {
             Player* otherPlayer = Game::GetPlayerByIndex(i);
 
             // skip self
             if (otherPlayer == this)
                 continue;
 
-            if (!otherPlayer->_isDead) {
-
+            if (!otherPlayer->_isDead)
+            {
                 bool knifeHit = false;
 
                 glm::vec3 myPos = GetViewPos();
@@ -1802,13 +1884,16 @@ void Player::CheckForMeleeHit() {
 
                 float dotProduct = glm::dot(forward, v);
                 std::cout << dotProduct << "\n";
-                if (dotProduct < -0.65 && distToEnemy < 1.0f) {
+                if (dotProduct < -0.65 && distToEnemy < 1.0f)
+                {
                     knifeHit = true;
                 }
 
-                if (knifeHit) {
+                if (knifeHit)
+                {
                     // apply damage
-                    if (otherPlayer->_health > 0) {
+                    if (otherPlayer->_health > 0)
+                    {
                         otherPlayer->_health -= weaponInfo->damage;// +rand() % 50;
 
                         otherPlayer->GiveDamageColor();
@@ -1819,7 +1904,6 @@ void Player::CheckForMeleeHit() {
                             otherPlayer->_health = 0;
                             std::string file = "Death0.wav";
                             Audio::PlayAudio(file.c_str(), 1.0f);
-
                             otherPlayer->Kill();
                             m_killCount++;
                         }
@@ -1844,68 +1928,81 @@ void Player::CheckForMeleeHit() {
     }
 }
 
-bool Player::IsDead() {
+bool Player::IsDead()
+{
     return _isDead;
 }
-bool Player::IsAlive() {
+bool Player::IsAlive()
+{
     return !_isDead;
 }
 
-bool Player::RespawnAllowed() {
+bool Player::RespawnAllowed() 
+{
     return _isDead && _timeSinceDeath > 3.25f;
 }
 
-CrosshairType Player::GetCrosshairType() {
-
+CrosshairType Player::GetCrosshairType()
+{
     // None
-    if (IsDead()) {
+    if (IsDead()) 
+    {
         return CrosshairType::NONE;
     }
 
-    if (m_pickUpInteractable) {
+    if (m_pickUpInteractable)
+    {
         return CrosshairType::INTERACT;
     }
 
     // Interact
-    else if (m_cameraRayResult.objectType == ObjectType::DOOR) {
+    else if (m_cameraRayResult.objectType == ObjectType::DOOR)
+    {
         Door* door = (Door*)(m_cameraRayResult.parent);
         if (door && door->IsInteractable(GetFeetPosition())) {
             return CrosshairType::INTERACT;
         }
     }
-    else if (m_cameraRayResult.objectType == ObjectType::GAME_OBJECT && m_cameraRayResult.parent) {
+    else if (m_cameraRayResult.objectType == ObjectType::GAME_OBJECT && m_cameraRayResult.parent)
+    {
         GameObject* gameObject = (GameObject*)(m_cameraRayResult.parent);
         return CrosshairType::INTERACT;
     }
 
     // Regular
     return CrosshairType::REGULAR;
-
 }
 
-void Player::GiveDamageColor() {
+void Player::GiveDamageColor()
+{
     _damageColorTimer = 0.0f;
 }
 
-int32_t Player::GetKeyboardIndex() {
+int32_t Player::GetKeyboardIndex()
+{
     return m_keyboardIndex;
 }
 
-int32_t Player::GetMouseIndex() {
+int32_t Player::GetMouseIndex()
+{
     return m_mouseIndex;
 }
 
-void Player::SetKeyboardIndex(int32_t index) {
+void Player::SetKeyboardIndex(int32_t index)
+{
     m_keyboardIndex = index;
 }
-void Player::SetMouseIndex(int32_t index) {
+void Player::SetMouseIndex(int32_t index)
+{
     m_mouseIndex = index;
 }
 
-int32_t Player::GetKillCount() {
+int32_t Player::GetKillCount()
+{
     return m_killCount;
 }
 
-void Player::IncrementKillCount() {
+void Player::IncrementKillCount()
+{
     m_killCount++;
 }
