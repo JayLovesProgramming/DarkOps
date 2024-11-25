@@ -32,8 +32,8 @@ void Player::Update(float deltaTime)
         Respawn();
     }
 
-    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
-    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "characterModel");
+    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponGameObject");
 
     // Update outside
     glm::vec3 origin = GetFeetPosition() + glm::vec3(0, 0.1f, 0);
@@ -141,8 +141,8 @@ void Player::Update(float deltaTime)
 
 void Player::Respawn()
 {
-    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
-    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "characterModel");
+    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponGameObject");
 
     _isDead = false;
     m_ignoreControl = false;
@@ -195,7 +195,7 @@ void Player::Respawn()
     }
 
     GiveDefaultLoadout();
-    SwitchWeapon("SPAS", SPAWNING);
+    SwitchWeapon("Knife", SPAWNING);
 
     if (_characterController) 
     {
@@ -741,8 +741,8 @@ void Player::CheckForDebugKeyPresses()
         return;
     }
 
-    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
-    AnimatedGameObject* viewWeaponModel = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "characterModel");
+    AnimatedGameObject* viewWeaponModel = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponModel");
 
     if (Input::KeyPressed(HELL_KEY_7))
     {
@@ -778,18 +778,19 @@ bool Player::HasControl()
 
 AnimatedGameObject* Player::GetCharacterAnimatedGameObject()
 {
-    return Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
+    return Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "GetCharacterAnimatedGameObject");
 }
 
 AnimatedGameObject* Player::GetViewWeaponAnimatedGameObject()
 {
-    return Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+    return Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "GetViewWeaponAnimatedGameObject");
 }
 
 int32_t Player::GetViewWeaponAnimatedGameObjectIndex()
 {
     return m_viewWeaponAnimatedGameObjectIndex;
 }
+
 int32_t Player::GetCharacterModelAnimatedGameObjectIndex()
 {
     return m_characterModelAnimatedGameObjectIndex;
@@ -827,7 +828,7 @@ glm::vec3 Player::GetMuzzleFlashPosition()
 
 glm::vec3 Player::GetPistolCasingSpawnPostion()
 {
-    AnimatedGameObject* viewWeaponAnimatedGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+    AnimatedGameObject* viewWeaponAnimatedGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponAnimatedGameObject");
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
 
     if (!viewWeaponAnimatedGameObject || !weaponInfo || GetCurrentWeaponInfo()->casingEjectionBoneName == UNDEFINED_STRING)
@@ -1064,7 +1065,7 @@ void Player::UpdateRagdoll()
     // this is probably broken
     // this is probably broken
 
-    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
+    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "characterModel");
 
     for (RigidComponent& rigid : characterModel->_ragdoll._rigidComponents)
     {
@@ -1297,7 +1298,7 @@ glm::vec3 Player::GetGlockBarrelPosition() {
 
 void Player::SpawnCasing(AmmoInfo* ammoInfo)
 {
-    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponGameObject");
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     if (!weaponInfo) 
     {
@@ -1846,7 +1847,7 @@ void Player::Kill()
     _characterController->setFootPosition(globalPose);
 
     std::cout << _playerName << " was killed\n";
-    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex);
+    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "characterModel");
     characterModel->_animationMode = AnimatedGameObject::AnimationMode::RAGDOLL;
     characterModel->_ragdoll.EnableCollision();
 

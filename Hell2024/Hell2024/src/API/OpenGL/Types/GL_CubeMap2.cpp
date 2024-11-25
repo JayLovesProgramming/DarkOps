@@ -58,7 +58,7 @@ void CubeMap2::CheckStatus()
     glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
     auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (fboStatus == 36053)
-        std::cout << "CUBEMAP FRAMEBUFFER: complete\n";
+        std::cout << "[LOADED] Cubemap Framebuffer \n";
     if (fboStatus == 36054)
         std::cout << "CUBEMAP FRAMEBUFFER: incomplete attachment\n";
     if (fboStatus == 36057)

@@ -373,7 +373,7 @@ float Dobermann::GetDistanceToTarget()
 
 AnimatedGameObject* Dobermann::GetAnimatedGameObject()
 {
-    return Scene::GetAnimatedGameObjectByIndex(m_animatedGameObjectIndex);
+    return Scene::GetAnimatedGameObjectByIndex(m_animatedGameObjectIndex, "Dobermann");
 }
 
 void Dobermann::CleanUp() 

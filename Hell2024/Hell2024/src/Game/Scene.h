@@ -1,4 +1,5 @@
 #pragma once
+
 #include "HellCommon.h"
 #include "GameObject.h"
 #include "AnimatedGameObject.h"
@@ -21,16 +22,20 @@
 #include "../Util.hpp"
 
 #include "../Editor/CSGPlane.hpp"
+#include <string>
 
-inline float RandFloat(float min, float max) {
+inline float RandFloat(float min, float max)
+{
     return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
 }
 
-inline glm::vec3 NormalFromThreePoints(glm::vec3 pos0, glm::vec3 pos1, glm::vec3 pos2) {
+inline glm::vec3 NormalFromThreePoints(glm::vec3 pos0, glm::vec3 pos1, glm::vec3 pos2)
+{
     return glm::normalize(glm::cross(pos1 - pos0, pos2 - pos0));
 }
 
-inline void SetNormalsAndTangentsFromVertices(Vertex* vert0, Vertex* vert1, Vertex* vert2) {
+inline void SetNormalsAndTangentsFromVertices(Vertex* vert0, Vertex* vert1, Vertex* vert2) 
+{
     // Shortcuts for UVs
     glm::vec3& v0 = vert0->position;
     glm::vec3& v1 = vert1->position;
@@ -60,21 +65,22 @@ inline void SetNormalsAndTangentsFromVertices(Vertex* vert0, Vertex* vert1, Vert
 #define PROPOGATION_HEIGHT (MAP_HEIGHT / PROPOGATION_SPACING)
 #define PROPOGATION_DEPTH (MAP_DEPTH / PROPOGATION_SPACING)
 
-
-
-struct SpawnPoint {
+struct SpawnPoint
+{
     glm::vec3 position = glm::vec3(0);
     glm::vec3 rotation = glm::vec3(0);
 };
 
-struct RTMesh {
+struct RTMesh
+{
     GLuint baseVertex = 0;
     GLuint vertexCount = 0;
     GLuint padding0 = 0;
     GLuint padding1 = 0;
 };
 
-struct RTInstance {
+struct RTInstance
+{
     glm::mat4 modelMatrix = glm::mat4(1);
     glm::mat4 inverseModelMatrix = glm::mat4(1);
     GLuint meshIndex = 0;
@@ -83,7 +89,8 @@ struct RTInstance {
     GLuint padding2 = 0;
 };
 
-struct Bullet {
+struct Bullet
+{
     glm::vec3 spawnPosition;
     glm::vec3 direction;
     Weapon type;
@@ -93,8 +100,8 @@ struct Bullet {
     int parentPlayerIndex = -1;
 };
 
-struct PickUp {
-
+struct PickUp
+{
 	enum class Type { GLOCK_AMMO = 0};
 
 	Type type;
@@ -105,27 +112,30 @@ struct PickUp {
     float timeSincePickedUp = 0.0f;
 	float respawnTime = 10.0f;
 
-	glm::mat4 GetModelMatrix() {
+	glm::mat4 GetModelMatrix() 
+    {
 		Transform transform;
 		transform.position = position;
 		transform.rotation = rotation;
 		return transform.to_mat4();
 	}
 
-    void Update(float deltaTime) {
-
-        if (pickedUp) {
+    void Update(float deltaTime)
+    {
+        if (pickedUp)
+        {
             timeSincePickedUp += deltaTime;
         }
-        if (timeSincePickedUp > respawnTime) {
+        if (timeSincePickedUp > respawnTime)
+        {
             pickedUp = false;
             timeSincePickedUp = 0;
         }
     }
 };
 
-namespace Scene {
-
+namespace Scene
+{
     inline bool g_needToPlantTrees = true;
     void Update(float deltaTime);
     void SaveMapData(const std::string& fileName);
@@ -157,7 +167,7 @@ namespace Scene {
 
     // Animated Game Objects
     int32_t CreateAnimatedGameObject();
-    AnimatedGameObject* GetAnimatedGameObjectByIndex(int32_t index);
+    AnimatedGameObject* GetAnimatedGameObjectByIndex(int32_t index, std::string type);
     std::vector<AnimatedGameObject>& GetAnimatedGamesObjects();
     std::vector<AnimatedGameObject*> GetAnimatedGamesObjectsToSkin();
     //void UpdateAnimatedGameObjects(float deltaTime);
@@ -259,7 +269,6 @@ namespace Scene {
     //void DirtyAllLights();
 
     void CreateVolumetricBlood(glm::vec3 position, glm::vec3 rotation, glm::vec3 front);
-
 
     //Player* GetPlayerFromCharacterControler(PxController* characterController);
 }

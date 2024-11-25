@@ -7,17 +7,17 @@
 #include "Util.hpp"
 #include "Timer.hpp"
 
-void Player::GiveDefaultLoadout() {
-
+void Player::GiveDefaultLoadout()
+{
     GiveWeapon("Knife");
     // GiveWeapon("GoldenKnife");
-    GiveWeapon("Glock");
-    GiveWeapon("GoldenGlock");
-    GiveWeapon("Tokarev");
-    // GiveWeapon("Smith & Wesson");
-    GiveWeapon("AKS74U");
-    GiveWeapon("P90");
-    GiveWeapon("Shotgun");
+    //GiveWeapon("Glock");
+    //GiveWeapon("GoldenGlock");
+    //GiveWeapon("Tokarev");
+    //// GiveWeapon("Smith & Wesson");
+    //GiveWeapon("AKS74U");
+    //GiveWeapon("P90");
+    //GiveWeapon("Shotgun");
     GiveWeapon("SPAS");
 
     GiveAmmo("Glock", 80000);
@@ -29,16 +29,7 @@ void Player::GiveDefaultLoadout() {
    // GiveSilencerToWeapon("Glock");
 }
 
-/*
- ▄█        ▄██████▄     ▄██████▄   ▄█   ▄████████
-███       ███    ███   ███    ███ ███  ███    ███
-███       ███    ███   ███    █▀  ███▌ ███    █▀
-███       ███    ███  ▄███        ███▌ ███
-███       ███    ███ ▀▀███ ████▄  ███▌ ███
-███       ███    ███   ███    ███ ███  ███    █▄
-███▌    ▄ ███    ███   ███    ███ ███  ███    ███
-█████▄▄██  ▀██████▀    ████████▀  █▀   ████████▀  */
-
+// Logic
 bool Player::WeaponMagIsEmpty(WeaponState* weaponState)
 {
     return weaponState->ammoInMag <= 0;
@@ -46,81 +37,93 @@ bool Player::WeaponMagIsEmpty(WeaponState* weaponState)
 
 void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
 {
-    /*
-    █▀▄▀█ █▀▀ █   █▀▀ █▀▀
-    █ ▀ █ █▀▀ █   █▀▀ █▀▀
-    ▀   ▀ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀ */
-    if (weaponInfo->type == WeaponType::MELEE) {
-
+    // Melee
+    if (weaponInfo->type == WeaponType::MELEE)
+    {
         // Idle
-        if (_weaponAction == IDLE) {
-            if (Player::IsMoving()) {
+        if (_weaponAction == IDLE) 
+        {
+            if (Player::IsMoving())
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.walk, 1.0f);
             }
-            else {
+            else 
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.idle, 1.0f);
             }
         }
         // Draw
-        if (_weaponAction == DRAW_BEGIN) {
+        if (_weaponAction == DRAW_BEGIN)
+        {
             viewWeapon->PlayAnimation(weaponInfo->animationNames.draw, 1.0f);
             _weaponAction = DRAWING;
         }
         // Drawing
-        if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete())
+        {
             _weaponAction = IDLE;
         }
         // Fire
-        if (PressedFire() && CanFire()) {
+        if (PressedFire() && CanFire())
+        {
             if (_weaponAction == DRAWING ||
                 _weaponAction == IDLE ||
                 _weaponAction == FIRE && viewWeapon->AnimationIsPastPercentage(25.0f) ||
-                _weaponAction == RELOAD && viewWeapon->AnimationIsPastPercentage(80.0f)) {
+                _weaponAction == RELOAD && viewWeapon->AnimationIsPastPercentage(80.0f))
+            {
                 _weaponAction = FIRE;
-
-                if (weaponInfo->audioFiles.fire.size()) {
+                if (weaponInfo->audioFiles.fire.size())
+                {
                     int rand = std::rand() % weaponInfo->audioFiles.fire.size();
                     Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 1.0f);
                 }
-                if (weaponInfo->animationNames.fire.size()) {
+                if (weaponInfo->animationNames.fire.size())
+                {
                     int rand = std::rand() % weaponInfo->animationNames.fire.size();
                     viewWeapon->PlayAnimation(weaponInfo->animationNames.fire[rand], weaponInfo->animationSpeeds.fire);
                 }
                 //CheckForMeleeHit();
             }
         }
-        if (_weaponAction == FIRE && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == FIRE && viewWeapon->IsAnimationComplete())
+        {
             _weaponAction = IDLE;
         }
     }
 };
 
-
 void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime) // And automatic weapons for now. Make more modular
 {
-    if (weaponInfo->type == WeaponType::PISTOL || weaponInfo->type == WeaponType::AUTOMATIC) {
-        if (!weaponState) {
+    if (weaponInfo->type == WeaponType::PISTOL || weaponInfo->type == WeaponType::AUTOMATIC)
+    {
+        if (!weaponState)
+        {
             return;
         }
-        if (HasControl()) {
+
+        if (HasControl())
+        {
             static float current = 0;
             constexpr float max = 0.0018f;
             constexpr float speed = 20.0f;
             float zoomSpeed = 0.075f;
 
             // Empty mag on pistol and automatic weapons
-            if (CanFire() && PressedFire() && WeaponMagIsEmpty(weaponState)) {
+            if (CanFire() && PressedFire() && WeaponMagIsEmpty(weaponState))
+            {
                 Audio::PlayAudio("Dry_Fire.wav", 0.8f);
             }
 
             if (_weaponAction == ADS_IN ||
                 _weaponAction == ADS_IDLE ||
                 _weaponAction == ADS_FIRE
-                ) {
+                )
+            {
                 current = Util::FInterpTo(current, max, deltaTime, speed);
                 _zoom -= zoomSpeed;
             }
-            else {
+            else 
+            {
                 current = Util::FInterpTo(current, 0, deltaTime, speed);
                 _zoom += zoomSpeed;
             }
@@ -137,34 +140,38 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
         _zoom = std::max(0.575f, _zoom);
         _zoom = std::min(1.0f, _zoom);
 
-
-        if (weaponInfo->name == "P90") {
+        if (weaponInfo->name == "P90") 
+        {
             _zoom = std::max(0.775f, _zoom);
         }
 
         float adsInOutSpeed = 3.0f;
 
         // ADS in
-        if (PressingADS() && CanEnterADS()) {
+        if (PressingADS() && CanEnterADS()) 
+        {
             _weaponAction = ADS_IN;
             viewWeapon->PlayAnimation(weaponInfo->animationNames.adsIn, adsInOutSpeed);
         }
         // ADS in complete
-        if (_weaponAction == ADS_IN && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == ADS_IN && viewWeapon->IsAnimationComplete())
+        {
             viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.adsIdle, 1.0f);
             _weaponAction = ADS_IDLE;
         }
         // ADS out
-        if (!PressingADS()) {
-
+        if (!PressingADS()) 
+        {
             if (_weaponAction == ADS_IN ||
-                _weaponAction == ADS_IDLE) {
+                _weaponAction == ADS_IDLE)
+            {
                 _weaponAction = ADS_OUT;
                 viewWeapon->PlayAnimation(weaponInfo->animationNames.adsOut, adsInOutSpeed);
             }
         }
         // ADS out complete
-        if (_weaponAction == ADS_OUT && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == ADS_OUT && viewWeapon->IsAnimationComplete())
+        {
             viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.idle, 1.0f);
             _weaponAction = IDLE;
         }
@@ -175,22 +182,27 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
             PressingFire() && weaponInfo->type == WeaponType::AUTOMATIC
             );
 
-        if (triggeredFire && CanFire() && InADS()) {
+        if (triggeredFire && CanFire() && InADS())
+        {
             // Has ammo
-            if (!WeaponMagIsEmpty(weaponState)) {
+            if (!WeaponMagIsEmpty(weaponState))
+            {
                 _weaponAction = ADS_FIRE;
-                if (weaponInfo->animationNames.adsFire.size()) {
+                if (weaponInfo->animationNames.adsFire.size())
+                {
                     int rand = std::rand() % weaponInfo->animationNames.adsFire.size();
                     viewWeapon->PlayAnimation(weaponInfo->animationNames.adsFire[rand], weaponInfo->animationSpeeds.adsFire);
                     m_crosshairCrossSize = 40;
                 }
-                if (!weaponState->hasSilencer) {
+                if (!weaponState->hasSilencer)
+                {
                     if (weaponInfo->audioFiles.fire.size()) {
                         int rand = std::rand() % weaponInfo->audioFiles.fire.size();
                         Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 1.0f);
                     }
                 }
-                else {
+                else
+                {
                     Audio::PlayAudio("Silenced.wav", 1.0f);
                 }
                 SpawnMuzzleFlash();
@@ -200,36 +212,44 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
             }
         }
         // Finished ADS Fire
-        if (_weaponAction == ADS_FIRE && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == ADS_FIRE && viewWeapon->IsAnimationComplete())
+        {
             viewWeapon->PlayAnimation(weaponInfo->animationNames.idle, 1.0f);
             _weaponAction = ADS_IDLE;
         }
         // Not finished ADS Fire but player HAS LET GO OF RIGHT MOUSE
-        if (_weaponAction == ADS_FIRE && !PressingADS()) {
+        if (_weaponAction == ADS_FIRE && !PressingADS())
+        {
             _weaponAction = ADS_OUT;
             viewWeapon->PlayAnimation(weaponInfo->animationNames.adsOut, adsInOutSpeed);
         }
         // ADS walk
-        if (_weaponAction == ADS_IDLE) {
-            if (Player::IsMoving()) {
+        if (_weaponAction == ADS_IDLE)
+        {
+            if (Player::IsMoving())
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.adsWalk, 1.0f);
             }
-            else {
+            else
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.adsIdle, 1.0f);
             }
         }
         // Give reload ammo
-        if (_weaponAction == RELOAD || _weaponAction == RELOAD_FROM_EMPTY) {
-
+        if (_weaponAction == RELOAD || _weaponAction == RELOAD_FROM_EMPTY) 
+        {
             int frameNumber = 0;
 
-            if (_weaponAction == RELOAD) {
+            if (_weaponAction == RELOAD)
+            {
                 frameNumber = weaponInfo->reloadMagInFrameNumber;
             }
-            if (_weaponAction == RELOAD_FROM_EMPTY) {
+            if (_weaponAction == RELOAD_FROM_EMPTY)
+            {
                 frameNumber = weaponInfo->reloadEmptyMagInFrameNumber;
             }
-            if (_needsAmmoReloaded && viewWeapon->AnimationIsPastFrameNumber(frameNumber)) {
+            if (_needsAmmoReloaded && viewWeapon->AnimationIsPastFrameNumber(frameNumber))
+            {
                 int ammoToGive = std::min(weaponInfo->magSize - weaponState->ammoInMag, ammoState->ammoOnHand);
                 weaponState->ammoInMag += ammoToGive;
                 ammoState->ammoOnHand -= ammoToGive;
@@ -239,19 +259,22 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
         // Revolver cocks
         if (weaponInfo->revolverCockFrameNumber != 0 &&
             m_revolverNeedsCocking &&
-            viewWeapon->AnimationIsPastFrameNumber(weaponInfo->revolverCockFrameNumber)) {
+            viewWeapon->AnimationIsPastFrameNumber(weaponInfo->revolverCockFrameNumber))
+        {
             int rand = std::rand() % weaponInfo->audioFiles.revolverCocks.size();
             Audio::PlayAudio(weaponInfo->audioFiles.revolverCocks[rand], 1.0f);
             m_revolverNeedsCocking = false;
         }
 
         // Fire (has ammo)
-        if (triggeredFire && CanFire() && weaponState->ammoInMag > 0) {
+        if (triggeredFire && CanFire() && weaponState->ammoInMag > 0)
+        {
             _weaponAction = FIRE;
             m_crosshairCrossSize = 40;
 
             // Await cock
-            if (weaponInfo->revolverCockFrameNumber != 0) {
+            if (weaponInfo->revolverCockFrameNumber != 0)
+            {
                 m_revolverNeedsCocking = true;
             }
 
@@ -669,56 +692,53 @@ void Player::UpdateViewWeaponLogic(float deltaTime) {
     }
 }
 
-/*
-   ▄████████  ▄█    █▄     ▄████████    ▄████████ ▄██   ▄       ███        ▄█    █▄     ▄█  ███▄▄▄▄      ▄██████▄            ▄████████  ▄█          ▄████████    ▄████████
-  ███    ███ ███    ███   ███    ███   ███    ███ ███   ██▄ ▀█████████▄   ███    ███   ███  ███▀▀▀██▄   ███    ███          ███    ███ ███         ███    ███   ███    ███
-  ███    █▀  ███    ███   ███    █▀    ███    ███ ███▄▄▄███    ▀███▀▀██   ███    ███   ███▌ ███   ███   ███    █▀           ███    █▀  ███         ███    █▀    ███    █▀
- ▄███▄▄▄     ███    ███  ▄███▄▄▄      ▄███▄▄▄▄██▀ ▀▀▀▀▀▀███     ███   ▀  ▄███▄▄▄▄███▄▄ ███▌ ███   ███  ▄███               ▄███▄▄▄     ███         ███         ▄███▄▄▄
-▀▀███▀▀▀     ███    ███ ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   ▄██   ███     ███     ▀▀███▀▀▀▀███▀  ███▌ ███   ███ ▀▀███ ████▄        ▀▀███▀▀▀     ███       ▀███████████ ▀▀███▀▀▀
-  ███    █▄  ███    ███   ███    █▄  ▀███████████ ███   ███     ███       ███    ███   ███  ███   ███   ███    ███          ███    █▄  ███                ███   ███    █▄
-  ███    ███ ███    ███   ███    ███   ███    ███ ███   ███     ███       ███    ███   ███  ███   ███   ███    ███          ███    ███ ███▌    ▄    ▄█    ███   ███    ███
-  ██████████  ▀██████▀    ██████████   ███    ███  ▀█████▀     ▄████▀     ███    █▀    █▀    ▀█   █▀    ████████▀           ██████████ █████▄▄██  ▄████████▀    ██████████ */
+// Everything else
 
-
-bool Player::CanMelee() {
+bool Player::CanMelee()
+{
     return true;
 }
 
-bool Player::CanEnterADS() {
-
-    AnimatedGameObject* viewWeapon = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+bool Player::CanEnterADS() 
+{
+    AnimatedGameObject* viewWeapon = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeapon");
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     WeaponState* weaponState = GetCurrentWeaponState();
 
-    if (weaponInfo->name == "Tokarev") {
+    if (weaponInfo->name == "Tokarev")
+    {
         return false;
     }
-    if (weaponInfo->name == "AKS74U") {
+    if (weaponInfo->name == "AKS74U") 
+    {
         return false;
     }
 
-    if (weaponInfo->name != "P90" && weaponState && !weaponState->hasScope) {
+    if (weaponInfo->name != "P90" && weaponState && !weaponState->hasScope)
+    {
         return false;
     }
 
     if (_weaponAction != RELOAD && _weaponAction != RELOAD_FROM_EMPTY && !InADS() ||
         _weaponAction == RELOAD && viewWeapon->AnimationIsPastPercentage(65.0f) ||
-        _weaponAction == RELOAD_FROM_EMPTY && viewWeapon->AnimationIsPastPercentage(65.0f)) {
+        _weaponAction == RELOAD_FROM_EMPTY && viewWeapon->AnimationIsPastPercentage(65.0f)) 
+    {
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-WeaponAction& Player::GetWeaponAction() {
+WeaponAction& Player::GetWeaponAction() 
+{
     return _weaponAction;
 }
 
-
-bool Player::CanFire() {
-
-    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+bool Player::CanFire() 
+{
+    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponGameObject");
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
 
     if (!HasControl() || IsDead()) {
@@ -854,7 +874,7 @@ void Player::UpdateWeaponSway(float deltaTime) {
     if (HasControl()) {
 
         WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-        AnimatedGameObject* viewWeapon = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex);
+        AnimatedGameObject* viewWeapon = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeapon");
 
         float xMax = 4.0;
         if (_zoom < 0.99f) {
@@ -957,16 +977,18 @@ void Player::DropWeapons() {
     }
 }
 
-void Player::SwitchWeapon(std::string name, WeaponAction weaponAction) {
-
+void Player::SwitchWeapon(std::string name, WeaponAction weaponAction)
+{
     WeaponState* state = GetWeaponStateByName(name);
     WeaponInfo* weaponInfo = WeaponManager::GetWeaponInfoByName(name);
     AnimatedGameObject* viewWeaponAnimatedGameObject = GetViewWeaponAnimatedGameObject();
 
-    if (weaponInfo && state) {
-
-        for (int i = 0; i < m_weaponStates.size(); i++) {
-            if (m_weaponStates[i].name == name) {
+    if (weaponInfo && state)
+    {
+        for (int i = 0; i < m_weaponStates.size(); i++) 
+        {
+            if (m_weaponStates[i].name == name)
+            {
                 m_currentWeaponIndex = i;
             }
         }

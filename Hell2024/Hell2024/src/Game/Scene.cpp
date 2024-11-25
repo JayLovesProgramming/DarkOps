@@ -167,7 +167,7 @@ void Scene::LoadMapData(const std::string& fileName)
 {
     // Load file
     std::string fullPath = "res/maps/" + fileName;
-    std::cout << "Loading map '" << fullPath << "'\n";
+    std::cout << "[LOADED] Map: '" << fullPath << "'\n";
 
     Scene::g_needToPlantTrees = true;
 
@@ -351,7 +351,7 @@ void Scene::LoadDefaultScene()
     int testLightCount = 50;
     int testCubeCount = 50;
 
-    std::cout << "Loading default scene\n";
+    std::cout << "[LOADED] Default Scene\n";
 
     CleanUp();
     CreateDefaultSpawnPoints();
@@ -369,7 +369,7 @@ void Scene::LoadDefaultScene()
         if (heightMap.m_pxRigidStatic == NULL) 
         {
             heightMap.CreatePhysicsObject();
-            std::cout << "Created heightmap physics shit\n";
+            std::cout << "[INIT] Height Map Physics Stuff\n";
         }
     }
 
@@ -521,7 +521,7 @@ void Scene::LoadDefaultScene()
         }
     }
 
-    std::cout << "Light Count: " << g_lights.size() << "\n";
+    std::cout << "[INFO] Light Count: " << g_lights.size() << "\n";
 
     // Dobermann spawn lab
     {
@@ -1525,17 +1525,24 @@ const size_t Scene::GetAnimatedGameObjectCount()
     return g_animatedGameObjects.size();
 }
 
-AnimatedGameObject* Scene::GetAnimatedGameObjectByIndex(int32_t index)
+AnimatedGameObject* Scene::GetAnimatedGameObjectByIndex(int32_t index, std::string type)
 {
-    if (index >= 0 && index < g_animatedGameObjects.size())
+    // Current types
+    if (type != "Dobermann" && 
+        type != "GetCharacterAnimatedGameObject" &&
+        type != "characterModel" &&
+        type != "viewWeaponGameObject" && 
+        type != "animatedGameObject" && 
+        type != "GetViewWeaponAnimatedGameObject" && 
+        type != "viewWeaponModel" && 
+        type != "viewWeapon")
     {
-        return &g_animatedGameObjects[index];
+        std::cout << type << std::endl;
     }
-    else
-    {
-        std::cout << "Scene::GetAnimatedGameObjectByIndex() called with out of range index " << index << ", size is " << GetAnimatedGameObjectCount() << "\n";
-        return nullptr;
-    }
+    //std::cout << "GetAnimatedGameObjectByIndex - Index Size = " << index << std::endl;
+    //std::cout << "GetAnimatedGameObjectByIndex - Animated Game Objects Size = " << g_animatedGameObjects.size() << std::endl;
+    assert(index >= 0 && index < g_animatedGameObjects.size());
+    return &g_animatedGameObjects[index];
 }
 
 /*void Scene::UpdateAnimatedGameObjects(float deltaTime) {
@@ -1931,7 +1938,8 @@ std::vector<RenderItem3D> Scene::GetGeometryRenderItems() {
 }
 
 
-std::vector<RenderItem3D> Scene::CreateDecalRenderItems() {
+std::vector<RenderItem3D> Scene::CreateDecalRenderItems()
+{
     static int bulletHolePlasterMaterialIndex = AssetManager::GetMaterialIndex("BulletHole_Plaster");
     static int bulletHoleGlassMaterialIndex = AssetManager::GetMaterialIndex("BulletHole_Glass");
     std::vector<RenderItem3D> renderItems;
@@ -2299,7 +2307,7 @@ void Scene::ProcessBullets() {
                                     Game::GetPlayerByIndex(1)->IncrementKillCount();
                                 }
 
-                                AnimatedGameObject* hitCharacterModel = GetAnimatedGameObjectByIndex(parentPlayerHit->GetCharacterModelAnimatedGameObjectIndex());
+                                AnimatedGameObject* hitCharacterModel = GetAnimatedGameObjectByIndex(parentPlayerHit->GetCharacterModelAnimatedGameObjectIndex(), "hitCharacterModel");
 
                                 for (RigidComponent& rigidComponent : hitCharacterModel->_ragdoll._rigidComponents) {
                                     float strength = 75;

@@ -119,7 +119,7 @@ void InputMulti::Init()
         return;
     }
     else
-        std::cout << "Dual keyboard init successful\n";
+        std::cout << "[INIT] Dual Keyboard\n";
     RegisterDeviceOfType(HID_USAGE_GENERIC_MOUSE, eventWindow);
     RegisterDeviceOfType(HID_USAGE_GENERIC_KEYBOARD, eventWindow);
 

@@ -20,7 +20,8 @@
 #include <stb_image.h>
 #include "tiny_obj_loader.h"
 
-struct CMPTextureData {
+struct CMPTextureData
+{
     CMP_Texture m_cmpTexture;
     std::string m_textureName;
     std::string m_sourceFilePath;
@@ -30,9 +31,10 @@ struct CMPTextureData {
     BakingState m_bakingState = BakingState::AWAITING_BAKE;
 };
 
-namespace AssetManager {
-
-    struct CompletedLoadingTasks {
+namespace AssetManager 
+{
+    struct CompletedLoadingTasks
+    {
         bool g_hardcodedModels = false;
         bool g_materials = false;
         bool g_texturesBaked = false;
@@ -97,57 +99,59 @@ namespace AssetManager {
     void LoadCMPTextureData(CMPTextureData* cmpTextureData);
 }
 
-
-/*
- ▄█        ▄██████▄     ▄████████ ████████▄   ▄█  ███▄▄▄▄      ▄██████▄
-███       ███    ███   ███    ███ ███   ▀███ ███  ███▀▀▀██▄   ███    ███
-███       ███    ███   ███    ███ ███    ███ ███▌ ███   ███   ███    █▀
-███       ███    ███   ███    ███ ███    ███ ███▌ ███   ███  ▄███
-███       ███    ███ ▀███████████ ███    ███ ███▌ ███   ███ ▀▀███ ████▄
-███       ███    ███   ███    ███ ███    ███ ███  ███   ███   ███    ███
-███▌    ▄ ███    ███   ███    ███ ███   ▄███ ███  ███   ███   ███    ███
-█████▄▄██  ▀██████▀    ███    █▀  ████████▀  █▀    ▀█   █▀    ████████▀  */
-
-
-TextureData AssetManager::LoadTextureData(std::string filepath) {
+// Loading
+TextureData AssetManager::LoadTextureData(std::string filepath)
+{
     stbi_set_flip_vertically_on_load(false);
     TextureData textureData;
     textureData.m_data = stbi_load(filepath.data(), &textureData.m_width, &textureData.m_height, &textureData.m_numChannels, 0);
     return textureData;
 }
 
-void AssetManager::LoadCMPTextureData(CMPTextureData* cmpTextureData) {
+void AssetManager::LoadCMPTextureData(CMPTextureData* cmpTextureData)
+{
     LoadDDSFile(cmpTextureData->m_compressedFilePath.c_str(), cmpTextureData->m_cmpTexture);
 }
 
-void AssetManager::FindAssetPaths() {
+void AssetManager::FindAssetPaths() 
+{
     // Cubemap Textures
     auto skyboxTexturePaths = std::filesystem::directory_iterator("res/textures/skybox/");
-    for (const auto& entry : skyboxTexturePaths) {
+    for (const auto& entry : skyboxTexturePaths) 
+    {
         FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") {
-            if (info.filename.substr(info.filename.length() - 5) == "Right") {
-                std::cout << "Loading: " << info.fullpath << "\n";
+        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") 
+        {
+            if (info.filename.substr(info.filename.length() - 5) == "Right")
+            {
+                // Loading skybox
                 g_cubemapTextures.emplace_back(info.fullpath);
             }
         }
     }
+
     // Animations
     auto animationPaths = std::filesystem::directory_iterator("res/animations/");
-    for (const auto& entry : animationPaths) {
+    for (const auto& entry : animationPaths)
+    {
         FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "fbx") {
+        if (info.filetype == "fbx")
+        {
             g_animations.emplace_back(info.fullpath);
         }
     }
+
     // Models
     auto modelPaths = std::filesystem::directory_iterator("res/models/");
-    for (const auto& entry : modelPaths) {
+    for (const auto& entry : modelPaths)
+    {
         FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "obj") {
+        if (info.filetype == "obj")
+        {
             g_models.emplace_back(info.fullpath);
         }
     }
+
     // Skinned models
     auto skinnedModelPaths = std::filesystem::directory_iterator("res/models/");
     for (const auto& entry : skinnedModelPaths) {
@@ -396,105 +400,120 @@ void AssetManager::LoadNextItem() {
         g_animationIndexMap[g_animations[i]._filename] = i;
     }
     // Other rando shit
-    if (BackEnd::GetAPI() == API::OPENGL) {
+    if (BackEnd::GetAPI() == API::OPENGL)
+    {
         OpenGLRenderer::BindBindlessTextures();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN)
+    {
         VulkanRenderer::CreateShaders();
         VulkanRenderer::UpdateSamplerDescriptorSet();
         VulkanRenderer::CreatePipelines();
     }
 
-
     // Build materials
-    if (!g_completedLoadingTasks.g_materials) {
+    if (!g_completedLoadingTasks.g_materials)
+    {
         BuildMaterials();
         AddItemToLoadLog("Building Materials");
         g_completedLoadingTasks.g_materials = true;
         return;
     }
-    for (int i = 0; i < g_materials.size(); i++) {
+    for (int i = 0; i < g_materials.size(); i++)
+    {
         g_materialIndexMap[g_materials[i]._name] = i;
     }
 
     // Heightmap
-    if (BackEnd::GetAPI() == API::OPENGL) {
+    if (BackEnd::GetAPI() == API::OPENGL)
+    {
         g_treeMap.Load("res/textures/heightmaps/TreeMap.png");
         g_heightMap.Load("res/textures/heightmaps/HeightMap.png", 20.0f);
         g_heightMap.UploadToGPU();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN)
+    {
         // TODO
     }
 
     // We're done
     g_completedLoadingTasks.g_all = true;
 
-    for (auto& text : g_loadLog) {
+    for (auto& text : g_loadLog) 
+    {
         //std::cout << text << "\n";
     }
 }
 
-
-void AssetManager::LoadCubemapTexture(CubemapTexture* cubemapTexture) {
+void AssetManager::LoadCubemapTexture(CubemapTexture* cubemapTexture)
+{
     FileInfo fileInfo = Util::GetFileInfo(cubemapTexture->m_fullPath);
     cubemapTexture->SetName(fileInfo.filename.substr(0, fileInfo.filename.length() - 6));
     cubemapTexture->SetFiletype(fileInfo.filetype);
     cubemapTexture->Load();
 }
 
-
-void AssetManager::LoadAnimation(Animation* animation) {
+void AssetManager::LoadAnimation(Animation* animation)
+{
     FbxImporter::LoadAnimation(animation);
     animation->m_loadedFromDisk = true;
 }
 
-
-void AssetManager::LoadFont() {
+void AssetManager::LoadFont()
+{
     auto texturePaths = std::filesystem::directory_iterator("res/textures/font/");
 
-    for (const auto& entry : texturePaths) {
+    for (const auto& entry : texturePaths)
+    {
         FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") {
+        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga")
+        {
             Texture& texture = g_textures.emplace_back(Texture(info.fullpath.c_str(), false));
             LoadTexture(&texture);
             texture.Bake();
         }
     }
 
-    if (BackEnd::GetAPI() == API::OPENGL) {
+    if (BackEnd::GetAPI() == API::OPENGL) 
+    {
         OpenGLRenderer::BindBindlessTextures();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN) 
+    {
         VulkanRenderer::UpdateSamplerDescriptorSet();
     }
-    for (int i = 0; i < g_textures.size(); i++) {
+    for (int i = 0; i < g_textures.size(); i++)
+    {
         g_textureIndexMap[g_textures[i].GetFilename()] = i;
     }
 }
 
-
-void AssetManager::UploadVertexData() {
-    if (BackEnd::GetAPI() == API::OPENGL) {
+void AssetManager::UploadVertexData()
+{
+    if (BackEnd::GetAPI() == API::OPENGL) 
+    {
         OpenGLBackEnd::UploadVertexData(g_vertices, g_indices);
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN)
+    {
         VulkanBackEnd::UploadVertexData(g_vertices, g_indices);
     }
 }
 
-
-void AssetManager::UploadWeightedVertexData() {
-    if (BackEnd::GetAPI() == API::OPENGL) {
+void AssetManager::UploadWeightedVertexData()
+{
+    if (BackEnd::GetAPI() == API::OPENGL) 
+    {
         OpenGLBackEnd::UploadWeightedVertexData(g_weightedVertices, g_weightedIndices);
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) {
+    else if (BackEnd::GetAPI() == API::VULKAN)
+    {
         VulkanBackEnd::UploadWeightedVertexData(g_weightedVertices, g_weightedIndices);
     }
 }
 
-
-void AssetManager::CreateMeshBLAS() {
+void AssetManager::CreateMeshBLAS() 
+{
     // TO DO: add code to delete any pre-existing BLAS
     for (Mesh& mesh : g_meshes) {
         mesh.accelerationStructure = VulkanBackEnd::CreateBottomLevelAccelerationStructure(mesh);
@@ -502,13 +521,9 @@ void AssetManager::CreateMeshBLAS() {
 }
 
 
-/*
-█▄ ▄█ █▀█ █▀▄ █▀▀ █
-█ █ █ █ █ █ █ █▀▀ █
-▀   ▀ ▀▀▀ ▀▀  ▀▀▀ ▀▀▀ */
-
-void AssetManager::LoadModel(Model* model) {
-
+// Model
+void AssetManager::LoadModel(Model* model) 
+{
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
@@ -604,10 +619,8 @@ void AssetManager::LoadModel(Model* model) {
     model->m_loadedFromDisk = true;
 }
 
-
-
-
-void AssetManager::CreateHardcodedModels() {
+void AssetManager::CreateHardcodedModels()
+{
     /* Quad */ {
         Vertex vertA, vertB, vertC, vertD;
         vertA.position = { -1.0f, -1.0f, 0.0f };
@@ -687,10 +700,7 @@ void AssetManager::CreateHardcodedModels() {
     UploadVertexData();
 }
 
-/*
-█▄ ▄█ █▀▀ █▀▀ █ █
-█ █ █ █▀▀ ▀▀█ █▀█
-▀   ▀ ▀▀▀ ▀▀▀ ▀ ▀ */
+// Mesh
 int AssetManager::CreateMesh(std::string name, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 aabbMin, glm::vec3 aabbMax)
 {
     Mesh& mesh = g_meshes.emplace_back();
@@ -713,10 +723,7 @@ int AssetManager::CreateMesh(std::string name, std::vector<Vertex>& vertices, st
     return g_meshes.size() - 1;
 }
 
-/*
-█▀▀ █ █ ▀█▀ █▀█ █▀█ █▀▀ █▀▄   █▄ ▄█ █▀█ █▀▄ █▀▀ █
-▀▀█ █▀▄  █  █ █ █ █ █▀▀ █ █   █ █ █ █ █ █ █ █▀▀ █
-▀▀▀ ▀ ▀ ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀ ▀▀    ▀   ▀ ▀▀▀ ▀▀  ▀▀▀ ▀▀▀ */
+// Skinned model
 void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
 {
     int totalVertexCount = 0;
@@ -888,10 +895,7 @@ void AssetManager::GrabSkeleton(SkinnedModel& skinnedModel, const aiNode* pNode,
     }
 }
 
-/*
-█▀▀ █ █ ▀█▀ █▀█ █▀█ █▀▀ █▀▄   █▄ ▄█ █▀▀ █▀▀ █ █
-▀▀█ █▀▄  █  █ █ █ █ █▀▀ █ █   █ █ █ █▀▀ ▀▀█ █▀█
-▀▀▀ ▀ ▀ ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀ ▀▀    ▀   ▀ ▀▀▀ ▀▀▀ ▀ ▀ */
+// Skinned mesh
 int AssetManager::CreateSkinnedMesh(std::string name, std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices, uint32_t baseVertexLocal, glm::vec3 aabbMin, glm::vec3 aabbMax) 
 {
     SkinnedMesh& mesh = g_skinnedMeshes.emplace_back();
@@ -916,13 +920,10 @@ int AssetManager::CreateSkinnedMesh(std::string name, std::vector<WeightedVertex
     return g_skinnedMeshes.size() - 1;
 }
 
-/*
-█▄ ▄█ █▀█ ▀█▀ █▀▀ █▀▄ ▀█▀ █▀█ █
-█ █ █ █▀█  █  █▀▀ █▀▄  █  █▀█ █
-▀   ▀ ▀ ▀  ▀  ▀▀▀ ▀ ▀ ▀▀▀ ▀ ▀ ▀▀▀ */
+// Material
 void AssetManager::BuildMaterials() 
 {
-    std::cout << "g_textureIndexMap.size(): " << g_textureIndexMap.size() << "\n";
+    //std::cout << "g_textureIndexMap.size(): " << g_textureIndexMap.size() << "\n";
 
     std::lock_guard<std::mutex> lock(_texturesMutex);
 
@@ -983,29 +984,15 @@ void AssetManager::BuildMaterials()
     }
 }
 
-/*
- ▀█▀ █▀▀ █ █ ▀█▀ █ █ █▀▄ █▀▀
-  █  █▀▀ ▄▀▄  █  █ █ █▀▄ █▀▀
-  ▀  ▀▀▀ ▀ ▀  ▀  ▀▀▀ ▀ ▀ ▀▀▀ */
+// Texture
 void AssetManager::LoadTexture(Texture* texture)
 {
     texture->Load();
 }
 
-/*
-█▀▀ █ █ █▀▄ █▀▀ █▄█ █▀█ █▀█   ▀█▀ █▀▀ █ █ ▀█▀ █ █ █▀▄ █▀▀
-█   █ █ █▀▄ █▀▀ █ █ █▀█ █▀▀    █  █▀▀ ▄▀▄  █  █ █ █▀▄ █▀▀
-▀▀▀ ▀▀▀ ▀▀  ▀▀▀ ▀ ▀ ▀ ▀ ▀      ▀  ▀▀▀ ▀ ▀  ▀  ▀▀▀ ▀ ▀ ▀▀▀ */
+// Cubemap texture
 // Todo
-/*
-   ▄████████  ▄████████  ▄████████    ▄████████    ▄████████    ▄████████
-  ███    ███ ███    ███ ███    ███   ███    ███   ███    ███   ███    ███
-  ███    ███ ███    █▀  ███    █▀    ███    █▀    ███    █▀    ███    █▀
-  ███    ███ ███        ███         ▄███▄▄▄       ███          ███
-▀███████████ ███        ███        ▀▀███▀▀▀     ▀███████████ ▀███████████
-  ███    ███ ███    █▄  ███    █▄    ███    █▄           ███          ███
-  ███    ███ ███    ███ ███    ███   ███    ███    ▄█    ███    ▄█    ███
-  ███    █▀  ████████▀  ████████▀    ██████████  ▄████████▀   ▄████████▀  */
+// Access
 
 std::vector<Vertex>& AssetManager::GetVertices() 
 {
@@ -1027,10 +1014,7 @@ std::vector<uint32_t>& AssetManager::GetWeightedIndices()
     return g_weightedIndices;
 }
 
-/*
-█▄ ▄█ █▀█ █▀▄ █▀▀ █
-█ █ █ █ █ █ █ █▀▀ █
-▀   ▀ ▀▀▀ ▀▀  ▀▀▀ ▀▀▀ */
+// Model
 Model* AssetManager::GetModelByName(const std::string& name) 
 {
     auto it = g_modelIndexMap.find(name);
@@ -1080,10 +1064,7 @@ bool AssetManager::ModelExists(const std::string& filename)
     return false;
 }
 
-/*
-█▄ ▄█ █▀▀ █▀▀ █ █
-█ █ █ █▀▀ ▀▀█ █▀█
-▀   ▀ ▀▀▀ ▀▀▀ ▀ ▀ */
+// Mesh
 unsigned int AssetManager::GetQuadMeshIndex()
 {
     return _quadMeshIndex;
@@ -1158,10 +1139,7 @@ int AssetManager::GetMeshIndexByName(const std::string& name)
     return -1;
 }
 
-/*
-█▀▀ █ █ ▀█▀ █▀█ █▀█ █▀▀ █▀▄   █▄ ▄█ █▀█ █▀▄ █▀▀ █
-▀▀█ █▀▄  █  █ █ █ █ █▀▀ █ █   █ █ █ █ █ █ █ █▀▀ █
-▀▀▀ ▀ ▀ ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀ ▀▀    ▀   ▀ ▀▀▀ ▀▀  ▀▀▀ ▀▀▀ */
+// Skinned model
 SkinnedModel* AssetManager::GetSkinnedModelByName(const std::string& name) 
 {
     auto it = g_skinnedModelIndexMap.find(name);
@@ -1174,10 +1152,7 @@ SkinnedModel* AssetManager::GetSkinnedModelByName(const std::string& name)
     return nullptr;
 }
 
-/*
-█▀▀ █ █ ▀█▀ █▀█ █▀█ █▀▀ █▀▄   █▄ ▄█ █▀▀ █▀▀ █ █
-▀▀█ █▀▄  █  █ █ █ █ █▀▀ █ █   █ █ █ █▀▀ ▀▀█ █▀█
-▀▀▀ ▀ ▀ ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀ ▀▀    ▀   ▀ ▀▀▀ ▀▀▀ ▀ ▀  */
+// Skinned mesh
 SkinnedMesh* AssetManager::GetSkinnedMeshByIndex(int index) 
 {
     if (index >= 0 && index < g_skinnedMeshes.size()) 
@@ -1202,10 +1177,7 @@ int AssetManager::GetSkinnedMeshIndexByName(const std::string& name)
     return -1;
 }
 
-/*
- █▀█ █▀█ ▀█▀ █▄ ▄█ █▀█ ▀█▀ ▀█▀ █▀█ █▀█
- █▀█ █ █  █  █ █ █ █▀█  █   █  █ █ █ █
- ▀ ▀ ▀ ▀ ▀▀▀ ▀   ▀ ▀ ▀  ▀  ▀▀▀ ▀▀▀ ▀ ▀ */
+// Animation
 Animation* AssetManager::GetAnimationByName(const std::string& name)
 {
     auto it = g_animationIndexMap.find(name);
@@ -1218,10 +1190,7 @@ Animation* AssetManager::GetAnimationByName(const std::string& name)
     return nullptr;
 }
 
-/*
-█▄ ▄█ █▀█ ▀█▀ █▀▀ █▀▄ ▀█▀ █▀█ █
-█ █ █ █▀█  █  █▀▀ █▀▄  █  █▀█ █
-▀   ▀ ▀ ▀  ▀  ▀▀▀ ▀ ▀ ▀▀▀ ▀ ▀ ▀▀▀ */
+// Material
 std::vector<GPUMaterial>& AssetManager::GetGPUMaterials()
 {
     return g_gpuMaterials;
@@ -1272,11 +1241,9 @@ int AssetManager::GetMaterialCount()
     return g_materials.size();
 }
 
-/*
- ▀█▀ █▀▀ █ █ ▀█▀ █ █ █▀▄ █▀▀
-  █  █▀▀ ▄▀▄  █  █ █ █▀▄ █▀▀
-  ▀  ▀▀▀ ▀ ▀  ▀  ▀▀▀ ▀ ▀ ▀▀▀ */
-int AssetManager::GetTextureCount() {
+// Texture
+int AssetManager::GetTextureCount()
+{
     return g_textures.size();
 }
 
@@ -1356,10 +1323,7 @@ hell::ivec2 AssetManager::GetTextureSizeByName(const char* textureName)
     }
 }
 
-/*
-█▀▀ █ █ █▀▄ █▀▀ █▄█ █▀█ █▀█   ▀█▀ █▀▀ █ █ ▀█▀ █ █ █▀▄ █▀▀
-█   █ █ █▀▄ █▀▀ █ █ █▀█ █▀▀    █  █▀▀ ▄▀▄  █  █ █ █▀▄ █▀▀
-▀▀▀ ▀▀▀ ▀▀  ▀▀▀ ▀ ▀ ▀ ▀ ▀      ▀  ▀▀▀ ▀ ▀  ▀  ▀▀▀ ▀ ▀ ▀▀▀ */
+// Cubemap texture
 CubemapTexture* AssetManager::GetCubemapTextureByIndex(const int index) 
 {
     if (index >= 0 && index < g_cubemapTextures.size())

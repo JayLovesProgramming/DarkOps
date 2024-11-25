@@ -30,5 +30,5 @@ void TreeMap::Load(const std::string& filepath)
         }
     }
     stbi_image_free(data);
-    std::cout << "Treemap loaded: " << m_data.size() << " values\n";
+    std::cout << "[LOADED] Tree Map: " << m_data.size() << " values\n";
 }

@@ -206,7 +206,7 @@ void WinstonPass(RenderData& renderData);
 
 void OpenGLRenderer::HotloadShaders() 
 {
-    std::cout << "Hotloading shaders...\n";
+    std::cout << "[LOADING] Shaders \n";
     
     g_shaders.worldPosition.Load("res/shaders/OpenGL/GL_world_position.comp");
     g_shaders.ssaoBlur.Load("res/shaders/OpenGL/GL_ssaoBlur.comp");
@@ -429,7 +429,7 @@ void OpenGLRenderer::InitMinimum()
     int tileXCount = gBuffer.GetWidth() / 12;
     int tileYCount = gBuffer.GetHeight() / 12;
     int tileCount = tileXCount * tileYCount;
-    std::cout << "Tile count: " << tileCount << "\n";
+    std::cout << "[INFO] Tile Count: " << tileCount << "\n";
     g_ssbos.tileData.PreAllocate(tileCount * sizeof(TileData));   
 }
 

@@ -208,7 +208,7 @@ void Renderer::UpdateDebugLinesMesh() {
 
     // Skip debug lines for player 0 ragdoll
     Player* player = Game::GetPlayerByIndex(0);
-    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(player->GetCharacterModelAnimatedGameObjectIndex());
+    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(player->GetCharacterModelAnimatedGameObjectIndex(), "characterModel");
     for (auto r : characterModel->_ragdoll._rigidComponents) {
         ignoreList.push_back(r.pxRigidBody);
     }

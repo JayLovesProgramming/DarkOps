@@ -88,7 +88,7 @@ void HeightMap::Load(const std::string& filepath, float textureRepeat)
     {
         //vertex.tangent = glm::normalize(vertex.tangent);
     }
-    std::cout << "Heightmap loaded: " << m_vertices.size() << " vertices\n";
+    std::cout << "[LOADED] Height Map: " << m_vertices.size() << " Vertices\n";
 }
 
 void HeightMap::UploadToGPU()

@@ -936,7 +936,7 @@ std::vector<SkinnedRenderItem> GetSkinnedRenderItemsForPlayer (int playerIndex)
 
     for (int i = 0; i < Scene::GetAnimatedGameObjectCount(); i++)
     {
-        AnimatedGameObject* animatedGameObject = Scene::GetAnimatedGameObjectByIndex(i);
+        AnimatedGameObject* animatedGameObject = Scene::GetAnimatedGameObjectByIndex(i, "animatedGameObject");
 
         if (animatedGameObject->GetFlag() == AnimatedGameObject::Flag::VIEW_WEAPON)
         {
