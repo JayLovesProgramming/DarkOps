@@ -2,15 +2,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 
-#define SSAO_KERNEL_SIZE 16
-#define SSAO_NOISE_SIZE 16
+constexpr static auto SSAO_KERNEL_SIZE = 16;
+constexpr static auto SSAO_NOISE_SIZE = SSAO_KERNEL_SIZE;
 
-namespace SSAO {
-
-    inline std::vector<glm::vec3> GenerateSSAOKernel(int kernelSize) {
+namespace SSAO 
+{
+    inline std::vector<glm::vec3> GenerateSSAOKernel(int kernelSize) 
+    {
         std::vector<glm::vec3> ssaoKernel;
         ssaoKernel.reserve(kernelSize);
-        for (int i = 0; i < kernelSize; ++i) {
+        for (int i = 0; i < kernelSize; ++i)
+        {
             glm::vec3 sample(
                 glm::linearRand(-1.0f, 1.0f),
                 glm::linearRand(-1.0f, 1.0f),
@@ -26,10 +28,12 @@ namespace SSAO {
         return ssaoKernel;
     }
     
-    inline std::vector<glm::vec3> GenerateNoise(int noiseSize) {
+    inline std::vector<glm::vec3> GenerateNoise(int noiseSize)
+    {
         std::vector<glm::vec3> noiseTexture;
         noiseTexture.reserve(noiseSize * noiseSize);
-        for (int i = 0; i < noiseSize * noiseSize; ++i) {
+        for (int i = 0; i < noiseSize * noiseSize; ++i)
+        {
             glm::vec3 noise(
                 glm::linearRand(-1.0f, 1.0f),
                 glm::linearRand(-1.0f, 1.0f),
@@ -39,5 +43,4 @@ namespace SSAO {
         }
         return noiseTexture;
     }
-
 }
