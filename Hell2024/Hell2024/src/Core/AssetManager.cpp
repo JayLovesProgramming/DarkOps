@@ -127,7 +127,7 @@ void AssetManager::FindAssetPaths() {
         FileInfo info = Util::GetFileInfo(entry);
         if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") {
             if (info.filename.substr(info.filename.length() - 5) == "Right") {
-                std::cout << info.fullpath << "\n";
+                std::cout << "Loading: " << info.fullpath << "\n";
                 g_cubemapTextures.emplace_back(info.fullpath);
             }
         }

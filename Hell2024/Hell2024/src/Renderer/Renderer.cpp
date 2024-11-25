@@ -410,8 +410,8 @@ void MoveTowards(glm::vec2& position, const glm::vec2& target, glm::vec2& curren
 ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ */
 
 
-std::vector<RenderItem2D> CreateLoadingScreenRenderItems() {
-
+std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
+{
     int desiredTotalLines = 40;
     float linesPerPresentHeight = (float)PRESENT_HEIGHT / (float)TextBlitter::GetLineHeight(BitmapFontType::STANDARD);
     float scaleRatio = (float)desiredTotalLines / (float)linesPerPresentHeight;
@@ -422,8 +422,9 @@ std::vector<RenderItem2D> CreateLoadingScreenRenderItems() {
     int maxLinesDisplayed = 40;
     int endIndex = AssetManager::GetLoadLog().size();
     int beginIndex = std::max(0, endIndex - maxLinesDisplayed);
-    for (int i = beginIndex; i < endIndex; i++) {
-        text += AssetManager::GetLoadLog()[i] + "\n";
+    for (int i = beginIndex; i < endIndex; i++)
+    {
+        text += "Loaded: " + AssetManager::GetLoadLog()[i] + "\n";
     }
 
     hell::ivec2 location = hell::ivec2(0.0f, loadingScreenHeight);
