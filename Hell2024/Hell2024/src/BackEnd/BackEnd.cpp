@@ -49,11 +49,14 @@ namespace BackEnd
             VulkanBackEnd::CreateVulkanInstance();
         }
 
-        int width = 1920 * 1.5f;
-        int height = 1080 * 1.5f;
+        int width = 1920;
+        int height = 1080;
 
         glfwInit();
-        glfwSetErrorCallback([](int error, const char* description) { std::cout << "GLFW Error (" << std::to_string(error) << "): " << description << "\n";});
+        glfwSetErrorCallback([](int error, const char* description) 
+        { 
+            std::cout << "GLFW Error (" << std::to_string(error) << "): " << description << "\n";
+        });
 
         if (GetAPI() == API::OPENGL) 
         {
@@ -161,7 +164,7 @@ namespace BackEnd
         glfwTerminate();
     }
 
-    //      API      //
+    // API
     void SetAPI(API api)
     {
         _api = api;
@@ -302,7 +305,7 @@ namespace BackEnd
         return _windowedMode;
     }
 
-    //      Render Targets      //
+    // Render Targets
     void SetPresentTargetSize(int width, int height)
     {
         _presentTargetWidth = width;
@@ -327,7 +330,7 @@ namespace BackEnd
         return _presentTargetHeight;
     }
 
-    //      Callbacks      //
+    // Callbacks
     void framebuffer_size_callback(GLFWwindow* /*window*/, int width, int height)
     {
         if (GetAPI() == API::OPENGL)
@@ -351,6 +354,3 @@ namespace BackEnd
         }
     }
 }
-
-
-

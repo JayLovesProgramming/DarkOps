@@ -1938,28 +1938,54 @@ std::vector<RenderItem3D> Scene::GetGeometryRenderItems() {
 }
 
 
-std::vector<RenderItem3D> Scene::CreateDecalRenderItems()
+std::vector<RenderItem3D> Scene::CreateDecalRenderItems() // 2
 {
-    static int bulletHolePlasterMaterialIndex = AssetManager::GetMaterialIndex("BulletHole_Plaster");
+    static int bulletHolePlasterMaterialIndex = AssetManager::GetMaterialIndex("BulletHole_Plaster"); // Index 7
     static int bulletHoleGlassMaterialIndex = AssetManager::GetMaterialIndex("BulletHole_Glass");
+
+    static int knifeSlashPlasterMaterialIndex = AssetManager::GetMaterialIndex("KnifeSlash_Plaster"); // Index 23
+
     std::vector<RenderItem3D> renderItems;
     renderItems.reserve(g_bulletHoleDecals.size());
-    // Wall bullet decals
-    for (BulletHoleDecal& decal : g_bulletHoleDecals) {
-        if (decal.GetType() == BulletHoleDecalType::REGULAR) {
+
+    // Knife slashes decals
+    for (BulletHoleDecal& decal : g_bulletHoleDecals)
+    {
+        if (decal.GetType() == BulletHoleDecalType::KNIFE)
+        {
             RenderItem3D& renderItem = renderItems.emplace_back();
             renderItem.modelMatrix = decal.GetModelMatrix();
             renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
-            Material* material = AssetManager::GetMaterialByIndex(bulletHolePlasterMaterialIndex);
+            Material* material = AssetManager::GetMaterialByIndex(knifeSlashPlasterMaterialIndex);
             renderItem.baseColorTextureIndex = material->_basecolor;
             renderItem.rmaTextureIndex = material->_rma;
             renderItem.normalMapTextureIndex = material->_normal;
             renderItem.meshIndex = AssetManager::GetQuadMeshIndex();
         }
     }
+
+    // Wall bullet decals
+    for (BulletHoleDecal& decal : g_bulletHoleDecals) 
+    {
+        if (decal.GetType() == BulletHoleDecalType::REGULAR) 
+        {
+            RenderItem3D& renderItem = renderItems.emplace_back();
+            renderItem.modelMatrix = decal.GetModelMatrix();
+            renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
+            Material* material = AssetManager::GetMaterialByIndex(knifeSlashPlasterMaterialIndex);
+            renderItem.baseColorTextureIndex = material->_basecolor;
+            renderItem.rmaTextureIndex = material->_rma;
+            renderItem.normalMapTextureIndex = material->_normal;
+            renderItem.meshIndex = AssetManager::GetQuadMeshIndex();
+            //std::cout << bulletHolePlasterMaterialIndex << std::endl;
+        }
+    }
+
     // Glass bullet decals
-    for (BulletHoleDecal& decal : g_bulletHoleDecals) {
-        if (decal.GetType() == BulletHoleDecalType::GLASS) {
+    for (BulletHoleDecal& decal : g_bulletHoleDecals)
+    {
+        if (decal.GetType() == BulletHoleDecalType::GLASS)
+        {
             RenderItem3D& renderItem = renderItems.emplace_back();
             renderItem.modelMatrix = decal.GetModelMatrix();
             renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
@@ -1997,68 +2023,48 @@ std::vector<RenderItem3D> Scene::CreateDecalRenderItems()
     return renderItems;
 }
 
-void Scene::EvaluateDebugKeyPresses() {
-
-
+void Scene::EvaluateDebugKeyPresses() 
+{
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 float door2X = 2.05f;
 
-void Scene::CreateVolumetricBlood(glm::vec3 position, glm::vec3 rotation, glm::vec3 front) {
+void Scene::CreateVolumetricBlood(glm::vec3 position, glm::vec3 rotation, glm::vec3 front) 
+{
     // Spawn a max of 4 per frame
     if (_volumetricBloodObjectsSpawnedThisFrame < 4)
         _volumetricBloodSplatters.push_back(VolumetricBloodSplatter(position, rotation, front));
     _volumetricBloodObjectsSpawnedThisFrame++;
 }
 
-void Scene::Update_OLD(float deltaTime) {
-
+void Scene::Update_OLD(float deltaTime)
+{
     EvaluateDebugKeyPresses();
-
 
     // OLD SHIT BELOW
 
     _volumetricBloodObjectsSpawnedThisFrame = 0;
 
-    for (VolumetricBloodSplatter& volumetricBloodSplatter : _volumetricBloodSplatters) {
+    for (VolumetricBloodSplatter& volumetricBloodSplatter : _volumetricBloodSplatters)
+    {
         volumetricBloodSplatter.Update(deltaTime);
     }
 
-    for (vector<VolumetricBloodSplatter>::iterator it = _volumetricBloodSplatters.begin(); it != _volumetricBloodSplatters.end();) {
+    for (vector<VolumetricBloodSplatter>::iterator it = _volumetricBloodSplatters.begin(); it != _volumetricBloodSplatters.end();) 
+    {
         if (it->m_CurrentTime > 0.9f)
             it = _volumetricBloodSplatters.erase(it);
         else
             ++it;
     }
 
-
-
-
-
-
     static int i = 0;
     i++;
 
     // Move light source 3 to the lamp
     GameObject* lamp = GetGameObjectByName("Lamp");
-    if (lamp && i > 2) {
+    if (lamp && i > 2)
+    {
         glm::mat4 lampMatrix = lamp->GetModelMatrix();
         Transform globeTransform;
         globeTransform.position = glm::vec3(0, 0.45f, 0);
@@ -2067,10 +2073,10 @@ void Scene::Update_OLD(float deltaTime) {
     }
    // Scene::_lights[3].isDirty = true;
 
-
     GameObject* ak = GetGameObjectByName("AKS74U_Carlos");
    // ak->_transform.rotation = glm::vec3(0, 0, 0);
-    if (Input::KeyPressed(HELL_KEY_SPACE) && false) {
+    if (Input::KeyPressed(HELL_KEY_SPACE) && false)
+    {
         std::cout << "updating game object: " << ak->_name << "\n";
         //ak->_editorRaycastBody->setGlobalPose(PxTransform(Util::GlmMat4ToPxMat44(ak->GetModelMatrix())));
         Transform transform = ak->_transform;
@@ -2083,20 +2089,25 @@ void Scene::Update_OLD(float deltaTime) {
     Game::SetPlayerGroundedStates();
     ProcessBullets();
 
-    for (BulletCasing& bulletCasing : g_bulletCasings) {
+    for (BulletCasing& bulletCasing : g_bulletCasings)
+    {
         bulletCasing.Update(deltaTime);
     }
 
-    for (Toilet& toilet : _toilets) {
+    for (Toilet& toilet : _toilets)
+    {
         toilet.Update(deltaTime);
     }
 
-	for (PickUp& pickUp : _pickUps) {
+	for (PickUp& pickUp : _pickUps)
+    {
         pickUp.Update(deltaTime);
 	}
 
-    if (Input::KeyPressed(HELL_KEY_T)) {
-        for (Light& light : Scene::g_lights) {
+    if (Input::KeyPressed(HELL_KEY_T))
+    {
+        for (Light& light : Scene::g_lights)
+        {
             light.m_shadowMapIsDirty = true;
         }
     }
@@ -2106,11 +2117,13 @@ void Scene::Update_OLD(float deltaTime) {
         animatedGameObject.Update(deltaTime);
     }*/
 
-    for (GameObject& gameObject : g_gameObjects) {
+    for (GameObject& gameObject : g_gameObjects)
+    {
         gameObject.Update(deltaTime);
     }
 
-    for (Door& door : g_doors) {
+    for (Door& door : g_doors)
+    {
         door.Update(deltaTime);
     }
 
@@ -2127,14 +2140,20 @@ void Scene::Update_OLD(float deltaTime) {
 //}
 
 
-void Scene::CheckForDirtyLights() {
-    for (Light& light : Scene::g_lights) {
-        if (!light.extraDirty) {
+void Scene::CheckForDirtyLights()
+{
+    for (Light& light : Scene::g_lights) 
+    {
+        if (!light.extraDirty)
+        {
             light.m_shadowMapIsDirty = false;
         }
-        for (GameObject& gameObject : Scene::g_gameObjects) {
-            if (gameObject.HasMovedSinceLastFrame() && gameObject.m_castShadows) {
-                if (Util::AABBInSphere(gameObject._aabb, light.position, light.radius)) {
+        for (GameObject& gameObject : Scene::g_gameObjects)
+        {
+            if (gameObject.HasMovedSinceLastFrame() && gameObject.m_castShadows)
+            {
+                if (Util::AABBInSphere(gameObject._aabb, light.position, light.radius)) 
+                {
                     light.m_shadowMapIsDirty = true;
                     break;
                 }
@@ -2142,10 +2161,14 @@ void Scene::CheckForDirtyLights() {
             }
         }
 
-        if (!light.m_shadowMapIsDirty) {
-            for (Door& door : Scene::g_doors) {
-                if (door.HasMovedSinceLastFrame()) {
-                    if (Util::AABBInSphere(door._aabb, light.position, light.radius)) {
+        if (!light.m_shadowMapIsDirty)
+        {
+            for (Door& door : Scene::g_doors)
+            {
+                if (door.HasMovedSinceLastFrame())
+                {
+                    if (Util::AABBInSphere(door._aabb, light.position, light.radius))
+                    {
                         light.m_shadowMapIsDirty = true;
                         break;
                     }
@@ -2172,29 +2195,30 @@ void Scene::CheckForDirtyLights() {
     }
 }
 
-
-
-void Scene::ProcessBullets() {
-
+void Scene::ProcessBullets() 
+{
     bool fleshWasHit = false;
     bool glassWasHit = false;
-	for (int i = 0; i < Scene::_bullets.size(); i++) {
+
+	for (int i = 0; i < Scene::_bullets.size(); i++) 
+    {
 		Bullet& bullet = Scene::_bullets[i];
         PxU32 raycastFlags = bullet.raycastFlags;// RaycastGroup::RAYCAST_ENABLED;
 
 		PhysXRayResult rayResult = Util::CastPhysXRay(bullet.spawnPosition, bullet.direction, 1000, raycastFlags);
-		if (rayResult.hitFound) {
+
+		if (rayResult.hitFound) 
+        {
 			PxRigidDynamic* actor = (PxRigidDynamic*)rayResult.hitActor;
-			if (actor->userData) {
-
-
+			if (actor->userData)
+            {
 				PhysicsObjectData* physicsObjectData = (PhysicsObjectData*)actor->userData;
 
                 // A ragdoll was hit
-                if (physicsObjectData->type == ObjectType::RAGDOLL_RIGID) {
-                    if (actor->userData) {
-
-
+                if (physicsObjectData->type == ObjectType::RAGDOLL_RIGID)
+                {
+                    if (actor->userData)
+                    {
                         // Spawn volumetric blood
                         glm::vec3 position = rayResult.hitPosition;
                         glm::vec3 rotation = glm::vec3(0, 0, 0);
@@ -2212,34 +2236,25 @@ void Scene::ProcessBullets() {
 
                         static int typeCounter = 0;
 
-
                         glm::vec3 origin = glm::vec3(transform.position) + glm::vec3(0, 0.5f, 0);
                         PxU32 raycastFlags = RaycastGroup::RAYCAST_ENABLED;
                         PhysXRayResult rayResult = Util::CastPhysXRay(origin, glm::vec3(0, -1, 0), 6, raycastFlags);
 
-                        if (rayResult.hitFound && rayResult.objectType == ObjectType::HEIGHT_MAP) {
+                        if (rayResult.hitFound && rayResult.objectType == ObjectType::HEIGHT_MAP)
+                        {
                             Scene::g_bloodDecalsForMegaTexture.push_back(BloodDecal(transform, typeCounter));
                         }
-                        else {
+                        else 
+                        {
                             transform.position.y = rayResult.hitPosition.y + 0.005f;
                             Scene::g_bloodDecals.push_back(BloodDecal(transform, typeCounter));
                             BloodDecal* decal = &Scene::g_bloodDecals.back();
                         }
 
-
-
                         // FIX THIS LATER
-
-
-
-
-
-
-
-
-
                         typeCounter++;
-                        if (typeCounter == 4) {
+                        if (typeCounter == 4)
+                        {
                             typeCounter = 0;
                         }
                         /*
@@ -2249,69 +2264,72 @@ void Scene::ProcessBullets() {
                             counter = 0;
                             */
 
-
-                        for (Dobermann& dobermann : Scene::g_dobermann) {
+                        for (Dobermann& dobermann : Scene::g_dobermann)
+                        {
                             AnimatedGameObject* animatedGameObject = dobermann.GetAnimatedGameObject();
-                            for (RigidComponent& rigidComponent : animatedGameObject->_ragdoll._rigidComponents) {
-                                if (rigidComponent.pxRigidBody == actor) {
-                                    if (animatedGameObject->_animationMode == AnimatedGameObject::ANIMATION) {
+                            for (RigidComponent& rigidComponent : animatedGameObject->_ragdoll._rigidComponents)
+                            {
+                                if (rigidComponent.pxRigidBody == actor) 
+                                {
+                                    if (animatedGameObject->_animationMode == AnimatedGameObject::ANIMATION)
+                                    {
                                         dobermann.GiveDamage(bullet.damage, bullet.parentPlayerIndex);
                                     }
                                 }
                             }
                         }
 
-
-
-
-
-
-
-
                         Player* parentPlayerHit = (Player*)physicsObjectData->parent;
-
 
                         // check if valid player. could be a god
                         bool found = false;
-                        for (int i = 0; i < Game::GetPlayerCount(); i++) {
-                            if (parentPlayerHit == Game::GetPlayerByIndex(i)) {
+                        for (int i = 0; i < Game::GetPlayerCount(); i++)
+                        {
+                            if (parentPlayerHit == Game::GetPlayerByIndex(i))
+                            {
                                 found = true;
                             }
                         }
 
-
-                        if (found && !parentPlayerHit->_isDead) {
-
+                        if (found && !parentPlayerHit->_isDead)
+                        {
                             parentPlayerHit->GiveDamageColor();
                             parentPlayerHit->_health -= bullet.damage;
                             parentPlayerHit->_health = std::max(0, parentPlayerHit->_health);
 
-                            if (actor->getName() == "RAGDOLL_HEAD") {
+                            if (actor->getName() == "RAGDOLL_HEAD")
+                            {
                                 parentPlayerHit->_health = 0;
                             }
-                            else if (actor->getName() == "RAGDOLL_NECK") {
+                            else if (actor->getName() == "RAGDOLL_NECK")
+                            {
                                 parentPlayerHit->_health = 0;
                             }
-                            else {
+                            else 
+                            {
                                 fleshWasHit = true;
                             }
 
                             // Did it kill them?
-                            if (parentPlayerHit->_health == 0) {
-
+                            if (parentPlayerHit->_health == 0)
+                            {
                                 parentPlayerHit->Kill();
-                                if (parentPlayerHit != Game::GetPlayerByIndex(0)) {
+                                if (parentPlayerHit != Game::GetPlayerByIndex(0)) 
+                                {
                                     Game::GetPlayerByIndex(0)->IncrementKillCount();
                                 }
-                                if (parentPlayerHit != Game::GetPlayerByIndex(1)) {
+                                if (parentPlayerHit != Game::GetPlayerByIndex(1))
+                                {
                                     Game::GetPlayerByIndex(1)->IncrementKillCount();
                                 }
 
                                 AnimatedGameObject* hitCharacterModel = GetAnimatedGameObjectByIndex(parentPlayerHit->GetCharacterModelAnimatedGameObjectIndex(), "hitCharacterModel");
 
-                                for (RigidComponent& rigidComponent : hitCharacterModel->_ragdoll._rigidComponents) {
+                                for (RigidComponent& rigidComponent : hitCharacterModel->_ragdoll._rigidComponents)
+                                {
                                     float strength = 75;
-                                    if (bullet.type == SHOTGUN) {
+                                    if (bullet.type == SHOTGUN)
+                                    {
                                         strength = 20;
                                     }
                                     strength *= rigidComponent.mass * 1.5f;
@@ -2322,12 +2340,9 @@ void Scene::ProcessBullets() {
                         }
                     }
 
-
-
-
-
                     float strength = 75;
-                    if (bullet.type == SHOTGUN) {
+                    if (bullet.type == SHOTGUN)
+                    {
                         strength = 20;
                     }
                     strength *= 20000;
@@ -2336,21 +2351,20 @@ void Scene::ProcessBullets() {
                     actor->addForce(force);
                 }
 
-
-                if (physicsObjectData->type == ObjectType::GAME_OBJECT) {
+                if (physicsObjectData->type == ObjectType::GAME_OBJECT) 
+                {
 					GameObject* gameObject = (GameObject*)physicsObjectData->parent;
                     float force = 75;
-                    if (bullet.type == SHOTGUN) {
+                    if (bullet.type == SHOTGUN)
+                    {
                         force = 20;
                         //std::cout << "spawned a shotgun bullet\n";
                     }
 					gameObject->AddForceToCollisionObject(bullet.direction, force);
 				}
 
-
-
-
-				if (physicsObjectData->type == ObjectType::GLASS) {
+				if (physicsObjectData->type == ObjectType::GLASS)
+                {
                     glassWasHit = true;
 					//std::cout << "you shot glass\n";
 					Bullet newBullet;
@@ -2372,21 +2386,27 @@ void Scene::ProcessBullets() {
                     Scene::CreateBulletDecal(localPosition, localNormal, parent, BulletHoleDecalType::GLASS);
 
 					// Glass projectile
-					for (int i = 0; i < 2; i++) {
+					for (int i = 0; i < 2; i++) 
+                    {
 						Transform transform;
-						if (i == 1) {
+						if (i == 1)
+                        {
 							transform.position = rayResult.hitPosition + (rayResult.surfaceNormal * glm::vec3(-0.13));
 						}
-						else {
+						else 
+                        {
 							transform.position = rayResult.hitPosition + (rayResult.surfaceNormal * glm::vec3(0.03));
 						}
 					}
 				}
-				else if (physicsObjectData->type != ObjectType::RAGDOLL_RIGID) {
+				else if (physicsObjectData->type != ObjectType::RAGDOLL_RIGID)
+                {
                     bool doIt = true;
-                    if (physicsObjectData->type == ObjectType::GAME_OBJECT) {
+                    if (physicsObjectData->type == ObjectType::GAME_OBJECT)
+                    {
                         GameObject* gameObject = (GameObject*)physicsObjectData->parent;
-                        if (gameObject->GetPickUpType() != PickUpType::NONE) {
+                        if (gameObject->GetPickUpType() != PickUpType::NONE) 
+                        {
                             doIt = false;
                         }
 
@@ -2394,13 +2414,14 @@ void Scene::ProcessBullets() {
                         // look at this properly later
                         // look at this properly later
                         // look at this properly later
-                        if (gameObject->_name == "PickUp") {
+                        if (gameObject->_name == "PickUp")
+                        {
                             doIt = false;
                         }
-
-
                     }
-                    if (doIt) {
+                    if (doIt) 
+                    {
+                        std::cout << "Created bullet decal" << std::endl;
                         // Bullet decal
                         PxRigidBody* parent = actor;
                         glm::mat4 parentMatrix = Util::PxMat44ToGlmMat4(actor->getGlobalPose());

@@ -3,7 +3,7 @@
 enum class API { OPENGL, VULKAN, UNDEFINED };
 enum class WindowedMode { WINDOWED, FULLSCREEN };
 enum class SplitscreenMode { NONE, TWO_PLAYER, FOUR_PLAYER, SPLITSCREEN_MODE_COUNT };
-enum class BulletHoleDecalType { REGULAR, GLASS };
+enum class BulletHoleDecalType { REGULAR, GLASS, KNIFE };
 enum class PickUpType { NONE, AMMO, GLOCK, GLOCK_AMMO, TOKAREV_AMMO, SHOTGUN, SHOTGUN_AMMO, AKS74U, AKS74U_AMMO, AKS74U_SCOPE };
 enum class DobermannState { LAY, PATROL, KAMAKAZI, DOG_SHAPED_PIECE_OF_MEAT, RETURN_TO_ORIGIN, WALK_TO_TARGET };
 //enum class Gait { WALK, RUN, JUMP };

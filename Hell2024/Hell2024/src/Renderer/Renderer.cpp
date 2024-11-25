@@ -698,37 +698,6 @@ MuzzleFlashData GetMuzzleFlashData(unsigned int playerIndex)
     return muzzleFlashData;
 }
 
-std::vector<RenderItem3D> CreateDecalRenderItems()
-{
-    static int bulletHolePlasterMaterialIndex = AssetManager::GetMaterialIndex("BulletHole_Plaster");
-    static int bulletHoleGlassMaterialIndex = AssetManager::GetMaterialIndex("BulletHole_Glass");
-    std::vector<RenderItem3D> renderItems;
-    renderItems.reserve(Scene::GetBulletHoleDecalCount());
-
-    for (int i = 0; i < Scene::GetBulletHoleDecalCount(); i++)
-    {
-        BulletHoleDecal* decal = Scene::GetBulletHoleDecalByIndex(i);
-        RenderItem3D& renderItem = renderItems.emplace_back();
-        renderItem.modelMatrix = decal->GetModelMatrix();
-        renderItem.meshIndex = AssetManager::GetQuadMeshIndex();
-        if (decal->GetType() == BulletHoleDecalType::REGULAR)
-        {
-            Material* material = AssetManager::GetMaterialByIndex(bulletHolePlasterMaterialIndex);
-            renderItem.baseColorTextureIndex = material->_basecolor;
-            renderItem.rmaTextureIndex = material->_rma;
-            renderItem.normalMapTextureIndex = material->_normal;
-        }
-        else if (decal->GetType() == BulletHoleDecalType::GLASS)
-        {
-            Material* material = AssetManager::GetMaterialByIndex(bulletHoleGlassMaterialIndex);
-            renderItem.baseColorTextureIndex = material->_basecolor;
-            renderItem.rmaTextureIndex = material->_rma;
-            renderItem.normalMapTextureIndex = material->_normal;
-        }
-    }
-    return renderItems;
-}
-
 std::vector<RenderItem3D> CreateBloodDecalRenderItems()
 {
     static int textureIndexType0 = AssetManager::GetTextureIndexByName("blood_decal_4");
