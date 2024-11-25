@@ -1,8 +1,10 @@
 #pragma once
+
 #include "HellCommon.h"
 #include "../Physics/Physics.h"
 
-struct BulletCasing {
+struct BulletCasing 
+{
     PxShape* m_pxShape = NULL;
     PxRigidBody* m_pxRigidBody = NULL;
     float m_audioDelay = 0.0f;
@@ -15,5 +17,6 @@ struct BulletCasing {
     void Update(float deltaTime);
     void CollisionResponse();
     void CleanUp();
+
     glm::mat4 GetModelMatrix();
 };

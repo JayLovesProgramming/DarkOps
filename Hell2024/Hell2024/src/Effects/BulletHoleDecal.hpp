@@ -1,10 +1,11 @@
 #pragma once
+
 #include "HellCommon.h"
 #include "../Physics/Physics.h"
 #include "../Util.hpp"
 
-struct BulletHoleDecal {
-
+struct BulletHoleDecal 
+{
 private:
     glm::mat4 m_modelMatrix = glm::mat4(1);
     glm::vec3 m_localPosition;
@@ -13,11 +14,11 @@ private:
     PxRigidBody* m_parent;
     BulletHoleDecalType m_type;
 
-
 public:
     BulletHoleDecal() = default;
 
-    BulletHoleDecal(glm::vec3 localPosition, glm::vec3 localNormal, PxRigidBody* parent, BulletHoleDecalType type) {
+    BulletHoleDecal(glm::vec3 localPosition, glm::vec3 localNormal, PxRigidBody* parent, BulletHoleDecalType type)
+    {
         float min = 0;
         float max = HELL_PI * 2;
         m_randomRotation = min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
@@ -27,8 +28,8 @@ public:
         m_type = type;
     }
 
-    glm::mat4 GetModelMatrix() {
-
+    glm::mat4 GetModelMatrix()
+    {
         glm::mat4 parentMatrix = Util::PxMat44ToGlmMat4(m_parent->getGlobalPose());
 
         Transform localTranslation;
@@ -52,7 +53,8 @@ public:
 
         m_modelMatrix = parentMatrix * localTranslation.to_mat4() * rotationMatrix * localRotation.to_mat4();
 
-        if (m_type == BulletHoleDecalType::GLASS) {
+        if (m_type == BulletHoleDecalType::GLASS)
+        {
             Transform transform;
             transform.scale = glm::vec3(2.0f);
             m_modelMatrix = m_modelMatrix * transform.to_mat4();
@@ -61,15 +63,18 @@ public:
         return m_modelMatrix;
     }
 
-    glm::vec3 GetWorldNormal() {
+    glm::vec3 GetWorldNormal()
+    {
         return glm::vec3(0);
     }
 
-    BulletHoleDecalType& GetType() {
+    BulletHoleDecalType& GetType() 
+    {
         return m_type;
     }
 
-    PxRigidBody* GetPxRigidBodyParent() {
+    PxRigidBody* GetPxRigidBodyParent()
+    {
         return m_parent;
     }
 };

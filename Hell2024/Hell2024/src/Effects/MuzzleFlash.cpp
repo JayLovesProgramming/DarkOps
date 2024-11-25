@@ -1,6 +1,7 @@
 #include "MuzzleFlash.h"
 
-MuzzleFlash::MuzzleFlash() {
+MuzzleFlash::MuzzleFlash() 
+{
 }
 
 void MuzzleFlash::SetFrameByTime(float time)
@@ -47,12 +48,14 @@ void MuzzleFlash::Init()
 	glBindVertexArray(0);
 }
 
-void MuzzleFlash::CreateFlash(glm::vec3 worldPosition) {
+void MuzzleFlash::CreateFlash(glm::vec3 worldPosition)
+{
 	m_worldPos = worldPosition;
 	m_CurrentTime = 0;
 }
 
-void MuzzleFlash::Draw(Shader* shader, Transform& global, float rotation) {
+void MuzzleFlash::Draw(Shader* shader, Transform& global, float rotation)
+{
 	if (m_VAO == 0)
 		this->Init();
 
