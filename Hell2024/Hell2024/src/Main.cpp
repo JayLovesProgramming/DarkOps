@@ -21,8 +21,7 @@ extern "C" {
 #include "Engine.h"
 #include <iostream>
 
-// check out ​​nuklear ui library
-
-int main() {
+int main() 
+{
     Engine::Run();
 }

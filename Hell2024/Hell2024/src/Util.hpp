@@ -1,4 +1,5 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <fstream>
 #include <sstream>
@@ -21,183 +22,230 @@
 #include <rapidjson/prettywriter.h>
 #include "RendererCommon.h"
 
-namespace Util {
-
+namespace Util 
+{
   //  long MapRange(long x, long in_min, long in_max, long out_min, long out_max) {
    //     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
    // }
 
-    inline std::string MenuTypeToString(MenuType menuType) {
-        if (menuType == MenuType::NONE) {
+    inline std::string MenuTypeToString(MenuType menuType) 
+    {
+        if (menuType == MenuType::NONE) 
+        {
             return "NONE";
         }
-        else if (menuType == MenuType::INSERT) {
+        else if (menuType == MenuType::INSERT) 
+        {
             return "INSERT";
         }
-        else if (menuType == MenuType::FILE) {
+        else if (menuType == MenuType::FILE) 
+        {
             return "FILE";
         }
-        else if (menuType == MenuType::SELECTED_OBJECT) {
+        else if (menuType == MenuType::SELECTED_OBJECT) 
+        {
             return "SELECTED_OBJECT";
         }
-        else if (menuType == MenuType::MISC) {
+        else if (menuType == MenuType::MISC) 
+        {
             return "MISC";
         }
-        else {
+        else
+        {
             return "UNDEFINED";
         }
     }
     
-
-    inline std::string DobermannStateToString(DobermannState& state) {
-        if (state == DobermannState::LAY) {
+    inline std::string DobermannStateToString(DobermannState& state)
+    {
+        if (state == DobermannState::LAY) 
+        {
             return "LAY";
         }
-        else if (state == DobermannState::PATROL) {
+        else if (state == DobermannState::PATROL) 
+        {
             return "PATROL";
         }
-        else if (state == DobermannState::KAMAKAZI) {
+        else if (state == DobermannState::KAMAKAZI) 
+        {
             return "KAMAKAZI";
         }
-        else if (state == DobermannState::DOG_SHAPED_PIECE_OF_MEAT) {
+        else if (state == DobermannState::DOG_SHAPED_PIECE_OF_MEAT) 
+        {
             return "DOG_SHAPED_PIECE_OF_MEAT";
         }
-        else if (state == DobermannState::RETURN_TO_ORIGIN) {
+        else if (state == DobermannState::RETURN_TO_ORIGIN)
+        {
             return "RETURN_TO_ORIGIN";
         }
-        else {
+        else
+        {
             return "UNDEFINED";
         }
     }
 
-    inline std::string PhysicsObjectTypeToString(ObjectType& type) {
-
-        if (type == ObjectType::GAME_OBJECT) {
+    inline std::string PhysicsObjectTypeToString(ObjectType& type) 
+    {
+        if (type == ObjectType::GAME_OBJECT) 
+        {
             return "GAME_OBJECT";
         }
-        else if (type == ObjectType::GLASS) {
+        else if (type == ObjectType::GLASS) 
+        {
             return "GLASS";
         }
-        else if (type == ObjectType::DOOR) {
+        else if (type == ObjectType::DOOR)
+        {
             return "DOOR";
         }
-        else if (type == ObjectType::WINDOW) {
+        else if (type == ObjectType::WINDOW)
+        {
             return "WINDOW";
         }
-        else if (type == ObjectType::SCENE_MESH) {
+        else if (type == ObjectType::SCENE_MESH)
+        {
             return "SCENE_MESH";
         }
-        else if (type == ObjectType::RAGDOLL_RIGID) {
+        else if (type == ObjectType::RAGDOLL_RIGID)
+        {
             return "RAGDOLL_RIGID";
         }
-        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_CUBE) {
+        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_CUBE) 
+        {
             return "CSG_OBJECT_ADDITIVE_CUBE";
         }
-        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE) {
+        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE) 
+        {
             return "CSG_OBJECT_ADDITIVE_WALL_PLANE";
         }
-        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE) {
+        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE) 
+        {
             return "CSG_OBJECT_ADDITIVE_FLOOR_PLANE";
         }
-        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
+        else if (type == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) 
+        {
             return "CSG_OBJECT_ADDITIVE_CEILING_PLANE";
         }
-        else if (type == ObjectType::CSG_OBJECT_SUBTRACTIVE) {
+        else if (type == ObjectType::CSG_OBJECT_SUBTRACTIVE) 
+        {
             return "CSG_OBJECT_SUBTRACTIVE";
         }
         else if (type == ObjectType::HEIGHT_MAP) {
             return "HEIGHT_MAP";
         }
-        else if (type == ObjectType::UNDEFINED) {
+        else if (type == ObjectType::UNDEFINED) 
+        {
             return "UNDEFINED";
         }
-
-        else  {
+        else  
+        {
             return "U N K N O W N";
         }
     }
 
-    inline glm::vec3 CalculateUniformScaleRelativeToCamera(glm::vec3 viewPos, glm::vec3 objectPos) {
+    inline glm::vec3 CalculateUniformScaleRelativeToCamera(glm::vec3 viewPos, glm::vec3 objectPos) 
+    {
         float magic = 10;
         float distance = glm::length(viewPos - objectPos);
         float scale = (distance) / (magic * std::tan(glm::radians(1.0f)));
         return glm::vec3(scale);
     }
 
-    inline glm::ivec2 CalculateScreenSpaceCoordinates(const glm::vec3& worldPos, const glm::mat4& mvpMatrix, int screenWidth, int screenHeight, bool flipY = false) {
+    inline glm::ivec2 CalculateScreenSpaceCoordinates(const glm::vec3& worldPos, const glm::mat4& mvpMatrix, int screenWidth, int screenHeight, bool flipY = false)
+    {
         glm::vec4 clipCoords = mvpMatrix * glm::vec4(worldPos, 1.0f);
         glm::vec3 ndcCoords = glm::vec3(clipCoords) / clipCoords.w;
         glm::ivec2 screenCoords;
         screenCoords.x = (ndcCoords.x + 1.0f) * 0.5f * screenWidth;
-        if (flipY) {
+        if (flipY) 
+        {
             screenCoords.y = screenHeight - (1.0f - ndcCoords.y) * 0.5f * screenHeight;
         }
-        else {
+        else 
+        {
             screenCoords.y = (1.0f - ndcCoords.y) * 0.5f * screenHeight;
         }
         return screenCoords;
     }
 
-    inline glm::vec3 Vec3Min(const glm::vec3& a, const glm::vec3& b) {
+    inline glm::vec3 Vec3Min(const glm::vec3& a, const glm::vec3& b) 
+    {
         return glm::vec3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
     }
 
-    inline glm::vec3 Vec3Max(const glm::vec3& a, const glm::vec3& b) {
+    inline glm::vec3 Vec3Max(const glm::vec3& a, const glm::vec3& b) 
+    {
         return glm::vec3(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
     }
 
-    inline std::string Lowercase(std::string& str) {
+    inline std::string Lowercase(std::string& str) 
+    {
         std::string result = "";
-        for (auto& c : str) {
+        for (auto& c : str) 
+        {
             result += std::tolower(c);
         }
         return result;
     }
 
-    inline std::string Uppercase(std::string& str) {
+    inline std::string Uppercase(std::string& str)
+    {
         std::string result = "";
-        for (auto& c : str) {
+        for (auto& c : str) 
+        {
             result += std::toupper(c);
         }
         return result;
     }
 
-    inline std::string DebugLineRenderModeToString(DebugLineRenderMode mode) {
-
-        if (mode == DebugLineRenderMode::SHOW_NO_LINES) {
+    inline std::string DebugLineRenderModeToString(DebugLineRenderMode mode) 
+    {
+        if (mode == DebugLineRenderMode::SHOW_NO_LINES) 
+        {
             return "NONE";
         }
-        else if (mode == DebugLineRenderMode::PHYSX_ALL) {
+        else if (mode == DebugLineRenderMode::PHYSX_ALL)
+        {
             return "PHYSX_ALL";
         }
-        else if (mode == DebugLineRenderMode::PHYSX_RAYCAST) {
+        else if (mode == DebugLineRenderMode::PHYSX_RAYCAST)
+        {
             return "PHYSX_RAYCAST";
         }
-        else if (mode == DebugLineRenderMode::PHYSX_COLLISION) {
+        else if (mode == DebugLineRenderMode::PHYSX_COLLISION)
+        {
             return "Collision";
         }
-        else if (mode == DebugLineRenderMode::RAYTRACE_LAND) {
+        else if (mode == DebugLineRenderMode::RAYTRACE_LAND) 
+        {
             return "RAYTRACE_LAND";
         }
-        else if (mode == DebugLineRenderMode::PHYSX_EDITOR) {
+        else if (mode == DebugLineRenderMode::PHYSX_EDITOR)
+        {
             return "PHYSX_EDITOR";
         }
-        else if (mode == DebugLineRenderMode::BOUNDING_BOXES) {
+        else if (mode == DebugLineRenderMode::BOUNDING_BOXES)
+        {
             return "BOUNDING_BOXES";
         }
-        else if (mode == DebugLineRenderMode::RTX_LAND_AABBS) {
+        else if (mode == DebugLineRenderMode::RTX_LAND_AABBS)
+        {
             return "RTX_LAND_AABBS";
         }
-        else if (mode == DebugLineRenderMode::RTX_LAND_TRIS) {
+        else if (mode == DebugLineRenderMode::RTX_LAND_TRIS)
+        {
             return "RTX_LAND_TRIS";
         }
-        else if (mode == DebugLineRenderMode::RTX_LAND_TOP_LEVEL_ACCELERATION_STRUCTURE) {
+        else if (mode == DebugLineRenderMode::RTX_LAND_TOP_LEVEL_ACCELERATION_STRUCTURE) 
+        {
             return "Top Level Acceleration Structure";
         }
-        else if (mode == DebugLineRenderMode::RTX_LAND_BOTTOM_LEVEL_ACCELERATION_STRUCTURES) {
+        else if (mode == DebugLineRenderMode::RTX_LAND_BOTTOM_LEVEL_ACCELERATION_STRUCTURES)
+        {
             return "Bottom Level Acceleration Structures";
         }
-        else if (mode == DebugLineRenderMode::RTX_LAND_TOP_AND_BOTTOM_LEVEL_ACCELERATION_STRUCTURES) {
+        else if (mode == DebugLineRenderMode::RTX_LAND_TOP_AND_BOTTOM_LEVEL_ACCELERATION_STRUCTURES)
+        {
             return "RTX_LAND_TOP_AND_BOTTOM_LEVEL_ACCELERATION_STRUCTURES";
         }
         else if (mode == DebugLineRenderMode::PATHFINDING_RECAST) {
