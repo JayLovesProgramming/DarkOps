@@ -1,11 +1,12 @@
 #pragma once
+
 #include "Types.h"
 #include "CSGCommon.h"
 #include "../Physics/Physics.h"
 #include "../Util.hpp"
 
-struct CSGCube {
-
+struct CSGCube 
+{
 public:
     PxRigidStatic* pxRigidStatic = nullptr;
     PxShape* m_pxShape = nullptr;

@@ -1,9 +1,10 @@
 #pragma once
+
 #include "HellCommon.h"
 #include "Enums.h"
 
-namespace Editor {
-
+namespace Editor 
+{
     void EnterEditor();
     void LeaveEditor();
     void Update(float deltaTime);

@@ -2,9 +2,10 @@
 #include <glad/glad.h>
 #include <iostream>
 
-void PresentFrameBuffer::Configure(int width, int height) {
-
-	if (_ID == 0) {
+void PresentFrameBuffer::Configure(int width, int height)
+{
+	if (_ID == 0) 
+	{
 		glGenFramebuffers(1, &_ID);
 		glGenTextures(1, &_inputTexture);
 		glGenTextures(1, &_fxaaTexture);
@@ -12,6 +13,7 @@ void PresentFrameBuffer::Configure(int width, int height) {
 		_width = width; 
 		_height = height;
 	}
+
 	glBindFramebuffer(GL_FRAMEBUFFER, _ID);
 
 	glBindTexture(GL_TEXTURE_2D, _inputTexture);
@@ -35,32 +37,39 @@ void PresentFrameBuffer::Configure(int width, int height) {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, _depthTexture, 0);
 
 	auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (status != GL_FRAMEBUFFER_COMPLETE) {
+
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void PresentFrameBuffer::Bind() {
+void PresentFrameBuffer::Bind()
+{
 	glBindFramebuffer(GL_FRAMEBUFFER, _ID);
 }
 
-void PresentFrameBuffer::Destroy() {
+void PresentFrameBuffer::Destroy()
+{
 	glDeleteTextures(1, &_inputTexture);
 	glDeleteTextures(1, &_fxaaTexture);
 	glDeleteTextures(1, &_depthTexture);
 	glDeleteFramebuffers(1, &_ID);
 }
 
-unsigned int PresentFrameBuffer::GetID() {
+unsigned int PresentFrameBuffer::GetID()
+{
 	return _ID;
 }
 
-unsigned int PresentFrameBuffer::GetWidth() {
+unsigned int PresentFrameBuffer::GetWidth()
+{
 	return _width;
 }
 
-unsigned int PresentFrameBuffer::GetHeight() {
+unsigned int PresentFrameBuffer::GetHeight()
+{
 	return _height;
 }

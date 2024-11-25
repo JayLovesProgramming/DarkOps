@@ -1,10 +1,11 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <vector>
 #include <string>
 
-struct OpenGLDetachedMesh {
-
+struct OpenGLDetachedMesh
+{
 private:
     unsigned int VBO = 0;
     unsigned int VAO = 0;
@@ -14,25 +15,33 @@ private:
     std::vector<unsigned int> indices;
 
 public:
-    int GetVertexCount() {
+    int GetVertexCount()
+    {
         return vertices.size();
     }
-    int GetIndexCount() {
+
+    int GetIndexCount()
+    {
         return indices.size();
     }
-    int GetVAO() {
+
+    int GetVAO()
+    {
         return VAO;
     }
-    void UpdateVertexBuffer(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
 
+    void UpdateVertexBuffer(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+    {
         this->indices = indices;
         this->vertices = vertices;
 
-        if (vertices.empty() || indices.empty()) {
+        if (vertices.empty() || indices.empty())
+        {
             return;
         }
 
-        if (VAO != 0) {
+        if (VAO != 0)
+        {
             glDeleteVertexArrays(1, &VAO);
             glDeleteBuffers(1, &VBO);
             glDeleteBuffers(1, &EBO);

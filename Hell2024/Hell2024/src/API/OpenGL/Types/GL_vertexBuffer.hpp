@@ -1,19 +1,23 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <glad/glad.h>
 
-struct OpenGLVertexBuffer {
-
+struct OpenGLVertexBuffer
+{
 public:
-    void AllocateSpace(int vertexCount) {
-
-        if (VAO == 0) {
+    void AllocateSpace(int vertexCount)
+    {
+        if (VAO == 0) 
+        {
             glGenVertexArrays(1, &VAO);
             glGenBuffers(1, &VBO);
         }
+
         // If there isn't enough space, destroy the buffer and recreate it
         GLsizeiptr bufferSize = vertexCount * sizeof(Vertex);
-        if (allocatedSize < bufferSize) {
+        if (allocatedSize < bufferSize)
+        {
             glBindVertexArray(VAO);
             glDeleteBuffers(1, &VBO);
             glGenBuffers(1, &VBO);
@@ -34,11 +38,13 @@ public:
         }
     }
 
-    const GLuint& GetVAO() {
+    const GLuint& GetVAO()
+    {
         return VAO;
     }
 
-    const GLuint& GetVBO() {
+    const GLuint& GetVBO() 
+    {
         return VBO;
     }
 

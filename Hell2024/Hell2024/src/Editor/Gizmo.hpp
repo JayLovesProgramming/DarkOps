@@ -1,10 +1,11 @@
 #pragma once
+
 #include "../../vendor/im3d/im3d.h"
 #include "../API/OpenGL/Types/GL_shader.h"
 #include "../Input/Input.h"
 
-namespace Gizmo {
-
+namespace Gizmo 
+{
     inline GLuint g_Im3dVertexArray;
     inline GLuint g_Im3dVertexBuffer;
     inline GLuint g_Im3dShaderPoints;
@@ -19,15 +20,13 @@ namespace Gizmo {
 
     inline bool _inUse = false;
 
-    inline void CleanUp() {
-
+    inline void CleanUp() 
+    {
         Im3d::GetContext();
     }
 
-
-    inline bool HasHover() {
-
-
+    inline bool HasHover() 
+    {
         Im3d::Context& ctx = Im3d::GetContext();
 
         return (Im3d::GetHotId() != 0);
@@ -37,15 +36,18 @@ namespace Gizmo {
         return (ctx.m_hotId != 0);
     }
 
-    inline bool InUse() {
+    inline bool InUse() 
+    {
         return _inUse;
     }
 
-    inline Im3d::Mat4& GetTransform() {
+    inline Im3d::Mat4& GetTransform()
+    {
         return g_transform;
     }
 
-    inline glm::mat4 Im3dMat4ToGlmMat4(Im3d::Mat4 pxMatrix) {
+    inline glm::mat4 Im3dMat4ToGlmMat4(Im3d::Mat4 pxMatrix)
+    {
         glm::mat4 matrix;
         for (int x = 0; x < 4; x++)
             for (int y = 0; y < 4; y++)
@@ -53,17 +55,21 @@ namespace Gizmo {
         return matrix;
     }
 
-    inline Im3d::Mat4 GlmMat4ToIm3dMat4(glm::mat4 glmMatrix) {
+    inline Im3d::Mat4 GlmMat4ToIm3dMat4(glm::mat4 glmMatrix) 
+    {
         Im3d::Mat4 matrix;
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
+        for (int i = 0; i < 4; ++i)
+        {
+            for (int j = 0; j < 4; ++j)
+            {
                 matrix[i * 4 + j] = glmMatrix[i][j];
             }
         }
         return matrix;
     }
 
-    inline void Init() {
+    inline void Init()
+    {
         g_TriangleShader.Load("im3d_triangles.vert", "im3d_triangles.frag");
         g_LineShader.Load("im3d_lines.vert", "im3d_lines.frag", "im3d_lines.geom");
         g_PointShader.Load("im3d_points.vert", "im3d_points.frag");
@@ -78,7 +84,8 @@ namespace Gizmo {
         glBindVertexArray(0);
     }
 
-    inline glm::vec3 GetMouseRay(glm::mat4 projection, glm::mat4 view, int windowWidth, int windowHeight, int mouseX, int mouseY) {
+    inline glm::vec3 GetMouseRay(glm::mat4 projection, glm::mat4 view, int windowWidth, int windowHeight, int mouseX, int mouseY) 
+    {
         float x = (2.0f * mouseX) / (float)windowWidth - 1.0f;
         float y = 1.0f - (2.0f * mouseY) / (float)windowHeight;
         float z = 1.0f;
@@ -92,11 +99,13 @@ namespace Gizmo {
         return ray_wor;
     }
 
-    inline glm::vec3 GetTranslationFromMatrix666(glm::mat4 matrix) {
+    inline glm::vec3 GetTranslationFromMatrix666(glm::mat4 matrix)
+    {
         return glm::vec3(matrix[3][0], matrix[3][1], matrix[3][2]);
     }
 
-    inline float Radians(float _degrees) {
+    inline float Radians(float _degrees)
+    {
         return _degrees * (HELL_PI / 180.0f);
     }
 
@@ -107,7 +116,6 @@ namespace Gizmo {
     constexpr float HalfPi = 0.5f * Pi;
 
     inline Im3d::Vec3 ToEulerXYZ(const Im3d::Mat3& _m) {
-        // http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf
         Im3d::Vec3 ret;
         if_likely(fabs(_m(2, 0)) < 1.0f) {
             ret.y = -asinf(_m(2, 0));
@@ -129,19 +137,22 @@ namespace Gizmo {
             return ret;
     }
 
-    inline Transform Update(glm::vec3 viewPos, glm::vec3 viewDir, float mouseX, float mouseY, glm::mat4 projection, glm::mat4 view, bool leftMouseDown, float viewportWidth, float viewportHeight, glm::mat4 matrix) {
-
+    inline Transform Update(glm::vec3 viewPos, glm::vec3 viewDir, float mouseX, float mouseY, glm::mat4 projection, glm::mat4 view, bool leftMouseDown, float viewportWidth, float viewportHeight, glm::mat4 matrix)
+    {
         Im3d::Context& ctx = Im3d::GetContext();
         ctx.m_gizmoHeightPixels = 50;
         ctx.m_gizmoSizePixels = 6;
 
-        if (Input::KeyPressed(HELL_KEY_NUMPAD_1)) {
+        if (Input::KeyPressed(HELL_KEY_NUMPAD_1))
+        {
             Im3d::GetContext().m_gizmoMode = Im3d::GizmoMode::GizmoMode_Translation;
         }
-        if (Input::KeyPressed(HELL_KEY_NUMPAD_2)) {
+        if (Input::KeyPressed(HELL_KEY_NUMPAD_2))
+        {
             Im3d::GetContext().m_gizmoMode = Im3d::GizmoMode::GizmoMode_Rotation;
         }
-        if (Input::KeyPressed(HELL_KEY_NUMPAD_3)) {
+        if (Input::KeyPressed(HELL_KEY_NUMPAD_3))
+        {
             Im3d::GetContext().m_gizmoMode = Im3d::GizmoMode::GizmoMode_Scale;
         }
 
@@ -190,8 +201,8 @@ namespace Gizmo {
         return gizmoTransform;
     }
 
-    inline void Draw(glm::mat4 projection, glm::mat4 view, float viewportWidth, float viewportHeight) {
-
+    inline void Draw(glm::mat4 projection, glm::mat4 view, float viewportWidth, float viewportHeight) 
+    {
         // Primitive rendering.
         // Typical pipeline state: enable alpha blending, disable depth test and backface culling.
         glEnable(GL_BLEND);
@@ -203,8 +214,8 @@ namespace Gizmo {
 
         glViewport(0, 0, (GLsizei)viewportWidth, (GLsizei)viewportHeight);
 
-        for (Im3d::U32 i = 0, n = Im3d::GetDrawListCount(); i < n; ++i) {
-
+        for (Im3d::U32 i = 0, n = Im3d::GetDrawListCount(); i < n; ++i)
+        {
             const Im3d::DrawList& drawList = Im3d::GetDrawLists()[i];
             //if (drawList.m_layerId == Im3d::MakeId("NamedLayer")) {
                 // The application may group primitives into layers, which can be used to change the draw state (e.g. enable depth testing, use a different shader)
@@ -257,10 +268,10 @@ namespace Gizmo {
         }
     }
 
-    inline void ResetHover() {
+    inline void ResetHover()
+    {
         Im3d::Context& ctx = Im3d::GetContext();
         ctx.reset();
         ctx.resetId();
     }
-
 }

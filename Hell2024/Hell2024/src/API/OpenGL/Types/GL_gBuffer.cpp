@@ -1,9 +1,10 @@
 #include "GL_gBuffer.h"
 #include <glad/glad.h>
 
-void GBuffer::Configure(int width, int height) {
-
-	if (ID == 0) {
+void GBuffer::Configure(int width, int height)
+{
+	if (ID == 0) 
+	{
 		glGenFramebuffers(1, &ID);
  		glGenTextures(1, &baseColorTexture);
 		glGenTextures(1, &normalTexture);
@@ -94,11 +95,13 @@ void GBuffer::Configure(int width, int height) {
     attachments[emissiveTexture] = GL_DEPTH_STENCIL_ATTACHMENT;
 }
 
-void GBuffer::Bind() {
+void GBuffer::Bind()
+{
 	glBindFramebuffer(GL_FRAMEBUFFER, ID);
 }
 
-void GBuffer::Destroy() {
+void GBuffer::Destroy()
+{
 	glDeleteTextures(1, &baseColorTexture);
 	glDeleteTextures(1, &normalTexture);
 	glDeleteTextures(1, &RMATexture);
@@ -107,14 +110,17 @@ void GBuffer::Destroy() {
 	glDeleteFramebuffers(1, &ID);
 }
 
-unsigned int GBuffer::GetID() {
+unsigned int GBuffer::GetID()
+{
 	return ID;
 }
 
-unsigned int GBuffer::GetWidth() {
+unsigned int GBuffer::GetWidth()
+{
 	return width;
 }
 
-unsigned int GBuffer::GetHeight() {
+unsigned int GBuffer::GetHeight() 
+{
 	return height;
 }

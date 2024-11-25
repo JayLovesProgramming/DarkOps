@@ -1,8 +1,10 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <vector>
 
-struct CubeMap2 {
+struct CubeMap2
+{
     void Init(unsigned int size);
     void Clear();
     void CheckStatus();

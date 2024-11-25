@@ -1,6 +1,7 @@
 #pragma once
 
-enum class CSGType {
+enum class CSGType
+{
     ADDITIVE_CUBE,
     SUBTRACTIVE,
     DOOR,
@@ -8,7 +9,8 @@ enum class CSGType {
     ADDITIVE_PLANE
 };
 
-enum class CSGContainerType {
+enum class CSGContainerType
+{
     UNDEFINED,
     ADDITIVE_CUBE,
     WALL_PLANE,
@@ -16,12 +18,14 @@ enum class CSGContainerType {
     CEILING_PLANE,
 };
 
-enum class BrushShape {
+enum class BrushShape
+{
     CUBE,
     PLANE
 };
 
-enum BrushType {
+enum BrushType
+{
     AIR_BRUSH,
     SOLID_BRUSH
 };

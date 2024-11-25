@@ -1,4 +1,5 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -6,8 +7,8 @@
 #include <string>
 #include <memory>
 
-struct OpenGLTexture {
-
+struct OpenGLTexture
+{
     OpenGLTexture() = default;
     //explicit OpenGLTexture(const std::string filepath);
     GLuint GetID();

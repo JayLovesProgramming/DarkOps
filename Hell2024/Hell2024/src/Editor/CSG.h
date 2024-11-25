@@ -1,4 +1,5 @@
 #pragma once
+
 #include "RendererCommon.h"
 #include "TinyCSG/tinycsg.hpp"
 #include "../Physics/RigidStatic.hpp"
@@ -9,8 +10,8 @@
 static constexpr csg::volume_t AIR = 0;
 static constexpr csg::volume_t SOLID = 1;
 
-struct CSGObject {
-
+struct CSGObject 
+{
     Transform m_transform;;
     ObjectType m_parentObjectType;
     CSGType m_type;
@@ -40,7 +41,8 @@ struct CSGObject {
 };
 
 
-namespace CSG {
+namespace CSG
+{
     void Init();
     void Update();
     void Build();
@@ -53,5 +55,4 @@ namespace CSG {
     std::span<uint32_t> GetRangedIndicesSpan(uint32_t baseIndex, uint32_t indexCount);
     uint32_t GetBaseCSGVertex();
     inline std::vector<Brush> g_subtractiveBrushes;
-
 }

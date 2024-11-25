@@ -5,8 +5,8 @@
 #include <iostream>
 #include <string>
 
-namespace OpenGLBackEnd {
-
+namespace OpenGLBackEnd 
+{
     GLuint _vertexDataVAO = 0;
     GLuint _vertexDataVBO = 0;
     GLuint _vertexDataEBO = 0;
@@ -29,61 +29,76 @@ namespace OpenGLBackEnd {
     GLuint g_triangle2DVAO = 0;
     GLuint g_triangle2DVBO = 0;
 
-    GLuint GetVertexDataVAO() {
+    GLuint GetVertexDataVAO()
+    {
         return _vertexDataVAO;
     }
 
-    GLuint GetVertexDataVBO() {
+    GLuint GetVertexDataVBO()
+    {
         return _vertexDataVBO;
     }
 
-    GLuint GetVertexDataEBO() {
+    GLuint GetVertexDataEBO()
+    {
         return _vertexDataEBO;
     }
 
-    GLuint GetWeightedVertexDataVAO() {
+    GLuint GetWeightedVertexDataVAO()
+    {
         return _weightedVertexDataVAO;
     }
 
-    GLuint GetWeightedVertexDataVBO() {
+    GLuint GetWeightedVertexDataVBO()
+    {
         return _weightedVertexDataVBO;
     }
 
-    GLuint GetWeightedVertexDataEBO() {
+    GLuint GetWeightedVertexDataEBO()
+    {
         return _weightedVertexDataEBO;
     }
 
-    GLuint GetSkinnedVertexDataVAO() {
+    GLuint GetSkinnedVertexDataVAO()
+    {
         return g_skinnedVertexDataVAO;
     }
 
-    GLuint GetSkinnedVertexDataVBO() {
+    GLuint GetSkinnedVertexDataVBO()
+    {
         return g_skinnedVertexDataVBO;
     }
 
-    GLuint GetPointCloudVAO() {
+    GLuint GetPointCloudVAO()
+    {
         return g_pointCloudVAO;
     }
 
-    GLuint GetPointCloudVBO() {
+    GLuint GetPointCloudVBO()
+    {
         return g_pointCloudVBO;
     }
 
-    GLuint GetCSGVAO() {
+    GLuint GetCSGVAO()
+    {
         return g_constructiveSolidGeometryVAO;
     }
 
-    GLuint GetCSGVBO() {
+    GLuint GetCSGVBO()
+    {
         return g_constructiveSolidGeometryVBO;
     }
 
-    GLuint GetCSGEBO() {
+    GLuint GetCSGEBO()
+    {
         return g_constructiveSolidGeometryEBO;
     }
 }
 
-GLenum glCheckError_(const char* file, int line) {
+GLenum glCheckError_(const char* file, int line) 
+{
     GLenum errorCode;
+
     while ((errorCode = glGetError()) != GL_NO_ERROR)
     {
         std::string error;
@@ -101,13 +116,18 @@ GLenum glCheckError_(const char* file, int line) {
     }
     return errorCode;
 }
+
 #define glCheckError() glCheckError_(__FILE__, __LINE__)
 
-void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei /*length*/, const char* message, const void* /*userParam*/) {
+void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei /*length*/, const char* message, const void* /*userParam*/) 
+{
     if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return; // ignore these non-significant error codes
+
     std::cout << "---------------\n";
     std::cout << "Debug message (" << id << "): " << message << "\n";
-    switch (source){
+
+    switch (source)
+    {
         case GL_DEBUG_SOURCE_API:             std::cout << "Source: API"; break;
         case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   std::cout << "Source: Window System"; break;
         case GL_DEBUG_SOURCE_SHADER_COMPILER: std::cout << "Source: Shader Compiler"; break;
@@ -116,7 +136,9 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
         case GL_DEBUG_SOURCE_OTHER:           std::cout << "Source: Other"; break;
     }
     std::cout << "\n";
-    switch (type) {
+
+    switch (type) 
+    {
         case GL_DEBUG_TYPE_ERROR:               std::cout << "Type: Error"; break;
         case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cout << "Type: Deprecated Behaviour"; break;
         case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cout << "Type: Undefined Behaviour"; break;
@@ -128,7 +150,9 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
         case GL_DEBUG_TYPE_OTHER:               std::cout << "Type: Other"; break;
     }
     std::cout << "\n";
-    switch (severity) {
+
+    switch (severity) 
+    {
         case GL_DEBUG_SEVERITY_HIGH:         std::cout << "Severity: high"; break;
         case GL_DEBUG_SEVERITY_MEDIUM:       std::cout << "Severity: medium"; break;
         case GL_DEBUG_SEVERITY_LOW:          std::cout << "Severity: low"; break;
@@ -136,18 +160,26 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
         }    std::cout << "\n\n\n";
 }
 
-void QuerySizes() {
+void QuerySizes() 
+{
     GLint max_layers;
+
     glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &max_layers);
+
     std::cout << "Max texture array size is: " << max_layers << "\n";
+
     int max_compute_work_group_count[3];
     int max_compute_work_group_size[3];
     int max_compute_work_group_invocations;
-    for (int idx = 0; idx < 3; idx++) {
+
+    for (int idx = 0; idx < 3; idx++)
+    {
         glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, idx, &max_compute_work_group_count[idx]);
         glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, idx, &max_compute_work_group_size[idx]);
     }
+
     glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &max_compute_work_group_invocations);
+
     std::cout << "Max number of work groups in X dimension " << max_compute_work_group_count[0] << "\n";
     std::cout << "Max number of work groups in Y dimension " << max_compute_work_group_count[1] << "\n";
     std::cout << "Max number of work groups in Z dimension " << max_compute_work_group_count[2] << "\n";
@@ -157,11 +189,14 @@ void QuerySizes() {
     std::cout << "Number of invocations in a single local work group that may be dispatched to a compute shader " << max_compute_work_group_invocations << "\n";
 }
 
-void OpenGLBackEnd::InitMinimum() {
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+void OpenGLBackEnd::InitMinimum()
+{
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) 
+    {
         std::cout << "Failed to initialize GLAD\n";
         return;
     }
+
     GLint major, minor;
     glGetIntegerv(GL_MAJOR_VERSION, &major);
     glGetIntegerv(GL_MINOR_VERSION, &minor);
@@ -172,13 +207,16 @@ void OpenGLBackEnd::InitMinimum() {
 
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+
+    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+    {
         //std::cout << "Debug GL context enabled\n";
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // makes sure errors are displayed synchronously
         glDebugMessageCallback(glDebugOutput, nullptr);
     }
-    else {
+    else 
+    {
         std::cout << "Debug GL context not available\n";
     }
 
@@ -186,16 +224,19 @@ void OpenGLBackEnd::InitMinimum() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLBackEnd::AllocateSkinnedVertexBufferSpace(int vertexCount) {
-
-    if (g_skinnedVertexDataVAO == 0) {
+void OpenGLBackEnd::AllocateSkinnedVertexBufferSpace(int vertexCount)
+{
+    if (g_skinnedVertexDataVAO == 0)
+    {
         glGenVertexArrays(1, &g_skinnedVertexDataVAO);
     }
-    // Check if there is enough space
-    if (g_allocatedSkinnedVertexBufferSize < vertexCount * sizeof(Vertex)) {
 
+    // Check if there is enough space
+    if (g_allocatedSkinnedVertexBufferSize < vertexCount * sizeof(Vertex)) 
+    {
         // Destroy old VBO
-        if (g_skinnedVertexDataVBO != 0) {
+        if (g_skinnedVertexDataVBO != 0)
+        {
             glDeleteBuffers(1, &g_skinnedVertexDataVBO);
         }
 
@@ -218,9 +259,10 @@ void OpenGLBackEnd::AllocateSkinnedVertexBufferSpace(int vertexCount) {
     }
 }
 
-void OpenGLBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
-
-    if (_vertexDataVAO != 0) {
+void OpenGLBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+{
+    if (_vertexDataVAO != 0)
+    {
         glDeleteVertexArrays(1, &_vertexDataVAO);
         glDeleteBuffers(1, &_vertexDataVBO);
         glDeleteBuffers(1, &_vertexDataEBO);
@@ -250,13 +292,15 @@ void OpenGLBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<
     glBindVertexArray(0);
 }
 
-void OpenGLBackEnd::UploadConstructiveSolidGeometry(std::vector<CSGVertex>& vertices, std::vector<uint32_t>& indices) {
-
-    if (vertices.empty()) {
+void OpenGLBackEnd::UploadConstructiveSolidGeometry(std::vector<CSGVertex>& vertices, std::vector<uint32_t>& indices)
+{
+    if (vertices.empty())
+    {
         return;
     }
 
-    if (g_constructiveSolidGeometryVAO != 0) {
+    if (g_constructiveSolidGeometryVAO != 0) 
+    {
         glDeleteVertexArrays(1, &g_constructiveSolidGeometryVAO);
         glDeleteBuffers(1, &g_constructiveSolidGeometryVBO);
         glDeleteBuffers(1, &g_constructiveSolidGeometryEBO);
@@ -293,13 +337,15 @@ void OpenGLBackEnd::UploadConstructiveSolidGeometry(std::vector<CSGVertex>& vert
     std::cout << "-ebo: " << g_constructiveSolidGeometryEBO << "\n";*/
 }
 
-void OpenGLBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices) {
-
-    if (vertices.empty() || indices.empty()) {
+void OpenGLBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices)
+{
+    if (vertices.empty() || indices.empty())
+    {
         return;
     }
 
-    if (_weightedVertexDataVAO != 0) {
+    if (_weightedVertexDataVAO != 0) 
+    {
         glDeleteVertexArrays(1, &_weightedVertexDataVAO);
         glDeleteBuffers(1, &_weightedVertexDataVBO);
         glDeleteBuffers(1, &_weightedVertexDataEBO);
@@ -333,26 +379,36 @@ void OpenGLBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertic
     glBindVertexArray(0);
 }
 
-void OpenGLBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointCloud) {
+void OpenGLBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointCloud)
+{
     static int allocatedBufferSize = 0;
-    if (g_pointCloudVAO == 0) {
+
+    if (g_pointCloudVAO == 0) 
+    {
         glGenVertexArrays(1, &g_pointCloudVAO);
         glGenBuffers(1, &g_pointCloudVBO);
     }
-    if (pointCloud.empty()) {
+
+    if (pointCloud.empty())
+    {
         return;
     }
+
     glBindVertexArray(g_pointCloudVAO);
-    if (pointCloud.size() * sizeof(CloudPoint) <= allocatedBufferSize) {
+
+    if (pointCloud.size() * sizeof(CloudPoint) <= allocatedBufferSize)
+    {
         glBindBuffer(GL_ARRAY_BUFFER, g_pointCloudVBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, (GLuint)pointCloud.size() * sizeof(CloudPoint), &pointCloud[0]);
     }
-    else {
+    else
+    {
         glDeleteBuffers(1, &g_pointCloudVBO);
         glGenBuffers(1, &g_pointCloudVBO);
         glBindBuffer(GL_ARRAY_BUFFER, g_pointCloudVBO);
         glBufferData(GL_ARRAY_BUFFER, pointCloud.size() * sizeof(CloudPoint), &pointCloud[0], GL_STATIC_DRAW);
     }
+
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(CloudPoint), (void*)0);
     glEnableVertexAttribArray(1);
@@ -364,27 +420,36 @@ void OpenGLBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointC
     allocatedBufferSize = pointCloud.size() * sizeof(CloudPoint);
 }
 
-void OpenGLBackEnd::UploadTriangle2DData(std::vector<glm::vec2>& vertices) {
-
+void OpenGLBackEnd::UploadTriangle2DData(std::vector<glm::vec2>& vertices)
+{
     static int allocatedBufferSize = 0;
-    if (g_triangle2DVAO == 0) {
+
+    if (g_triangle2DVAO == 0)
+    {
         glGenVertexArrays(1, &g_triangle2DVAO);
         glGenBuffers(1, &g_triangle2DVBO);
     }
-    if (vertices.empty()) {
+
+    if (vertices.empty())
+    {
         return;
     }
+
     glBindVertexArray(g_triangle2DVAO);
-    if (vertices.size() * sizeof(glm::vec2) <= allocatedBufferSize) {
+
+    if (vertices.size() * sizeof(glm::vec2) <= allocatedBufferSize)
+    {
         glBindBuffer(GL_ARRAY_BUFFER, g_triangle2DVBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, (GLuint)vertices.size() * sizeof(glm::vec2), &vertices[0]);
     }
-    else {
+    else
+    {
         glDeleteBuffers(1, &g_triangle2DVBO);
         glGenBuffers(1, &g_triangle2DVBO);
         glBindBuffer(GL_ARRAY_BUFFER, g_triangle2DVBO);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_STATIC_DRAW);
     }
+
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
     glBindVertexArray(0);
@@ -392,11 +457,12 @@ void OpenGLBackEnd::UploadTriangle2DData(std::vector<glm::vec2>& vertices) {
     allocatedBufferSize = vertices.size() * sizeof(glm::vec2);
 }
 
-GLuint OpenGLBackEnd::GetTriangles2DVAO() {
+GLuint OpenGLBackEnd::GetTriangles2DVAO()
+{
     return g_triangle2DVAO;
 }
 
-GLuint OpenGLBackEnd::GetTriangles2DVBO() {
+GLuint OpenGLBackEnd::GetTriangles2DVBO() 
+{
     return g_triangle2DVBO;
-
 }

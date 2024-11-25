@@ -1,24 +1,29 @@
 #pragma once
+
 #include "CSGShape.h"
 
-glm::mat4 CSGCube::GetModelMatrix() {
+glm::mat4 CSGCube::GetModelMatrix()
+{
     return m_transform.to_mat4();
 }
 
-glm::mat4 CSGCube::GetCSGMatrix() {
+glm::mat4 CSGCube::GetCSGMatrix() 
+{
     Transform transform = m_transform;
     transform.scale *= glm::vec3(0.5f);
     return transform.to_mat4();
 }
 
-glm::mat4 CSGCube::GetNormalMatrix() {
+glm::mat4 CSGCube::GetNormalMatrix()
+{
     Transform transform;
     transform.position = m_transform.position;
     transform.rotation = m_transform.rotation;
     return transform.to_mat4();
 }
 
-void CSGCube::SetTransform(Transform transform) {
+void CSGCube::SetTransform(Transform transform)
+{
     m_transform = transform;
     if (pxRigidStatic) {
         PxMat44 matrix = Util::GlmMat4ToPxMat44(GetModelMatrix());
@@ -27,17 +32,19 @@ void CSGCube::SetTransform(Transform transform) {
     }
 }
 
-Transform& CSGCube::GetTransform() {
+Transform& CSGCube::GetTransform()
+{
     return m_transform;
 }
 
-void CSGCube::CleanUp() {
+void CSGCube::CleanUp()
+{
     Physics::Destroy(pxRigidStatic);
     Physics::Destroy(m_pxShape);
 }
 
-void CSGCube::CreateCubePhysicsObject() {
-
+void CSGCube::CreateCubePhysicsObject()
+{
     PhysicsFilterData filterData2;
     filterData2.raycastGroup = RaycastGroup::RAYCAST_ENABLED;
     filterData2.collisionGroup = NO_COLLISION;
@@ -60,10 +67,12 @@ void CSGCube::CreateCubePhysicsObject() {
     Physics::DisableRaycast(m_pxShape);
 }
 
-void CSGCube::DisableRaycast() {
+void CSGCube::DisableRaycast() 
+{
     Physics::DisableRaycast(m_pxShape);
 }
 
-void CSGCube::EnableRaycast() {
+void CSGCube::EnableRaycast() 
+{
     Physics::EnableRaycast(m_pxShape);
 }

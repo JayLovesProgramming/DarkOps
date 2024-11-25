@@ -4,18 +4,21 @@
 #include <GLFW/glfw3.h>
 #include "../../Util.hpp"
 
-struct ColorAttachment {
+struct ColorAttachment
+{
     const char* name = "undefined";
     GLuint handle = 0;
     GLenum internalFormat = GL_RGBA;
 };
-struct DepthAttachment {
+
+struct DepthAttachment
+{
     GLuint handle = 0;
     GLenum internalFormat = GL_RGBA;
 };
 
-struct GLFrameBuffer {
-
+struct GLFrameBuffer
+{
 private:
     const char* name = "undefined";
     GLuint handle = 0;
@@ -25,20 +28,22 @@ private:
     DepthAttachment depthAttachment;
 
 public:
-
-    void Create(const char* name, int width, int height) {
+    void Create(const char* name, int width, int height)
+    {
         glGenFramebuffers(1, &handle);
         this->name = name;
         this->width = width;
         this->height = height;
     }
 
-    void CleanUp() {
+    void CleanUp()
+    {
         colorAttachments.clear();
         glDeleteFramebuffers(1, &handle);
     }
 
-    void CreateAttachment(const char* name, GLenum internalFormat) {
+    void CreateAttachment(const char* name, GLenum internalFormat)
+    {
         GLenum slot = GL_COLOR_ATTACHMENT0 + colorAttachments.size();
         ColorAttachment& colorAttachment = colorAttachments.emplace_back();
         colorAttachment.name = name;
@@ -54,7 +59,8 @@ public:
         glFramebufferTexture2D(GL_FRAMEBUFFER, slot, GL_TEXTURE_2D, colorAttachment.handle, 0);
     }
 
-    void CreateDepthAttachment(GLenum internalFormat) {
+    void CreateDepthAttachment(GLenum internalFormat)
+    {
         depthAttachment.internalFormat = internalFormat;
         glBindFramebuffer(GL_FRAMEBUFFER, handle);
         glGenTextures(1, &depthAttachment.handle);
@@ -67,29 +73,37 @@ public:
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthAttachment.handle, 0);
     }
 
-    void Bind() {
+    void Bind()
+    {
         glBindFramebuffer(GL_FRAMEBUFFER, handle);
     }
 
-    void SetViewport() {
+    void SetViewport()
+    {
         glViewport(0, 0, width, height);
     }
 
-    GLuint GetHandle() {
+    GLuint GetHandle()
+    {
         return handle;
     }
 
-    GLuint GetWidth() {
+    GLuint GetWidth()
+    {
         return width;
     }
 
-    GLuint GetHeight() {
+    GLuint GetHeight()
+    {
         return height;
     }
 
-    GLuint GetColorAttachmentHandleByName(const char* name) {
-        for (int i = 0; i < colorAttachments.size(); i++) {
-            if (Util::StrCmp(name, colorAttachments[i].name)) {
+    GLuint GetColorAttachmentHandleByName(const char* name)
+    {
+        for (int i = 0; i < colorAttachments.size(); i++)
+        {
+            if (Util::StrCmp(name, colorAttachments[i].name))
+            {
                 return colorAttachments[i].handle;
             }
         }
@@ -97,13 +111,17 @@ public:
         return GL_NONE;
     }
 
-    GLuint GetDepthAttachmentHandle() {
+    GLuint GetDepthAttachmentHandle()
+    {
         return depthAttachment.handle;
     }
 
-    GLenum GetColorAttachmentSlotByName(const char* name) {
-        for (int i = 0; i < colorAttachments.size(); i++) {
-            if (Util::StrCmp(name, colorAttachments[i].name)) {
+    GLenum GetColorAttachmentSlotByName(const char* name) 
+    {
+        for (int i = 0; i < colorAttachments.size(); i++) 
+        {
+            if (Util::StrCmp(name, colorAttachments[i].name)) 
+            {
                 return GL_COLOR_ATTACHMENT0 + i;
             }
         }

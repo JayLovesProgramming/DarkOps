@@ -1,8 +1,10 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <vector>
 
-struct ShadowMapArray {
+struct ShadowMapArray
+{
     void Init(unsigned int numberOfCubemaps);
     void CleanUp();
     void Clear();

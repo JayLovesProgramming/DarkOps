@@ -1,9 +1,10 @@
 #pragma once
+
 #include <string>
 
 class OpenGLTexture3D
 {
-public: // Methods
+public: 
     OpenGLTexture3D();
     void Create(int width, int height, int depth);
 	void Bind(unsigned int slot);

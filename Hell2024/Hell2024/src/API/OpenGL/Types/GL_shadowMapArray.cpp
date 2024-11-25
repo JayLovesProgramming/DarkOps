@@ -2,7 +2,8 @@
 #include <glad/glad.h>
 #include "Defines.h"
 
-void ShadowMapArray::Init(unsigned int numberOfCubemaps) {
+void ShadowMapArray::Init(unsigned int numberOfCubemaps) 
+{
     m_numberOfCubemaps = numberOfCubemaps;
     glGenFramebuffers(1, &m_ID);
     glGenTextures(1, &m_depthTexture);
@@ -23,7 +24,8 @@ void ShadowMapArray::Init(unsigned int numberOfCubemaps) {
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_depthTexture, 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
         std::cerr << "Framebuffer not complete!" << std::endl;
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -42,13 +44,15 @@ void ShadowMapArray::Init(unsigned int numberOfCubemaps) {
     );
 }
 
-void ShadowMapArray::CleanUp() {
+void ShadowMapArray::CleanUp()
+{
     glDeleteTextures(1, &m_depthTexture);
     glDeleteTextures(1, &m_textureView);
     glDeleteFramebuffers(1, &m_ID);
 }
 
-void ShadowMapArray::Clear() {
+void ShadowMapArray::Clear() 
+{
     glViewport(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
     glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
     glEnable(GL_DEPTH_TEST);

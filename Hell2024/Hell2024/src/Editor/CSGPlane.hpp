@@ -1,26 +1,30 @@
 #pragma once
+
 #include "glm/glm.hpp"
 
-struct CSGPlane {
-
+struct CSGPlane 
+{
     glm::vec3 m_veritces[4];
     int materialIndex = -1;
     float textureScale = 0;
     float textureOffsetX = 0;
     float textureOffsetY = 0;
 
-    glm::vec3 GetCenter() {
+    glm::vec3 GetCenter()
+    {
         return glm::vec3(m_veritces[TL] + m_veritces[TR] + m_veritces[BL] + m_veritces[BR]) / 4.0f;
     }
 
-    glm::vec3 GetNormal() {
+    glm::vec3 GetNormal()
+    {
         glm::vec3 edge1 = m_veritces[TR] - m_veritces[TL];
         glm::vec3 edge2 = m_veritces[BL] - m_veritces[TL];
         glm::vec3 normal = glm::cross(edge2, edge1);
         return glm::normalize(normal);
     }
 
-    glm::mat4 GetModelMatrix() {
+    glm::mat4 GetModelMatrix()
+    {
         glm::vec3 center = GetCenter();
         glm::vec3 normal = GetNormal();
         glm::mat4 translation = glm::translate(glm::mat4(1.0f), center);
@@ -34,7 +38,8 @@ struct CSGPlane {
         return modelMatrix;
     }
 
-    glm::mat4 GetCSGMatrix() {
+    glm::mat4 GetCSGMatrix() 
+    {
         // Rotation
         glm::vec3 normal = GetNormal();
         glm::vec3 defaultNormal = glm::vec3(0, 0, 1);
@@ -54,5 +59,4 @@ struct CSGPlane {
         glm::mat4 modelMatrix = translation * rotation * scaleMatrix;
         return modelMatrix;
     }
-
 };

@@ -1,9 +1,10 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <string>
 
-struct OpenGLCubemapTexture {
-
+struct OpenGLCubemapTexture
+{
 public:
     OpenGLCubemapTexture() = default;
     void Load(std::string name, std::string filetype);

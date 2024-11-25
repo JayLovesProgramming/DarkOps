@@ -1474,23 +1474,26 @@ AnimatedGameObject* Scene::GetAnimatedGameObjectByIndex(int32_t index) {
     }
 }*/
 
-
-std::vector<AnimatedGameObject>& Scene::GetAnimatedGamesObjects() {
+std::vector<AnimatedGameObject>& Scene::GetAnimatedGamesObjects()
+{
     return g_animatedGameObjects;
 }
 
-std::vector<AnimatedGameObject*> Scene::GetAnimatedGamesObjectsToSkin() {
+std::vector<AnimatedGameObject*> Scene::GetAnimatedGamesObjectsToSkin()
+{
     std::vector<AnimatedGameObject*> objects;
-    for (AnimatedGameObject& object : g_animatedGameObjects) {
-
+    for (AnimatedGameObject& object : g_animatedGameObjects)
+    {
         if (Game::GetSplitscreenMode() == SplitscreenMode::NONE &&
             object.GetFlag() == AnimatedGameObject::Flag::VIEW_WEAPON &&
-            object.GetPlayerIndex() != 0) {
+            object.GetPlayerIndex() != 0)
+        {
             continue;
         }
         if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER &&
             object.GetFlag() == AnimatedGameObject::Flag::VIEW_WEAPON &&
-            object.GetPlayerIndex() > 1) {
+            object.GetPlayerIndex() > 1) 
+        {
             continue;
         }
         objects.push_back(&object);
@@ -1498,8 +1501,8 @@ std::vector<AnimatedGameObject*> Scene::GetAnimatedGamesObjectsToSkin() {
     return objects;
 }
 
-void Scene::Init() {
-
+void Scene::Init()
+{
     AllocateStorageSpace();
     CleanUp();
     LoadDefaultScene();
@@ -1509,22 +1512,26 @@ void Scene::Init() {
 //    return glm::fract(sin(glm::vec2(dot(p, glm::vec2(127.1, 311.7)), dot(p, glm::vec2(269.5, 183.3)))) * 43758.5453);
 //}
 
-std::vector<RenderItem3D> GetTreeRenderItems() {
-
+std::vector<RenderItem3D> GetTreeRenderItems()
+{
     // Cache a bunch of shit
     static Model* model = AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName("Tree_0"));
     static int barkMaterialIndex = AssetManager::GetMaterialIndex("TreeBark");
     static int leavesMaterialIndex = AssetManager::GetMaterialIndex("TreeLeaves");
     static int barkMeshIndex = 0;
     static int leavesMeshIndex = 0;
-    if (barkMeshIndex == 0) {
-        for (int i = 0; i < model->GetMeshIndices().size(); i++) {
+    if (barkMeshIndex == 0) 
+    {
+        for (int i = 0; i < model->GetMeshIndices().size(); i++)
+        {
             uint32_t& meshIndex = model->GetMeshIndices()[i];
             Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
-            if (mesh->name == "Bark") {
+            if (mesh->name == "Bark")
+            {
                 barkMeshIndex = meshIndex;
             }
-            if (mesh->name == "Leaves") {
+            if (mesh->name == "Leaves") 
+            {
                 leavesMeshIndex = meshIndex;
             }
         }
@@ -1535,10 +1542,11 @@ std::vector<RenderItem3D> GetTreeRenderItems() {
 
     //if (g_treeTransforms.empty()) {
 
-    if (Scene::g_needToPlantTrees) {
+    if (Scene::g_needToPlantTrees) 
+    {
         Scene::g_needToPlantTrees = false;
 
-        Timer timer("PLANT SAMPLINGS");
+        //Timer timer("PLANT SAMPLINGS");
 
         int iterationMax = 800;
         int desiredTreeCount = 800;
@@ -3755,19 +3763,23 @@ Door* Scene::GetDoorByIndex(int32_t index) {
     }
 }
 
-uint32_t Scene::GetWindowCount() {
+uint32_t Scene::GetWindowCount() 
+{
     return g_windows.size();
 }
 
-uint32_t Scene::GetDoorCount() {
+uint32_t Scene::GetDoorCount()
+{
     return g_doors.size();
 }
 
-std::vector<Window>& Scene::GetWindows() {
+std::vector<Window>& Scene::GetWindows()
+{
     return g_windows;
 }
 
-std::vector<Door>& Scene::GetDoors() {
+std::vector<Door>& Scene::GetDoors()
+{
     return g_doors;
 }
 
@@ -3786,7 +3798,8 @@ void Scene::SetWindowPosition(uint32_t windowIndex, glm::vec3 position) {
     }
 }*/
 
-void Scene::CreateDoor(DoorCreateInfo createInfo) {
+void Scene::CreateDoor(DoorCreateInfo createInfo) 
+{
     Door& door = g_doors.emplace_back();
     door.SetPosition(createInfo.position);
     door.SetRotation(createInfo.rotation);
@@ -3794,7 +3807,8 @@ void Scene::CreateDoor(DoorCreateInfo createInfo) {
     door.CreatePhysicsObject();
 }
 
-void Scene::CreateWindow(WindowCreateInfo createInfo) {
+void Scene::CreateWindow(WindowCreateInfo createInfo)
+{
     Window& window = g_windows.emplace_back();
     window.SetPosition(createInfo.position);
     window.SetRotationY(createInfo.rotation);

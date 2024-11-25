@@ -2,9 +2,8 @@
 #include <glad/glad.h>
 #include "Defines.h"
 
-
-void CubeMap2::Init(unsigned int size) {
-
+void CubeMap2::Init(unsigned int size) 
+{
     m_size = size;
 
     glGenFramebuffers(1, &m_ID);
@@ -42,7 +41,6 @@ void CubeMap2::Init(unsigned int size) {
 
     glGenTextures(1, &m_textureView);  // Generate a new texture for the view
 
-
     glTextureView(
         m_textureView,                  // The texture view handle
         GL_TEXTURE_2D_ARRAY,            // Alias it as a 2D texture array
@@ -55,7 +53,8 @@ void CubeMap2::Init(unsigned int size) {
     );
 }
 
-void CubeMap2::CheckStatus() {
+void CubeMap2::CheckStatus()
+{
     glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
     auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (fboStatus == 36053)
@@ -74,7 +73,8 @@ void CubeMap2::CheckStatus() {
     }
 }
 
-void CubeMap2::Clear() {
+void CubeMap2::Clear()
+{
     glViewport(0, 0, m_size, m_size);
     glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
     glEnable(GL_DEPTH_TEST);
