@@ -3,9 +3,14 @@
 #include "Core/AssetManager.h"
 #include "Game/Game.h"
 #include "Renderer/Renderer.h"
+#include "Utils/ErrorHandling/LogErrors.h"
 
 void Engine::Run() 
 {
+    // TODO: Log all warnings in a txt file
+    //BuildWarningLogger logger;
+    //logger.monitorBuild("E:\\Hell2024\\Hell2024\\Hell2024.sln");
+
     BackEnd::Init(API::OPENGL);
 
     while (BackEnd::WindowIsOpen()) 

@@ -381,6 +381,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Types\Model.hpp" />
     <ClInclude Include="src\Util.hpp" />
     <ClInclude Include="src\Editor\CSG.h" />
+    <ClInclude Include="src\Utils\ErrorHandling\LogErrors.h" />
     <ClInclude Include="vendor\lz4\include\lz4.h" />
     <ClInclude Include="vendor\lz4\include\lz4file.h" />
     <ClInclude Include="vendor\lz4\include\lz4frame.h" />
