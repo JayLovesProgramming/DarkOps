@@ -3,7 +3,8 @@
 #include "keycodes.h"
 #include <vector>
 
-struct MouseState {
+struct MouseState 
+{
     bool detected = false;
     bool leftMouseDown = false;
     bool rightMouseDown = false;
@@ -15,17 +16,17 @@ struct MouseState {
     int yoffset = 0;
 };
 
-struct KeyboardState {
+struct KeyboardState
+{
     bool keyPressed[372];
     bool keyDown[372];
     bool keyDownLastFrame[372];
 };
 
-namespace InputMulti {
-
+namespace InputMulti 
+{
     void Init();
     void Update();
-
     bool LeftMouseDown(int index);
     bool RightMouseDown(int index);
     bool LeftMousePressed(int index);

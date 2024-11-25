@@ -3,8 +3,8 @@
 #include "../Renderer/Renderer.h"
 #include "../Util.hpp"
 
-namespace Input {
-
+namespace Input 
+{
     bool _keyPressed[372];
     bool _keyDown[372];
     bool _keyDownLastFrame[372];
@@ -30,8 +30,8 @@ namespace Input {
 
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-    void Init() {
-
+    void Init() 
+    {
         double x, y;
         _window = BackEnd::GetWindowPointer();
         glfwSetScrollCallback(_window, scroll_callback);
@@ -43,15 +43,18 @@ namespace Input {
         _mouseY = y;
     }
 
-    void Update() {
-
-        if (KeyPressed(HELL_KEY_ESCAPE)) {
+    void Update()
+    {
+        if (KeyPressed(HELL_KEY_ESCAPE))
+        {
             BackEnd::ForceCloseWindow();
         }
-        if (KeyPressed(HELL_KEY_G)) {
+        if (KeyPressed(HELL_KEY_G)) 
+        {
             BackEnd::ToggleFullscreen();
         }
-        if (KeyPressed(HELL_KEY_H)) {
+        if (KeyPressed(HELL_KEY_H))
+        {
             Renderer::HotloadShaders();
         }
 
@@ -66,7 +69,8 @@ namespace Input {
         ResetScrollWheelYOffset();
 
         // Keyboard
-        for (int i = 32; i < 349; i++) {
+        for (int i = 32; i < 349; i++)
+        {
             // down
             if (glfwGetKey(_window, i) == GLFW_PRESS)
                 _keyDown[i] = true;
@@ -109,77 +113,93 @@ namespace Input {
             _preventRightMouseHoldTillNextClick = false;
     }
 
-    bool KeyPressed(unsigned int keycode) {
+    bool KeyPressed(unsigned int keycode)
+    {
         return _keyPressed[keycode];
     }
 
-    bool KeyDown(unsigned int keycode) {
+    bool KeyDown(unsigned int keycode)
+    {
         return _keyDown[keycode];
     }
 
-    float GetMouseOffsetX() {
+    float GetMouseOffsetX()
+    {
         return (float)_mouseOffsetX;
     }
 
-    float GetMouseOffsetY() {
+    float GetMouseOffsetY() 
+    {
         return (float)_mouseOffsetY;
     }
 
-    bool LeftMouseDown() {
+    bool LeftMouseDown()
+    {
         return _leftMouseDown;
     }
 
-    bool RightMouseDown() {
+    bool RightMouseDown() 
+    {
         return _rightMouseDown && !_preventRightMouseHoldTillNextClick;
     }
 
-    bool LeftMousePressed() {
+    bool LeftMousePressed()
+    {
         return _leftMousePressed;
     }
 
-    bool RightMousePressed() {
+    bool RightMousePressed()
+    {
         return _rightMousePressed;
     }
 
-    bool MouseWheelDown() {
+    bool MouseWheelDown()
+    {
         return _mouseWheelDown;
     }
 
-    int GetMouseWheelValue() {
+    int GetMouseWheelValue()
+    {
         return _mouseWheelValue;
     }
 
-    bool MouseWheelUp() {
+    bool MouseWheelUp() 
+    {
         return _mouseWheelUp;
     }
 
-    void PreventRightMouseHold() {
+    void PreventRightMouseHold()
+    {
         _preventRightMouseHoldTillNextClick = true;
     }
 
-    int GetMouseX() {
+    int GetMouseX() 
+    {
         return (int)_mouseX;
     }
 
-    int GetMouseY() {
+    int GetMouseY() 
+    {
         return (int)_mouseY;
     }
 
-
-    int GetViewportMappedMouseX(int viewportWidth) {
+    int GetViewportMappedMouseX(int viewportWidth)
+    {
         return Util::MapRange(Input::GetMouseX(), 0, BackEnd::GetCurrentWindowWidth(), 0, viewportWidth);
     }
 
-    int GetViewportMappedMouseY(int viewportHeight) {
+    int GetViewportMappedMouseY(int viewportHeight)
+    {
         return Util::MapRange(Input::GetMouseY(), 0, BackEnd::GetCurrentWindowHeight(), 0, viewportHeight);
     }
 
-
-    int GetScrollWheelYOffset() {
+    int GetScrollWheelYOffset()
+    {
         return _scrollWheelYOffset;
     }
 
-    void ResetScrollWheelYOffset() {
+    void ResetScrollWheelYOffset()
+    {
         _scrollWheelYOffset = 0;
     }
 
@@ -195,32 +215,33 @@ namespace Input {
         return int(ypos);
     }*/
 
-    void DisableCursor() {
+    void DisableCursor()
+    {
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
-    void HideCursor() {
+    void HideCursor()
+    {
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     }
 
-    void ShowCursor() {
+    void ShowCursor()
+    {
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
-    int GetCursorScreenX() {
+    int GetCursorScreenX() 
+    {
         return _mouseScreenX;
     }
 
-    int GetCursorScreenY() {
+    int GetCursorScreenY() 
+    {
         return _mouseScreenY;
     }
 
-
-    /////////////////////////
-    //                     //
-    //      Callbacks      //
-
-    void scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
+    void scroll_callback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) 
+    {
         _scrollWheelYOffset = (int)yoffset;
     }
 }

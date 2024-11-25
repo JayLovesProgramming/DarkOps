@@ -1,10 +1,11 @@
 #pragma once
+
 #include "keycodes.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-namespace Input {
-
+namespace Input 
+{
 	void Init();
 	void Update();
 	bool KeyPressed(unsigned int keycode);
