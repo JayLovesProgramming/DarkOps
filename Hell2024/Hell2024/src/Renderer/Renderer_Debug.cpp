@@ -702,7 +702,8 @@ std::string& Renderer::GetDebugText() {
         text += "\n";
     }*/
 
-    g_debugText = Util::RenderModeToString(Renderer::GetRenderMode()) + "\n";
+    g_debugText = "Jay Development Build 0.1 \n";
+    g_debugText += Util::RenderModeToString(Renderer::GetRenderMode()) + "\n";
 
     if (Renderer::GetDebugLineRenderMode() != SHOW_NO_LINES) {
         g_debugText += "Line mode: " + Util::DebugLineRenderModeToString(Renderer::GetDebugLineRenderMode()) + "\n";
