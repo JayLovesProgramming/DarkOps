@@ -1,11 +1,13 @@
 #pragma once
+
 #include "HellCommon.h"
 #include <string>
 #include <unordered_map>
 
 enum class WeaponType { MELEE, PISTOL, SHOTGUN, AUTOMATIC };
 
-struct AnimationNames {
+struct AnimationNames 
+{
     std::string idle;
     std::string walk;
     std::string reload;
@@ -28,7 +30,8 @@ struct AnimationNames {
     std::string shotgunReloadTwoShells;
 };
 
-struct AnimationCancelPercentages {
+struct AnimationCancelPercentages
+{
     float fire = 0.0f;
     float reload = 0.0f;
     float reloadFromEmpty = 0.0f;
@@ -36,7 +39,8 @@ struct AnimationCancelPercentages {
     float adsFire = 0.0f;
 };
 
-struct AnimationSpeeds {
+struct AnimationSpeeds
+{
     float idle = 1.0f;
     float walk = 1.0f;
     float reload = 1.0f;
@@ -51,14 +55,16 @@ struct AnimationSpeeds {
     float shotgunReloadTwoShells = 1.0f;
 };
 
-struct AudioFiles {
+struct AudioFiles
+{
     std::vector<std::string> fire;
     std::vector<std::string> revolverCocks;
     std::string reload;
     std::string reloadEmpty;
 };
 
-struct WeaponInfo {
+struct WeaponInfo 
+{
     std::string name;
     std::string modelName;
     AnimationNames animationNames;
@@ -92,7 +98,8 @@ struct WeaponInfo {
     const char* pickupConvexMeshModelName = UNDEFINED_STRING;
 };
 
-struct AmmoInfo {
+struct AmmoInfo
+{
     const char* name = UNDEFINED_STRING;
     const char* convexMeshModelName = UNDEFINED_STRING;
     const char* modelName = UNDEFINED_STRING;
@@ -102,15 +109,16 @@ struct AmmoInfo {
     int pickupAmount = 0;
 };
 
-struct WeaponAttachmentInfo {
+struct WeaponAttachmentInfo 
+{
     const char* name = UNDEFINED_STRING;
     const char* materialName = UNDEFINED_STRING;
     const char* modelName = UNDEFINED_STRING;
     bool isGold = false;
 };
 
-namespace WeaponManager {
-
+namespace WeaponManager 
+{
     void Init();
     void SortList();
     void PreLoadWeaponPickUpConvexHulls();
@@ -120,5 +128,4 @@ namespace WeaponManager {
     AmmoInfo* GetAmmoInfoByIndex(int index);
     int GetWeaponCount();
     int GetAmmoTypeCount();
-
 }

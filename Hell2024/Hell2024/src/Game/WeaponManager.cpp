@@ -649,30 +649,37 @@ namespace WeaponManager {
         }
     }
 
-    void SortList() {
-
+    void SortList() 
+    {
         std::vector< WeaponInfo> melees;
         std::vector< WeaponInfo> pistols;
         std::vector< WeaponInfo> shotguns;
         std::vector< WeaponInfo> automatics;
 
-        for (int i = 0; i < g_weapons.size(); i++) {
-            if (g_weapons[i].type == WeaponType::MELEE) {
+        for (int i = 0; i < g_weapons.size(); i++) 
+        {
+            if (g_weapons[i].type == WeaponType::MELEE) 
+            {
                 melees.push_back(g_weapons[i]);
             }
-            if (g_weapons[i].type == WeaponType::PISTOL) {
+            if (g_weapons[i].type == WeaponType::PISTOL) 
+            {
                 pistols.push_back(g_weapons[i]);
             }
-            if (g_weapons[i].type == WeaponType::SHOTGUN) {
+            if (g_weapons[i].type == WeaponType::SHOTGUN) 
+            {
                 shotguns.push_back(g_weapons[i]);
             }
-            if (g_weapons[i].type == WeaponType::AUTOMATIC) {
+            if (g_weapons[i].type == WeaponType::AUTOMATIC) 
+            {
                 automatics.push_back(g_weapons[i]);
             }
         }
 
-        struct less_than_damage {
-            inline bool operator() (const WeaponInfo& a, const WeaponInfo& b) {
+        struct less_than_damage 
+        {
+            inline bool operator() (const WeaponInfo& a, const WeaponInfo& b)
+            {
                 return (a.damage < b.damage);
             }
         };
@@ -684,61 +691,76 @@ namespace WeaponManager {
 
         g_weapons.clear();
 
-        for (int i = 0; i < melees.size(); i++) {
+        for (int i = 0; i < melees.size(); i++) 
+        {
             g_weapons.push_back(melees[i]);
         }
-        for (int i = 0; i < pistols.size(); i++) {
+        for (int i = 0; i < pistols.size(); i++)
+        {
             g_weapons.push_back(pistols[i]);
         }
-        for (int i = 0; i < shotguns.size(); i++) {
+        for (int i = 0; i < shotguns.size(); i++) 
+        {
             g_weapons.push_back(shotguns[i]);
         }
-        for (int i = 0; i < automatics.size(); i++) {
+        for (int i = 0; i < automatics.size(); i++)
+        {
             g_weapons.push_back(automatics[i]);
         }
-
-        for (int i = 0; i < g_weapons.size(); i++) {
+        for (int i = 0; i < g_weapons.size(); i++) 
+        {
            // std::cout << i << ": " << g_weapons[i].name << "\n";
         }
     }
 
-
-    WeaponInfo* GetWeaponInfoByName(std::string name) {
-        for (int i = 0; i < g_weapons.size(); i++) {
-            if (g_weapons[i].name == name) {
+    WeaponInfo* GetWeaponInfoByName(std::string name) 
+    {
+        for (int i = 0; i < g_weapons.size(); i++) 
+        {
+            if (g_weapons[i].name == name)
+            {
                 return &g_weapons[i];
             }
         }
         return nullptr;
     }
 
-    WeaponInfo* GetWeaponInfoByIndex(int index) {
-        if (index >= 0 && index < g_weapons.size()) {
+    WeaponInfo* GetWeaponInfoByIndex(int index) 
+    {
+        if (index >= 0 && index < g_weapons.size()) 
+        {
             return &g_weapons[index];
         }
         return nullptr;
     }
 
-    AmmoInfo* GetAmmoInfoByName(std::string name) {
-        for (int i = 0; i < g_ammos.size(); i++) {
-            if (g_ammos[i].name == name) {
+    AmmoInfo* GetAmmoInfoByName(std::string name) 
+    {
+        for (int i = 0; i < g_ammos.size(); i++)
+        {
+            if (g_ammos[i].name == name)
+            {
                 return &g_ammos[i];
             }
         }
         return nullptr;
     }
 
-    AmmoInfo* GetAmmoInfoByIndex(int index) {
-        if (index >= 0 && index < g_ammos.size()) {
+    AmmoInfo* GetAmmoInfoByIndex(int index)
+    {
+        if (index >= 0 && index < g_ammos.size())
+        {
             return &g_ammos[index];
         }
         return nullptr;
     }
 
-    int GetWeaponCount() {
+    int GetWeaponCount()
+    {
         return g_weapons.size();
     }
-    int GetAmmoTypeCount() {
+    int GetAmmoTypeCount() 
+    {
         return g_ammos.size();
     }
 }
