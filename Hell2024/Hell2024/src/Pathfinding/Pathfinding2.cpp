@@ -11,51 +11,60 @@
 #include "../Game/Game.h"
 #include "../Core/AssetManager.h"
 
-class MyDebugDraw : public duDebugDraw {
+class MyDebugDraw : public duDebugDraw
+{
 public:
     std::vector<glm::vec3> debugVertices;
     virtual void depthMask(bool state) override {}
     virtual void texture(bool state) override {}
     virtual void begin(duDebugDrawPrimitives prim, float size = 1.0f) override {}
-    virtual void vertex(const float x, const float y, const float z, unsigned int color) override {
+    virtual void vertex(const float x, const float y, const float z, unsigned int color) override
+    {
         debugVertices.push_back(glm::vec3(x, y, z));
     }
-    virtual void vertex(const float* pos, unsigned int color, const float* uv) override {
+    virtual void vertex(const float* pos, unsigned int color, const float* uv) override
+    {
         debugVertices.push_back(glm::vec3(pos[0], pos[1], pos[2]));
     }
-    virtual void vertex(const float* pos, unsigned int color) override {
+    virtual void vertex(const float* pos, unsigned int color) override
+    {
         debugVertices.push_back(glm::vec3(pos[0], pos[1], pos[2]));
     }
-    virtual void vertex(const float x, const float y, const float z, unsigned int color, const float u, const float v) override {
+    virtual void vertex(const float x, const float y, const float z, unsigned int color, const float u, const float v) override
+    {
         debugVertices.push_back(glm::vec3(x, y, z));
     }
     virtual void end() override {}
 };
 
-
-
-
-void DrawNavMesh(MyDebugDraw& dd, NavMesh& navMesh, dtTileCache* tileCache, std::vector<glm::vec3>& vector) {
-    if (!navMesh.GetDtNaveMesh() || !tileCache) {
+void DrawNavMesh(MyDebugDraw& dd, NavMesh& navMesh, dtTileCache* tileCache, std::vector<glm::vec3>& vector) 
+{
+    if (!navMesh.GetDtNaveMesh() || !tileCache)
+    {
         return;
     }
 
     vector.clear();
     const dtNavMesh* mesh = navMesh.GetDtNaveMesh();
 
-    for (int i = 0; i < mesh->getMaxTiles(); ++i) {
+    for (int i = 0; i < mesh->getMaxTiles(); ++i) 
+    {
         const dtMeshTile* tile = mesh->getTile(i);
-        if (!tile || !tile->header) {
+        if (!tile || !tile->header)
+        {
             continue;
         }
 
-        for (int j = 0; j < tile->header->polyCount; ++j) {
+        for (int j = 0; j < tile->header->polyCount; ++j)
+        {
             const dtPoly* poly = &tile->polys[j];
-            if (poly->getType() == DT_POLYTYPE_OFFMESH_CONNECTION) {
+            if (poly->getType() == DT_POLYTYPE_OFFMESH_CONNECTION) 
+            {
                 continue;
             }
 
-            for (int k = 0; k < poly->vertCount; ++k) {
+            for (int k = 0; k < poly->vertCount; ++k) 
+            {
                 const float* v0 = &tile->verts[poly->verts[k] * 3];
                 const float* v1 = &tile->verts[poly->verts[(k + 1) % poly->vertCount] * 3];
 
@@ -66,29 +75,34 @@ void DrawNavMesh(MyDebugDraw& dd, NavMesh& navMesh, dtTileCache* tileCache, std:
     }
 }
 
-
-
-
-void DrawNavMesh(MyDebugDraw& dd, NavMesh& navMesh, std::vector<glm::vec3>& vector) {
-
+void DrawNavMesh(MyDebugDraw& dd, NavMesh& navMesh, std::vector<glm::vec3>& vector)
+{
     Timer timer("DrawNavMesh()");
 
-    if (!navMesh.GetDtNaveMesh()) {
+    if (!navMesh.GetDtNaveMesh())
+    {
         return;
     }
+
     vector.clear();
     const dtNavMesh* mesh = navMesh.GetDtNaveMesh();
-    for (int i = 0; i < mesh->getMaxTiles(); ++i) {
+
+    for (int i = 0; i < mesh->getMaxTiles(); ++i) 
+    {
         const dtMeshTile* tile = mesh->getTile(i);
-        if (!tile || !tile->header) {
+        if (!tile || !tile->header)
+        {
             continue;
         }
-        for (int j = 0; j < tile->header->polyCount; ++j) {
+        for (int j = 0; j < tile->header->polyCount; ++j) 
+        {
             const dtPoly* poly = &tile->polys[j];
-            if (poly->getType() == DT_POLYTYPE_OFFMESH_CONNECTION) {
+            if (poly->getType() == DT_POLYTYPE_OFFMESH_CONNECTION)
+            {
                 continue;
             }
-            for (int k = 0; k < poly->vertCount; ++k) {
+            for (int k = 0; k < poly->vertCount; ++k)
+            {
                 const float* v0 = &tile->verts[poly->verts[k] * 3];
                 const float* v1 = &tile->verts[poly->verts[(k + 1) % poly->vertCount] * 3];
                 vector.push_back(glm::vec3(v0[0], v0[1], v0[2]));
@@ -99,15 +113,19 @@ void DrawNavMesh(MyDebugDraw& dd, NavMesh& navMesh, std::vector<glm::vec3>& vect
 
     const int maxTiles = navMesh.GetTileCache()->getTileCount();
 
-    for (int i = 0; i < maxTiles; ++i) {
+    for (int i = 0; i < maxTiles; ++i)
+    {
         const dtCompressedTile* tile = navMesh.GetTileCache()->getTile(i);
-        if (!tile) {
+        if (!tile) 
+        {
             continue;
         }
 
         const dtTileCacheObstacle* obstacle = navMesh.GetTileCache()->getObstacleByRef(tile->salt);
-        while (obstacle) {
-            if (obstacle->state == DT_OBSTACLE_EMPTY) {
+        while (obstacle)
+        {
+            if (obstacle->state == DT_OBSTACLE_EMPTY) 
+            {
                 obstacle = obstacle->next;
                 continue;
             }
@@ -150,20 +168,21 @@ void DrawNavMesh(MyDebugDraw& dd, NavMesh& navMesh, std::vector<glm::vec3>& vect
     }
 }
 
-namespace Pathfinding2 {
-
+namespace Pathfinding2
+{
     rcContext* g_ctx;
     MyDebugDraw g_debugDraw;
     NavMesh g_navMesh;
     std::vector<glm::vec3> g_debugVertices;
 
-    void Init() {
+    void Init() 
+    {
         g_ctx = new rcContext();
         std::cout << "Recast initialized\n";
     }
 
-    void Update(float deltaTime) {
-
+    void Update(float deltaTime)
+    {
         // do door shit here
         //g_navMesh.GetTileCache()->update(deltaTime, g_navMesh.GetDtNaveMesh());
 
@@ -171,8 +190,8 @@ namespace Pathfinding2 {
         //UpdateNavMesh(CSG::GetNavMeshVertices());
     }
 
-    void CalculateNavMesh() {
-
+    void CalculateNavMesh() 
+    {
         Timer timer("Pathfinding::UpdateNavMesh()");
 
         std::vector<glm::vec3> vertices = CSG::GetNavMeshVertices();
@@ -211,8 +230,8 @@ namespace Pathfinding2 {
         DrawNavMesh(g_debugDraw, g_navMesh, g_debugVertices);
     }
 
-    Path FindPath(glm::vec3 startPos, glm::vec3 endPos) {
-
+    Path FindPath(glm::vec3 startPos, glm::vec3 endPos)
+    {
         Path path;
         path.start = startPos;
         path.end = endPos;
@@ -220,11 +239,13 @@ namespace Pathfinding2 {
         return path;
     }
 
-    std::vector<glm::vec3>& GetDebugVertices() {
+    std::vector<glm::vec3>& GetDebugVertices() 
+    {
         return g_debugVertices;
     }
 
-    rcContext* GetRecastContext() {
+    rcContext* GetRecastContext()
+    {
         return g_ctx;
     }
 }

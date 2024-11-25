@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include "glm/glm.hpp"
 #include "recast/Recast.h"
@@ -16,7 +17,8 @@
 #define MAX_POLYS 256
 #define EXPECTED_LAYERS_PER_TILE 4
 
-enum class NavMeshRegionMode {
+enum class NavMeshRegionMode 
+{
     WATER_SHED,
     MONOTONE
 };
@@ -128,8 +130,8 @@ public:
     }
 };*/
 
-struct NavMesh {
-
+struct NavMesh
+{
     void Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMeshRegionMode regionMode);
     //void Create2(rcContext* context, std::vector<glm::vec3>& vertices, NavMeshRegionMode regionMode);
     std::vector<glm::vec3> FindPath(glm::vec3 startPos, glm::vec3 endPos);

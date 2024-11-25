@@ -1,53 +1,61 @@
 #include "NavMesh.h"
 #include <iostream>
 
-
-struct FastLZCompressor : public dtTileCacheCompressor {
+struct FastLZCompressor : public dtTileCacheCompressor 
+{
     virtual ~FastLZCompressor();
 
-    virtual int maxCompressedSize(const int bufferSize) {
+    virtual int maxCompressedSize(const int bufferSize)
+    {
         return (int)(bufferSize * 1.05f);
     }
-    virtual dtStatus compress(const unsigned char* buffer, const int bufferSize, unsigned char* compressed, const int /*maxCompressedSize*/, int* compressedSize) {
+    virtual dtStatus compress(const unsigned char* buffer, const int bufferSize, unsigned char* compressed, const int /*maxCompressedSize*/, int* compressedSize)
+    {
         *compressedSize = fastlz_compress((const void* const)buffer, bufferSize, compressed);
         return DT_SUCCESS;
     }
-    virtual dtStatus decompress(const unsigned char* compressed, const int compressedSize, unsigned char* buffer, const int maxBufferSize, int* bufferSize) {
+    virtual dtStatus decompress(const unsigned char* compressed, const int compressedSize, unsigned char* buffer, const int maxBufferSize, int* bufferSize)
+    {
         *bufferSize = fastlz_decompress(compressed, compressedSize, buffer, maxBufferSize);
         return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
     }
 };
 
-FastLZCompressor::~FastLZCompressor() {
+FastLZCompressor::~FastLZCompressor()
+{
     // Defined out of line to fix the weak v-tables warning
 }
 
-
-struct LinearAllocator : public dtTileCacheAlloc {
+struct LinearAllocator : public dtTileCacheAlloc
+{
     unsigned char* buffer;
     size_t capacity;
     size_t top;
     size_t high;
 
     LinearAllocator() = default;
-    LinearAllocator(const size_t cap) : buffer(0), capacity(0), top(0), high(0) {
+    LinearAllocator(const size_t cap) : buffer(0), capacity(0), top(0), high(0)
+    {
         resize(cap);
     }
 
     virtual ~LinearAllocator();
 
-    void resize(const size_t cap) {
+    void resize(const size_t cap) 
+    {
         if (buffer) dtFree(buffer);
         buffer = (unsigned char*)dtAlloc(cap, DT_ALLOC_PERM);
         capacity = cap;
     }
 
-    virtual void reset() {
+    virtual void reset()
+    {
         high = dtMax(high, top);
         top = 0;
     }
 
-    virtual void* alloc(const size_t size) {
+    virtual void* alloc(const size_t size)
+    {
         if (!buffer)
             return 0;
         if (top + size > capacity)
@@ -57,107 +65,122 @@ struct LinearAllocator : public dtTileCacheAlloc {
         return mem;
     }
 
-    virtual void free(void* /*ptr*/) {
+    virtual void free(void* /*ptr*/)
+    {
         // Empty
     }
 };
 
-LinearAllocator::~LinearAllocator() {
+LinearAllocator::~LinearAllocator() 
+{
     // Defined out of line to fix the weak v-tables warning
     dtFree(buffer);
 }
 
-
-
-struct MeshProcess : public dtTileCacheMeshProcess {
+struct MeshProcess : public dtTileCacheMeshProcess
+{
     inline MeshProcess() {}
     virtual ~MeshProcess();
 
-    virtual void process(struct dtNavMeshCreateParams* params, unsigned char* polyAreas, unsigned short* polyFlags) {
-        for (int i = 0; i < params->polyCount; ++i) {
+    virtual void process(struct dtNavMeshCreateParams* params, unsigned char* polyAreas, unsigned short* polyFlags)
+    {
+        for (int i = 0; i < params->polyCount; ++i)
+        {
             polyAreas[i] = 1;
             polyFlags[i] = 1;
         }
     }
 };
 
-MeshProcess::~MeshProcess() {
+MeshProcess::~MeshProcess()
+{
     // Defined out of line to fix the weak v-tables warning
 }
 
 static const int MAX_LAYERS = 32;
 
-struct TileCacheData {
+struct TileCacheData 
+{
     unsigned char* data;
     int dataSize;
 };
 
-
-
-
-
-
-void NavMesh::CleanUp() {
-
-    if (m_heightField) {
+void NavMesh::CleanUp()
+{
+    if (m_heightField) 
+    {
         rcFreeHeightField(m_heightField);
         m_heightField = nullptr;
     }
-    if (m_compactHeightField) {
+    if (m_compactHeightField)
+    {
         rcFreeCompactHeightfield(m_compactHeightField);
         m_compactHeightField = nullptr;
     }
-    if (m_contourSet) {
+    if (m_contourSet)
+    {
         rcFreeContourSet(m_contourSet);
         m_contourSet = nullptr;
     }
-    if (m_polyMesh) {
+    if (m_polyMesh)
+    {
         rcFreePolyMesh(m_polyMesh);
         m_polyMesh = nullptr;
     }
-    if (m_polyMeshDetail) {
+    if (m_polyMeshDetail) 
+    {
         rcFreePolyMeshDetail(m_polyMeshDetail);
         m_polyMeshDetail = nullptr;
     }
-    if (m_navMesh) {
+    if (m_navMesh)
+    {
         dtFreeNavMesh(m_navMesh);
         m_navMesh = nullptr;
     }
-    if (m_navQuery) {
+    if (m_navQuery) 
+    {
         dtFreeNavMeshQuery(m_navQuery);
         m_navQuery = nullptr;
     }
-    if (m_tileCache) {
+    if (m_tileCache)
+    {
         dtFreeTileCache(m_tileCache);
         m_tileCache = nullptr;
     }
-    if (m_talloc) {
+    if (m_talloc)
+    {
         delete m_talloc;
         m_talloc = nullptr;
     }
-    if (m_tcomp) {
+    if (m_tcomp)
+    {
         delete m_tcomp;
         m_tcomp = nullptr;
     }
-    if (m_tmproc) {
+    if (m_tmproc)
+    {
         delete m_tmproc;
         m_tmproc = nullptr;
     }
 }
 
-dtNavMesh* NavMesh::GetDtNaveMesh() {
+dtNavMesh* NavMesh::GetDtNaveMesh()
+{
     return m_navMesh;
 }
 
-rcPolyMesh* NavMesh::GetPolyMesh() {
+rcPolyMesh* NavMesh::GetPolyMesh()
+{
     return m_polyMesh;
 }
 
-dtTileCache* NavMesh::GetTileCache() {
+dtTileCache* NavMesh::GetTileCache() 
+{
     return m_tileCache;
 }
 
-int calcLayerBufferSize(const int gridWidth, const int gridHeight) {
+int calcLayerBufferSize(const int gridWidth, const int gridHeight)
+{
     const int headerSize = dtAlign4(sizeof(dtTileCacheLayerHeader));
     const int gridSize = gridWidth * gridHeight;
     return headerSize + gridSize * 4;
@@ -402,10 +425,11 @@ int calcLayerBufferSize(const int gridWidth, const int gridHeight) {
    // }
     
 }*/
+
 #include "Timer.hpp"
 
-void NavMesh::AllocateMemory() {
-
+void NavMesh::AllocateMemory() 
+{
     m_talloc = new LinearAllocator(32000);
     m_tcomp = new FastLZCompressor;
     m_tmproc = new MeshProcess;
@@ -424,13 +448,13 @@ void NavMesh::AllocateMemory() {
     std::cout << "Navmesh memory allocated\n";
 }
 
-void NavMesh::Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMeshRegionMode regionMode) {
-
+void NavMesh::Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMeshRegionMode regionMode)
+{
     Timer timer("NavMesh::Create");
 
     //CleanUp();
-
-    if (!m_memoryAllocated) {
+    if (!m_memoryAllocated) 
+    {
         AllocateMemory();
     }
 
@@ -438,7 +462,8 @@ void NavMesh::Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMe
     m_indices.clear();
     m_indices.reserve(vertices.size());
 
-    for (size_t i = 0; i < vertices.size(); i++) {
+    for (size_t i = 0; i < vertices.size(); i++) 
+    {
         m_indices.push_back(i);
     }
     m_boundsMin[0] = std::numeric_limits<float>::max();
@@ -448,7 +473,8 @@ void NavMesh::Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMe
     m_boundsMax[1] = -std::numeric_limits<float>::max();
     m_boundsMax[2] = -std::numeric_limits<float>::max();
 
-    for (glm::vec3& vertex : vertices) {
+    for (glm::vec3& vertex : vertices) 
+    {
         m_boundsMin[0] = std::min(m_boundsMin[0], vertex.x);
         m_boundsMin[1] = std::min(m_boundsMin[1], vertex.y);
         m_boundsMin[2] = std::min(m_boundsMin[2], vertex.z);
@@ -482,46 +508,58 @@ void NavMesh::Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMe
     unsigned char* triareas = new unsigned char[GetTriCount()];
     memset(triareas, 0, GetTriCount() * sizeof(unsigned char));
 
-    if (!rcCreateHeightfield(context, *m_heightField, cfg.width, cfg.height, GetBoundsMin(), GetBoundsMax(), cfg.cs, cfg.ch)) {
+    if (!rcCreateHeightfield(context, *m_heightField, cfg.width, cfg.height, GetBoundsMin(), GetBoundsMax(), cfg.cs, cfg.ch)) 
+    {
         std::cout << "Heightfield creation failed!\n";
     }
     rcMarkWalkableTriangles(context, cfg.walkableSlopeAngle, GetVertices(), GetVertexCount(), GetTriangles(), GetTriCount(), triareas);
-    if (!rcRasterizeTriangles(context, GetVertices(), GetVertexCount(), GetTriangles(), triareas, GetTriCount(), *m_heightField, cfg.walkableClimb)) {
+    if (!rcRasterizeTriangles(context, GetVertices(), GetVertexCount(), GetTriangles(), triareas, GetTriCount(), *m_heightField, cfg.walkableClimb)) 
+    {
         std::cout << "Triangle rasterization failed!\n";
     }
     rcFilterLowHangingWalkableObstacles(context, cfg.walkableClimb, *m_heightField);
     rcFilterLedgeSpans(context, cfg.walkableHeight, cfg.walkableClimb, *m_heightField);
     rcFilterWalkableLowHeightSpans(context, cfg.walkableHeight, *m_heightField);
-    if (!rcBuildCompactHeightfield(context, cfg.walkableHeight, cfg.walkableClimb, *m_heightField, *m_compactHeightField)) {
+    if (!rcBuildCompactHeightfield(context, cfg.walkableHeight, cfg.walkableClimb, *m_heightField, *m_compactHeightField))
+    {
         std::cout << "Compact Heightfield creation failed!\n";
     }
-    if (!rcErodeWalkableArea(context, cfg.walkableRadius, *m_compactHeightField)) {
+    if (!rcErodeWalkableArea(context, cfg.walkableRadius, *m_compactHeightField))
+    {
         std::cout << "Walkable area erosion failed!\n";
     }
     if (regionMode == NavMeshRegionMode::WATER_SHED) {
-        if (!rcBuildDistanceField(context, *m_compactHeightField)) {
+        if (!rcBuildDistanceField(context, *m_compactHeightField))
+        {
             std::cout << "Could not build distance field.\n";
         }
-        if (!rcBuildRegions(context, *m_compactHeightField, 0, cfg.minRegionArea, cfg.mergeRegionArea)) {
+        if (!rcBuildRegions(context, *m_compactHeightField, 0, cfg.minRegionArea, cfg.mergeRegionArea)) 
+        {
             std::cout << "Could not build watershed regions.\n";
         }
     }
-    else if (regionMode == NavMeshRegionMode::MONOTONE) {
-        if (!rcBuildRegionsMonotone(context, *m_compactHeightField, 0, cfg.minRegionArea, cfg.mergeRegionArea)) {
+    else if (regionMode == NavMeshRegionMode::MONOTONE)
+    {
+        if (!rcBuildRegionsMonotone(context, *m_compactHeightField, 0, cfg.minRegionArea, cfg.mergeRegionArea))
+        {
             std::cout << "Build regions monotone failed!\n";
         }
     }
-    if (!rcBuildContours(context, *m_compactHeightField, cfg.maxSimplificationError, cfg.maxEdgeLen, *m_contourSet)) {
+    if (!rcBuildContours(context, *m_compactHeightField, cfg.maxSimplificationError, cfg.maxEdgeLen, *m_contourSet)) 
+    {
         std::cout << "Build contours failed!\n";
     }
-    if (!rcBuildPolyMesh(context, *m_contourSet, cfg.maxVertsPerPoly, *m_polyMesh)) {
+    if (!rcBuildPolyMesh(context, *m_contourSet, cfg.maxVertsPerPoly, *m_polyMesh)) 
+    {
         std::cout << "Build poly mesh failed!\n";
     }
-    if (!rcBuildPolyMeshDetail(context, *m_polyMesh, *m_compactHeightField, cfg.detailSampleDist, cfg.detailSampleMaxError, *m_polyMeshDetail)) {
+    if (!rcBuildPolyMeshDetail(context, *m_polyMesh, *m_compactHeightField, cfg.detailSampleDist, cfg.detailSampleMaxError, *m_polyMeshDetail)) 
+    {
         std::cout << "Build poly mesh detail failed!\n";
     }
     // Mark walkable tiles
-    for (int i = 0; i < m_polyMesh->npolys; i++) {
+    for (int i = 0; i < m_polyMesh->npolys; i++)
+    {
         m_polyMesh->flags[i] = 1;
     }
     /*
@@ -570,15 +608,18 @@ void NavMesh::Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMe
     params.walkableClimb = 0.1;
     unsigned char* navData = 0;
     int navDataSize = 0;
-    if (!dtCreateNavMeshData(&params, &navData, &navDataSize)) {
+    if (!dtCreateNavMeshData(&params, &navData, &navDataSize))
+    {
         std::cout << "Build detour nav mesh failed!\n";
     }
     dtStatus status = m_navMesh->init(navData, navDataSize, DT_TILE_FREE_DATA);
-    if (dtStatusFailed(status)) {
+    if (dtStatusFailed(status))
+    {
         std::cout << "Detour nav mesh init failed!\n";
     }
     status = m_navQuery->init(m_navMesh, 2048);
-    if (dtStatusFailed(status)) {
+    if (dtStatusFailed(status))
+    {
         std::cout << "Detour nav mesh query failed!\n";
     }
 
@@ -599,13 +640,15 @@ void NavMesh::Create(rcContext* context, std::vector<glm::vec3>& vertices, NavMe
     std::cout << "obstacle count: " << count << "\n";*/
 }
 
-struct RasterizationContext {
-
-    RasterizationContext() : solid(0), triareas(0), lset(0), chf(0), ntiles(0) {
+struct RasterizationContext
+{
+    RasterizationContext() : solid(0), triareas(0), lset(0), chf(0), ntiles(0)
+    {
         memset(tiles, 0, sizeof(TileCacheData) * MAX_LAYERS);
     }
 
-    ~RasterizationContext() {
+    ~RasterizationContext()
+    {
         rcFreeHeightField(solid);
         delete[] triareas;
         rcFreeHeightfieldLayerSet(lset);
@@ -625,8 +668,8 @@ struct RasterizationContext {
     int ntiles;
 };
 
-int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& vertices, NavMeshRegionMode regionMode, const int tx, const int ty, const rcConfig& cfg, TileCacheData* tiles, const int maxTiles) {
-
+int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& vertices, NavMeshRegionMode regionMode, const int tx, const int ty, const rcConfig& cfg, TileCacheData* tiles, const int maxTiles)
+{
     FastLZCompressor comp;
     RasterizationContext rc;
 
@@ -652,11 +695,13 @@ int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& ver
 
     // Allocate voxel heightfield where we rasterize our input data to.
     rc.solid = rcAllocHeightfield();
-    if (!rc.solid) {
+    if (!rc.solid) 
+    {
         std::cout << "buildNavigation: Out of memory 'solid'.\n";
         return 0;
     }
-    if (!rcCreateHeightfield(context, *rc.solid, tcfg.width, tcfg.height, tcfg.bmin, tcfg.bmax, tcfg.cs, tcfg.ch)) {
+    if (!rcCreateHeightfield(context, *rc.solid, tcfg.width, tcfg.height, tcfg.bmin, tcfg.bmax, tcfg.cs, tcfg.ch)) 
+    {
         std::cout << "buildNavigation: Could not create solid heightfield.\n";
         return 0;
     }
@@ -698,12 +743,13 @@ int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& ver
     }*/
 
     rcMarkWalkableTriangles(context, cfg.walkableSlopeAngle, GetVertices(), GetVertexCount(), GetTriangles(), GetTriCount(), triareas);
-    if (!rcRasterizeTriangles(context, GetVertices(), GetVertexCount(), GetTriangles(), triareas, GetTriCount(), *m_heightField, cfg.walkableClimb)) {
+    if (!rcRasterizeTriangles(context, GetVertices(), GetVertexCount(), GetTriangles(), triareas, GetTriCount(), *m_heightField, cfg.walkableClimb)) 
+    {
         std::cout << "Triangle rasterization failed!\n";
     }
 
 
-        // Once all geometry is rasterized, we do initial pass of filtering to
+    // Once all geometry is rasterized, we do initial pass of filtering to
     // remove unwanted overhangs caused by the conservative rasterization
     // as well as filter spans where the character cannot possibly stand.
     //if (m_filterLowHangingObstacles)
@@ -715,16 +761,19 @@ int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& ver
 
 
     rc.chf = rcAllocCompactHeightfield();
-    if (!rc.chf) {
+    if (!rc.chf) 
+    {
         std::cout << "buildNavigation: Out of memory 'chf'.\n";
         return 0;
     }
-    if (!rcBuildCompactHeightfield(context, tcfg.walkableHeight, tcfg.walkableClimb, *rc.solid, *rc.chf)) {
+    if (!rcBuildCompactHeightfield(context, tcfg.walkableHeight, tcfg.walkableClimb, *rc.solid, *rc.chf)) 
+    {
         std::cout << "buildNavigation: Could not build compact data.\n";
         return 0;
     }
     // Erode the walkable area by agent radius.
-    if (!rcErodeWalkableArea(context, tcfg.walkableRadius, *rc.chf)) {
+    if (!rcErodeWalkableArea(context, tcfg.walkableRadius, *rc.chf)) 
+    {
         std::cout << "buildNavigation: Could not erode.\n";
         return 0;
     }
@@ -737,17 +786,20 @@ int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& ver
     //}
 
     rc.lset = rcAllocHeightfieldLayerSet();
-    if (!rc.lset) {
+    if (!rc.lset)
+    {
         std::cout << "buildNavigation: Out of memory 'lset'.\n";
         return 0;
     }
-    if (!rcBuildHeightfieldLayers(context, *rc.chf, tcfg.borderSize, tcfg.walkableHeight, *rc.lset)) {
+    if (!rcBuildHeightfieldLayers(context, *rc.chf, tcfg.borderSize, tcfg.walkableHeight, *rc.lset))
+    {
         std::cout << "buildNavigation: Could not build heighfield layers.\n";
         return 0;
     }
 
     rc.ntiles = 0;
-    for (int i = 0; i < rcMin(rc.lset->nlayers, MAX_LAYERS); ++i) {
+    for (int i = 0; i < rcMin(rc.lset->nlayers, MAX_LAYERS); ++i)
+    {
         TileCacheData* tile = &rc.tiles[rc.ntiles++];
         const rcHeightfieldLayer* layer = &rc.lset->layers[i];
 
@@ -774,14 +826,16 @@ int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& ver
         header.hmax = (unsigned short)layer->hmax;
 
         dtStatus status = dtBuildTileCacheLayer(&comp, &header, layer->heights, layer->areas, layer->cons, &tile->data, &tile->dataSize);
-        if (dtStatusFailed(status)) {
+        if (dtStatusFailed(status)) 
+        {
             return 0;
         }
     }
 
     // Transfer ownership of tile data from build context to the caller.
     int n = 0;
-    for (int i = 0; i < rcMin(rc.ntiles, maxTiles); ++i) {
+    for (int i = 0; i < rcMin(rc.ntiles, maxTiles); ++i) 
+    {
         tiles[n++] = rc.tiles[i];
         rc.tiles[i].data = 0;
         rc.tiles[i].dataSize = 0;
@@ -790,9 +844,8 @@ int NavMesh::rasterizeTileLayers(rcContext* context, std::vector<glm::vec3>& ver
     return n;
 }
 
-
-
-std::vector<glm::vec3> NavMesh::FindPath(glm::vec3 startPos, glm::vec3 endPos) {
+std::vector<glm::vec3> NavMesh::FindPath(glm::vec3 startPos, glm::vec3 endPos) 
+{
     std::vector<glm::vec3> finalPath;
     float spos[3] = { startPos.x, startPos.y, startPos.z };
     float epos[3] = { endPos.x, endPos.y, endPos.z };
@@ -804,26 +857,29 @@ std::vector<glm::vec3> NavMesh::FindPath(glm::vec3 startPos, glm::vec3 endPos) {
     dtPolyRef startRef, endRef;
     dtStatus status = m_navQuery->findNearestPoly(spos, polyPickExt, &filter, &startRef, nspos);
 
-    if (dtStatusFailed(status) || !startRef) {
+    if (dtStatusFailed(status) || !startRef)
+    {
         //printf("Failed to find nearest poly for start position. Status: %u, startRef: %u\n", status, startRef);
         return finalPath;
     }
     status = m_navQuery->findNearestPoly(epos, polyPickExt, &filter, &endRef, nepos);
-    if (dtStatusFailed(status) || !endRef) {
+    if (dtStatusFailed(status) || !endRef)
+    {
         //printf("Failed to find nearest poly for end position. Status: %u, endRef: %u\n", status, endRef);
         return finalPath;
     }
-
 
     // Allocate memory for the polys array
     dtPolyRef polys[MAX_POLYS];
     int npolys;
     // Find path
     status = m_navQuery->findPath(startRef, endRef, spos, epos, &filter, polys, &npolys, MAX_POLYS);
-    if (dtStatusFailed(status)) {
+    if (dtStatusFailed(status)) 
+    {
         //std::cout << "findPath() failed with status: " << status << "\n";
     }
-    else {
+    else 
+    {
         // Allocate memory for straight path
         float straightPath[MAX_POLYS * 3];
         dtPolyRef straightPathPolys[MAX_POLYS];
@@ -832,11 +888,14 @@ std::vector<glm::vec3> NavMesh::FindPath(glm::vec3 startPos, glm::vec3 endPos) {
 
         // Find straight path
         status = m_navQuery->findStraightPath(spos, epos, polys, npolys, straightPath, straightPathFlags, straightPathPolys, &nstraightPath, MAX_POLYS);
-        if (dtStatusFailed(status)) {
+        if (dtStatusFailed(status))
+        {
             //printf("Failed to find straight path. Status: %u\n", status);
         }
-        else {
-            for (int i = 0; i < nstraightPath; ++i) {
+        else
+        {
+            for (int i = 0; i < nstraightPath; ++i) 
+            {
                 float* v = &straightPath[i * 3];
                 finalPath.push_back({ v[0], v[1], v[2] });
             }
@@ -845,68 +904,85 @@ std::vector<glm::vec3> NavMesh::FindPath(glm::vec3 startPos, glm::vec3 endPos) {
     return finalPath;
 }
 
-const float* NavMesh::GetBoundsMin() const {
+const float* NavMesh::GetBoundsMin() const 
+{
     return m_boundsMin;
 }
 
-const float* NavMesh::GetBoundsMax() const {
+const float* NavMesh::GetBoundsMax() const 
+{
     return m_boundsMax;
 }
 
-float* NavMesh::GetVertices() {
-    if (!m_vertices.empty()) {
+float* NavMesh::GetVertices() 
+{
+    if (!m_vertices.empty()) 
+    {
         return reinterpret_cast<float*>(m_vertices.data());
     }
     return nullptr;
 }
 
-int* NavMesh::GetTriangles() {
-    if (!m_indices.empty()) {
+int* NavMesh::GetTriangles() 
+{
+    if (!m_indices.empty()) 
+    {
         return reinterpret_cast<int*>(m_indices.data());
     }
     return nullptr;
 }
 
-int NavMesh::GetVertexCount() {
+int NavMesh::GetVertexCount()
+{
     return m_vertices.size();
 }
 
-int NavMesh::GetTriCount() {
+int NavMesh::GetTriCount() 
+{
     return m_indices.size() / 3;
 }
 
-float NavMesh::GetSizeX() {
+float NavMesh::GetSizeX()
+{
     return m_boundsMax[0] - m_boundsMin[0];
 }
 
-float NavMesh::GetSizeY() {
+float NavMesh::GetSizeY() 
+{
     return m_boundsMax[1] - m_boundsMin[1];
 }
 
-float NavMesh::GetSizeZ() {
+float NavMesh::GetSizeZ()
+{
     return m_boundsMax[2] - m_boundsMin[2];
 }
 
-float NavMesh::GetBoundsMinX() {
+float NavMesh::GetBoundsMinX()
+{
     return m_boundsMin[0];
 }
 
-float NavMesh::GetBoundsMinY() {
+float NavMesh::GetBoundsMinY() 
+{
     return m_boundsMin[1];
 }
 
-float NavMesh::GetBoundsMinZ() {
+float NavMesh::GetBoundsMinZ()
+{
     return m_boundsMin[2];
 }
 
-float NavMesh::GetBoundsMaxX() {
+float NavMesh::GetBoundsMaxX() 
+{
     return m_boundsMax[0];
 }
 
-float NavMesh::GetBoundsMaxY() {
+float NavMesh::GetBoundsMaxY()
+{
     return m_boundsMax[1];
 }
 
-float NavMesh::GetBoundsMaxZ() {
+float NavMesh::GetBoundsMaxZ()
+{
     return m_boundsMax[2];
 }
