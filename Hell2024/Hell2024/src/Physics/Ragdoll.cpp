@@ -13,36 +13,43 @@
 #include <iostream>
 #include "../Util.hpp"
 
-std::string FindParentJointName(std::string query) {
+std::string FindParentJointName(std::string query)
+{
     std::string result = query.substr(query.rfind("|") + 1);
     return result;
 }
 
-void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
-
+void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup)
+{
     FILE* filepoint;
     errno_t err;
     std::string filepath = "res/ragdolls/" + filename;
     rapidjson::Document document;
 
-    if ((err = fopen_s(&filepoint, filepath.c_str(), "rb")) != 0) {
+    if ((err = fopen_s(&filepoint, filepath.c_str(), "rb")) != 0)
+    {
         std::cout << "Failed to open " << filepath << "\n";
         return;
     }
-    else {
+
+    else 
+    {
         //std::cout << filepath << " read successfully\n";
         char buffer[65536];
         rapidjson::FileReadStream is(filepoint, buffer, sizeof(buffer));
         document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(is);
-        if (document.HasParseError()) {
+        if (document.HasParseError())
+        {
             std::cout << "Error  : " << document.GetParseError() << '\n' << "Offset : " << document.GetErrorOffset() << '\n';
         }
         fclose(filepoint);
     }
 
-    for (auto& entity : document["entities"].GetObject()) {
+    for (auto& entity : document["entities"].GetObject())
+    {
         auto const components = entity.value["components"].GetObject();
-        if (components.HasMember("RigidComponent")) {
+        if (components.HasMember("RigidComponent")) 
+        {
             RigidComponent rigidComponent;
             rigidComponent.ID = entity.value["id"].GetInt();
             rigidComponent.name = components["NameComponent"].GetObject()["members"].GetObject()["value"].GetString();
@@ -74,13 +81,15 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
             }
         }
 
-        if (components.HasMember("JointComponent")) {
+        if (components.HasMember("JointComponent")
+            ) {
             JointComponent jointComponent;
             jointComponent.name = components["NameComponent"].GetObject()["members"].GetObject()["value"].GetString();
 
             // Ugly check to skip over absolute joints. Ask Marcus what they are!
             std::string jointName = jointComponent.name;
-            if (jointName.find("Absolute") != -1) {
+            if (jointName.find("Absolute") != -1)
+            {
                 continue;
             }
 
@@ -109,7 +118,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
 
          //   std::cout << "twist\n";
 
-            if (components["LimitComponent"].GetObject()["members"].GetObject().HasMember("twist")) {
+            if (components["LimitComponent"].GetObject()["members"].GetObject().HasMember("twist")) 
+            {
                 jointComponent.twist = components["LimitComponent"].GetObject()["members"].GetObject()["twist"].GetFloat();
             }
 
@@ -140,18 +150,20 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
 
     Transform spawnTransform;
 
-    for (JointComponent& joint : _jointComponents)  {
+    for (JointComponent& joint : _jointComponents) 
+    {
         joint.name = joint.name.substr(8);
         joint.name = joint.name.substr(0, joint.name.size() - 8);
     }
 
-    for (RigidComponent& rigid : _rigidComponents) {
+    for (RigidComponent& rigid : _rigidComponents)
+    {
 
         // Skip the scene rigid (it's outputted in the JSON export)
-        if (Util::StrCmp(rigid.name.c_str(), "rSceneShape")) {
+        if (Util::StrCmp(rigid.name.c_str(), "rSceneShape"))
+        {
             continue;
         }
-
 
         rigid.pxRigidBody = Physics::CreateRigidDynamic(spawnTransform.to_mat4() * rigid.restMatrix, false);
         rigid.pxRigidBody->wakeUp();
@@ -159,8 +171,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         rigid.pxRigidBody->setSolverIterationCounts(8, 1);
         rigid.pxRigidBody->setName("RAGDOLL");
 
-        if (Util::StrCmp(rigid.shapeType.c_str(), "Capsule")) {
-
+        if (Util::StrCmp(rigid.shapeType.c_str(), "Capsule"))
+        {
             rigid.capsuleRadius *= rigid.scaleAbsoluteVector.x;
             rigid.capsuleLength *= rigid.scaleAbsoluteVector.y;
 
@@ -171,8 +183,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
             PxCapsuleGeometry geom = PxCapsuleGeometry(radius, halfExtent);
             PxShape* shape = PxRigidActorExt::createExclusiveShape(*rigid.pxRigidBody, geom, *material);
         }
-        else if (Util::StrCmp(rigid.shapeType.c_str(), "Box")) {
-
+        else if (Util::StrCmp(rigid.shapeType.c_str(), "Box"))
+        {
             rigid.boxExtents.x *= rigid.scaleAbsoluteVector.x;
             rigid.boxExtents.y *= rigid.scaleAbsoluteVector.y;
             rigid.boxExtents.z *= rigid.scaleAbsoluteVector.z;
@@ -192,10 +204,12 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         rigid.pxRigidBody->getShapes(&shape, 1);
         shape->setLocalPose(offsetTranslation.transform(offsetRotation));
 
-        if (Util::StrCmp(rigid.name.c_str(), "rMarker_CC_Base_Head")) {
+        if (Util::StrCmp(rigid.name.c_str(), "rMarker_CC_Base_Head"))
+        {
             rigid.pxRigidBody->setName("RAGDOLL_HEAD");
         }
-        else if (Util::StrCmp(rigid.name.c_str(), "rMarker_CC_Base_NeckTwist01")) {
+        else if (Util::StrCmp(rigid.name.c_str(), "rMarker_CC_Base_NeckTwist01")) 
+        {
             rigid.pxRigidBody->setName("RAGDOLL_NECK");
         }
 
@@ -214,7 +228,6 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         rigid.pxRigidBody->putToSleep();
     }
 
-
     scene->setVisualizationParameter(PxVisualizationParameter::eJOINT_LOCAL_FRAMES, 1.0f);
     scene->setVisualizationParameter(PxVisualizationParameter::eJOINT_LIMITS, 1.0f);
 
@@ -229,15 +242,14 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         std::cout << joint.name << " PARENT ID: " << joint.parentID << " CHILD ID: " << joint.childID << "\n";
     }*/
 
-
-
-    for (JointComponent& joint : _jointComponents) {
-
+    for (JointComponent& joint : _jointComponents)
+    {
         // Get pointers to the parent and child rigid bodies
         RigidComponent* parentRigid = NULL;
         RigidComponent* childRigid = NULL;
 
-        for (RigidComponent& rigid : _rigidComponents) {
+        for (RigidComponent& rigid : _rigidComponents)
+        {
             if (rigid.ID == joint.parentID)
                 parentRigid = &rigid;
             if (rigid.ID == joint.childID)
@@ -245,15 +257,13 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         }
 
         // temp fix
-        if (!parentRigid || !childRigid) {
+        if (!parentRigid || !childRigid)
+        {
             continue;
         }
 
         PxTransform parentFrame = PxTransform(joint.parentFrame);
         PxTransform childFrame = PxTransform(joint.childFrame);
-
-
-
 
         joint.pxD6 = PxD6JointCreate(*Physics::GetPhysics(), parentRigid->pxRigidBody, parentFrame, childRigid->pxRigidBody, childFrame);
 
@@ -270,7 +280,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         joint.limit_linearStiffness = 10000;
         joint.limit_linearDampening = 1000000;
 
-        const PxSpring linearSpring{
+        const PxSpring linearSpring
+        {
             joint.limit_linearStiffness,
             joint.limit_linearDampening
         };
@@ -278,7 +289,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
 
         PxMat44 m = PxMat44(parentFrame);
         //std::cout << "joint.limit.x: " << joint.limit.x << "\n";
-        if (joint.limit.x > -1) {
+        if (joint.limit.x > -1) 
+        {
             const PxJointLinearLimitPair limitX{
             -joint.limit.x,
             joint.limit.x,
@@ -288,7 +300,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         }
 
         //std::cout << "joint.limit.y: " << joint.limit.y << "\n";
-        if (joint.limit.y > -1) {
+        if (joint.limit.y > -1)
+        {
             const PxJointLinearLimitPair limitY{
                 -joint.limit.y,
                 joint.limit.y,
@@ -297,7 +310,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
             joint.pxD6->setLinearLimit(PxD6Axis::eY, limitY);
         }
 
-        if (joint.limit.z > -1) {
+        if (joint.limit.z > -1)
+        {
             const PxJointLinearLimitPair limitZ{
                 -joint.limit.z,
                 joint.limit.z,
@@ -306,19 +320,22 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
             joint.pxD6->setLinearLimit(PxD6Axis::eZ, limitZ);
         }
 
-
-        const PxSpring angularSpring{
+        const PxSpring angularSpring
+        {
             joint.drive_angularStiffness,
             joint.drive_angularDamping
         };
-        const PxJointAngularLimitPair twistLimit{
+
+        const PxJointAngularLimitPair twistLimit
+        {
             -joint.twist,
              joint.twist,
              angularSpring
         };
         joint.pxD6->setTwistLimit(twistLimit);
 
-        const PxJointLimitCone swingLimit{
+        const PxJointLimitCone swingLimit
+        {
             joint.swing1,
             joint.swing2,
             angularSpring
@@ -342,13 +359,14 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
         if (joint.swing2 < 0) joint.pxD6->setMotion(PxD6Axis::eSWING2, PxD6Motion::eLOCKED);
 
 
-        if (joint.drive_enabled) {
+        if (joint.drive_enabled) 
+        {
             PxD6JointDrive linearDrive{
             joint.limit_linearStiffness,
             joint.limit_linearDampening,
             FLT_MAX,   // Maximum force; ignored
             true,  // ACCELERATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! read from the json file some day when you aren't lazy
-            };
+        };
 
             // TEMP FIX COZ U THINK U DONT NEED DRIVES
             if (false) {
@@ -382,7 +400,8 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
 
         }
 
-        else {
+        else 
+        {
             static const PxD6JointDrive defaultDrive{ 0.0f, 0.0f, 0.0f, false };
 
 
@@ -399,34 +418,42 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup) {
     }
 }
 
-RigidComponent* Ragdoll::GetRigidByName(std::string& name) {
+RigidComponent* Ragdoll::GetRigidByName(std::string& name) 
+{
     //std::cout << "m_rigidComponents size: " << m_rigidComponents.size() << "\n";
-    for (RigidComponent& rigidComponent : _rigidComponents) {
+    for (RigidComponent& rigidComponent : _rigidComponents)
+    {
         //std::cout << "rigidComponent: " << rigidComponent.correspondingJointName << "\n";
-        if (rigidComponent.correspondingJointName == name) {
+        if (rigidComponent.correspondingJointName == name)
+        {
             return &rigidComponent;
         }
     }
     return nullptr;
 }
 
-void Ragdoll::EnableVisualization() {
-    for (RigidComponent& rigid : _rigidComponents) {
+void Ragdoll::EnableVisualization()
+{
+    for (RigidComponent& rigid : _rigidComponents)
+    {
         PxShape* shape;
         rigid.pxRigidBody->getShapes(&shape, 1);
         shape->setFlag(PxShapeFlag::eVISUALIZATION, true);
     }
 }
 
-void Ragdoll::DisableVisualization() {
-    for (RigidComponent& rigid : _rigidComponents) {
+void Ragdoll::DisableVisualization() 
+{
+    for (RigidComponent& rigid : _rigidComponents)
+    {
         PxShape* shape;
         rigid.pxRigidBody->getShapes(&shape, 1);
         shape->setFlag(PxShapeFlag::eVISUALIZATION, false);
     }
 }
 
-void Ragdoll::EnableCollision() {
+void Ragdoll::EnableCollision()
+{
     /*
     for (RigidComponent& rigid : _rigidComponents) {
         PxShape* shape;
@@ -439,7 +466,8 @@ void Ragdoll::EnableCollision() {
     }*/
 }
 
-void Ragdoll::DisableCollision() {
+void Ragdoll::DisableCollision()
+{
     /*return;
     for (RigidComponent& rigid : _rigidComponents) {
         PxShape* shape;

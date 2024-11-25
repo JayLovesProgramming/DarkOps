@@ -1,47 +1,58 @@
 #pragma once
+
 #include "Physics.h"
 #include "HellCommon.h"
 #include "../Util.hpp"
 #include "../Renderer/Types/Model.hpp"
 
-struct RigidBody {
-
+struct RigidBody 
+{
     PxRigidBody* pxRigidBody = NULL;
     bool kinematic = false;
 
-    bool Exists() {
+    bool Exists()
+    {
         return pxRigidBody != NULL;
     }
 
-    std::vector<PxShape*>& GetCollisionShapes() {
+    std::vector<PxShape*>& GetCollisionShapes()
+    {
         return collisionShapes;
     }
 
-    void SetGlobalPose(glm::mat4 matrix) {
+    void SetGlobalPose(glm::mat4 matrix)
+    {
         PxMat44 physXGlobalPose = Util::GlmMat4ToPxMat44(matrix);
         pxRigidBody->setGlobalPose(PxTransform(physXGlobalPose));
     }
 
-    glm::mat4 GetGlobalPoseAsMatrix() {
+    glm::mat4 GetGlobalPoseAsMatrix()
+    {
         return Util::PxMat44ToGlmMat4(pxRigidBody->getGlobalPose());
     }
 
-    PxTransform GetGlobalPoseAsPxTransform() {
+    PxTransform GetGlobalPoseAsPxTransform() 
+    {
         return pxRigidBody->getGlobalPose();
     }
 
-    void PutToSleep() {
-        if (!pxRigidBody) {
+    void PutToSleep() 
+    {
+        if (!pxRigidBody)
+        {
             std::cout << "You tried to put a rigid body to sleep but its pxRigidBody doesn't exist!\n";
             return;
         }
-        if (!kinematic) {
+        if (!kinematic) 
+        {
             ((PxRigidDynamic*)pxRigidBody)->putToSleep();
         }
     }
 
-    void SetKinematic(bool value) {
-        if (!pxRigidBody) {
+    void SetKinematic(bool value) 
+    {
+        if (!pxRigidBody)
+        {
             std::cout << "You tried to set the kinematic state of a pxRigidBody that doesn't exist!\n";
             return;
         }
@@ -49,14 +60,17 @@ struct RigidBody {
         pxRigidBody->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, kinematic);
     }
 
-    void CreateRigidBody(glm::mat4 worldMatrix) {
+    void CreateRigidBody(glm::mat4 worldMatrix)
+    {
         Physics::Destroy(pxRigidBody);
         pxRigidBody = Physics::GetPhysics()->createRigidDynamic(PxTransform(Util::GlmMat4ToPxMat44(worldMatrix)));
         Physics::GetScene()->addActor(*pxRigidBody);
     }
 
-    void AddCollisionShape(PxShape* shape, PhysicsFilterData physicsFilterData) {
-        if (!pxRigidBody) {
+    void AddCollisionShape(PxShape* shape, PhysicsFilterData physicsFilterData)
+    {
+        if (!pxRigidBody)
+        {
             std::cout << "Tried to add a collision shape to rigid body but pxRigidBody doesn't exist!\n";
             return;
         }
@@ -71,8 +85,10 @@ struct RigidBody {
         pxRigidBody->attachShape(*shape);
     }
 
-    void AddCollisionShapeFromModelIndex(int modelIndex, PxFilterData filterData, glm::vec3 scale) {
-        if (!pxRigidBody) {
+    void AddCollisionShapeFromModelIndex(int modelIndex, PxFilterData filterData, glm::vec3 scale)
+    {
+        if (!pxRigidBody) 
+        {
             std::cout << "Tried to add a collision shape to rigid body but pxRigidBody doesn't exist!\n";
             return;
         }
@@ -84,8 +100,10 @@ struct RigidBody {
         pxRigidBody->attachShape(*shape);
     }
 
-    void AddCollisionShapeFromBoundingBox(BoundingBox& boundingBox, PxFilterData filterData) {
-        if (!pxRigidBody) {
+    void AddCollisionShapeFromBoundingBox(BoundingBox& boundingBox, PxFilterData filterData)
+    {
+        if (!pxRigidBody)
+        {
             std::cout << "Tried to add a collision shape to rigid body but pxRigidBody doesn't exist!\n";
             return;
         }
@@ -101,8 +119,10 @@ struct RigidBody {
         shape->setLocalPose(localShapeTransform);
     }
 
-    bool IsInMotion() {
-        if (pxRigidBody) {
+    bool IsInMotion() 
+    {
+        if (pxRigidBody) 
+        {
             PxVec3 linearVelocity = pxRigidBody->getLinearVelocity();
             PxVec3 angularVelocity = pxRigidBody->getLinearVelocity();
             return (linearVelocity.x != 0 || linearVelocity.y != 0 || linearVelocity.z != 0 || angularVelocity.x != 0 || angularVelocity.y != 0 || angularVelocity.z != 0);
@@ -112,9 +132,11 @@ struct RigidBody {
         }
     }
 
-    void Destroy() {
+    void Destroy()
+    {
         Physics::Destroy(pxRigidBody);
-        for (auto* shape : collisionShapes) {
+        for (auto* shape : collisionShapes)
+        {
             Physics::Destroy(shape);
         }
     }

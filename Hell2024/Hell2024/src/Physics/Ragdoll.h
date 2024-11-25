@@ -1,9 +1,11 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include "../Physics/Physics.h"
 
-struct RigidComponent {
+struct RigidComponent 
+{
 public:
     int ID;
     //const char* name;
@@ -22,7 +24,8 @@ public:
     glm::vec3 boxExtents, offset;
 };
 
-struct JointComponent {
+struct JointComponent 
+{
 public:
     //const char* name;
     std::string name;
@@ -40,8 +43,8 @@ public:
     bool joint_enabled;
 };
 
-struct Ragdoll {
-
+struct Ragdoll
+{
     std::vector<RigidComponent> _rigidComponents;
     std::vector<JointComponent> _jointComponents;
 

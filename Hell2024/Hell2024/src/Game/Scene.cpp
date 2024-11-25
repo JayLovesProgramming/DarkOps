@@ -1,3 +1,6 @@
+// TODO: MAKE THIS A LOT!!!! MORE MODULAR
+
+
 #include "Scene.h"
 #include "Player.h"
 #include <memory>
@@ -18,8 +21,8 @@
 
 int _volumetricBloodObjectsSpawnedThisFrame = 0;
 
-namespace Scene {
-
+namespace Scene 
+{
     std::vector<GameObject> g_gameObjects;
     std::vector<AnimatedGameObject> g_animatedGameObjects;
     std::vector<Door> g_doors;
@@ -35,8 +38,8 @@ namespace Scene {
     void AddDobermann(DobermannCreateInfo& createInfo);
 }
 
-void Scene::AllocateStorageSpace() {
-
+void Scene::AllocateStorageSpace()
+{
     g_doors.reserve(sizeof(Door) * 1000);
     g_csgAdditiveCubes.reserve(sizeof(CSGCube) * 1000);
     g_csgSubtractiveCubes.reserve(sizeof(CSGCube) * 1000);
@@ -45,23 +48,26 @@ void Scene::AllocateStorageSpace() {
 }
 
 
-void Scene::RemoveGameObjectByIndex(int index) {
-
-    if (index < 0 || index >= g_gameObjects.size()) {
+void Scene::RemoveGameObjectByIndex(int index)
+{
+    if (index < 0 || index >= g_gameObjects.size()) 
+    {
         return;
     }
+
     g_gameObjects[index].CleanUp();
     g_gameObjects.erase(g_gameObjects.begin() + index);
 }
 
-void Scene::SaveMapData(const std::string& fileName) {
-
+void Scene::SaveMapData(const std::string& fileName) 
+{
     JSONObject saveFile;
     nlohmann::json data;
 
     // save doors
     nlohmann::json jsonDoors = nlohmann::json::array();
-    for (const Door& door : Scene::GetDoors()) {
+    for (const Door& door : Scene::GetDoors())
+    {
         nlohmann::json jsonObject;
         jsonObject["position"] = { {"x", door.m_position.x}, {"y", door.m_position.y}, {"z", door.m_position.z} };
         jsonObject["rotation"] = door.m_rotation;
@@ -72,7 +78,8 @@ void Scene::SaveMapData(const std::string& fileName) {
 
     // save windows
     nlohmann::json jsonWindows = nlohmann::json::array();
-    for (Window& window : Scene::GetWindows()) {
+    for (Window& window : Scene::GetWindows()) 
+    {
         nlohmann::json jsonObject;
         jsonObject["position"] = { {"x", window.GetPostionX()}, {"y", window.GetPostionY()}, {"z", window.GetPostionZ()}};
         jsonObject["rotation"] = window.GetRotationY();
@@ -82,7 +89,8 @@ void Scene::SaveMapData(const std::string& fileName) {
 
     // save additive cube volumes
     nlohmann::json jsonCubeVolumesAdditive = nlohmann::json::array();
-    for (CSGCube& cubeVolume : g_csgAdditiveCubes) {
+    for (CSGCube& cubeVolume : g_csgAdditiveCubes)
+    {
         nlohmann::json jsonObject;
         jsonObject["position"] = { {"x", cubeVolume.m_transform.position.x}, {"y", cubeVolume.m_transform.position.y}, {"z", cubeVolume.m_transform.position.z} };
         jsonObject["rotation"] = { {"x", cubeVolume.m_transform.rotation.x}, {"y", cubeVolume.m_transform.rotation.y}, {"z", cubeVolume.m_transform.rotation.z} };
@@ -97,7 +105,8 @@ void Scene::SaveMapData(const std::string& fileName) {
 
     // save wall planes
     nlohmann::json jsonWallPLanes = nlohmann::json::array();
-    for (CSGPlane& plane : g_csgAdditiveWallPlanes) {
+    for (CSGPlane& plane : g_csgAdditiveWallPlanes) 
+    {
         nlohmann::json jsonObject;
         jsonObject["TL"] = { {"x", plane.m_veritces[TL].x}, {"y", plane.m_veritces[TL].y}, {"z", plane.m_veritces[TL].z} };
         jsonObject["TR"] = { {"x", plane.m_veritces[TR].x}, {"y", plane.m_veritces[TR].y}, {"z", plane.m_veritces[TR].z} };
@@ -114,7 +123,8 @@ void Scene::SaveMapData(const std::string& fileName) {
 
     // save subtractive cube volumes
     nlohmann::json jsonCubeVolumesSubtractive = nlohmann::json::array();
-    for (CSGCube& cubeVolume : g_csgSubtractiveCubes) {
+    for (CSGCube& cubeVolume : g_csgSubtractiveCubes)
+    {
         nlohmann::json jsonObject;
         jsonObject["position"] = { {"x", cubeVolume.m_transform.position.x}, {"y", cubeVolume.m_transform.position.y}, {"z", cubeVolume.m_transform.position.z} };
         jsonObject["rotation"] = { {"x", cubeVolume.m_transform.rotation.x}, {"y", cubeVolume.m_transform.rotation.y}, {"z", cubeVolume.m_transform.rotation.z} };
@@ -129,7 +139,8 @@ void Scene::SaveMapData(const std::string& fileName) {
 
     // save lights
     nlohmann::json jsonLights = nlohmann::json::array();
-    for (Light& light: Scene::g_lights) {
+    for (Light& light: Scene::g_lights)
+    {
         nlohmann::json jsonObject;
         jsonObject["position"] = { {"x", light.position.x}, {"y", light.position.y}, {"z", light.position.z} };
         jsonObject["color"] = { {"x", light.color.x}, {"y", light.color.y}, {"z", light.color.z} };
@@ -152,8 +163,8 @@ void Scene::SaveMapData(const std::string& fileName) {
 
 }
 
-void Scene::LoadMapData(const std::string& fileName) {
-
+void Scene::LoadMapData(const std::string& fileName)
+{
     // Load file
     std::string fullPath = "res/maps/" + fileName;
     std::cout << "Loading map '" << fullPath << "'\n";
@@ -168,7 +179,8 @@ void Scene::LoadMapData(const std::string& fileName) {
     nlohmann::json data = nlohmann::json::parse(buffer.str());
 
     // Load doors
-    for (const auto& jsonObject : data["doors"]) {
+    for (const auto& jsonObject : data["doors"]) 
+    {
         DoorCreateInfo createInfo;
         createInfo.position = { jsonObject["position"]["x"], jsonObject["position"]["y"], jsonObject["position"]["z"] };
         createInfo.openAtStart = jsonObject["openOnStart"];
@@ -176,14 +188,16 @@ void Scene::LoadMapData(const std::string& fileName) {
         Scene::CreateDoor(createInfo);
     }
     // Load windows
-    for (const auto& jsonObject : data["windows"]) {
+    for (const auto& jsonObject : data["windows"])
+    {
         WindowCreateInfo createInfo;
         createInfo.position = { jsonObject["position"]["x"], jsonObject["position"]["y"], jsonObject["position"]["z"] };
         createInfo.rotation = jsonObject["rotation"];
         Scene::CreateWindow(createInfo);
     }
     // Load Volumes Additive
-    for (const auto& jsonObject : data["VolumesAdditive"]) {
+    for (const auto& jsonObject : data["VolumesAdditive"])
+    {
         CSGCube& cube = g_csgAdditiveCubes.emplace_back();
         cube.m_transform.position = { jsonObject["position"]["x"], jsonObject["position"]["y"], jsonObject["position"]["z"] };
         cube.m_transform.rotation = { jsonObject["rotation"]["x"], jsonObject["rotation"]["y"], jsonObject["rotation"]["z"] };
@@ -194,7 +208,8 @@ void Scene::LoadMapData(const std::string& fileName) {
         cube.textureScale = jsonObject["texScale"];
     }
     // Load Wall Planes
-    for (const auto& jsonObject : data["WallPlanes"]) {
+    for (const auto& jsonObject : data["WallPlanes"]) 
+    {
         CSGPlane& plane = g_csgAdditiveWallPlanes.emplace_back();
         plane.m_veritces[TL] = { jsonObject["TL"]["x"], jsonObject["TL"]["y"], jsonObject["TL"]["z"] };
         plane.m_veritces[TR] = { jsonObject["TR"]["x"], jsonObject["TR"]["y"], jsonObject["TR"]["z"] };
@@ -206,7 +221,8 @@ void Scene::LoadMapData(const std::string& fileName) {
         plane.textureScale = jsonObject["texScale"];
     }
     // Load Volumes Subtractive
-    for (const auto& jsonObject : data["VolumesSubtractive"]) {
+    for (const auto& jsonObject : data["VolumesSubtractive"]) 
+    {
         CSGCube& cube = g_csgSubtractiveCubes.emplace_back();
         cube.m_transform.position = { jsonObject["position"]["x"], jsonObject["position"]["y"], jsonObject["position"]["z"] };
         cube.m_transform.rotation = { jsonObject["rotation"]["x"], jsonObject["rotation"]["y"], jsonObject["rotation"]["z"] };
@@ -218,7 +234,8 @@ void Scene::LoadMapData(const std::string& fileName) {
         cube.CreateCubePhysicsObject();
     }
     // Load Lights
-    for (const auto& jsonObject : data["Lights"]) {
+    for (const auto& jsonObject : data["Lights"])
+    {
         LightCreateInfo createInfo;
         createInfo.position = { jsonObject["position"]["x"], jsonObject["position"]["y"], jsonObject["position"]["z"] };
         createInfo.color = { jsonObject["color"]["x"], jsonObject["color"]["y"], jsonObject["color"]["z"] };
@@ -229,8 +246,8 @@ void Scene::LoadMapData(const std::string& fileName) {
     }
 }
 
-void Scene::LoadEmptyScene() {
-
+void Scene::LoadEmptyScene() 
+{
     std::cout << "New map\n";
     {
         Timer timer("CleanUp()");
@@ -258,7 +275,8 @@ void Scene::LoadEmptyScene() {
     }
 }
 
-void Scene::AddDobermann(DobermannCreateInfo& createInfo) {
+void Scene::AddDobermann(DobermannCreateInfo& createInfo)
+{
     Dobermann& dobermann = g_dobermann.emplace_back();
     dobermann.m_initialPosition = createInfo.position;
     dobermann.m_currentPosition = createInfo.position;
@@ -267,7 +285,8 @@ void Scene::AddDobermann(DobermannCreateInfo& createInfo) {
     dobermann.Init();
 }
 
-void Scene::AddCSGWallPlane(CSGPlaneCreateInfo& createInfo) {
+void Scene::AddCSGWallPlane(CSGPlaneCreateInfo& createInfo)
+{
     CSGPlane& plane = g_csgAdditiveWallPlanes.emplace_back();
     plane.m_veritces[0] = createInfo.vertexTL;
     plane.m_veritces[1] = createInfo.vertexTR;
@@ -279,7 +298,8 @@ void Scene::AddCSGWallPlane(CSGPlaneCreateInfo& createInfo) {
     plane.textureScale = createInfo.textureScale;
 }
 
-void Scene::AddCSGFloorPlane(CSGPlaneCreateInfo& createInfo) {
+void Scene::AddCSGFloorPlane(CSGPlaneCreateInfo& createInfo)
+{
     CSGPlane& plane = g_csgAdditiveFloorPlanes.emplace_back();
     plane.m_veritces[0] = createInfo.vertexTL;
     plane.m_veritces[1] = createInfo.vertexTR;
@@ -291,7 +311,8 @@ void Scene::AddCSGFloorPlane(CSGPlaneCreateInfo& createInfo) {
     plane.textureScale = createInfo.textureScale;
 }
 
-void Scene::AddCSGCeilingPlane(CSGPlaneCreateInfo& createInfo) {
+void Scene::AddCSGCeilingPlane(CSGPlaneCreateInfo& createInfo)
+{
     CSGPlane& plane = g_csgAdditiveCeilingPlanes.emplace_back();
     plane.m_veritces[0] = createInfo.vertexTL;
     plane.m_veritces[1] = createInfo.vertexTR;
@@ -303,12 +324,17 @@ void Scene::AddCSGCeilingPlane(CSGPlaneCreateInfo& createInfo) {
     plane.textureScale = createInfo.textureScale;
 }
 
-int Scene::AssignNextFreeShadowMapIndex(int lightIndex) {
-    if (lightIndex >= MAX_SHADOW_CASTING_LIGHTS) {
+int Scene::AssignNextFreeShadowMapIndex(int lightIndex)
+{
+    if (lightIndex >= MAX_SHADOW_CASTING_LIGHTS)
+    {
         return -1;
     }    
-    for (int i = 0; i < g_shadowMapLightIndices.size(); i++) {
-        if (g_shadowMapLightIndices[i] == -1) {
+
+    for (int i = 0; i < g_shadowMapLightIndices.size(); i++)
+    {
+        if (g_shadowMapLightIndices[i] == -1) 
+        {
             g_shadowMapLightIndices[i] = lightIndex;
             return i;
         }
@@ -316,8 +342,8 @@ int Scene::AssignNextFreeShadowMapIndex(int lightIndex) {
     return -1;
 }
 
-void Scene::LoadDefaultScene() {
-
+void Scene::LoadDefaultScene()
+{
     bool hardcoded = false;
 
     bool createTestLights = false;// true;
@@ -338,8 +364,10 @@ void Scene::LoadDefaultScene() {
     heightMap.m_transform.position.z = heightMap.m_depth * -0.5f * heightMap.m_transform.scale.z;
 
     // Heightmap (OPEN GL ONLY ATM)
-    if (BackEnd::GetAPI() == API::OPENGL) {
-        if (heightMap.m_pxRigidStatic == NULL) {
+    if (BackEnd::GetAPI() == API::OPENGL)
+    {
+        if (heightMap.m_pxRigidStatic == NULL) 
+        {
             heightMap.CreatePhysicsObject();
             std::cout << "Created heightmap physics shit\n";
         }
@@ -357,48 +385,43 @@ void Scene::LoadDefaultScene() {
     g_windows.clear();
     g_windows.reserve(sizeof(Window) * 1000);
 
-
-
     // CSG PLANE TEST
 
- //CSGPlaneCreateInfo planeCreateInfo;
- //planeCreateInfo.vertexTL = glm::vec3(3, 2, 5);
- //planeCreateInfo.vertexTR = glm::vec3(3, 2, 7);
- //planeCreateInfo.vertexBL = glm::vec3(3, 0, 5);
- //planeCreateInfo.vertexBR = glm::vec3(3, 0, 7);
- //planeCreateInfo.materialIndex = AssetManager::GetMaterialIndex("Ceiling2");
- //AddCSGWallPlane(planeCreateInfo);
- //
- //planeCreateInfo.vertexTL = glm::vec3(5, 2, 5);
- //planeCreateInfo.vertexTR = glm::vec3(5, 2, 7);
- //planeCreateInfo.vertexBL = glm::vec3(5, 0, 5);
- //planeCreateInfo.vertexBR = glm::vec3(5, 0, 7);
- //planeCreateInfo.materialIndex = AssetManager::GetMaterialIndex("Ceiling2");
- //AddCSGWallPlane(planeCreateInfo);
+    //CSGPlaneCreateInfo planeCreateInfo;
+    //planeCreateInfo.vertexTL = glm::vec3(3, 2, 5);
+    //planeCreateInfo.vertexTR = glm::vec3(3, 2, 7);
+    //planeCreateInfo.vertexBL = glm::vec3(3, 0, 5);
+    //planeCreateInfo.vertexBR = glm::vec3(3, 0, 7);
+    //planeCreateInfo.materialIndex = AssetManager::GetMaterialIndex("Ceiling2");
+    //AddCSGWallPlane(planeCreateInfo);
+    //
+    //planeCreateInfo.vertexTL = glm::vec3(5, 2, 5);
+    //planeCreateInfo.vertexTR = glm::vec3(5, 2, 7);
+    //planeCreateInfo.vertexBL = glm::vec3(5, 0, 5);
+    //planeCreateInfo.vertexBR = glm::vec3(5, 0, 7);
+    //planeCreateInfo.materialIndex = AssetManager::GetMaterialIndex("Ceiling2");
+    //AddCSGWallPlane(planeCreateInfo);
 
-   // CSGPlaneCreateInfo planeCreateInfo2;
-   // planeCreateInfo2.vertexTL = glm::vec3(0, 2, 1);
-   // planeCreateInfo2.vertexTR = glm::vec3(1, 2, 1);
-   // planeCreateInfo2.vertexBL = glm::vec3(0, 1, 1.5f);
-   // planeCreateInfo2.vertexBR = glm::vec3(1, 1, 1.5);
-   // planeCreateInfo2.materialIndex = AssetManager::GetMaterialIndex("FloorBoards");
-   // AddCSGFloorPlane(planeCreateInfo2);
-   //
-   // CSGPlaneCreateInfo planeCreateInfo3;
-   // planeCreateInfo3.vertexTL = glm::vec3(1, 2.6, 1);
-   // planeCreateInfo3.vertexTR = glm::vec3(1, 2.6, 2);
-   // planeCreateInfo3.vertexBL = glm::vec3(2, 1.6, 1);
-   // planeCreateInfo3.vertexBR = glm::vec3(2, 1.6, 2);
-   // planeCreateInfo3.materialIndex = AssetManager::GetMaterialIndex("BathroomFloor");
-   // AddCSGCeilingPlane(planeCreateInfo3);
-
-
-
-
+    // CSGPlaneCreateInfo planeCreateInfo2;
+    // planeCreateInfo2.vertexTL = glm::vec3(0, 2, 1);
+    // planeCreateInfo2.vertexTR = glm::vec3(1, 2, 1);
+    // planeCreateInfo2.vertexBL = glm::vec3(0, 1, 1.5f);
+    // planeCreateInfo2.vertexBR = glm::vec3(1, 1, 1.5);
+    // planeCreateInfo2.materialIndex = AssetManager::GetMaterialIndex("FloorBoards");
+    // AddCSGFloorPlane(planeCreateInfo2);
+    //
+    // CSGPlaneCreateInfo planeCreateInfo3;
+    // planeCreateInfo3.vertexTL = glm::vec3(1, 2.6, 1);
+    // planeCreateInfo3.vertexTR = glm::vec3(1, 2.6, 2);
+    // planeCreateInfo3.vertexBL = glm::vec3(2, 1.6, 1);
+    // planeCreateInfo3.vertexBR = glm::vec3(2, 1.6, 2);
+    // planeCreateInfo3.materialIndex = AssetManager::GetMaterialIndex("BathroomFloor");
+    // AddCSGCeilingPlane(planeCreateInfo3);
 
     g_staircases.clear();
 
-    if (hardcoded) {
+    if (hardcoded) 
+    {
         Staircase& stairCase3 = g_staircases.emplace_back();
         stairCase3.m_position = glm::vec3(-3.0f, 0, -3.1f);
         stairCase3.m_rotation = -HELL_PI * 0.5f;
@@ -407,18 +430,20 @@ void Scene::LoadDefaultScene() {
 
 
     LoadMapData("mappp.txt");
-    for (Light& light : g_lights) {
+    for (Light& light : g_lights)
+    {
         light.m_shadowMapIsDirty = true;
     }
 
-      
     // Reset all shadow map light indices
     g_shadowMapLightIndices.resize(MAX_SHADOW_CASTING_LIGHTS);
-    for (int i = 0; i < g_shadowMapLightIndices.size(); i++) {
+    for (int i = 0; i < g_shadowMapLightIndices.size(); i++) 
+    {
         g_shadowMapLightIndices[i] = -1;
     }
 
-    if (createTestLights) {
+    if (createTestLights)
+    {
         // Create 100 test lights
         float size = 30;
         float xMin = 10;
@@ -428,7 +453,9 @@ void Scene::LoadDefaultScene() {
         float zMin = -size * 0.5f;
         float zMax = zMin + size * 2;
         int cubeCount = testLightCount;
-        for (int i = 0; i < cubeCount; i++) {
+
+        for (int i = 0; i < cubeCount; i++)
+        {
             float x = Util::RandomFloat(xMin, xMax);
             float y = Util::RandomFloat(yMin, yMax);
             float z = Util::RandomFloat(zMin, zMax);
@@ -445,18 +472,18 @@ void Scene::LoadDefaultScene() {
         }
     }
 
-
-
-
     // Debug test init shit
-    for (int i = 0; i < g_lights.size(); i++) {
+    for (int i = 0; i < g_lights.size(); i++)
+    {
         Light& light = g_lights[i];;
-        if (i > 15) {
+        if (i > 15)
+        {
             light.m_shadowCasting = false;
             light.m_contributesToGI = false;
             light.m_aabbLightVolumeMode = AABBLightVolumeMode::POSITION_RADIUS;
         }
-        else {
+        else 
+        {
             light.m_shadowCasting = true;
             light.m_contributesToGI = true;
             light.m_aabbLightVolumeMode = AABBLightVolumeMode::WORLDSPACE_CUBE_MAP;
@@ -465,7 +492,8 @@ void Scene::LoadDefaultScene() {
             i == 11 ||
             i == 8 ||
             i == 7 ||
-            i == 9) {
+            i == 9) 
+        {
             light.m_shadowCasting = false;
             light.m_contributesToGI = false;
             light.m_aabbLightVolumeMode = AABBLightVolumeMode::POSITION_RADIUS;
@@ -473,24 +501,25 @@ void Scene::LoadDefaultScene() {
     }
 
     // Assign a shadow map to any shadow casting lights
-    for (int i = 0; i < g_lights.size(); i++) {
+    for (int i = 0; i < g_lights.size(); i++) 
+    {
         Light& light = g_lights[i];
         light.m_aaabbVolumeIsDirty = true;
-        if (light.m_shadowCasting) {
+        if (light.m_shadowCasting)
+        {
             light.m_shadowMapIndex = AssignNextFreeShadowMapIndex(i);
         }
     }
 
-
     // Error checking
-    for (int i = 0; i < g_lights.size(); i++) {
+    for (int i = 0; i < g_lights.size(); i++)
+    {
         Light& light = g_lights[i];
-        if (light.m_shadowMapIndex == -1) {
+        if (light.m_shadowMapIndex == -1)
+        {
             light.m_shadowCasting = false;
         }
     }
-
-   
 
     std::cout << "Light Count: " << g_lights.size() << "\n";
 
@@ -515,10 +544,8 @@ void Scene::LoadDefaultScene() {
         AddDobermann(createInfo);
     }
 
-
-
-    if (false) {
-
+    if (false)
+    {
         int index = CreateAnimatedGameObject();
         AnimatedGameObject& dobermann = g_animatedGameObjects[index];
         dobermann.SetFlag(AnimatedGameObject::Flag::NONE);
@@ -533,7 +560,6 @@ void Scene::LoadDefaultScene() {
         dobermann.PlayAndLoopAnimation("Smith_Idle", 1.0f);
         dobermann.PrintMeshNames();
     }
-
 
     /*
     if (true) {
@@ -621,11 +647,8 @@ void Scene::LoadDefaultScene() {
     }
     */
 
-
-
-
-
-    if (true) {
+    if (true)
+    {
         CreateGameObject();
         GameObject* pictureFrame = GetGameObjectByIndex(GetGameObjectCount() - 1);
         pictureFrame->SetPosition(1.1f, 1.9f, -0.85f);
@@ -778,13 +801,15 @@ void Scene::LoadDefaultScene() {
     houseRoofB->SetName("BlenderHouse");
     houseRoofB->SetMeshMaterial("Ceiling2");
 
-
-
-    if (hardcoded) {
+    if (hardcoded) 
+    {
         float spacing = 0.3f;
-        for (int x = -3; x < 1; x++) {
-            for (int y = -1; y < 5; y++) {
-                for (int z = -1; z < 2; z++) {
+        for (int x = -3; x < 1; x++) 
+        {
+            for (int y = -1; y < 5; y++) 
+            {
+                for (int z = -1; z < 2; z++)
+                {
                     CreateGameObject();
                     GameObject* cube = GetGameObjectByIndex(GetGameObjectCount() - 1);
                     float halfExtent = 0.1f;
@@ -796,16 +821,20 @@ void Scene::LoadDefaultScene() {
                     cube->SetModel("ChristmasPresent");
                     cube->SetName("Present");
                     int rand = Util::RandomInt(0, 3);
-                    if (rand == 0) {
+                    if (rand == 0)
+                    {
                         cube->SetMeshMaterial("PresentA");
                     }
-                    else if (rand == 1) {
+                    else if (rand == 1) 
+                    {
                         cube->SetMeshMaterial("PresentB");
                     }
-                    else if (rand == 2) {
+                    else if (rand == 2) 
+                    {
                         cube->SetMeshMaterial("PresentC");
                     }
-                    else if (rand == 3) {
+                    else if (rand == 3) 
+                    {
                         cube->SetMeshMaterial("PresentD");
                     }
                     cube->SetMeshMaterialByMeshName("Bow", "Gold");
@@ -827,7 +856,9 @@ void Scene::LoadDefaultScene() {
             }
         }
     }
-    if (createTestCubes) {
+
+    if (createTestCubes)
+    {
         float size = 30;
         float xMin = 10;
         float xMax = xMin + size * 2;
@@ -836,7 +867,9 @@ void Scene::LoadDefaultScene() {
         float zMin = -size * 0.5f;
         float zMax = zMin + size * 2;
         int cubeCount = 200;
-        for (int i = 0; i < cubeCount; i++) {
+
+        for (int i = 0; i < cubeCount; i++)
+        {
             float x = Util::RandomFloat(xMin, xMax);
             float y = Util::RandomFloat(yMin, yMax);
             float z = Util::RandomFloat(zMin, zMax);
@@ -858,9 +891,11 @@ void Scene::LoadDefaultScene() {
     
     // FOG hack
     g_fogAABB.clear();
-    for (auto& csgObject : CSG::GetCSGObjects()) {
+    for (auto& csgObject : CSG::GetCSGObjects())
+    {
         if (csgObject.m_materialIndex == AssetManager::GetMaterialIndex("FloorBoards") ||
-            csgObject.m_materialIndex == AssetManager::GetMaterialIndex("BathroomFloor")) {
+            csgObject.m_materialIndex == AssetManager::GetMaterialIndex("BathroomFloor"))
+        {
             AABB& aabb = g_fogAABB.emplace_back();
             float xMin = csgObject.m_transform.position.x - csgObject.m_transform.scale.x * 0.5f;
             float yMin = csgObject.m_transform.position.y + csgObject.m_transform.scale.y * 0.5f;
@@ -873,7 +908,6 @@ void Scene::LoadDefaultScene() {
         }
     }
 
-
     RecreateAllPhysicsObjects();
     ResetGameObjectStates();
     CreateBottomLevelAccelerationStructures();
@@ -881,11 +915,14 @@ void Scene::LoadDefaultScene() {
     Pathfinding2::CalculateNavMesh();
 }
 
-AABB AABBFromVertices(std::span<Vertex> vertices, std::span<uint32_t> indices, glm::mat4 worldTransform) {
+AABB AABBFromVertices(std::span<Vertex> vertices, std::span<uint32_t> indices, glm::mat4 worldTransform)
+{
     AABB aabb;
     aabb.boundsMin = glm::vec3(1e30f);
     aabb.boundsMax = glm::vec3(-1e30f);
-    for (auto& index : indices) {
+
+    for (auto& index : indices)
+    {
         Vertex& vertex = vertices[index];
         aabb.boundsMin = Util::Vec3Min(aabb.boundsMin, vertex.position);
         aabb.boundsMax = Util::Vec3Max(aabb.boundsMax, vertex.position);
@@ -895,32 +932,35 @@ AABB AABBFromVertices(std::span<Vertex> vertices, std::span<uint32_t> indices, g
 
 uint32_t g_doorBLASIndex = 0;
 
-void Scene::CreateBottomLevelAccelerationStructures() {
-
-    if (BackEnd::GetAPI() == API::VULKAN) {
+void Scene::CreateBottomLevelAccelerationStructures()
+{
+    if (BackEnd::GetAPI() == API::VULKAN)
+    {
         return;
     }
 
     Raytracing::CleanUp();
 
     // Create Bottom Level Acceleration Structures
-    for (CSGObject& csgObject : CSG::GetCSGObjects()) {
+    for (CSGObject& csgObject : CSG::GetCSGObjects()) 
+    {
         std::span<CSGVertex> spanVertices = csgObject.GetVerticesSpan();
         std::span<uint32_t> spanIndices = csgObject.GetIndicesSpan();
         std::vector<CSGVertex> vertices(spanVertices.begin(), spanVertices.end());
         std::vector<uint32_t> indices(spanIndices.begin(), spanIndices.end());
-        if (indices.size()) {
+        if (indices.size())
+        {
             csgObject.m_blasIndex = Raytracing::CreateBLAS(vertices, indices, csgObject.m_baseVertex, csgObject.m_baseIndex);
         }
-        else {
+        else 
+        {
             csgObject.m_blasIndex = -1;
         }
     }
 }
 
-
-void Scene::CreateTopLevelAccelerationStructures() {
-
+void Scene::CreateTopLevelAccelerationStructures() 
+{
     Raytracing::DestroyTopLevelAccelerationStructure(0);
 
     // Hack in door BLAS
@@ -932,11 +972,13 @@ void Scene::CreateTopLevelAccelerationStructures() {
 
     // Create Top Level Acceleration Structure
     TLAS* tlas = Raytracing::CreateTopLevelAccelerationStruture();
-    for (CSGObject& csgObject : CSG::GetCSGObjects()) {
+    for (CSGObject& csgObject : CSG::GetCSGObjects())
+    {
         glm::mat4 worldTransform = glm::mat4(1);
         tlas->AddInstance(worldTransform, csgObject.m_blasIndex, csgObject.m_aabb);
     }
-    for (Door& door : g_doors) {
+    for (Door& door : g_doors)
+    {
         glm::mat4 modelMatrix = door.GetDoorModelMatrix();
         AABB aabb;
         aabb.boundsMin = door._aabb.boundsMin;
@@ -946,9 +988,11 @@ void Scene::CreateTopLevelAccelerationStructures() {
     tlas->BuildBVH();
 }
 
-void Scene::RecreateCeilingTrims() {
+void Scene::RecreateCeilingTrims() 
+{
     g_ceilingTrims.clear();
-    for (CSGPlane& plane : g_csgAdditiveWallPlanes) {
+    for (CSGPlane& plane : g_csgAdditiveWallPlanes) 
+    {
         glm::vec3 planeDir = glm::normalize(plane.m_veritces[BR] - plane.m_veritces[BL]);
         Transform transform;
         transform.position = plane.m_veritces[TL];
@@ -959,26 +1003,13 @@ void Scene::RecreateCeilingTrims() {
     }
 }
 
-void Scene::RecreateFloorTrims() {
+void Scene::RecreateFloorTrims()
+{
     return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
-    return;
+  
     g_floorTrims.clear();
-    for (CSGPlane& plane : g_csgAdditiveWallPlanes) {
-
+    for (CSGPlane& plane : g_csgAdditiveWallPlanes)
+    {
         glm::vec3 planeDir = glm::normalize(plane.m_veritces[BR] - plane.m_veritces[BL]);
 
         float closestSegmentLength = 9999;
@@ -987,29 +1018,32 @@ void Scene::RecreateFloorTrims() {
         float planeWidth = glm::distance(plane.m_veritces[BL], plane.m_veritces[BR]);
         float searchedDistance = 0;
 
-        while (searchedDistance < planeWidth) {
-            for (Brush& brush : CSG::g_subtractiveBrushes) {
-
+        while (searchedDistance < planeWidth) 
+        {
+            for (Brush& brush : CSG::g_subtractiveBrushes)
+            {
                 auto& brushVertices = brush.GetCubeTriangles();
 
-                for (int i = 0; i < brushVertices.size(); i += 3) {
-
+                for (int i = 0; i < brushVertices.size(); i += 3)
+                {
                     const glm::vec3& v0 = brushVertices[i].position;
                     const glm::vec3& v1 = brushVertices[i + 1].position;
                     const glm::vec3& v2 = brushVertices[i + 2].position;
                     TriangleIntersectionResult result = Util::IntersectLineTriangle(searchBegin, planeDir, v0, v1, v2);
 
-                    if (result.hitFound) {
+                    if (result.hitFound)
+                    {
                         float segmentLength = glm::distance(result.hitPosition, searchBegin);
-
-                        if (segmentLength < closestSegmentLength) {
+                        if (segmentLength < closestSegmentLength)
+                        {
                             closestSegmentLength = segmentLength;
                             anyHitWasFound = true;
                         }
                     }
                 }
             }
-            if (anyHitWasFound) {
+            if (anyHitWasFound)
+            {
                 Transform transform;
                 transform.position = searchBegin;
                 transform.rotation.y = Util::YRotationBetweenTwoPoints(plane.m_veritces[BR], plane.m_veritces[BL]) + HELL_PI;
@@ -1019,7 +1053,8 @@ void Scene::RecreateFloorTrims() {
                 searchBegin += glm::vec3(planeDir * (DOOR_WIDTH + 0.001f));
                 searchedDistance += closestSegmentLength;
             }
-            else {
+            else
+            {
                 break;
             }
         }        
@@ -1032,8 +1067,8 @@ void Scene::RecreateFloorTrims() {
     }
 }
 
-void Scene::CreateDefaultSpawnPoints() {
-
+void Scene::CreateDefaultSpawnPoints()
+{
     g_spawnPoints.clear();
     {
         SpawnPoint& spawnPoint = g_spawnPoints.emplace_back();
@@ -1057,8 +1092,8 @@ void Scene::CreateDefaultSpawnPoints() {
     }
 }
 
-void Scene::Update(float deltaTime) {
-
+void Scene::Update(float deltaTime)
+{
     /*
     for (Light& light : g_lights) {
         if (light.m_pointCloudIndicesNeedRecalculating) {
@@ -1067,7 +1102,8 @@ void Scene::Update(float deltaTime) {
     }
     */
 
-    if (Input::KeyPressed(HELL_KEY_9)) {
+    if (Input::KeyPressed(HELL_KEY_9))
+    {
         Dobermann& dobermann = Scene::g_dobermann[2];
         dobermann.m_targetPosition = Game::GetPlayerByIndex(0)->GetFeetPosition();
         dobermann.m_currentState = DobermannState::WALK_TO_TARGET;
@@ -1075,7 +1111,8 @@ void Scene::Update(float deltaTime) {
         dobermann.m_characterController->setFootPosition({ dobermann.m_currentPosition.x, dobermann.m_currentPosition.y, dobermann.m_currentPosition.z });
     }
 
-    if (Input::KeyPressed(HELL_KEY_L)) {
+    if (Input::KeyPressed(HELL_KEY_L))
+    {
         Light& light = g_lights[0];
         if (light.m_pointCloudIndicesNeedRecalculating) {
             light.m_pointCloudIndicesNeedRecalculating = false;
@@ -1083,21 +1120,25 @@ void Scene::Update(float deltaTime) {
         }
     }
 
-
-    for (Dobermann& dobermann : g_dobermann) {
+    for (Dobermann& dobermann : g_dobermann)
+    {
         dobermann.Update(deltaTime);
 
         AnimatedGameObject* animatedGameObject = dobermann.GetAnimatedGameObject();
-        if (Input::KeyDown(HELL_KEY_NUMPAD_4)) {
+        if (Input::KeyDown(HELL_KEY_NUMPAD_4))
+        {
             animatedGameObject->_transform.rotation.y += 0.05f;
         }
-        if (Input::KeyDown(HELL_KEY_NUMPAD_5)) {
+        if (Input::KeyDown(HELL_KEY_NUMPAD_5))
+        {
             animatedGameObject->_transform.rotation.y -= 0.05f;
         }
-        if (Input::KeyDown(HELL_KEY_NUMPAD_1)) {
+        if (Input::KeyDown(HELL_KEY_NUMPAD_1))
+        {
             dobermann.m_currentPosition.x += 0.05f;
             }
-        if (Input::KeyDown(HELL_KEY_NUMPAD_2)) {
+        if (Input::KeyDown(HELL_KEY_NUMPAD_2)) 
+        {
             dobermann.m_currentPosition.x -= 0.05f;
         }
 
@@ -1124,45 +1165,46 @@ void Scene::Update(float deltaTime) {
    //}
 
 
-    if (Input::KeyPressed(HELL_KEY_5)) {
+    if (Input::KeyPressed(HELL_KEY_5)
+        ) {
         g_dobermann[0].m_currentState = DobermannState::KAMAKAZI;
         g_dobermann[0].m_health = 100;
     }
-    if (Input::KeyPressed(HELL_KEY_6)) {
+    if (Input::KeyPressed(HELL_KEY_6))
+    {
         for (Dobermann& dobermann : g_dobermann) {
             dobermann.Revive();
         }
     }
 
-
     static AudioHandle dobermanLoopaudioHandle;
-
 
     static std::vector<AudioHandle> dobermanAudioHandlesVector;
 
-
     bool huntedByDogs = false;
-    for (Dobermann& dobermann : g_dobermann) {
-        if (dobermann.m_currentState == DobermannState::KAMAKAZI) {
+    for (Dobermann& dobermann : g_dobermann)
+    {
+        if (dobermann.m_currentState == DobermannState::KAMAKAZI)
+        {
             huntedByDogs = true;
             break;
         }
         dobermann.Update(deltaTime);
     }
 
-    if (huntedByDogs && dobermanAudioHandlesVector.empty()) {
+    if (huntedByDogs && dobermanAudioHandlesVector.empty())
+    {
         dobermanAudioHandlesVector.push_back(Audio::PlayAudio("Doberman_Loop.wav", 1.0f));
         std::cout << "creating new sound\n";
     }
 
-    if (!huntedByDogs && dobermanAudioHandlesVector.size()) {
+    if (!huntedByDogs && dobermanAudioHandlesVector.size())
+    {
         dobermanAudioHandlesVector[0].sound->release();
         dobermanAudioHandlesVector.clear();
         std::cout << "STOPPING AUDIO\n";
         Audio::g_loadedAudio.clear();
     }
-
-
 
 
     /*
@@ -1216,10 +1258,10 @@ void Scene::Update(float deltaTime) {
     */
 
 
-    for (int i = 0; i < g_animatedGameObjects.size(); i++) {
-
-        if (g_animatedGameObjects[i].GetName() == "Dobermann") {
-
+    for (int i = 0; i < g_animatedGameObjects.size(); i++) 
+    {
+        if (g_animatedGameObjects[i].GetName() == "Dobermann")
+        {
             auto& dobermann = g_animatedGameObjects[i];
 
             /*
@@ -1264,7 +1306,8 @@ void Scene::Update(float deltaTime) {
         }
     }
 
-    for (GameObject& gameObject : g_gameObjects) {
+    for (GameObject& gameObject : g_gameObjects)
+    {
         gameObject.Update(deltaTime);
     }
 
@@ -1275,42 +1318,57 @@ void Scene::Update(float deltaTime) {
 
     CheckForDirtyLights();
 
-    if (Input::KeyPressed(HELL_KEY_N)) {
+    if (Input::KeyPressed(HELL_KEY_N))
+    {
         Physics::ClearCollisionLists();
-        for (GameObject& gameObject : g_gameObjects) {
+        for (GameObject& gameObject : g_gameObjects
+            ) {
             gameObject.LoadSavedState();
         }
         CleanUpBulletCasings();
         CleanUpBulletHoleDecals();
         std::cout << "Loaded scene save state\n";
     }
-    for (Door& door : g_doors) {
+
+    for (Door& door : g_doors)
+    {
         door.Update(deltaTime);
         door.UpdateRenderItems();
     }
-    for (Window& window : g_windows) {
+
+    for (Window& window : g_windows) 
+    {
         window.UpdateRenderItems();
     }
+
     ProcessBullets();
 
     UpdateGameObjects(deltaTime);
     //UpdateAnimatedGameObjects(deltaTime);
 
-    for (BulletCasing& bulletCasing : g_bulletCasings) {
+    for (BulletCasing& bulletCasing : g_bulletCasings)
+    {
         // TO DO: render item
         bulletCasing.Update(deltaTime);
     }
-    for (Toilet& toilet : _toilets) {
+
+    for (Toilet& toilet : _toilets) 
+    {
         // TO DO: render item
         toilet.Update(deltaTime);
     }
-    for (PickUp& pickUp : _pickUps) {
+
+    for (PickUp& pickUp : _pickUps) 
+    {
         // TO DO: render item
         pickUp.Update(deltaTime);
     }
-    for (AnimatedGameObject& animatedGameObject : g_animatedGameObjects) {
+
+    for (AnimatedGameObject& animatedGameObject : g_animatedGameObjects)
+    {
         // TO DO: render item
-        if (animatedGameObject.GetFlag() != AnimatedGameObject::Flag::VIEW_WEAPON) {
+        if (animatedGameObject.GetFlag() != AnimatedGameObject::Flag::VIEW_WEAPON) 
+        {
             animatedGameObject.Update(deltaTime);
         }
     }
@@ -1319,14 +1377,18 @@ void Scene::Update(float deltaTime) {
    // Game::GetPlayerByIndex(0)->UpdateCamera(0);
 
     // Check if any player needs there pistol slide sloded?
-    for (int i = 0; i < Game::GetPlayerCount(); i++) {
+    for (int i = 0; i < Game::GetPlayerCount(); i++)
+    {
         Player* player = Game::GetPlayerByIndex(i);
         AnimatedGameObject* viewWeaponAnimatedGameObject = player->GetViewWeaponAnimatedGameObject();
         WeaponInfo* weaponInfo = player->GetCurrentWeaponInfo();
         WeaponState* weaponState = player->GetCurrentWeaponState();
-        if (weaponState->useSlideOffset && weaponInfo->type == WeaponType::PISTOL && weaponInfo->pistolSlideBoneName != UNDEFINED_STRING) {
-            for (int j = 0; j < viewWeaponAnimatedGameObject->GetAnimatedTransformCount(); j++) {
-                if (viewWeaponAnimatedGameObject->_animatedTransforms.names[j] == weaponInfo->pistolSlideBoneName) {
+        if (weaponState->useSlideOffset && weaponInfo->type == WeaponType::PISTOL && weaponInfo->pistolSlideBoneName != UNDEFINED_STRING)
+        {
+            for (int j = 0; j < viewWeaponAnimatedGameObject->GetAnimatedTransformCount(); j++)
+            {
+                if (viewWeaponAnimatedGameObject->_animatedTransforms.names[j] == weaponInfo->pistolSlideBoneName)
+                {
                     auto& boneMatrix = viewWeaponAnimatedGameObject->_animatedTransforms.local[j];
                     Transform newTransform;
                     newTransform.position.z = weaponInfo->pistolSlideOffset;
@@ -1336,58 +1398,62 @@ void Scene::Update(float deltaTime) {
         }
     }
 
-
     // Update vat blood
     _volumetricBloodObjectsSpawnedThisFrame = 0;
-    for (vector<VolumetricBloodSplatter>::iterator it = _volumetricBloodSplatters.begin(); it != _volumetricBloodSplatters.end();) {
-         if (it->m_CurrentTime < 0.9f) {
+    for (vector<VolumetricBloodSplatter>::iterator it = _volumetricBloodSplatters.begin(); it != _volumetricBloodSplatters.end();)
+    {
+         if (it->m_CurrentTime < 0.9f) 
+         {
             it->Update(deltaTime);
             ++it;
          }
-         else {
+         else
+         {
              it = _volumetricBloodSplatters.erase(it);
          }
     }
 }
 
-
-
 // Bullet hole decals
-
-void Scene::CreateBulletDecal(glm::vec3 localPosition, glm::vec3 localNormal, PxRigidBody* parent, BulletHoleDecalType type) {
+void Scene::CreateBulletDecal(glm::vec3 localPosition, glm::vec3 localNormal, PxRigidBody* parent, BulletHoleDecalType type)
+{
     g_bulletHoleDecals.emplace_back(BulletHoleDecal(localPosition, localNormal, parent, type));
 }
 
-const size_t Scene::GetBulletHoleDecalCount() {
+const size_t Scene::GetBulletHoleDecalCount()
+{
     return g_bulletHoleDecals.size();
 }
 
-BulletHoleDecal* Scene::GetBulletHoleDecalByIndex(int32_t index) {
-    if (index >= 0 && index < g_bulletHoleDecals.size()) {
+BulletHoleDecal* Scene::GetBulletHoleDecalByIndex(int32_t index)
+{
+    if (index >= 0 && index < g_bulletHoleDecals.size())
+    {
         return &g_bulletHoleDecals[index];
     }
-    else {
+    else 
+    {
         std::cout << "Scene::GetBulletHoleDecalByIndex() called with out of range index " << index << ", size is " << GetBulletHoleDecalCount() << "\n";
         return nullptr;
     }
 }
 
-void Scene::CleanUpBulletHoleDecals() {
+void Scene::CleanUpBulletHoleDecals()
+{
     g_bulletHoleDecals.clear();
 }
 
-void Scene::CleanUpBulletCasings() {
+void Scene::CleanUpBulletCasings()
+{
 
-    for (BulletCasing& bulletCasing : g_bulletCasings) {
+    for (BulletCasing& bulletCasing : g_bulletCasings)
+    {
         bulletCasing.CleanUp();
     }
     g_bulletCasings.clear();
 }
 
-
-
 // Game Objects
-
 int32_t Scene::CreateGameObject()
 {
     g_gameObjects.emplace_back();
@@ -1448,21 +1514,25 @@ void Scene::UpdateGameObjects(float deltaTime)
 }
 
 // Animated Game Objects
-
-int32_t Scene::CreateAnimatedGameObject() {
+int32_t Scene::CreateAnimatedGameObject()
+{
     g_animatedGameObjects.emplace_back();
     return (int32_t)g_animatedGameObjects.size() - 1;
 }
 
-const size_t Scene::GetAnimatedGameObjectCount() {
+const size_t Scene::GetAnimatedGameObjectCount()
+{
     return g_animatedGameObjects.size();
 }
 
-AnimatedGameObject* Scene::GetAnimatedGameObjectByIndex(int32_t index) {
-    if (index >= 0 && index < g_animatedGameObjects.size()) {
+AnimatedGameObject* Scene::GetAnimatedGameObjectByIndex(int32_t index)
+{
+    if (index >= 0 && index < g_animatedGameObjects.size())
+    {
         return &g_animatedGameObjects[index];
     }
-    else {
+    else
+    {
         std::cout << "Scene::GetAnimatedGameObjectByIndex() called with out of range index " << index << ", size is " << GetAnimatedGameObjectCount() << "\n";
         return nullptr;
     }
@@ -2466,11 +2536,7 @@ void Scene::LoadHardCodedObjects() {
     }
     */
 
-
-
-
     if (true) {
-
         CreateGameObject();
         GameObject* aks74u = GetGameObjectByIndex(GetGameObjectCount()-1);
         aks74u->SetPosition(1.8f, 1.7f, 0.75f);
@@ -2586,23 +2652,24 @@ void Scene::LoadHardCodedObjects() {
 
         Game::SpawnPickup(PickUpType::GLOCK_AMMO, glm::vec3(0.40f, 0.78f, 4.45f), glm::vec3(0, HELL_PI * 0.4f, 0), true);
 
-        for (int x = 0; x < 10; x++) {
-            for (int z = 0; z < 10; z++) {
-
+        for (int x = 0; x < 10; x++)
+        {
+            for (int z = 0; z < 10; z++)
+            {
                 glm::vec3 position = glm::vec3(1 + x * 0.4f, 0.5f, 1 + z * 0.4f);
                 glm::vec3 rotation = glm::vec3(0, Util::RandomFloat(0, HELL_PI * 2), 0);
 
-
                 int random_number = std::rand() % 2;
-                if (random_number == 0) {
+                if (random_number == 0)
+                {
                     //Game::SpawnAmmo("Glock", position, rotation, true);
                 }
-                else {
+                else
+                {
                     //Game::SpawnAmmo("Tokarev", position, rotation, true);
                 }
             }
         }
-
 
         CreateGameObject();
         GameObject* pictureFrame = GetGameObjectByIndex(GetGameObjectCount() - 1);
@@ -2871,10 +2938,8 @@ void Scene::LoadHardCodedObjects() {
             smallChestOfDrawer_4->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SmallDrawerFourth"));
         }
 
-
-
-        for (int y = 0; y < 12; y++) {
-
+        for (int y = 0; y < 12; y++) 
+        {
             CreateGameObject();
             GameObject* cube = GetGameObjectByIndex(GetGameObjectCount() - 1);
             float halfExtent = 0.1f;
@@ -2919,42 +2984,40 @@ void Scene::LoadHardCodedObjects() {
     }
 
 
-    // GO HERE
+    //// GO HERE
+    //if (false) {
+    //    int testIndex = CreateAnimatedGameObject();
+    //    AnimatedGameObject& glock = g_animatedGameObjects[testIndex];
+    //    glock.SetFlag(AnimatedGameObject::Flag::NONE);
+    //    glock.SetPlayerIndex(1);
+    //    //glock.SetSkinnedModel("Glock");
+    //    glock.SetSkinnedModel("Tokarev");
+    //    glock.SetName("Tokarev");
+    //    // glock.SetAllMeshMaterials("Tokarev");
+    //    glock.SetAnimationModeToBindPose();
+    //    glock.SetMeshMaterialByMeshName("ArmsMale", "Hands");
+    //    glock.SetMeshMaterialByMeshName("ArmsFemale", "FemaleArms");
+    //    glock.SetMeshMaterialByMeshName("TokarevBody", "Tokarev");
+    //    glock.SetMeshMaterialByMeshName("TokarevMag", "TokarevMag");
+    //    glock.SetMeshMaterialByMeshName("TokarevGripPolymer", "TokarevGrip");
+    //    glock.SetMeshMaterialByMeshName("TokarevGripPolyWood", "TokarevGrip");
+    //    //glock.PlayAndLoopAnimation("Glock_Walk", 1.0f);
+    //    glock.PlayAndLoopAnimation("Tokarev_Reload", 1.0f);
+    //    glock.SetPosition(glm::vec3(2.5f, 1.5f, 3));
+    //    glock.SetScale(0.01);
 
-    if (false) {
-        int testIndex = CreateAnimatedGameObject();
-        AnimatedGameObject& glock = g_animatedGameObjects[testIndex];
-        glock.SetFlag(AnimatedGameObject::Flag::NONE);
-        glock.SetPlayerIndex(1);
-        //glock.SetSkinnedModel("Glock");
-        glock.SetSkinnedModel("Tokarev");
-        glock.SetName("Tokarev");
-        // glock.SetAllMeshMaterials("Tokarev");
-        glock.SetAnimationModeToBindPose();
-        glock.SetMeshMaterialByMeshName("ArmsMale", "Hands");
-        glock.SetMeshMaterialByMeshName("ArmsFemale", "FemaleArms");
-        glock.SetMeshMaterialByMeshName("TokarevBody", "Tokarev");
-        glock.SetMeshMaterialByMeshName("TokarevMag", "TokarevMag");
-        glock.SetMeshMaterialByMeshName("TokarevGripPolymer", "TokarevGrip");
-        glock.SetMeshMaterialByMeshName("TokarevGripPolyWood", "TokarevGrip");
-        //glock.PlayAndLoopAnimation("Glock_Walk", 1.0f);
-        glock.PlayAndLoopAnimation("Tokarev_Reload", 1.0f);
-        glock.SetPosition(glm::vec3(2.5f, 1.5f, 3));
-        glock.SetScale(0.01);
-    }
-    if (false) {
-        int testIndex = CreateAnimatedGameObject();
-        AnimatedGameObject& glock = g_animatedGameObjects[testIndex];
-        glock.SetFlag(AnimatedGameObject::Flag::NONE);
-        glock.SetPlayerIndex(1);
-        glock.SetSkinnedModel("Glock");
-        glock.SetName("Glock");
-        glock.SetAllMeshMaterials("Glock");
-        glock.SetAnimationModeToBindPose();
-        glock.PlayAndLoopAnimation("Glock_Reload", 1.0f);
-        glock.SetPosition(glm::vec3(2.5f, 1.5f, 3));
-        glock.SetScale(0.01);
-    }
+    //    int testIndex = CreateAnimatedGameObject();
+    //    AnimatedGameObject& glock = g_animatedGameObjects[testIndex];
+    //    glock.SetFlag(AnimatedGameObject::Flag::NONE);
+    //    glock.SetPlayerIndex(1);
+    //    glock.SetSkinnedModel("Glock");
+    //    glock.SetName("Glock");
+    //    glock.SetAllMeshMaterials("Glock");
+    //    glock.SetAnimationModeToBindPose();
+    //    glock.PlayAndLoopAnimation("Glock_Reload", 1.0f);
+    //    glock.SetPosition(glm::vec3(2.5f, 1.5f, 3));
+    //    glock.SetScale(0.01);
+    //}
 
 
 
@@ -3260,45 +3323,55 @@ void Scene::LoadHardCodedObjects() {
 	}*/
 }
 
-void Scene::ResetGameObjectStates() {
-    for (GameObject& gameObject : g_gameObjects) {
+void Scene::ResetGameObjectStates()
+{
+    for (GameObject& gameObject : g_gameObjects)
+    {
         gameObject.LoadSavedState();
     }
 }
 
-
-void Scene::CleanUp() {
-
-    for (Door& door : g_doors) {
+void Scene::CleanUp()
+{
+    for (Door& door : g_doors) 
+    {
         door.CleanUp();
     }
 
-    for (Dobermann& dobermann : g_dobermann) {
+    for (Dobermann& dobermann : g_dobermann)
+    {
         dobermann.CleanUp();
     }
 
     CleanUpBulletHoleDecals();
     CleanUpBulletCasings();
 
-    for (BulletCasing& bulletCasing : g_bulletCasings) {
+    for (BulletCasing& bulletCasing : g_bulletCasings)
+    {
         bulletCasing.CleanUp();
     }
-    for (GameObject& gameObject : g_gameObjects) {
+    for (GameObject& gameObject : g_gameObjects) 
+    {
         gameObject.CleanUp();
     }
-    for (Toilet& toilet: _toilets) {
+    for (Toilet& toilet: _toilets)
+    {
         toilet.CleanUp();
     }
-    for (Window& window : g_windows) {
+    for (Window& window : g_windows)
+    {
         window.CleanUp();
     }
-    for (AnimatedGameObject& animatedGameObject : g_animatedGameObjects) {
+    for (AnimatedGameObject& animatedGameObject : g_animatedGameObjects)
+    {
         //animatedGameObject.DestroyRagdoll();
     }
-    for (CSGCube& cubeVolume : g_csgAdditiveCubes) {
+    for (CSGCube& cubeVolume : g_csgAdditiveCubes)
+    {
         cubeVolume.CleanUp();
     }
-    for (CSGCube& cubeVolume : g_csgSubtractiveCubes) {
+    for (CSGCube& cubeVolume : g_csgSubtractiveCubes)
+    {
         cubeVolume.CleanUp();
     }
 
@@ -3317,18 +3390,21 @@ void Scene::CleanUp() {
     g_csgAdditiveCubes.clear();
     g_csgSubtractiveCubes.clear();
      
-	if (_sceneTriangleMesh) {
+	if (_sceneTriangleMesh)
+    {
 		_sceneTriangleMesh->release();
 		_sceneShape->release();
     }
 
-    for (int i = 0; i < g_animatedGameObjects.size(); ) {
+    for (int i = 0; i < g_animatedGameObjects.size();)
+    {
         if (g_animatedGameObjects[i].GetFlag() != AnimatedGameObject::Flag::VIEW_WEAPON &&
             g_animatedGameObjects[i].GetFlag() != AnimatedGameObject::Flag::CHARACTER_MODEL) {
             g_animatedGameObjects[i].DestroyRagdoll();
             g_animatedGameObjects.erase(g_animatedGameObjects.begin() + i);
         }
-        else {
+        else
+        {
             ++i;
         }
     }
@@ -3336,7 +3412,8 @@ void Scene::CleanUp() {
     GlobalIllumination::ClearData();
 }
 
-void Scene::CreateLight(LightCreateInfo createInfo) {
+void Scene::CreateLight(LightCreateInfo createInfo)
+{
     Light& light = g_lights.emplace_back();
     light.position = createInfo.position;
     light.color = createInfo.color;
@@ -3347,22 +3424,26 @@ void Scene::CreateLight(LightCreateInfo createInfo) {
     light.extraDirty = true;
 }
 
-void Scene::AddLight(Light& light) {
+void Scene::AddLight(Light& light)
+{
     g_lights.push_back(light);
 }
 
-void Scene::AddDoor(Door& door) {
+void Scene::AddDoor(Door& door)
+{
     g_doors.push_back(door);
 }
 
-void Scene::CreatePointCloud() {
+void Scene::CreatePointCloud() 
+{
     float pointSpacing = _pointCloudSpacing;
     _cloudPoints.clear();
 }
 
-void Scene::LoadLightSetup(int index) {
-
-    if (index == 2) {
+void Scene::LoadLightSetup(int index)
+{
+    if (index == 2) 
+    {
         g_lights.clear();
         Light lightD;
         lightD.position = glm::vec3(2.8, 2.2, 3.6);
@@ -3395,8 +3476,6 @@ void Scene::LoadLightSetup(int index) {
     }
 }
 
-
-
 /*
 AnimatedGameObject* Scene::GetAnimatedGameObjectByName(std::string name) {
     if (name == "undefined") {
@@ -3416,15 +3495,16 @@ std::vector<AnimatedGameObject>& Scene::GetAnimatedGameObjects() {
     return _animatedGameObjects;
 }*/
 
-void Scene::UpdateRTInstanceData() {
-
+void Scene::UpdateRTInstanceData()
+{
     _rtInstances.clear();
     RTInstance& houseInstance = _rtInstances.emplace_back(RTInstance());
     houseInstance.meshIndex = 0;
     houseInstance.modelMatrix = glm::mat4(1);
     houseInstance.inverseModelMatrix = glm::inverse(glm::mat4(1));
 
-    for (Door& door : g_doors) {
+    for (Door& door : g_doors)
+    {
         RTInstance& doorInstance = _rtInstances.emplace_back(RTInstance());
         doorInstance.meshIndex = 1;
         doorInstance.modelMatrix = door.GetDoorModelMatrix();
@@ -3432,25 +3512,28 @@ void Scene::UpdateRTInstanceData() {
     }
 }
 
-void Scene::RecreateAllPhysicsObjects() {
-
-	for (Door& door : g_doors) {
+void Scene::RecreateAllPhysicsObjects()
+{
+	for (Door& door : g_doors) 
+    {
 		door.CreatePhysicsObject();
 	}
-	for (Window& window : g_windows) {
+	for (Window& window : g_windows)
+    {
         window.CreatePhysicsObjects();
 	}
 }
 
-void Scene::RemoveAllDecalsFromWindow(Window* window) {
-
+void Scene::RemoveAllDecalsFromWindow(Window* window)
+{
     std::cout << "size was: " << g_bulletHoleDecals.size() << "\n";
-
-    for (int i = 0; i < g_bulletHoleDecals.size(); i++) {
+    for (int i = 0; i < g_bulletHoleDecals.size(); i++)
+    {
         PxRigidBody* decalParentRigid = g_bulletHoleDecals[i].GetPxRigidBodyParent();
         if (decalParentRigid == (void*)window->raycastBody //||
            // decalParentRigid == (void*)window->raycastBodyTop
-            ) {
+            )
+        {
             g_bulletHoleDecals.erase(g_bulletHoleDecals.begin() + i);
             i--;
             std::cout << "removed decal " << i << " size is now: " << g_bulletHoleDecals.size() << "\n";
@@ -3458,14 +3541,15 @@ void Scene::RemoveAllDecalsFromWindow(Window* window) {
     }
 }
 
-void Scene::ProcessPhysicsCollisions() {
-
+void Scene::ProcessPhysicsCollisions()
+{
     bool bulletCasingCollision = false;
     bool shotgunShellCollision = false;
 
-    for (CollisionReport& report : Physics::GetCollisions()) {
-
-        if (!report.rigidA || !report.rigidB) {
+    for (CollisionReport& report : Physics::GetCollisions()) 
+    {
+        if (!report.rigidA || !report.rigidB)
+        {
             if (!report.rigidA)
                 std::cout << "report.rigidA was nullptr, ESCAPING!\n";
             if (!report.rigidB)
@@ -3480,35 +3564,41 @@ void Scene::ProcessPhysicsCollisions() {
         const char* nameA = report.rigidA->getName();
         const char* nameB = report.rigidB->getName();
         if (nameA == "BulletCasing" ||
-            nameB == "BulletCasing") {
+            nameB == "BulletCasing")
+        {
             bulletCasingCollision = true;
         }
         if (nameA == "ShotgunShell" ||
-            nameB == "ShotgunShell") {
+            nameB == "ShotgunShell")
+        {
             shotgunShellCollision = true;
         }
     }
-    if (bulletCasingCollision) {
+    if (bulletCasingCollision)
+    {
         Audio::PlayAudio("BulletCasingBounce.wav", Util::RandomFloat(0.2f, 0.3f));
     }
-    if (shotgunShellCollision) {
+    if (shotgunShellCollision)
+    {
         Audio::PlayAudio("ShellFloorBounce.wav", Util::RandomFloat(0.1f, 0.2f));
     }
 
     Physics::ClearCollisionLists();
 }
 
-
-void Scene::RecreateDataStructures() {
-
+void Scene::RecreateDataStructures()
+{
     // Remove all scene physx objects, if they exist
-    if (_sceneTriangleMesh) {
+    if (_sceneTriangleMesh)
+    {
         _sceneTriangleMesh->release();
     }
-    if (_sceneShape) {
+    if (_sceneShape)
+    {
         _sceneShape->release();
     }
-    if (_sceneRigidDynamic) {
+    if (_sceneRigidDynamic)
+    {
         _sceneRigidDynamic->release();
     }
 
@@ -3542,8 +3632,8 @@ void Scene::RecreateDataStructures() {
 
 
 
-void Scene::CalculateLightBoundingVolumes() {
-
+void Scene::CalculateLightBoundingVolumes()
+{
     return;
     /*
     std::vector<Triangle> triangles;
@@ -3627,8 +3717,8 @@ void Scene::CalculateLightBoundingVolumes() {
     }*/
 }
 
-void Scene::CreateMeshData() {
-
+void Scene::CreateMeshData()
+{
     //for (Wall& wall : _walls) {
     //    wall.CreateMesh();
     //}
@@ -3689,75 +3779,97 @@ void Scene::CreateMeshData() {
     }
 }
 
-const size_t Scene::GetCubeVolumeAdditiveCount() {
+const size_t Scene::GetCubeVolumeAdditiveCount() 
+{
     return g_csgAdditiveCubes.size();
 }
 
-CSGCube* Scene::GetCubeVolumeAdditiveByIndex(int32_t index) {
-    if (index >= 0 && index < g_csgAdditiveCubes.size()) {
+CSGCube* Scene::GetCubeVolumeAdditiveByIndex(int32_t index) 
+{
+    if (index >= 0 && index < g_csgAdditiveCubes.size())
+    {
         return &g_csgAdditiveCubes[index];
     }
-    else {
-            std::cout << "Scene::GetCubeVolumeAdditiveByIndex() failed coz " << index << " out of range of size " << g_csgAdditiveCubes.size() << "\n";
+    else
+    {
+        std::cout << "Scene::GetCubeVolumeAdditiveByIndex() failed coz " << index << " out of range of size " << g_csgAdditiveCubes.size() << "\n";
         return nullptr;
     }
 }
 
-CSGPlane* Scene::GetWallPlaneByIndex(int32_t index) {
-    if (index >= 0 && index < g_csgAdditiveWallPlanes.size()) {
+CSGPlane* Scene::GetWallPlaneByIndex(int32_t index)
+{
+    if (index >= 0 && index < g_csgAdditiveWallPlanes.size())
+    {
         return &g_csgAdditiveWallPlanes[index];
     }
-    else {
+    else
+    {
         std::cout << "Scene::GetWallPlaneByIndex() failed coz " << index << " out of range of size " << g_csgAdditiveCubes.size() << "\n";
         return nullptr;
     }
 }
 
-CSGPlane* Scene::GetFloorPlaneByIndex(int32_t index) {
-    if (index >= 0 && index < g_csgAdditiveFloorPlanes.size()) {
+CSGPlane* Scene::GetFloorPlaneByIndex(int32_t index) 
+{
+    if (index >= 0 && index < g_csgAdditiveFloorPlanes.size()) 
+    {
         return &g_csgAdditiveFloorPlanes[index];
     }
-    else {
+    else 
+    {
         std::cout << "Scene::GetFloorPlaneByIndex() failed coz " << index << " out of range of size " << g_csgAdditiveCubes.size() << "\n";
         return nullptr;
     }
 }
 
-CSGPlane* Scene::GetCeilingPlaneByIndex(int32_t index) {
-    if (index >= 0 && index < g_csgAdditiveCeilingPlanes.size()) {
+CSGPlane* Scene::GetCeilingPlaneByIndex(int32_t index)
+{
+    if (index >= 0 && index < g_csgAdditiveCeilingPlanes.size()) 
+    {
         return &g_csgAdditiveCeilingPlanes[index];
     }
-    else {
+    else
+    {
         std::cout << "Scene::GetCeilingPlaneByIndex() failed coz " << index << " out of range of size " << g_csgAdditiveCubes.size() << "\n";
         return nullptr;
     }
 }
 
-CSGCube* Scene::GetCubeVolumeSubtractiveByIndex(int32_t index) {
-    if (index >= 0 && index < g_csgSubtractiveCubes.size()) {
+CSGCube* Scene::GetCubeVolumeSubtractiveByIndex(int32_t index) 
+{
+    if (index >= 0 && index < g_csgSubtractiveCubes.size())
+    {
         return &g_csgSubtractiveCubes[index];
     }
-    else {
+    else 
+    {
         std::cout << "Scene::GetCubeVolumeSubtractiveByIndex() failed coz " << index << " out of range of size " << g_csgSubtractiveCubes.size() << "\n";
         return nullptr;
     }
 }
 
-Window* Scene::GetWindowByIndex(int32_t index) {
-    if (index >= 0 && index < g_windows.size()) {
+Window* Scene::GetWindowByIndex(int32_t index)
+{
+    if (index >= 0 && index < g_windows.size()) 
+    {
         return &g_windows[index];
     }
-    else {
+    else 
+    {
         std::cout << "Scene::GetWindowByIndex() failed coz " << index << " out of range of size " << g_windows.size() << "\n";
         return nullptr;
     }
 }
 
-Door* Scene::GetDoorByIndex(int32_t index) {
-    if (index >= 0 && index < g_doors.size()) {
+Door* Scene::GetDoorByIndex(int32_t index)
+{
+    if (index >= 0 && index < g_doors.size())
+    {
         return &g_doors[index];
     }
-    else {
+    else
+    {
         std::cout << "Scene::GetDoorByIndex() failed coz " << index << " out of range of size " << g_doors.size() << "\n";
         return nullptr;
     }

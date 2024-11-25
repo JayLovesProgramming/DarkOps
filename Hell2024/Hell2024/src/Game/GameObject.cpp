@@ -595,7 +595,7 @@ PickUpType GameObject::GetPickUpType()
 
 const InteractType& GameObject::GetInteractType() 
 {
-	return InteractType::NONE;
+    return InteractType::NONE;
 	//return _interactType;
 }
 
