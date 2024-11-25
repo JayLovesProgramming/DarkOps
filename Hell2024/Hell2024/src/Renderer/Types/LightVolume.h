@@ -1,12 +1,15 @@
 #pragma once
+
 #include "Texture3D.h"
 #include <glm/glm.hpp>
 
-struct LightVolume {
-
+struct LightVolume
+{
 public:
     LightVolume() = default;
+
     LightVolume(float witdh, float height, float depth, float posX, float posY, float posZ);
+
     void CreateTexure3D();
     const float GetWorldSpaceWidth();
     const float GetWorldSpaceHeight();

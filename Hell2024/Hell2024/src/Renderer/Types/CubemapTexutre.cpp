@@ -2,7 +2,7 @@
 #include "../../BackEnd/BackEnd.h"
 
 void CubemapTexture::SetName(std::string name)
- {
+{
     this->name = name;
 }
 
@@ -13,7 +13,8 @@ void CubemapTexture::SetFiletype(std::string filetype)
 
 void CubemapTexture::Load()
 {
-    if (BackEnd::GetAPI() == API::OPENGL) {
+    if (BackEnd::GetAPI() == API::OPENGL)
+    {
 
         glTexture.Load(name, filetype);
     }
@@ -75,7 +76,8 @@ std::string& CubemapTexture::GetFilename() {
     }
 }*/
 
-OpenGLCubemapTexture& CubemapTexture::GetGLTexture() {
+OpenGLCubemapTexture& CubemapTexture::GetGLTexture()
+{
     return glTexture;
 }
 /*

@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Compressonator.h>
 #include <string>
 #include <memory>
@@ -6,12 +7,13 @@
 #include "../../API/Vulkan/Types/VK_texture.h"
 #include "../../Types/Enums.h"
 
-class Texture {
-
+class Texture
+{
 public:
-
     Texture() = default;
+
     Texture(std::string fullpath, bool compressed);
+
 	void Load();
     void Bake();
     void BakeCMPData(CMP_Texture* cmpTexture);

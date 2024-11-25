@@ -31,24 +31,29 @@ Sphere g_testSphere = {
     0.35f
 };
 
-void Renderer::UpdateDebugPointsMesh() {
-
+void Renderer::UpdateDebugPointsMesh() 
+{
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
 
     Player* player = Game::GetPlayerByIndex(0);
 
-    if (g_debugLineRenderMode == DebugLineRenderMode::PATHFINDING_RECAST) {
+    if (g_debugLineRenderMode == DebugLineRenderMode::PATHFINDING_RECAST) 
+    {
         // Dobermann path
-        for (Dobermann& dobermann : Scene::g_dobermann) {
-            for (int i = 0; i < dobermann.m_pathToTarget.points.size(); i++) {
+        for (Dobermann& dobermann : Scene::g_dobermann)
+        {
+            for (int i = 0; i < dobermann.m_pathToTarget.points.size(); i++)
+            {
                 vertices.push_back(Vertex(dobermann.m_pathToTarget.points[i], RED));
             }
         }
     }
 
-    if (Editor::GetSelectedObjectType() == ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE) {       
-        if (Editor::GetSelectedObjectIndex() != -1) {
+    if (Editor::GetSelectedObjectType() == ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE) 
+    {       
+        if (Editor::GetSelectedObjectIndex() != -1)
+        {
             CSGPlane* csgPlane = Scene::GetWallPlaneByIndex(Editor::GetSelectedObjectIndex());
             vertices.push_back(Vertex(csgPlane->m_veritces[0], ORANGE));
             vertices.push_back(Vertex(csgPlane->m_veritces[1], ORANGE));
@@ -88,13 +93,14 @@ void Renderer::UpdateDebugPointsMesh() {
     // BROKEN ABOVE
     // BROKEN ABOVE
     // BROKEN ABOVE
-    if (Editor::GetHoveredVertexIndex() != -1) {
+    if (Editor::GetHoveredVertexIndex() != -1)
+    {
         vertices.push_back(Vertex(Editor::GetHoveredVertexPosition(), WHITE));
     }
-    if (Editor::GetSelectedVertexIndex() != -1) {
+    if (Editor::GetSelectedVertexIndex() != -1) 
+    {
         vertices.push_back(Vertex(Editor::GetSelectedVertexPosition(), WHITE));
     }
-
 
     /*
     HeightMap& heightMap = AssetManager::g_heightMap;

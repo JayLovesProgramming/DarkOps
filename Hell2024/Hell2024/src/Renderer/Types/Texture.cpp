@@ -42,7 +42,8 @@ void Texture::Bake()
 
 void Texture::BakeCMPData(CMP_Texture* cmpTexture)
 {
-    if (m_bakingState == BakingState::AWAITING_BAKE) {
+    if (m_bakingState == BakingState::AWAITING_BAKE)
+    {
         if (BackEnd::GetAPI() == API::OPENGL)
         {
             glTexture.BakeCMPData(cmpTexture);

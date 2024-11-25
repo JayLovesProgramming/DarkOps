@@ -8,16 +8,16 @@
 #include "../Editor/CSG.h"
 #include "../Timer.hpp"
 
-namespace GlobalIllumination {
-
+namespace GlobalIllumination
+{
     std::vector<LightVolume> _lightVolumes;
     std::vector<CloudPoint> g_pointCloud;
     bool g_gpuDataAwaitingClear = false;
     int g_frameCounter = 0;
 }
 
-void GlobalIllumination::CreateLightVolume(float width, float height, float depth, float posX, float posY, float posZ) {
-
+void GlobalIllumination::CreateLightVolume(float width, float height, float depth, float posX, float posY, float posZ) 
+{
     LightVolume& lightVolume = _lightVolumes.emplace_back(LightVolume(width, height, depth, posX, posY, posZ));
     lightVolume.CreateTexure3D();
 }

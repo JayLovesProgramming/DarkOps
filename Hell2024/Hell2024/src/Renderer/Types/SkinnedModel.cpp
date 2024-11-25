@@ -1,16 +1,17 @@
-
 #include "SkinnedModel.h"
 #include "../../Util.hpp"
 
 
-SkinnedModel::~SkinnedModel() {
+SkinnedModel::~SkinnedModel() 
+{
 }
 
-void BackAllMesh() {
-
+void BackAllMesh() 
+{
 }
 
-void SkinnedModel::UpdateBoneTransformsFromBindPose(AnimatedTransforms& animatedTransforms) {
+void SkinnedModel::UpdateBoneTransformsFromBindPose(AnimatedTransforms& animatedTransforms) 
+{
     // Traverse the tree
     for (int i = 0; i < m_joints.size(); i++)
     {
@@ -25,7 +26,8 @@ void SkinnedModel::UpdateBoneTransformsFromBindPose(AnimatedTransforms& animated
 
         m_joints[i].m_currentFinalTransform = GlobalTransformation;
 
-        if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
+        if (m_BoneMapping.find(NodeName) != m_BoneMapping.end())
+        {
             unsigned int BoneIndex = m_BoneMapping[NodeName];
             m_BoneInfo[BoneIndex].FinalTransformation = GlobalTransformation * m_BoneInfo[BoneIndex].BoneOffset;
             m_BoneInfo[BoneIndex].ModelSpace_AnimatedTransform = GlobalTransformation;
@@ -36,7 +38,8 @@ void SkinnedModel::UpdateBoneTransformsFromBindPose(AnimatedTransforms& animated
     animatedTransforms.worldspace.resize(m_joints.size());
     animatedTransforms.names.resize(m_joints.size());
 
-    for (unsigned int i = 0; i < m_NumBones; i++) {
+    for (unsigned int i = 0; i < m_NumBones; i++)
+    {
         animatedTransforms.local[i] = m_BoneInfo[i].FinalTransformation;
         animatedTransforms.worldspace[i] = m_BoneInfo[i].ModelSpace_AnimatedTransform;
         animatedTransforms.names[i] = m_BoneInfo[i].BoneName;
@@ -49,7 +52,8 @@ int SkinnedModel::FindAnimatedNodeIndex(float AnimationTime, const AnimatedNode*
     if (AnimationTime < animatedNode->m_nodeKeys[0].timeStamp)
         return -1; // you WERE returning -1 here
 
-    for (unsigned int i = 1; i < animatedNode->m_nodeKeys.size(); i++) {
+    for (unsigned int i = 1; i < animatedNode->m_nodeKeys.size(); i++)
+    {
         if (AnimationTime < animatedNode->m_nodeKeys[i].timeStamp)
             return i-1;
     }
@@ -63,13 +67,15 @@ void SkinnedModel::CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime,
     int NextIndex = (Index + 1);
 
 	// Is next frame out of range?
-	if (NextIndex == animatedNode->m_nodeKeys.size()) {
+	if (NextIndex == animatedNode->m_nodeKeys.size()) 
+    {
 		Out = animatedNode->m_nodeKeys[Index].positon;
 		return;
 	}
 
     // Nothing to report
-    if (Index == -1 || animatedNode->m_nodeKeys.size() == 1) {
+    if (Index == -1 || animatedNode->m_nodeKeys.size() == 1)
+    {
         Out = animatedNode->m_nodeKeys[0].positon;
         return;
     }
@@ -89,13 +95,15 @@ void SkinnedModel::CalcInterpolatedRotation(glm::quat& Out, float AnimationTime,
     int NextIndex = (Index + 1);
 
     // Is next frame out of range?
-    if (NextIndex == animatedNode->m_nodeKeys.size()) {
+    if (NextIndex == animatedNode->m_nodeKeys.size())
+    {
         Out = animatedNode->m_nodeKeys[Index].rotation;
         return;
     }
 
     // Nothing to report
-    if (Index == -1 || animatedNode->m_nodeKeys.size() == 1) {
+    if (Index == -1 || animatedNode->m_nodeKeys.size() == 1)
+    {
         Out = animatedNode->m_nodeKeys[0].rotation;
         return;
     }
@@ -116,13 +124,15 @@ void SkinnedModel::CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, 
     int NextIndex = (Index + 1);
 
 	// Is next frame out of range?
-	if (NextIndex == animatedNode->m_nodeKeys.size()) {
+	if (NextIndex == animatedNode->m_nodeKeys.size()) 
+    {
         Out = glm::vec3(animatedNode->m_nodeKeys[Index].scale);
 		return;
 	}
 
     // Nothing to report
-    if (Index == -1 || animatedNode->m_nodeKeys.size() == 1) {
+    if (Index == -1 || animatedNode->m_nodeKeys.size() == 1) 
+    {
         Out = glm::vec3(animatedNode->m_nodeKeys[0].scale);
         return;
     }
@@ -193,12 +203,10 @@ void SkinnedModel::UpdateBoneTransformsFromAnimation(float animTime, Animation* 
         if (Util::StrCmp("camera", NodeName) ||
             Util::StrCmp("camera_end", NodeName) ||
             Util::StrCmp("Camera_$AssimpFbx$_PostRotation", NodeName) ||
-            Util::StrCmp("Camera", NodeName)) {
-
-
+            Util::StrCmp("Camera", NodeName)) 
+        {
             //std::cout << i << ": " << NodeName << "\n";
             //std::cout << Util::Mat4ToString(GlobalTransformation) << "\n\n";
-
         }
 
         //10: Camera001_$AssimpFbx$_PreRotation
@@ -206,9 +214,9 @@ void SkinnedModel::UpdateBoneTransformsFromAnimation(float animTime, Animation* 
         //    12 : Camera001_$AssimpFbx$_PostRotation
        //     13 : Camera001
 
-
         if (Util::StrCmp("Camera", NodeName) ||
-            Util::StrCmp("Camera001", NodeName)) {
+            Util::StrCmp("Camera001", NodeName)) 
+        {
                 outCameraMatrix = GlobalTransformation;
                 outCameraMatrix[0][2] *= -1.0f; // yaw
                 outCameraMatrix[2][0] *= -1.0f; // yaw
@@ -219,7 +227,8 @@ void SkinnedModel::UpdateBoneTransformsFromAnimation(float animTime, Animation* 
         // Store the current transformation, so child nodes can access it
         m_joints[i].m_currentFinalTransform = GlobalTransformation;
 
-        if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
+        if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) 
+        {
             unsigned int BoneIndex = m_BoneMapping[NodeName];
             m_BoneInfo[BoneIndex].FinalTransformation = GlobalTransformation * m_BoneInfo[BoneIndex].BoneOffset;
             m_BoneInfo[BoneIndex].ModelSpace_AnimatedTransform = GlobalTransformation;
@@ -235,7 +244,8 @@ void SkinnedModel::UpdateBoneTransformsFromAnimation(float animTime, Animation* 
 
     animatedTransforms.Resize(m_NumBones);
 
-    for (unsigned int i = 0; i < m_NumBones; i++) {
+    for (unsigned int i = 0; i < m_NumBones; i++)
+    {
         animatedTransforms.local[i] = m_BoneInfo[i].FinalTransformation;
         animatedTransforms.worldspace[i] = m_BoneInfo[i].ModelSpace_AnimatedTransform;
         animatedTransforms.names[i] = m_BoneInfo[i].BoneName;
@@ -243,16 +253,17 @@ void SkinnedModel::UpdateBoneTransformsFromAnimation(float animTime, Animation* 
     }
 }
 
-
 //void SkinnedModel::UpdateBoneTransformsFromAnimation(float animTime, int animationIndex, std::vector<glm::mat4>& /*Transforms*/, std::vector<glm::mat4>& /*DebugAnimatedTransforms*/) {
 //    Animation* animation = m_animations[animationIndex];
 //}
 
-const AnimatedNode* SkinnedModel::FindAnimatedNode(Animation* animation, const char* NodeName) {
-    for (unsigned int i = 0; i < animation->m_animatedNodes.size(); i++) {
+const AnimatedNode* SkinnedModel::FindAnimatedNode(Animation* animation, const char* NodeName)
+{
+    for (unsigned int i = 0; i < animation->m_animatedNodes.size(); i++)
+    {
         const AnimatedNode* animatedNode = &animation->m_animatedNodes[i];
-
-        if (Util::StrCmp(animatedNode->m_nodeName, NodeName)) {
+        if (Util::StrCmp(animatedNode->m_nodeName, NodeName))
+        {
             return animatedNode;
         }
     }

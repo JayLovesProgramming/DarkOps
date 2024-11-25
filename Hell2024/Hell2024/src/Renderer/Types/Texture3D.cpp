@@ -53,10 +53,12 @@ void Texture3D::CleanUp()
     return;
 }
 
-OpenGLTexture3D& Texture3D::GetGLTexture3D() {
+OpenGLTexture3D& Texture3D::GetGLTexture3D() 
+{
     return glTexture3D;
 }
 
-VulkanTexture3D& Texture3D::GetVKTexture3D() {
+VulkanTexture3D& Texture3D::GetVKTexture3D() 
+{
     return vkTexture3D;
 }

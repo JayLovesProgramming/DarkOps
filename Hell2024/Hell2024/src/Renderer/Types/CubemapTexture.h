@@ -1,17 +1,20 @@
 #pragma once
+
 #include <string>
 #include "../../Util.hpp"
 #include "../../API/OpenGL/Types/GL_cubemapTexture.h"
 //#include "../API/Vulkan/Types/VK_cubeMaptexture.h"
 
-struct CubemapTexture {
-
+struct CubemapTexture 
+{
 public:
-
     CubemapTexture() = default;
-    CubemapTexture(std::string fullPath) {
+
+    CubemapTexture(std::string fullPath) 
+    {
         m_fullPath = fullPath;
     }
+
     void Load();
     void SetName(std::string name);
     void SetFiletype(std::string filetype);
@@ -33,5 +36,4 @@ private:
     std::string filetype;
     int width = 0;
     int height = 0;
-
 };

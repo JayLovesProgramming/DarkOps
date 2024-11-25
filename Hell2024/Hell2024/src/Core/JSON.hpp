@@ -1,40 +1,51 @@
 #pragma once
+
 #include "nlohmann/json.hpp"
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <glm/glm.hpp>
 
-struct JSONObject {
+struct JSONObject 
+{
 
     nlohmann::json data;
 
-    void WriteString(std::string elementName, std::string value) {
-        data[elementName] = value;
-    }
-    void WriteInt(std::string elementName, int value) {
-        data[elementName] = value;
-    }
-    void WriteFloat(std::string elementName, float value) {
-        data[elementName] = value;
-    }
-    void WriteArray(std::string elementName, std::vector<std::string> value) {
+    void WriteString(std::string elementName, std::string value)
+    {
         data[elementName] = value;
     }
 
-    std::string GetJSONAsString() {
+    void WriteInt(std::string elementName, int value)
+    {
+        data[elementName] = value;
+    }
+
+    void WriteFloat(std::string elementName, float value)
+    {
+        data[elementName] = value;
+    }
+
+    void WriteArray(std::string elementName, std::vector<std::string> value)
+    {
+        data[elementName] = value;
+    }
+
+    std::string GetJSONAsString()
+    {
         int indent = 4;
         return data.dump(indent);
     }
 
-    void SaveToFile(std::string filepath) {
+    void SaveToFile(std::string filepath) 
+    {
         std::ofstream out(filepath);
         out << GetJSONAsString();
         out.close();
     }
 
-    void test() {
-
+    void test() 
+    {
         std::vector<int> arr = { 1, 2, 3 };
 
         nlohmann::json data;

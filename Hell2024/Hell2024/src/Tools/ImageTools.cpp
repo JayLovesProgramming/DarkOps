@@ -6,14 +6,18 @@
 #include <filesystem>
 #include <mutex>
 
-namespace ImageTools {
+namespace ImageTools 
+{
     std::mutex g_consoleMutex;
 }
 
-void ImageTools::CompresssBC5(const char* filename, unsigned char* data, int width, int height, int numChannels) {
+void ImageTools::CompresssBC5(const char* filename, unsigned char* data, int width, int height, int numChannels)
+{
     // Copy RGB data and add Alpha channel
     uint8_t* rgbaData = (uint8_t*)malloc(width * height * 4);
-    for (int i = 0; i < width * height; ++i) {
+
+    for (int i = 0; i < width * height; ++i)
+    {
         rgbaData[i * 4 + 0] = data[i * 3 + 0];  // Copy Red channel
         rgbaData[i * 4 + 1] = data[i * 3 + 1];  // Copy Green channel
         rgbaData[i * 4 + 2] = data[i * 3 + 2];  // Copy Blue channel
@@ -39,7 +43,8 @@ void ImageTools::CompresssBC5(const char* filename, unsigned char* data, int wid
     destTexture.dwDataSize = CMP_CalculateBufferSize(&destTexture);
     destTexture.pData = (CMP_BYTE*)malloc(destTexture.dwDataSize);
 
-    if (destTexture.pData == nullptr) {
+    if (destTexture.pData == nullptr) 
+    {
         std::lock_guard<std::mutex> lock(g_consoleMutex);
         std::cerr << "Failed to allocate memory for destination texture!\n";
         free(rgbaData);
@@ -51,14 +56,16 @@ void ImageTools::CompresssBC5(const char* filename, unsigned char* data, int wid
 
     CMP_ERROR cmp_status = CMP_ConvertTexture(&srcTexture, &destTexture, &options, nullptr);
 
-    if (cmp_status != CMP_OK) {
+    if (cmp_status != CMP_OK) 
+    {
         std::lock_guard<std::mutex> lock(g_consoleMutex);
         std::cerr << "Compression failed with error code: " << cmp_status << "\n";
         free(destTexture.pData);
         free(rgbaData);
         return;
     } 
-    else {
+    else 
+    {
         std::lock_guard<std::mutex> lock(g_consoleMutex);
         std::cout << "Saving compressed texture: " << filename << "\n";
         SaveDDSFile(filename, destTexture);
@@ -67,12 +74,16 @@ void ImageTools::CompresssBC5(const char* filename, unsigned char* data, int wid
     } 
 }
 
-void ImageTools::CompresssDXT3(const char* filename, unsigned char* data, int width, int height, int numChannels) {
-    if (numChannels == 3) {
+void ImageTools::CompresssDXT3(const char* filename, unsigned char* data, int width, int height, int numChannels) 
+{
+    if (numChannels == 3)
+    {
         const uint64_t pitch = static_cast<uint64_t>(width) * 3UL;
-        for (auto r = 0; r < height; ++r) {
+        for (auto r = 0; r < height; ++r) 
+        {
             uint8_t* row = data + r * pitch;
-            for (auto c = 0UL; c < static_cast<uint64_t>(width); ++c) {
+            for (auto c = 0UL; c < static_cast<uint64_t>(width); ++c)
+            {
                 uint8_t* pixel = row + c * 3UL;
                 std::swap(pixel[0], pixel[2]);  // Swap Red and Blue channels using std::swap for clarity
             }
@@ -101,13 +112,15 @@ void ImageTools::CompresssDXT3(const char* filename, unsigned char* data, int wi
     options.fquality = 0.88f;
 
     CMP_ERROR cmp_status = CMP_ConvertTexture(&srcTexture, &destTexture, &options, nullptr);
-    if (cmp_status != CMP_OK) {
+    if (cmp_status != CMP_OK)
+    {
         free(destTexture.pData);
         std::lock_guard<std::mutex> lock(g_consoleMutex);
         std::cerr << "Compression failed for " << filename << " with error code: " << cmp_status << "\n";
         return;
     }
-    else {
+    else 
+    {
         CreateFolder("res/textures/dds/");
         SaveDDSFile(filename, destTexture);
         free(destTexture.pData);
@@ -116,20 +129,26 @@ void ImageTools::CompresssDXT3(const char* filename, unsigned char* data, int wi
     }
 }
 
-void ImageTools::CreateFolder(const char* path) {
+void ImageTools::CreateFolder(const char* path) 
+{
     std::filesystem::path dir(path);
-    if (!std::filesystem::exists(dir)) {
-        if (!std::filesystem::create_directories(dir) && !std::filesystem::exists(dir)) {
+    if (!std::filesystem::exists(dir)) 
+    {
+        if (!std::filesystem::create_directories(dir) && !std::filesystem::exists(dir)) 
+        {
             std::cout << "Failed to create directory: " << path << "\n";
         }
     }
 }
 
-CompressionType ImageTools::CompressionTypeFromTextureSuffix(const std::string& suffix) {
-    if (suffix == "NRM") {
+CompressionType ImageTools::CompressionTypeFromTextureSuffix(const std::string& suffix) 
+{
+    if (suffix == "NRM") 
+    {
         return CompressionType::BC5;
     }
-    else {
+    else 
+    {
         return CompressionType::DXT3;
     }
 }
