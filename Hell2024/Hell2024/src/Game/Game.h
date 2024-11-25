@@ -1,11 +1,12 @@
 #include "Player.h"
 
-namespace Game {
-
+namespace Game
+{
     enum class GameMode { GAME, EDITOR_TOP_DOWN, EDITOR_3D };
     enum class MultiplayerMode { NONE, LOCAL, ONLINE };
 
-    struct GameSettings {
+    struct GameSettings
+    {
         bool takeDamageOutside = false;
         glm::vec3 skyBoxTint = glm::vec3(1);
     };
@@ -38,5 +39,4 @@ namespace Game {
     inline int g_playerDeaths = -1;
     inline std::vector<glm::vec3> testPoints;
     inline std::vector<PlayerData> g_playerData;
-
 }

@@ -1,9 +1,11 @@
 #pragma once
+
 #include "../Renderer/Types/SkinnedModel.h"
 #include "../Renderer/Types/VertexBuffer.h"
 #include "../Physics/Ragdoll.h"
 
-struct MeshRenderingEntry {
+struct MeshRenderingEntry 
+{
     std::string meshName;
     int materialIndex = 0;
     int emissiveColorTexutreIndex = -1;
@@ -13,7 +15,8 @@ struct MeshRenderingEntry {
     int meshIndex = -1;
 };
 
-struct JointWorldMatrix {
+struct JointWorldMatrix 
+{
     const char* name;
     glm::mat4 worldMatrix;
 };
@@ -24,8 +27,8 @@ struct JointInfo {
     glm::mat4 worldTransform;
 };*/
 
-struct AnimatedGameObject {
-
+struct AnimatedGameObject 
+{
     enum AnimationMode { BINDPOSE, ANIMATION, RAGDOLL };
     enum class Flag { VIEW_WEAPON, CHARACTER_MODEL, NONE };
 
@@ -38,11 +41,9 @@ private:
     bool m_isGold = false;
 
 public:
-
     bool IsGold();
     void MakeGold();
     void MakeNotGold();
-
 
     bool m_useCameraMatrix = false;
     glm::mat4 m_cameraMatrix = glm::mat4(1);
@@ -117,7 +118,8 @@ public:
     std::vector<glm::mat4> _debugTransformsB;
     bool _hasRagdoll = false;
 
-    struct BoneDebugInfo {
+    struct BoneDebugInfo
+    {
         const char* name;
         const char* parentName;
         glm::vec3 worldPos;
@@ -133,17 +135,19 @@ public:
 
     glm::vec3 FindClosestParentAnimatedNode(std::vector<JointWorldMatrix>& worldMatrices, int parentIndex);
 
-    void SetBaseTransfromIndex(int index) {
+    void SetBaseTransfromIndex(int index) 
+    {
         baseTransformIndex = index;
     }
-    int GetBaseTransfromIndex() {
+
+    int GetBaseTransfromIndex() 
+    {
         return baseTransformIndex;
     }
 
     const char* GetCurrentAnimationName();
 
 private:
-
 	void UpdateAnimation(float deltaTime);
 	void CalculateBoneTransforms();
 
@@ -154,6 +158,4 @@ private:
 	std::string _name;
 	bool _animationIsComplete = true;
     int baseTransformIndex = -1;
-
-
 };

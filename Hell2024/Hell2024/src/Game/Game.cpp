@@ -1,5 +1,4 @@
-﻿
-#include "Game.h"
+﻿#include "Game.h"
 #include "Scene.h"
 #include "../BackEnd/BackEnd.h"
 #include "../Core/Audio.hpp"
@@ -12,8 +11,8 @@
 #include "../Pathfinding/Pathfinding2.h"
 #include "RapidHotload.h"
 
-namespace Game {
-
+namespace Game
+{
     GameMode _gameMode = {};
     MultiplayerMode _multiplayerMode = {};
     SplitscreenMode _splitscreenMode = {};
@@ -32,8 +31,8 @@ namespace Game {
 
     void EvaluateDebugKeyPresses();
 
-    void Create() {
-
+    void Create() 
+    {
         _gameMode = GameMode::GAME;
         _multiplayerMode = MultiplayerMode::LOCAL;
         _splitscreenMode = SplitscreenMode::NONE;
@@ -46,15 +45,11 @@ namespace Game {
 
         Scene::Init();
 
-
-
-
         Model* model = AssetManager::GetModelByName("SPAS_Isolated");
-        for (auto& idx : model->GetMeshIndices()) {
-
+        for (auto& idx : model->GetMeshIndices())
+        {
             Mesh* mesh = AssetManager::GetMeshByIndex(idx);
             std:cout << mesh->name << "\n";
-
         }
         
         std::cout << "\n";
@@ -70,13 +65,15 @@ namespace Game {
         std::cout << "Game::Create() succeeded\n";
     }
 
-    bool IsLoaded() {
+    bool IsLoaded() 
+    {
         return _isLoaded;
     }
 
-    void Update() {
-
-        if (g_firstFrame) {
+    void Update() 
+    {
+        if (g_firstFrame)
+        {
             g_thisFrame = glfwGetTime();
             g_firstFrame = false;
         }
@@ -91,7 +88,8 @@ namespace Game {
         g_time += deltaTime;
 
         // CSG
-        if (Input::KeyPressed(GLFW_KEY_O)) {
+        if (Input::KeyPressed(GLFW_KEY_O)) 
+        {
             Physics::ClearCollisionLists();
             Scene::LoadDefaultScene();
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
@@ -100,25 +98,33 @@ namespace Game {
         Pathfinding2::Update(deltaTime);
 
         // Editor
-        if (Input::KeyPressed(HELL_KEY_F1) || Input::KeyPressed(HELL_KEY_F2) || Input::KeyPressed(HELL_KEY_F3)) {
+        if (Input::KeyPressed(HELL_KEY_F1) || Input::KeyPressed(HELL_KEY_F2) || Input::KeyPressed(HELL_KEY_F3)) 
+        {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Editor::EnterEditor();
         }
-        if (Input::KeyPressed(HELL_KEY_TAB)) {
+
+        if (Input::KeyPressed(HELL_KEY_TAB)) 
+        {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
-            if (Editor::IsOpen()) {
+            if (Editor::IsOpen()) 
+            {
                 Editor::LeaveEditor();
             }
-            else {
+            else 
+            {
                 Editor::EnterEditor();
             }
         }
-        if (Editor::IsOpen()) {
+
+        if (Editor::IsOpen()) 
+        {
             Editor::Update(deltaTime);
         }
 
         // Physics
-        while (_deltaTimeAccumulator >= _fixedDeltaTime) {
+        while (_deltaTimeAccumulator >= _fixedDeltaTime) 
+        {
             _deltaTimeAccumulator -= _fixedDeltaTime;
             Physics::StepPhysics(_fixedDeltaTime);
         }
@@ -128,24 +134,23 @@ namespace Game {
 
         // Player update
         InputMulti::Update();
-        for (Player& player : g_players) {
+        for (Player& player : g_players)
+        {
             player.Update(deltaTime);
         }
         InputMulti::ResetMouseOffsets();
         Scene::Update(deltaTime);
 
-
-
-
-
-        if (g_dogDeaths == -1) {
+        if (g_dogDeaths == -1)
+        {
             std::ifstream file("DogDeaths.txt");
             std::stringstream buffer;
             buffer << file.rdbuf();
             g_dogDeaths = std::stoi(buffer.str());
         }
 
-        if (g_playerDeaths == -1) {
+        if (g_playerDeaths == -1)
+        {
             std::ifstream file("PlayerDeaths.txt");
             std::stringstream buffer;
             buffer << file.rdbuf();
@@ -153,17 +158,19 @@ namespace Game {
         }
 
         // Populate Player data
-        for (int i = 0; i < g_players.size(); i++) {
+        for (int i = 0; i < g_players.size(); i++)
+        {
             g_playerData[i].flashlightOn = g_players[i].m_flashlightOn;
         }
     }
 
-    void CreatePlayers(unsigned int playerCount) {
-
+    void CreatePlayers(unsigned int playerCount)
+    {
         g_players.clear();
         g_playerData.resize(4);
 
-        for (int i = 0; i < playerCount; i++) {
+        for (int i = 0; i < playerCount; i++)
+        {
             Game::g_players.push_back(Player(i));
         }
 
@@ -193,7 +200,8 @@ namespace Game {
         Game::g_players[0]._playerName = "Orion";
         Game::g_players[1]._playerName = "CrustyAssCracker";
 
-        if (g_players.size() == 4) {
+        if (g_players.size() == 4)
+        {
             p3characterModel->LoadRagdoll("UnisexGuy3.rag", p3RagdollCollisionGroupFlags);
             p4characterModel->LoadRagdoll("UnisexGuy3.rag", p4RagdollCollisionGroupFlags);
             Game::g_players[2]._interactFlags = RaycastGroup::RAYCAST_ENABLED;
@@ -206,156 +214,193 @@ namespace Game {
             Game::g_players[3]._playerName = "P4";
         }
 
-
-        for (RigidComponent& rigid : p1characterModel->_ragdoll._rigidComponents) {
+        for (RigidComponent& rigid : p1characterModel->_ragdoll._rigidComponents)
+        {
             PxShape* shape;
             rigid.pxRigidBody->getShapes(&shape, 1);
             shape->setFlag(PxShapeFlag::eVISUALIZATION, false);
         }
     }
 
-    const int GetPlayerCount() {
+    const int GetPlayerCount()
+    {
         return g_players.size();
     }
 
-    const GameMode& GetGameMode() {
+    const GameMode& GetGameMode() 
+    {
         return _gameMode;
     }
 
-    Player* GetPlayerByIndex(unsigned int index) {
-        if (index >= 0 && index < g_players.size()) {
+    Player* GetPlayerByIndex(unsigned int index)
+    {
+        if (index >= 0 && index < g_players.size())
+        {
             return &g_players[index];
         }
-        else {
+        else 
+        {
             //std::cout << "Game::GetPlayerByIndex() failed because index was out of range. Size of Game::_players is " << GetPlayerCount() << "\n";
             return nullptr;
         }
     }
 
-    void SetPlayerKeyboardAndMouseIndex(int playerIndex, int keyboardIndex, int mouseIndex) {
-        if (playerIndex >= 0 && playerIndex < Game::GetPlayerCount()) {
+    void SetPlayerKeyboardAndMouseIndex(int playerIndex, int keyboardIndex, int mouseIndex)
+    {
+        if (playerIndex >= 0 && playerIndex < Game::GetPlayerCount())
+        {
             g_players[playerIndex].SetKeyboardIndex(keyboardIndex);
             g_players[playerIndex].SetMouseIndex(mouseIndex);
         }
     }
 
-    void SetPlayerGroundedStates() {
-        for (Player& player : g_players) {
+    void SetPlayerGroundedStates()
+    {
+        for (Player& player : g_players) 
+        {
             player._isGrounded = false;
-            for (auto& report : Physics::_characterCollisionReports) {
-                if (report.characterController == player._characterController && report.hitNormal.y > 0.5f) {
+            for (auto& report : Physics::_characterCollisionReports)
+            {
+                if (report.characterController == player._characterController && report.hitNormal.y > 0.5f)
+                {
                     player._isGrounded = true;
                 }
             }
         }
     }
 
-    void GiveControlToPlayer1() {
+    void GiveControlToPlayer1()
+    {
         SetPlayerKeyboardAndMouseIndex(0, 0, 0);
         SetPlayerKeyboardAndMouseIndex(1, 1, 1);
         SetPlayerKeyboardAndMouseIndex(2, 1, 1);
         SetPlayerKeyboardAndMouseIndex(3, 1, 1);
-        for (Player& player : g_players) {
+
+        for (Player& player : g_players)
+        {
             g_players[0].DisableControl();
         }
+
         g_players[0].EnableControl();
     }
 
-    const int GetPlayerIndexFromPlayerPointer(Player* player) {
-        for (int i = 0; i < g_players.size(); i++) {
-            if (&g_players[i] == player) {
+    const int GetPlayerIndexFromPlayerPointer(Player* player) 
+    {
+        for (int i = 0; i < g_players.size(); i++) 
+        {
+            if (&g_players[i] == player)
+            {
                 return i;
             }
         }
         return -1;
     }
 
-
-    const MultiplayerMode& GetMultiplayerMode() {
+    const MultiplayerMode& GetMultiplayerMode() 
+    {
         return _multiplayerMode;
     }
 
-    const SplitscreenMode& GetSplitscreenMode() {
+    const SplitscreenMode& GetSplitscreenMode() 
+    {
         return _splitscreenMode;
     }
 
-    void NextSplitScreenMode() {
+    void NextSplitScreenMode()
+    {
         int currentSplitScreenMode = (int)(_splitscreenMode);
         currentSplitScreenMode++;
-        if (currentSplitScreenMode == (int)(SplitscreenMode::SPLITSCREEN_MODE_COUNT)) {
+        if (currentSplitScreenMode == (int)(SplitscreenMode::SPLITSCREEN_MODE_COUNT))
+        {
             currentSplitScreenMode = 0;
         }
         _splitscreenMode = (SplitscreenMode)currentSplitScreenMode;
     }
 
-    void SetSplitscreenMode(SplitscreenMode mode) {
+    void SetSplitscreenMode(SplitscreenMode mode)
+    {
         _splitscreenMode = mode;
     }
 
-    void PrintPlayerControlIndices() {
+    void PrintPlayerControlIndices()
+    {
         std::cout << "\n";
-        for (int i = 0; i < g_players.size(); i++) {
+        for (int i = 0; i < g_players.size(); i++)
+        {
             std::cout << "Player " << i << ": keyboard[";
             std::cout << g_players[i].GetKeyboardIndex() << "] mouse[";
             std::cout << g_players[i].GetMouseIndex() << "]\n";
         }
     }
 
-    void RespawnAllPlayers() {
-        for (Player& player : g_players) {
+    void RespawnAllPlayers()
+    {
+        for (Player& player : g_players) 
+        {
             player.Respawn();
         }
     }
 
-    void RespawnAllDeadPlayers() {
-        for (Player& player : g_players) {
+    void RespawnAllDeadPlayers()
+    {
+        for (Player& player : g_players)
+        {
             if (player.IsDead()) {
                 player.Respawn();
             }
         }
     }
 
-    void EvaluateDebugKeyPresses() {
-
-        if (Input::KeyPressed(HELL_KEY_B)) {
+    void EvaluateDebugKeyPresses() 
+    {
+        if (Input::KeyPressed(HELL_KEY_B))
+        {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Renderer::NextDebugLineRenderMode();
         }
-        if (Input::KeyPressed(HELL_KEY_X)) {
+        if (Input::KeyPressed(HELL_KEY_X))
+        {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Renderer::PreviousRenderMode();
         }
-        if (Input::KeyPressed(HELL_KEY_Z)) {
+        if (Input::KeyPressed(HELL_KEY_Z)) 
+        {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Renderer::NextRenderMode();
         }
-        if (Input::KeyPressed(GLFW_KEY_Y)) {
+        if (Input::KeyPressed(GLFW_KEY_Y))
+        {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Renderer::ToggleProbes();
         }
-        if (!Editor::IsOpen()) {
-            if (Input::KeyPressed(HELL_KEY_1)) {
+        if (!Editor::IsOpen()) 
+        {
+            if (Input::KeyPressed(HELL_KEY_1))
+            {
                 SetPlayerKeyboardAndMouseIndex(0, 0, 0);
                 SetPlayerKeyboardAndMouseIndex(1, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(2, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(3, 1, 1);
                 //PrintPlayerControlIndices();
             }
-            if (Input::KeyPressed(HELL_KEY_2)) {
+            if (Input::KeyPressed(HELL_KEY_2))
+            {
                 SetPlayerKeyboardAndMouseIndex(0, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(1, 0, 0);
                 SetPlayerKeyboardAndMouseIndex(2, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(3, 1, 1);
                 //PrintPlayerControlIndices();
             }
-            if (Input::KeyPressed(HELL_KEY_3)) {
+            if (Input::KeyPressed(HELL_KEY_3)) 
+            {
                 SetPlayerKeyboardAndMouseIndex(0, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(1, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(2, 0, 0);
                 SetPlayerKeyboardAndMouseIndex(3, 1, 1);
                 //PrintPlayerControlIndices();
             }
-            if (Input::KeyPressed(HELL_KEY_4)) {
+            if (Input::KeyPressed(HELL_KEY_4)) 
+            {
                 SetPlayerKeyboardAndMouseIndex(0, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(1, 1, 1);
                 SetPlayerKeyboardAndMouseIndex(2, 1, 1);
@@ -363,25 +408,31 @@ namespace Game {
                 //PrintPlayerControlIndices();
             }
         }
-        if (Input::KeyPressed(HELL_KEY_J)) {
+        if (Input::KeyPressed(HELL_KEY_J)) 
+        {
             RespawnAllDeadPlayers();
         }
-        if (Input::KeyPressed(HELL_KEY_K)) {
-            if (Editor::IsOpen()) {
+        if (Input::KeyPressed(HELL_KEY_K)) 
+        {
+            if (Editor::IsOpen()) 
+            {
                 std::cout << "Pos:" << Util::Vec3ToString(Game::GetPlayerByIndex(0)->GetFeetPosition()) << "\n";
                 std::cout << "Rot:" << Util::Vec3ToString(Game::GetPlayerByIndex(0)->GetViewRotation()) << "\n";
             }
-            else {
+            else 
+            {
                 RespawnAllPlayers();
             }
         }
-        if (Input::KeyPressed(HELL_KEY_GRAVE_ACCENT)) {
+        if (Input::KeyPressed(HELL_KEY_GRAVE_ACCENT))
+        {
             _showDebugText = !_showDebugText;
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
         }
     }
 
-    const bool DebugTextIsEnabled() {
+    const bool DebugTextIsEnabled()
+    {
         return _showDebugText;
     }
 
@@ -392,12 +443,12 @@ namespace Game {
     █▀▀  █  █   █▀▄   █ █ █▀▀ ▀▀█
     ▀   ▀▀▀ ▀▀▀ ▀ ▀   ▀▀▀ ▀   ▀▀▀  */
 
-
-    void SpawnAmmo(std::string type, glm::vec3 position, glm::vec3 rotation, bool wakeOnStart) {
-
+    void SpawnAmmo(std::string type, glm::vec3 position, glm::vec3 rotation, bool wakeOnStart)
+    {
         AmmoInfo* ammoInfo = WeaponManager::GetAmmoInfoByName(type);
 
-        if (ammoInfo) {
+        if (ammoInfo)
+        {
             Scene::CreateGameObject();
             GameObject* pickup = Scene::GetGameObjectByIndex(Scene::GetGameObjectCount() - 1);
             pickup->SetPosition(position);
@@ -417,9 +468,10 @@ namespace Game {
         }
     }
 
-    void SpawnPickup(PickUpType pickupType, glm::vec3 position, glm::vec3 rotation, bool wakeOnStart) {
-
-        if (pickupType == PickUpType::NONE) {
+    void SpawnPickup(PickUpType pickupType, glm::vec3 position, glm::vec3 rotation, bool wakeOnStart)
+    {
+        if (pickupType == PickUpType::NONE)
+        {
             return;
         }
 
@@ -433,7 +485,8 @@ namespace Game {
         pickup->SetKinematic(false);
         pickup->SetWakeOnStart(wakeOnStart);
 
-        if (pickupType == PickUpType::GLOCK_AMMO) {
+        if (pickupType == PickUpType::GLOCK_AMMO)
+        {
             pickup->SetModel("GlockAmmoBox");
             pickup->SetName("GlockAmmo_PickUp");
             pickup->SetMeshMaterial("GlockAmmoBox");
@@ -443,7 +496,8 @@ namespace Game {
             pickup->UpdateRigidBodyMassAndInertia(150.0f);
         }
 
-        if (pickupType == PickUpType::TOKAREV_AMMO) {
+        if (pickupType == PickUpType::TOKAREV_AMMO)
+        {
             pickup->SetModel("TokarevAmmoBox");
             pickup->SetName("GlockAmmo_PickUp");
             pickup->SetMeshMaterial("TokarevAmmoBox");
@@ -454,13 +508,13 @@ namespace Game {
         }
     }
 
-    float GetTime() {
+    float GetTime()
+    {
         return g_time;
     }
 
-    // sETTINGS
-
-    const GameSettings& GetSettings() {
+    const GameSettings& GetSettings()
+    {
         return g_gameSettings;
     }
 }

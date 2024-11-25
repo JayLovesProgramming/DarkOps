@@ -1,12 +1,13 @@
 #pragma once
+
 #include "HellCommon.h"
 #include "../Game/AnimatedGameObject.h"
 #include "../Pathfinding/Pathfinding2.h"
 
 #define DOG_MAX_HEALTH 45
 
-struct Dobermann {
-
+struct Dobermann
+{
     glm::vec3 m_initialPosition = glm::vec3(0);
     glm::vec3 m_currentPosition = glm::vec3(0);
     float m_initialRotation = 0;

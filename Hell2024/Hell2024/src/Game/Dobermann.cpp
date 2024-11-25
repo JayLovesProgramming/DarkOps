@@ -4,8 +4,8 @@
 #include "../Game/Game.h"
 #include "../Timer.hpp"
 
-
-void Dobermann::Init() {
+void Dobermann::Init() 
+{
     m_animatedGameObjectIndex = Scene::CreateAnimatedGameObject();
     AnimatedGameObject* animatedGameObject = GetAnimatedGameObject();
     animatedGameObject->SetFlag(AnimatedGameObject::Flag::NONE);
@@ -47,26 +47,30 @@ void Dobermann::Init() {
 
 }
 
-void Dobermann::GiveDamage(int amount, int targetPlayerIndex) {
+void Dobermann::GiveDamage(int amount, int targetPlayerIndex) 
+{
     m_health -= amount;
     int rand = Util::RandomInt(0, 7);
     std::string audioName = "FLY_Bullet_Impact_Flesh_0" + std::to_string(rand) + ".wav";
     Audio::PlayAudio(audioName, 1.0f);
     m_currentState = DobermannState::KAMAKAZI;
     m_targetPlayerIndex = targetPlayerIndex;
-    if (m_health <= 0) {
+    if (m_health <= 0)
+    {
         Kill();
     }
 }
 
-void Dobermann::Revive() {
+void Dobermann::Revive()
+{
     m_currentState = DobermannState::KAMAKAZI;
     m_health = DOG_MAX_HEALTH;
     m_characterController->setFootPosition({ m_currentPosition.x, m_currentPosition.y, m_currentPosition.z });
     m_targetPlayerIndex = 1;
 }
 
-void Dobermann::Kill() {
+void Dobermann::Kill() 
+{
     AnimatedGameObject* animatedGameObject = GetAnimatedGameObject();
     animatedGameObject->SetAnimatedModeToRagdoll();
     Audio::PlayAudio("Dobermann_Death.wav", 1.5f);
@@ -81,26 +85,32 @@ void Dobermann::Kill() {
     out.close();
 }
 
-void Dobermann::Update(float deltaTime) {
-
-    if (Input::KeyPressed(HELL_KEY_7)) {
+void Dobermann::Update(float deltaTime) 
+{
+    if (Input::KeyPressed(HELL_KEY_7)) 
+    {
         m_currentState = DobermannState::RETURN_TO_ORIGIN;
     }
 
     Player* targetPlayer = Game::GetPlayerByIndex(m_targetPlayerIndex);
     AnimatedGameObject* animatedGameObject = GetAnimatedGameObject();
 
-    if (m_currentState == DobermannState::DOG_SHAPED_PIECE_OF_MEAT) {
+    if (m_currentState == DobermannState::DOG_SHAPED_PIECE_OF_MEAT) 
+    {
         UpdateDead(deltaTime);
     }
-    else {
-        if (m_currentState == DobermannState::RETURN_TO_ORIGIN) {
+    else
+    {
+        if (m_currentState == DobermannState::RETURN_TO_ORIGIN) 
+        {
             FindPath(m_initialPosition);
         }
-        if (m_currentState == DobermannState::WALK_TO_TARGET) {
+        if (m_currentState == DobermannState::WALK_TO_TARGET)
+        {
             FindPath(m_targetPosition);
         }
-        if (m_currentState == DobermannState::KAMAKAZI && targetPlayer) {
+        if (m_currentState == DobermannState::KAMAKAZI && targetPlayer)
+        {
              FindPath(targetPlayer->GetFeetPosition());
         }
         UpdateMovement(deltaTime);
@@ -110,16 +120,20 @@ void Dobermann::Update(float deltaTime) {
     UpdateAudio(deltaTime);
 
     // Is dog in kamakazi but another player is closer (maybe scrap this if it sucks)
-    if (m_currentState == DobermannState::KAMAKAZI) {
+    if (m_currentState == DobermannState::KAMAKAZI) 
+    {
         m_targetPlayerIndex = -1;
         float closestDistance = 99999;
-        for (int i = 0; i < Game::GetPlayerCount(); i++) {
+        for (int i = 0; i < Game::GetPlayerCount(); i++)
+        {
             Player* player = Game::GetPlayerByIndex(i);
-            if (player->IsAlive()) {
+            if (player->IsAlive())
+            {
                 glm::vec3 playerFeetPosiition = player->GetFeetPosition();
                 glm::vec3 dobermannFeetPosition = Util::PxVec3toGlmVec3(m_characterController->getFootPosition());
                 float distToPlayer = glm::distance(playerFeetPosiition, dobermannFeetPosition);
-                if (distToPlayer < closestDistance) {
+                if (distToPlayer < closestDistance) 
+                {
                     m_targetPlayerIndex = i;
                     closestDistance = distToPlayer;
                 }
@@ -128,13 +142,16 @@ void Dobermann::Update(float deltaTime) {
     }
 
     // Target is dead? then lay
-    if (m_currentState == DobermannState::KAMAKAZI && targetPlayer && targetPlayer->IsDead()) {
+    if (m_currentState == DobermannState::KAMAKAZI && targetPlayer && targetPlayer->IsDead()) 
+    {
         // Pick a random action
         int rand = Util::RandomInt(0, 1);
-        if (rand == 0) {
+        if (rand == 0)
+        {
             m_currentState = DobermannState::RETURN_TO_ORIGIN;
         }
-        if (rand == 1) {
+        if (rand == 1)
+        {
             m_currentState = DobermannState::LAY;
         }
         // Heal to full health
@@ -142,60 +159,73 @@ void Dobermann::Update(float deltaTime) {
 
     }
     // Lay when reached home?
-    if (GetDistanceToTarget() < 0.1f) {
+    if (GetDistanceToTarget() < 0.1f)
+    {
        if (m_currentState == DobermannState::RETURN_TO_ORIGIN ||
-           m_currentState == DobermannState::WALK_TO_TARGET) {
+           m_currentState == DobermannState::WALK_TO_TARGET) 
+       {
            m_currentState = DobermannState::LAY;
        }
     }
 }
 
-void Dobermann::UpdateDead(float deltaTime) {
+void Dobermann::UpdateDead(float deltaTime)
+{
     m_characterController->setFootPosition({ 0, -10, 0 });
     m_pathToTarget.points.clear();
 }
 
-void Dobermann::FindPath(glm::vec3 targetPosition) {
+void Dobermann::FindPath(glm::vec3 targetPosition)
+{
     m_pathToTarget = Pathfinding2::FindPath(m_currentPosition, targetPosition);
     m_targetPosition = targetPosition;
 }
 
-void Dobermann::UpdateMovement(float deltaTime) {
-           
-    if (m_pathToTarget.Found()) {
-
+void Dobermann::UpdateMovement(float deltaTime) 
+{
+    if (m_pathToTarget.Found())
+    {
         // Speed
         m_currentSpeed = 0;
         m_currentRotationSpeed = 0;
-        if (m_currentState == DobermannState::DOG_SHAPED_PIECE_OF_MEAT) {
+        if (m_currentState == DobermannState::DOG_SHAPED_PIECE_OF_MEAT) 
+        {
             m_currentSpeed = 0;
             m_currentRotationSpeed = 0;
         }
-        if (m_currentState == DobermannState::KAMAKAZI) {
+        if (m_currentState == DobermannState::KAMAKAZI)
+        {
             m_currentSpeed = m_runSpeed;
             m_currentRotationSpeed = 0.2;
         }
         else if (m_currentState == DobermannState::RETURN_TO_ORIGIN ||
-            m_currentState == DobermannState::WALK_TO_TARGET) {
+            m_currentState == DobermannState::WALK_TO_TARGET)
+        {
             m_currentSpeed = 0.5f;
             m_currentRotationSpeed = 0.1;
         }
         // Deliver damage
-        if (GetDistanceToTarget() < 1.0f && m_currentState == DobermannState::KAMAKAZI) {            
+        if (GetDistanceToTarget() < 1.0f && m_currentState == DobermannState::KAMAKAZI) 
+        {            
             Player* targetPlayer = Game::GetPlayerByIndex(m_targetPlayerIndex);
-            if (targetPlayer) {
+            if (targetPlayer)
+            {
                 m_currentSpeed = m_currentSpeed * 0.5f; // GROSS FIX THIS
                 targetPlayer->_health -= 3;
                 targetPlayer->GiveDamageColor();
                 static float damageAudioTimer = 0;
                 damageAudioTimer += deltaTime;
-                if (damageAudioTimer > 0.85f) {
+
+                if (damageAudioTimer > 0.85f)
+                {
                     damageAudioTimer = 0.0f;
                     Audio::PlayAudio("Pain.wav", 1.0f);
                     Audio::PlayAudio("Doberman_Attack.wav", 1.0f);
                 }
+
                 // Save death stat to file
-                if (targetPlayer->_health <= 0) {
+                if (targetPlayer->_health <= 0) 
+                {
                     Game::g_playerDeaths++;
                     std::ofstream out("PlayerDeaths.txt");
                     out << Game::g_playerDeaths;
@@ -204,15 +234,14 @@ void Dobermann::UpdateMovement(float deltaTime) {
             }
         }
 
-
         Transform test;
         test.position = m_currentPosition;
         test.rotation.y = m_currentRotation;
 
         AnimatedGameObject* animatedGameObject = GetAnimatedGameObject();
         // Move
-        if (m_health > 0 && m_currentState != DobermannState::LAY) {
-
+        if (m_health > 0 && m_currentState != DobermannState::LAY)
+        {
             glm::vec3 target = m_pathToTarget.points[1] * glm::vec3(1, 0, 1); // this might need to be points[1]
             glm::vec3 dogPosition = animatedGameObject->_transform.position * glm::vec3(1, 0, 1);
             float maxAllowedDirChange = 0.6f;
@@ -225,12 +254,15 @@ void Dobermann::UpdateMovement(float deltaTime) {
             //}
             //else {
             //glm::vec3 enemyForward = animatedGameObject->_transform.to_forward_vector();
+
             glm::vec3 enemyForward = test.to_forward_vector();
             FacingDirection facingDirection = Util::DetermineFacingDirection(enemyForward, target, test.position);
-            if (facingDirection == FacingDirection::LEFT) {
+            if (facingDirection == FacingDirection::LEFT) 
+            {
                 m_currentRotation += maxAllowedDirChange * m_currentRotationSpeed;
             }
-            else {
+            else
+            {
                 m_currentRotation -= maxAllowedDirChange * m_currentRotationSpeed;
             }
 
@@ -241,20 +273,17 @@ void Dobermann::UpdateMovement(float deltaTime) {
             data.mFilterData = &filterData;
             PxF32 minDist = 0.001f;
             float fixedDeltaTime = (1.0f / 60.0f);
-
-
-            
             float len = glm::length(enemyForward);
             glm::vec3 displacement;
-            if (len != 0.0) {
+
+            if (len != 0.0) 
+            {
                 displacement = (enemyForward / len) * m_currentSpeed * deltaTime;
             }
             m_characterController->move(PxVec3(displacement.x, -0.981f, displacement.z), minDist, fixedDeltaTime, data);
             m_currentPosition = Util::PxVec3toGlmVec3(m_characterController->getFootPosition());
             // Update render position*/
             animatedGameObject->SetPosition(m_currentPosition);
-
-
 
             // Rotation
             float newRotation = Util::FInterpTo(animatedGameObject->_transform.rotation.y, m_currentRotation, deltaTime, 15.1f);
@@ -270,41 +299,53 @@ void Dobermann::UpdateMovement(float deltaTime) {
     }
 }
 
-void Dobermann::UpdateAnimation() {
+void Dobermann::UpdateAnimation() 
+{
     AnimatedGameObject* animatedGameObject = GetAnimatedGameObject();
-    if (animatedGameObject) {
-        if (m_health > 0) {
+    if (animatedGameObject) 
+    {
+        if (m_health > 0)
+        {
             if (m_currentState == DobermannState::RETURN_TO_ORIGIN ||
-                m_currentState == DobermannState::WALK_TO_TARGET) {
+                m_currentState == DobermannState::WALK_TO_TARGET) 
+            {
                 animatedGameObject->PlayAndLoopAnimation("Dobermann_Walk", 1.3f);
             }
-            if (m_currentState == DobermannState::KAMAKAZI) {
-                if (GetDistanceToTarget() < 1.0) {
+            if (m_currentState == DobermannState::KAMAKAZI) 
+            {
+                if (GetDistanceToTarget() < 1.0)
+                {
                     animatedGameObject->PlayAndLoopAnimation("Dobermann_Attack_Jump_Cut", 1.0f);
                 }
-                else {
+                else 
+                {
                     animatedGameObject->PlayAndLoopAnimation("Dobermann_Run", 1.0f);
                 }
             }
-            if (m_currentState == DobermannState::LAY) {
+            if (m_currentState == DobermannState::LAY) 
+            {
                 animatedGameObject->PlayAndLoopAnimation("Dobermann_Lay", 1.2f);
             }
-            if (m_currentState == DobermannState::DOG_SHAPED_PIECE_OF_MEAT) {
+            if (m_currentState == DobermannState::DOG_SHAPED_PIECE_OF_MEAT)
+            {
                 animatedGameObject->SetAnimatedModeToRagdoll();
             }
         }
     }
-    else {
+    else 
+    {
         std::cout << "Dobermann has nullptr AnimatedGameObject\n";
     }
 }
 
-void Dobermann::UpdateAudio(float deltaTime) {
-
+void Dobermann::UpdateAudio(float deltaTime)
+{
     // Play footsteps
-    if (m_currentState == DobermannState::KAMAKAZI) {
+    if (m_currentState == DobermannState::KAMAKAZI)
+    {
         float footstepAudioLoopLength = 0.1875f;
-        if (m_footstepAudioTimer == 0) {
+        if (m_footstepAudioTimer == 0)
+        {
             const std::vector<const char*> footstepFilenames = {
                 "Dobermann_Run0.wav",
                 "Dobermann_Run1.wav",
@@ -315,29 +356,35 @@ void Dobermann::UpdateAudio(float deltaTime) {
             int random = rand() % 5;
             Audio::PlayAudio(footstepFilenames[random], 0.24f);
         }
+
         m_footstepAudioTimer += deltaTime;
-        if (m_footstepAudioTimer > footstepAudioLoopLength) {
+        if (m_footstepAudioTimer > footstepAudioLoopLength)
+        {
             m_footstepAudioTimer = 0;
         }
     }
 
 }
 
-
-float Dobermann::GetDistanceToTarget() {
+float Dobermann::GetDistanceToTarget()
+{
     return glm::distance(m_currentPosition, m_targetPosition);
 }
 
-
-AnimatedGameObject* Dobermann::GetAnimatedGameObject() {
+AnimatedGameObject* Dobermann::GetAnimatedGameObject()
+{
     return Scene::GetAnimatedGameObjectByIndex(m_animatedGameObjectIndex);
 }
 
-void Dobermann::CleanUp() {
-    if (m_shape) {
+void Dobermann::CleanUp() 
+{
+    if (m_shape) 
+    {
         m_shape->release();
     }
-    if (m_characterController) {
+
+    if (m_characterController)
+    {
         m_characterController->release();
     }
 }
