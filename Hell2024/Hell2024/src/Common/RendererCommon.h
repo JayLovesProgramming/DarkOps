@@ -33,7 +33,8 @@
 #define MAX_CSG_CUBE_COUNT 4096
 #define MAX_SKINNED_MESH 96
 
-enum Alignment {
+enum Alignment 
+{
     CENTERED,
     TOP_LEFT,
     TOP_RIGHT,
@@ -41,14 +42,16 @@ enum Alignment {
     BOTTOM_RIGHT
 };
 
-struct ViewportInfo {
+struct ViewportInfo 
+{
     int width = 0;
     int height = 0;
     int xOffset = 0;
     int yOffset = 0;
 };
 
-struct DrawIndexedIndirectCommand {
+struct DrawIndexedIndirectCommand 
+{
     uint32_t indexCount;
     uint32_t instanceCount;
     uint32_t firstIndex;
@@ -56,7 +59,8 @@ struct DrawIndexedIndirectCommand {
     uint32_t baseInstance;
 };
 
-struct GPULight {
+struct GPULight 
+{
     float posX;
     float posY;
     float posZ;
@@ -71,7 +75,8 @@ struct GPULight {
     int lightVolumeAABBIsDirty;
 };
 
-struct RenderItem2D {
+struct RenderItem2D
+{
     glm::mat4 modelMatrix = glm::mat4(1);
     float colorTintR;
     float colorTintG;
@@ -79,8 +84,8 @@ struct RenderItem2D {
     int textureIndex;
 };
 
-struct RenderItem3D {
-
+struct RenderItem3D 
+{
     glm::mat4 modelMatrix = glm::mat4(1);
     glm::mat4 inverseModelMatrix = glm::mat4(1);
 
@@ -103,7 +108,8 @@ struct RenderItem3D {
     float padding2;
 
     // Overloading < operator for sorting with std::sort
-    bool operator<(const RenderItem3D& obj) const {
+    bool operator<(const RenderItem3D& obj) const 
+    {
         return meshIndex < obj.meshIndex;
     }
 };
@@ -141,16 +147,16 @@ struct RenderItem3D {
 };
 };*/
 
-struct CSGInstance {
+struct CSGInstance
+{
     int baseColorTextureIndex;
     int normalTextureIndex;
     int rmaTextureIndex;
     int padding;
 };
 
-
-struct SkinnedRenderItem {
-
+struct SkinnedRenderItem 
+{
     glm::mat4 modelMatrix = glm::mat4(1);
     glm::mat4 inverseModelMatrix = glm::mat4(1);
     int originalMeshIndex;
@@ -159,9 +165,8 @@ struct SkinnedRenderItem {
     int isGold;
 };
 
-
-struct CameraData {
-
+struct CameraData 
+{
     glm::mat4 projection = glm::mat4(1);
     glm::mat4 projectionInverse = glm::mat4(1);
     glm::mat4 view = glm::mat4(1);
@@ -183,30 +188,40 @@ struct CameraData {
     float colorMultiplierB;
 };
 
-struct BoundingBox {
+struct BoundingBox 
+{
     glm::vec3 size;
     glm::vec3 offsetFromModelOrigin;
 };
 
-struct Vertex {
+struct Vertex 
+{
     Vertex() = default;
-    Vertex(glm::vec3 pos) {
+
+    Vertex(glm::vec3 pos) 
+    {
         position = pos;
     }
-    Vertex(glm::vec3 pos, glm::vec3 norm) {
+
+    Vertex(glm::vec3 pos, glm::vec3 norm)
+    {
         position = pos;
         normal = norm;
     }
-   glm::vec3 position = glm::vec3(0);
-   glm::vec3 normal = glm::vec3(0);
-   glm::vec2 uv = glm::vec2(0);
-   glm::vec3 tangent = glm::vec3(0);
-    bool operator==(const Vertex& other) const {
+
+    glm::vec3 position = glm::vec3(0);
+    glm::vec3 normal = glm::vec3(0);
+    glm::vec2 uv = glm::vec2(0);
+    glm::vec3 tangent = glm::vec3(0);
+
+    bool operator==(const Vertex& other) const 
+    {
         return position == other.position && normal == other.normal && uv == other.uv;
     }
 };
 
-struct WeightedVertex {
+struct WeightedVertex 
+{
     glm::vec3 position = glm::vec3(0);
     glm::vec3 normal = glm::vec3(0);
     glm::vec2 uv = glm::vec2(0);
@@ -214,29 +229,38 @@ struct WeightedVertex {
     glm::ivec4 boneID = glm::ivec4(0);
     glm::vec4 weight = glm::vec4(0);
 
-    bool operator==(const Vertex& other) const {
+    bool operator==(const Vertex& other) const 
+    {
         return position == other.position && normal == other.normal && uv == other.uv;
     }
 };
 
-struct DebugVertex {
+struct DebugVertex 
+{
     glm::vec3 position = glm::vec3(0);
     glm::vec3 color = glm::vec3(0);
 };
 
-struct CSGVertex {
+struct CSGVertex 
+{
     CSGVertex() = default;
-    CSGVertex(glm::vec3 pos) {
+
+    CSGVertex(glm::vec3 pos) 
+    {
         position = pos;
     }
-    CSGVertex(glm::vec3 pos, glm::vec3 norm) {
+
+    CSGVertex(glm::vec3 pos, glm::vec3 norm) 
+    {
         position = pos;
         normal = norm;
     }
+
     glm::vec3 position = glm::vec3(0);
     glm::vec3 normal = glm::vec3(0);
     glm::vec2 uv = glm::vec2(0);
     glm::vec3 tangent = glm::vec3(0);
+
     int materialIndex = 0;
 };
 
@@ -249,9 +273,12 @@ namespace std {
     };
 }*/
 
-namespace std {
-    template<> struct hash<Vertex> {
-        size_t operator()(Vertex const& vertex) const {
+namespace std 
+{
+    template<> struct hash<Vertex> 
+    {
+        size_t operator()(Vertex const& vertex) const 
+        {
             size_t h1 = hash<glm::vec3>()(vertex.position);
             size_t h2 = hash<glm::vec3>()(vertex.normal);
             size_t h3 = hash<glm::vec2>()(vertex.uv);
@@ -260,13 +287,15 @@ namespace std {
     };
 }
 
-struct CloudPointOld {
+struct CloudPointOld 
+{
     glm::vec4 position = glm::vec4(0);
     glm::vec4 normal = glm::vec4(0);
     glm::vec4 directLighting = glm::vec4(0);
 };
 
-enum DebugLineRenderMode {
+enum DebugLineRenderMode 
+{
     SHOW_NO_LINES,
     PATHFINDING_RECAST,
     PHYSX_ALL,
@@ -283,7 +312,8 @@ enum DebugLineRenderMode {
     DEBUG_LINE_MODE_COUNT,
 };
 
-enum RenderMode {
+enum RenderMode
+{
     COMPOSITE,
     DIRECT_LIGHT,
     POINT_CLOUD,
@@ -294,7 +324,8 @@ enum RenderMode {
     RENDER_MODE_COUNT
 };
 
-struct CloudPoint {
+struct CloudPoint 
+{
     glm::vec3 position = glm::vec3(0);
     glm::vec3 normal = glm::vec3(0);
     glm::vec3 directLighting = glm::vec3(0);

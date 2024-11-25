@@ -13,7 +13,8 @@ enum class MenuType { NONE, FILE, INSERT, SELECTED_OBJECT, MISC };
 
 enum EngineMode { GAME = 0, FLOORPLAN, EDITOR };
 enum Weapon { KNIFE = 0, GLOCK, SHOTGUN, AKS74U, MP7, WEAPON_COUNT };
-enum WeaponAction {
+enum WeaponAction 
+{
     IDLE = 0,
     FIRE,
     RELOAD,
@@ -35,7 +36,8 @@ enum WeaponAction {
     MELEE
 };
 
-enum RaycastGroup {
+enum RaycastGroup 
+{
     RAYCAST_DISABLED = 0,
     RAYCAST_ENABLED = 1,
     PLAYER_1_RAGDOLL = 2,
@@ -45,7 +47,8 @@ enum RaycastGroup {
     DOBERMAN = 32
 };
 
-enum class ObjectType {
+enum class ObjectType 
+{
     UNDEFINED,
     GAME_OBJECT,
     GLASS,
@@ -62,7 +65,8 @@ enum class ObjectType {
     HEIGHT_MAP,
 };
 
-enum CollisionGroup {
+enum CollisionGroup 
+{
     NO_COLLISION = 0,
     BULLET_CASING = 1,
     PLAYER = 2,
