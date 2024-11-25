@@ -19,6 +19,7 @@
 #include "../Timer.hpp"
 #include "../Util.hpp"
 #include "MiscObjects.h"
+#include "Cushions.h"
 
 int _volumetricBloodObjectsSpawnedThisFrame = 0;
 
@@ -343,12 +344,11 @@ int Scene::AssignNextFreeShadowMapIndex(int lightIndex)
     return -1;
 }
 
-#include "Cushions.h"
 void Scene::LoadDefaultScene()
 {
     bool hardcoded = true;
 
-    bool createTestLights = false;
+    bool createTestLights = true;
     bool createTestCubes = false;
     int testLightCount = 50;
     int testCubeCount = 50;
@@ -429,7 +429,6 @@ void Scene::LoadDefaultScene()
         stairCase3.m_rotation = -HELL_PI * 0.5f;
         stairCase3.m_stepCount = 18;
     }
-
 
     LoadMapData("mappp.txt");
     for (Light& light : g_lights)
@@ -1452,13 +1451,10 @@ std::vector<RenderItem3D> GetTreeRenderItems()
                
                
 
-               if (rayResult.hitFound) {
+               if (rayResult.hitFound)
+               {
                    spawn.position.y = rayResult.hitPosition.y - 0.25f;
                }
-
-
-
-
 
             Scene::CreateGameObject();
             GameObject* tree = Scene::GetGameObjectByIndex(Scene::GetGameObjectCount() - 1);
@@ -1472,10 +1468,6 @@ std::vector<RenderItem3D> GetTreeRenderItems()
             tree->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("Tree_0_ConvexHull"));
             tree->SetModelMatrixMode(ModelMatrixMode::GAME_TRANSFORM);
             tree->SetCollisionType(CollisionType::STATIC_ENVIROMENT);
-
-
-
-
                //g_treeTransforms.push_back(spawn);
             }
 
@@ -1486,23 +1478,26 @@ std::vector<RenderItem3D> GetTreeRenderItems()
 
     }
 
-
     std::vector<RenderItem3D> renderItems;
 
-    for (Transform& transform : g_treeTransforms) {
-
-        for (int i = 0; i < model->GetMeshIndices().size(); i++) {
+    for (Transform& transform : g_treeTransforms)
+    {
+        for (int i = 0; i < model->GetMeshIndices().size(); i++)
+        {
             uint32_t& meshIndex = model->GetMeshIndices()[i];
             Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
             Material* material = nullptr;
 
-            if (meshIndex == barkMeshIndex) {
+            if (meshIndex == barkMeshIndex)
+            {
                 material = AssetManager::GetMaterialByIndex(barkMaterialIndex);
             }
-            else if (meshIndex == leavesMeshIndex) {
+            else if (meshIndex == leavesMeshIndex)
+            {
                 material = AssetManager::GetMaterialByIndex(leavesMaterialIndex);
             }
-            else {
+            else
+            {
                 continue;
             }
             RenderItem3D& renderItem = renderItems.emplace_back();
@@ -1521,8 +1516,8 @@ std::vector<RenderItem3D> GetTreeRenderItems()
     return renderItems;
 }
 
-std::vector<RenderItem3D> Scene::GetGeometryRenderItems() {
-
+std::vector<RenderItem3D> Scene::GetGeometryRenderItems() 
+{
     static int ceilingMaterialIndex = AssetManager::GetMaterialIndex("Ceiling");
 
     std::vector<RenderItem3D> renderItems;
@@ -1532,7 +1527,8 @@ std::vector<RenderItem3D> Scene::GetGeometryRenderItems() {
     static int floorTrimMeshIndex = AssetManager::GetModelByName("TrimFloor")->GetMeshIndices()[0];
     static int ceilingTrimMaterialIndex = AssetManager::GetMaterialIndex("Trims");
     int index = 0;
-    for (glm::mat4& matrix : g_ceilingTrims) {
+    for (glm::mat4& matrix : g_ceilingTrims)
+    {
         RenderItem3D renderItem;
         renderItem.meshIndex = ceilingTrimMeshIndex;
         renderItem.modelMatrix = matrix;
@@ -1543,7 +1539,8 @@ std::vector<RenderItem3D> Scene::GetGeometryRenderItems() {
         renderItem.normalMapTextureIndex = material->_normal;
         renderItems.push_back(renderItem);
     }
-    for (glm::mat4& matrix : g_floorTrims) {
+    for (glm::mat4& matrix : g_floorTrims)
+    {
         RenderItem3D renderItem;
         renderItem.meshIndex = floorTrimMeshIndex;
         renderItem.modelMatrix = matrix;
