@@ -1,9 +1,10 @@
 #pragma once
+
 #include "HellCommon.h"
 #include "../../Physics/Physics.h"
 
-struct Door {
-
+struct Door 
+{
     Door() = default;
     Door(glm::vec3 position, float rotation, bool openOnStart = false);
     void Interact();
@@ -19,23 +20,19 @@ struct Door {
     float m_maxOpenRotation = 1.8f;
     bool m_openOnStart = false;
 
-    enum State {
+    enum State 
+    {
         CLOSED = 0,
         CLOSING,
         OPEN,
         OPENING
     } state = CLOSED;
 
-
     float m_currentOpenRotation = 0;
-
 
     AABB _aabb;
     AABB _aabbPreviousFrame;
-
-
   //  AABB m_doorFrameAABB;
-
 
     glm::mat4 GetFrameModelMatrix();
     glm::mat4 GetDoorModelMatrix();
