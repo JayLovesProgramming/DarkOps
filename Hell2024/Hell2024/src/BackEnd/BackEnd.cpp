@@ -103,7 +103,7 @@ namespace BackEnd
         {
             glfwMakeContextCurrent(_window);
             OpenGLBackEnd::InitMinimum();
-            OpenGLRenderer::InitMinimum();
+            OpenGLRenderer::Init_OpenGL();
             Gizmo::Init();
             glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
         }

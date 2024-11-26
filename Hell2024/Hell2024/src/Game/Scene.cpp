@@ -1768,7 +1768,7 @@ std::vector<RenderItem3D> Scene::CreateDecalRenderItems() // 2
             RenderItem3D& renderItem = renderItems.emplace_back();
             renderItem.modelMatrix = decal.GetModelMatrix();
             renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
-            Material* material = AssetManager::GetMaterialByIndex(knifeSlashPlasterMaterialIndex);
+            Material* material = AssetManager::GetMaterialByIndex(bulletHolePlasterMaterialIndex);
             renderItem.baseColorTextureIndex = material->_basecolor;
             renderItem.rmaTextureIndex = material->_rma;
             renderItem.normalMapTextureIndex = material->_normal;

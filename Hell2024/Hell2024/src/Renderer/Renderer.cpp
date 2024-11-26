@@ -1044,15 +1044,7 @@ IndirectDrawInfo CreateIndirectDrawInfo(std::vector<RenderItem3D>& potentialRend
     return drawInfo;
 }
 
-/*
-
-███╗   ███╗██╗███████╗ ██████╗
-████╗ ████║██║██╔════╝██╔════╝
-██╔████╔██║██║███████╗██║
-██║╚██╔╝██║██║╚════██║██║
-██║ ╚═╝ ██║██║███████║╚██████╗
-╚═╝     ╚═╝╚═╝╚══════╝ ╚═════╝ */
-
+// Misc
 void Renderer::RenderLoadingScreen() 
 {
     std::vector<RenderItem2D> renderItems = CreateLoadingScreenRenderItems();

@@ -212,6 +212,8 @@ namespace Gizmo
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
 
+        glEnable(GL_MULTISAMPLE);
+
         glViewport(0, 0, (GLsizei)viewportWidth, (GLsizei)viewportHeight);
 
         for (Im3d::U32 i = 0, n = Im3d::GetDrawListCount(); i < n; ++i)

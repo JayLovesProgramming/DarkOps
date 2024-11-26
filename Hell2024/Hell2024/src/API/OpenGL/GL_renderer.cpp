@@ -27,7 +27,7 @@
 
 #include "RapidHotload.h"
 
-#define TILE_SIZE 24
+const static auto TILE_SIZE = 24;
 
 struct LightVolumeData
 {
@@ -360,7 +360,7 @@ void OpenGLRenderer::RecreateBlurBuffers()
     }
 }
 
-void OpenGLRenderer::InitMinimum()
+void OpenGLRenderer::Init_OpenGL()
 {
     //QueryAvaliability();
     HotloadShaders();
@@ -681,10 +681,9 @@ void SetViewport(ViewportInfo viewportInfo)
 
 void OpenGLRenderer::RenderLoadingScreen(std::vector<RenderItem2D>& renderItems) 
 {
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, g_ssbos.samplers);
-
-    RenderUI(renderItems, g_frameBuffers.loadingScreen, true);
-    BlitFrameBuffer(&g_frameBuffers.loadingScreen, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, g_ssbos.samplers);
+    //RenderUI(renderItems, g_frameBuffers.loadingScreen, true);
+    //BlitFrameBuffer(&g_frameBuffers.loadingScreen, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 void OpenGLRenderer::UploadSSBOsGPU(RenderData& renderData)
@@ -2658,7 +2657,6 @@ void CSGSubtractivePass()
 
 void OpenGLRenderer::RaytracingTestPass(RenderData& renderData)
 {
-
     TLAS* tlas = Raytracing::GetTLASByIndex(0);
     if (!tlas)
     {
@@ -2751,7 +2749,6 @@ void OpenGLRenderer::UpdatePointCloud()
 
 void OpenGLRenderer::Triangle2DPass() 
 {
-    return;
 
     std::vector<glm::vec2> pixelCoords = {
      /* glm::vec2(100.0f, 100.0f),
@@ -2771,7 +2768,6 @@ void OpenGLRenderer::Triangle2DPass()
 
     player->_playerName = "";
     glm::vec3 viewPos = player->GetViewPos();
-    float minPickUpDistance = 1.5f;
 
     player->m_pickUpInteractable = false;
 
@@ -2818,12 +2814,14 @@ void OpenGLRenderer::Triangle2DPass()
                     {
                         continue;
                     }
+
                     d = glm::normalize(player->GetViewPos() - v1);
                     ndotl = glm::dot(d, player->GetCameraForward());
                     if (ndotl < 0)
                     {
                         continue;
                     }
+
                     d = glm::normalize(player->GetViewPos() - v2);
                     ndotl = glm::dot(d, player->GetCameraForward());
                     if (ndotl < 0) 
@@ -2867,7 +2865,6 @@ void OpenGLRenderer::Triangle2DPass()
     glBindVertexArray(OpenGLBackEnd::GetTriangles2DVAO());
     glDrawArrays(GL_TRIANGLES, 0, triangleVertices.size());
 
-
     GLFrameBuffer& present = OpenGLRenderer::g_frameBuffers.present;
     g_shaders.debugCircle.Use();
     g_shaders.debugCircle.SetInt("screenCenterX", screenCenterX);
@@ -2875,6 +2872,19 @@ void OpenGLRenderer::Triangle2DPass()
     glBindImageTexture(0, present.GetColorAttachmentHandleByName("Color"), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
     glDispatchCompute(present.GetWidth() / 16, present.GetHeight() / 4, 1);
 
+}
+
+void OpenGLRenderer::CreateBlackBox(BlitDstCoords* blitDstCoords)
+{
+     if (g_frameBuffers.megaTexture.GetHandle() != 0) {
+         blitDstCoords->dstX0 = 0;
+         blitDstCoords->dstY0 = 0;
+         blitDstCoords->dstX1 = BackEnd::GetCurrentWindowWidth() * 0.5;
+         blitDstCoords->dstY1 = BackEnd::GetCurrentWindowHeight() * 0.5;
+         //blitDstCoords->dstX1 = BackEnd::GetCurrentWindowWidth() * 0.25;
+         //blitDstCoords->dstY1 = BackEnd::GetCurrentWindowHeight() * 0.25;
+         BlitPlayerPresentTargetToDefaultFrameBuffer(&g_frameBuffers.megaTexture, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST, *blitDstCoords);
+     }
 }
 
 void OpenGLRenderer::PresentFinalImage()
@@ -2885,13 +2895,7 @@ void OpenGLRenderer::PresentFinalImage()
     blitDstCoords.dstX1 = BackEnd::GetCurrentWindowWidth();
     blitDstCoords.dstY1 = BackEnd::GetCurrentWindowHeight();
     BlitPlayerPresentTargetToDefaultFrameBuffer(&g_frameBuffers.present, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST, blitDstCoords);
-   // if (g_frameBuffers.megaTexture.GetHandle() != 0) {
-   //     blitDstCoords.dstX0 = 0;
-   //     blitDstCoords.dstY0 = 0;
-   //     blitDstCoords.dstX1 = BackEnd::GetCurrentWindowWidth() * 0.25;
-   //     blitDstCoords.dstY1 = BackEnd::GetCurrentWindowHeight() * 0.25;
-   //     BlitPlayerPresentTargetToDefaultFrameBuffer(&g_frameBuffers.megaTexture, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST, blitDstCoords);
-   // }
+    //CreateBlackBox(&blitDstCoords);
 }
 
 void OpenGLRenderer::IndirectLightingPass()
@@ -2960,9 +2964,8 @@ void OpenGLRenderer::ProbeGridDebugPass()
         glBindImageTexture(1, texture3D.GetID(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
         glDrawElementsInstancedBaseVertex(GL_TRIANGLES, cubeMesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * cubeMesh->baseIndex), instanceCount, cubeMesh->baseVertex);
     }
+
     /*
-
-
     static Transform transform;
     transform.position = glm::vec3(0, 1, 0);
     transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -2986,7 +2989,6 @@ void OpenGLRenderer::ProbeGridDebugPass()
 
 void OpenGLRenderer::HeightMapPass(RenderData& renderData)
 {
-
     glDisable(GL_BLEND);
 
     HeightMap& heightMap = AssetManager::g_heightMap;
@@ -3012,12 +3014,14 @@ void OpenGLRenderer::HeightMapPass(RenderData& renderData)
     glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("TreeMap")->GetGLTexture().GetID());
        
-    for (int i = 0; i < renderData.playerCount; i++
-        ) {
+    for (int i = 0; i < renderData.playerCount; i++) 
+    {
         Player* player = Game::GetPlayerByIndex(i);
+
         ViewportInfo viewportInfo = RendererUtil::CreateViewportInfo(i, Game::GetSplitscreenMode(), gBuffer.GetWidth(), gBuffer.GetHeight());
         SetViewport(viewportInfo);
         glViewport(viewportInfo.xOffset, viewportInfo.yOffset, viewportInfo.width, viewportInfo.height);
+
         Shader& shader = OpenGLRenderer::g_shaders.heightMap;
         shader.Use();
         shader.SetMat4("mvp", player->GetProjectionMatrix() * player->GetViewMatrix() * heightMap.m_transform.to_mat4());
@@ -3025,6 +3029,7 @@ void OpenGLRenderer::HeightMapPass(RenderData& renderData)
         shader.SetInt("playerIndex", i);
         shader.SetFloat("heightMapWidth", heightMap.m_width);
         shader.SetFloat("heightMapDepth", heightMap.m_depth);
+
         glBindVertexArray(heightMap.m_VAO);
         glDrawElements(GL_TRIANGLE_STRIP, heightMap.m_indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
@@ -3105,16 +3110,15 @@ void WinstonPass(RenderData& renderData)
             };
         }
 
-       //for (GameObject& gameObject : Scene::GetGamesObjects()) {
-       //    if (true) {
-       //        for (RenderItem3D& renderItem : gameObject.GetRenderItems()) {
-       //            shader.SetMat4("model", renderItem.modelMatrix);
-       //            Mesh* mesh = AssetManager::GetMeshByIndex(renderItem.meshIndex);
-       //            glDrawElementsBaseVertex(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->baseIndex), mesh->baseVertex);
-       //        };
-       //    }
-       //}
-
+        for (GameObject& gameObject : Scene::GetGamesObjects()) {
+           if (OpenGLRenderer::drawBlueAroundModels) {
+               for (RenderItem3D& renderItem : gameObject.GetRenderItems()) {
+                   shader.SetMat4("model", renderItem.modelMatrix);
+                   Mesh* mesh = AssetManager::GetMeshByIndex(renderItem.meshIndex);
+                   glDrawElementsBaseVertex(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->baseIndex), mesh->baseVertex);
+               };
+           }
+       }
 
         //if (OpenGLRenderer::g_sphereMesh.GetIndexCount() > 0) {
         //    glBindVertexArray(OpenGLRenderer::g_sphereMesh.GetVAO());
