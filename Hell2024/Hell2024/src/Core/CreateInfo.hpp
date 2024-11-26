@@ -24,12 +24,7 @@ struct LightCreateInfo
     int type;
 };
 
-struct DobermannCreateInfo 
-{
-    glm::vec3 position;
-    float rotation;
-    DobermannState initalState;
-};
+
 
 struct CSGPlaneCreateInfo 
 {

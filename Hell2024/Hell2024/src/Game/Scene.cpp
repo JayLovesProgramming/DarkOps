@@ -1,6 +1,5 @@
 // TODO: MAKE THIS A LOT!!!! MORE MODULAR
 
-
 #include "Scene.h"
 #include "Player.h"
 #include <memory>
@@ -37,7 +36,6 @@ namespace Scene
     void CreateDefaultSpawnPoints();
     void LoadMapData(const std::string& fileName);
     void AllocateStorageSpace();
-    void AddDobermann(DobermannCreateInfo& createInfo);
 }
 
 void Scene::AllocateStorageSpace()
@@ -48,7 +46,6 @@ void Scene::AllocateStorageSpace()
     g_windows.reserve(sizeof(Window) * 1000);
     g_animatedGameObjects.reserve(sizeof(Window) * 50);
 }
-
 
 void Scene::RemoveGameObjectByIndex(int index)
 {
@@ -66,7 +63,7 @@ void Scene::SaveMapData(const std::string& fileName)
     JSONObject saveFile;
     nlohmann::json data;
 
-    // save doors
+    // Save Doors
     nlohmann::json jsonDoors = nlohmann::json::array();
     for (const Door& door : Scene::GetDoors())
     {
@@ -78,7 +75,7 @@ void Scene::SaveMapData(const std::string& fileName)
     }
     data["doors"] = jsonDoors;
 
-    // save windows
+    // Save Windows
     nlohmann::json jsonWindows = nlohmann::json::array();
     for (Window& window : Scene::GetWindows()) 
     {
@@ -89,7 +86,7 @@ void Scene::SaveMapData(const std::string& fileName)
     }
     data["windows"] = jsonWindows;
 
-    // save additive cube volumes
+    // Save Additive Cube Volumes
     nlohmann::json jsonCubeVolumesAdditive = nlohmann::json::array();
     for (CSGCube& cubeVolume : g_csgAdditiveCubes)
     {
@@ -105,7 +102,7 @@ void Scene::SaveMapData(const std::string& fileName)
     }
     data["VolumesAdditive"] = jsonCubeVolumesAdditive;
 
-    // save wall planes
+    // Save Wall Planes
     nlohmann::json jsonWallPLanes = nlohmann::json::array();
     for (CSGPlane& plane : g_csgAdditiveWallPlanes) 
     {
@@ -122,8 +119,7 @@ void Scene::SaveMapData(const std::string& fileName)
     }
     data["WallPlanes"] = jsonWallPLanes;
 
-
-    // save subtractive cube volumes
+    // Save Subtractive Cube Volumes
     nlohmann::json jsonCubeVolumesSubtractive = nlohmann::json::array();
     for (CSGCube& cubeVolume : g_csgSubtractiveCubes)
     {
@@ -139,7 +135,7 @@ void Scene::SaveMapData(const std::string& fileName)
     }
     data["VolumesSubtractive"] = jsonCubeVolumesSubtractive;
 
-    // save lights
+    // Save Lights
     nlohmann::json jsonLights = nlohmann::json::array();
     for (Light& light: Scene::g_lights)
     {
@@ -162,7 +158,6 @@ void Scene::SaveMapData(const std::string& fileName)
     std::ofstream out("res/maps/mappp.txt");
     out << text;
     out.close();
-
 }
 
 void Scene::LoadMapData(const std::string& fileName)
@@ -177,10 +172,10 @@ void Scene::LoadMapData(const std::string& fileName)
     std::stringstream buffer;
     buffer << file.rdbuf();
 
-    // Parse file
+    // Parse File
     nlohmann::json data = nlohmann::json::parse(buffer.str());
 
-    // Load doors
+    // Load Doors
     for (const auto& jsonObject : data["doors"]) 
     {
         DoorCreateInfo createInfo;
@@ -189,7 +184,8 @@ void Scene::LoadMapData(const std::string& fileName)
         createInfo.rotation = jsonObject["rotation"];
         Scene::CreateDoor(createInfo);
     }
-    // Load windows
+
+    // Load Windows
     for (const auto& jsonObject : data["windows"])
     {
         WindowCreateInfo createInfo;
@@ -197,6 +193,7 @@ void Scene::LoadMapData(const std::string& fileName)
         createInfo.rotation = jsonObject["rotation"];
         Scene::CreateWindow(createInfo);
     }
+
     // Load Volumes Additive
     for (const auto& jsonObject : data["VolumesAdditive"])
     {
@@ -209,6 +206,7 @@ void Scene::LoadMapData(const std::string& fileName)
         cube.textureOffsetY = jsonObject["texOffsetY"];
         cube.textureScale = jsonObject["texScale"];
     }
+
     // Load Wall Planes
     for (const auto& jsonObject : data["WallPlanes"]) 
     {
@@ -222,6 +220,7 @@ void Scene::LoadMapData(const std::string& fileName)
         plane.textureOffsetY = jsonObject["texOffsetY"];
         plane.textureScale = jsonObject["texScale"];
     }
+
     // Load Volumes Subtractive
     for (const auto& jsonObject : data["VolumesSubtractive"]) 
     {
@@ -235,6 +234,7 @@ void Scene::LoadMapData(const std::string& fileName)
         cube.textureScale = jsonObject["texScale"];
         cube.CreateCubePhysicsObject();
     }
+
     // Load Lights
     for (const auto& jsonObject : data["Lights"])
     {
@@ -275,16 +275,6 @@ void Scene::LoadEmptyScene()
         //Timer timer("CreateBottomLevelAccelerationStructures()");
         CreateBottomLevelAccelerationStructures();
     }
-}
-
-void Scene::AddDobermann(DobermannCreateInfo& createInfo)
-{
-    Dobermann& dobermann = g_dobermann.emplace_back();
-    dobermann.m_initialPosition = createInfo.position;
-    dobermann.m_currentPosition = createInfo.position;
-    dobermann.m_currentRotation = createInfo.rotation;
-    dobermann.m_initialRotation = createInfo.rotation;
-    dobermann.Init();
 }
 
 void Scene::AddCSGWallPlane(CSGPlaneCreateInfo& createInfo)
@@ -532,17 +522,17 @@ void Scene::LoadDefaultScene()
         createInfo.position = glm::vec3(-1.7f, 0.4f, -1.2f);
         createInfo.rotation = 0.7f;
         createInfo.initalState = DobermannState::LAY;
-        AddDobermann(createInfo);
+        Dobermann::AddDobermann(createInfo);
 
         createInfo.position = glm::vec3(-2.46f, 0.4f, -3.08f);
         createInfo.rotation = HELL_PI * 0.5f;
         createInfo.initalState = DobermannState::LAY;
-        AddDobermann(createInfo);
+        Dobermann::AddDobermann(createInfo);
 
         createInfo.position = glm::vec3(-1.77f, 0.4f, -5.66f);
         createInfo.rotation = (1.3f);
         createInfo.initalState = DobermannState::LAY;
-        AddDobermann(createInfo);
+        Dobermann::AddDobermann(createInfo);
     }
 
     if (false)

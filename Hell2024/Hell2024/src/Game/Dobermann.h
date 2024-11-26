@@ -6,6 +6,13 @@
 
 #define DOG_MAX_HEALTH 45
 
+struct DobermannCreateInfo
+{
+    glm::vec3 position;
+    float rotation;
+    DobermannState initalState;
+};
+
 struct Dobermann
 {
     glm::vec3 m_initialPosition = glm::vec3(0);
@@ -36,6 +43,7 @@ struct Dobermann
     void CleanUp();
     AnimatedGameObject* GetAnimatedGameObject();
     float GetDistanceToTarget();
+    static void AddDobermann(DobermannCreateInfo& createInfo);
 
     PxController* m_characterController = nullptr;
     PxShape* m_shape = nullptr;

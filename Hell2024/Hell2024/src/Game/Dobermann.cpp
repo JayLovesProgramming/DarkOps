@@ -47,6 +47,16 @@ void Dobermann::Init()
 
 }
 
+void Dobermann::AddDobermann(DobermannCreateInfo& createInfo)
+{
+    Dobermann& dobermann = Scene::g_dobermann.emplace_back();
+    dobermann.m_initialPosition = createInfo.position;
+    dobermann.m_currentPosition = createInfo.position;
+    dobermann.m_currentRotation = createInfo.rotation;
+    dobermann.m_initialRotation = createInfo.rotation;
+    dobermann.Init();
+}
+
 void Dobermann::GiveDamage(int amount, int targetPlayerIndex) 
 {
     m_health -= amount;
