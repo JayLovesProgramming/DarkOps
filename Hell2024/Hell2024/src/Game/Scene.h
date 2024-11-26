@@ -24,17 +24,14 @@
 #include "../Editor/CSGPlane.hpp"
 #include <string>
 #include "Utils/Normal/Normal_OpenGL.h"
+#include "Pickup.h"
+#include "Bullet.h"
+#include "SpawnPoint.h"
 
 constexpr static auto PROPOGATION_SPACING = 1;
 #define PROPOGATION_WIDTH (MAP_WIDTH / PROPOGATION_SPACING)
 #define PROPOGATION_HEIGHT (MAP_HEIGHT / PROPOGATION_SPACING)
 #define PROPOGATION_DEPTH (MAP_DEPTH / PROPOGATION_SPACING)
-
-struct SpawnPoint
-{
-    glm::vec3 position = glm::vec3(0);
-    glm::vec3 rotation = glm::vec3(0);
-};
 
 struct RTMesh
 {
@@ -52,51 +49,6 @@ struct RTInstance
     GLuint padding0 = 0;
     GLuint padding1 = 0;
     GLuint padding2 = 0;
-};
-
-struct Bullet
-{
-    glm::vec3 spawnPosition;
-    glm::vec3 direction;
-    Weapon type;
-    PxU32 raycastFlags;
-    glm::vec3 parentPlayersViewRotation;
-    int damage = 0;
-    int parentPlayerIndex = -1;
-};
-
-struct PickUp
-{
-	enum class Type { GLOCK_AMMO = 0};
-
-	Type type;
-	glm::vec3 position;
-	glm::vec3 rotation;
-	std::string parentGameObjectName = "";
-	bool pickedUp = false;
-    float timeSincePickedUp = 0.0f;
-	float respawnTime = 10.0f;
-
-	glm::mat4 GetModelMatrix() 
-    {
-		Transform transform;
-		transform.position = position;
-		transform.rotation = rotation;
-		return transform.to_mat4();
-	}
-
-    void Update(float deltaTime)
-    {
-        if (pickedUp)
-        {
-            timeSincePickedUp += deltaTime;
-        }
-        if (timeSincePickedUp > respawnTime)
-        {
-            pickedUp = false;
-            timeSincePickedUp = 0;
-        }
-    }
 };
 
 namespace Scene
