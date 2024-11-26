@@ -159,7 +159,7 @@ namespace Game
             g_playerDeaths = std::stoi(buffer.str());
         }
 
-        // Populate Player data
+        // Populate Player Data
         for (int i = 0; i < g_players.size(); i++)
         {
             g_playerData[i].flashlightOn = g_players[i].m_flashlightOn;

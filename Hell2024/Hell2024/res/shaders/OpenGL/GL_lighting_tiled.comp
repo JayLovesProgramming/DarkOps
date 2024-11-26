@@ -573,15 +573,16 @@ void main() {
 
 	
 	// Spotlights
-	for (int i = 0; i < 2; i++) {
-	
+	for (int i = 0; i < 2; i++) 
+	{
 		mat4 inverseViewMatrix = cameraDataArray[i].viewInverse;
 		vec3 forward = -normalize(vec3(inverseViewMatrix[2].xyz));
 		vec3 camPos = cameraDataArray[i].viewInverse[3].xyz;
 				
 
 		vec3 spotLightPos = camPos;
-		if (playerIndex != i) {
+		if (playerIndex != i) 
+		{
 			spotLightPos += (forward * 0.125);
 		}
 		
@@ -590,8 +591,8 @@ void main() {
 
 		vec3 spotLightingFactor = GetSpotLighting(worldSpacePosition.xyz, normalize(normal), spotLightPos, dir);
 	
-		vec3 spotLightColor = vec3(1, 0.8799999713897705, 0.6289999842643738);
-		vec3 spotLighting = GetDirectLighting(spotLightPos, spotLightColor, 100, 1.0, normal, worldSpacePosition.xyz, baseColor, roughness, metallic, camPos);
+		vec3 spotLightColor = vec3(0.2, 0.4799999713897705, 0.5289999842643738);
+		vec3 spotLighting = GetDirectLighting(spotLightPos, spotLightColor, 55, 1.0, normal, worldSpacePosition.xyz, baseColor, roughness, metallic, camPos);
 		spotLighting = max(spotLighting, vec3(0));
 		spotLighting *= spotLightingFactor;
 	

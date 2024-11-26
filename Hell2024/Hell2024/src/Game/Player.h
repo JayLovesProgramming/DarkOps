@@ -128,7 +128,7 @@ public:
     bool m_pickUpInteractable = false;
     bool g_awaitingRespawn = true;
     int m_interactbleGameObjectIndex = -1;
-    bool m_flashlightOn = false;
+    bool m_flashlightOn = true;
 
     Player() = default;
     Player(int playerIndex);
