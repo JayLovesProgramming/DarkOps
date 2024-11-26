@@ -25,8 +25,18 @@ Player::Player(int playerIndex)
     g_awaitingRespawn = true;
 }
 
-void Player::Update(float deltaTime) 
+void Player::UpdatePlayer1(float deltaTime) 
 {
+    // 1 = CrustyAssCracker
+    // 
+    //std::cout << "-1: " << Game::GetPlayerNameByIndex(-1) << std::endl;
+    //std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << std::endl;
+    //std::cout << "Name: " << Game::GetPlayerByIndex(1)->_playerName << std::endl;
+    std::cout << _playerName << m_playerIndex << std::endl;
+    //std::cout << "1: " << Game::GetPlayerNameByIndex(1) << std::endl;
+    //std::cout << "2: " << Game::GetPlayerNameByIndex(2) << std::endl;
+    //std::cout << "3: " << Game::GetPlayerNameByIndex(3) << std::endl;*/
+
     if (g_awaitingRespawn)
     {
         Respawn();
@@ -43,11 +53,13 @@ void Player::Update(float deltaTime)
     {
         m_isOutside = true;
     }
-    if (rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_CUBE ||
+    else if (rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_CUBE ||
         rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE)
     {
         m_isOutside = false;
     }
+
+    //std::cout << "Outside: " << m_isOutside << std::endl;
 
     UpdateRagdoll(); // updates pointers to rigids
 
@@ -136,7 +148,122 @@ void Player::Update(float deltaTime)
     {
         _health = 0;
     }
+}
 
+void Player::UpdatePlayer2(float deltaTime)
+{
+    if (GetPlayerIndex() != 0)
+        return;
+
+    if (g_awaitingRespawn)
+    {
+        Respawn();
+    }
+
+    AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "characterModel");
+    AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponGameObject");
+
+    // Update outside
+    glm::vec3 origin = GetFeetPosition() + glm::vec3(0, 0.1f, 0);
+    PxU32 raycastFlags = RaycastGroup::RAYCAST_ENABLED;
+    PhysXRayResult rayResult = Util::CastPhysXRay(origin, glm::vec3(0, -1, 0), 10, raycastFlags);
+    if (rayResult.hitFound && rayResult.objectType == ObjectType::HEIGHT_MAP)
+    {
+        m_isOutside = true;
+    }
+    if (rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_CUBE ||
+        rayResult.hitFound && rayResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE)
+    {
+        m_isOutside = false;
+    }
+
+    UpdateRagdoll(); // updates pointers to rigids
+
+    CheckForItemPickOverlaps();
+    CheckForEnviromentalDamage(deltaTime);
+    CheckForDeath();
+    CheckForDebugKeyPresses();
+    CheckForAndEvaluateRespawnPress();
+    CheckForAndEvaluateNextWeaponPress();
+    CheckForAndEvaluateInteract();
+    CheckForSuicide();
+
+    CheckForAndEvaluateFlashlight(deltaTime);
+    UpdateHeadBob(deltaTime);
+    UpdateTimers(deltaTime);
+    UpdateAudio(deltaTime);
+    UpdatePickupText(deltaTime);
+
+    UpdateMovement(deltaTime);
+    UpdateMouseLook(deltaTime);
+    UpdateViewWeaponLogic(deltaTime);
+    UpdateWeaponSway(deltaTime); // this needs checking
+
+    UpdateViewMatrix(deltaTime);
+
+    UpdateCharacterModelAnimation(deltaTime);
+
+    UpdateAttachmentRenderItems();
+    UpdateAttachmentGlassRenderItems();
+
+    glm::mat4 projectionView = GetProjectionMatrix() * GetViewMatrix();
+    m_frustum.Update(projectionView);
+
+    /*
+    // Check for game object pick up collision
+    for (GameObject & gameObject: Scene::_gameObjects) {
+
+        if (gameObject.IsCollectable() && !gameObject.IsCollected()) {
+
+            glm::vec3 worldPositionOfPickUp = glm::vec4(gameObject._transform.position, 1.0f);
+            float allowedPickupMinDistance = 0.6f;
+            glm::vec3 a = glm::vec3(worldPositionOfPickUp.x, 0, worldPositionOfPickUp.z);
+            glm::vec3 b = glm::vec3(GetFeetPosition().x, 0, GetFeetPosition().z);
+            float distanceToPickUp = glm::distance(a, b);
+
+            if (distanceToPickUp < allowedPickupMinDistance) {
+                if (gameObject.GetPickUpType() == PickUpType::AKS74U) {
+                    PickUpAKS74U();
+                }
+                gameObject.PickUp();
+            }
+        }
+    }*/
+
+    /*
+    // Check for pick up "collision"
+    for (PickUp& pickUp : Scene::_pickUps) {
+        if (pickUp.pickedUp) {
+            continue;
+        }
+        glm::mat4 parentMatrix = glm::mat4(1);
+        if (pickUp.parentGameObjectName != "") {
+            GameObject* parentgameObject = Scene::GetGameObjectByName(pickUp.parentGameObjectName);
+            if (parentgameObject->GetOpenState() == OpenState::CLOSED ||
+                parentgameObject->GetOpenState() == OpenState::OPENING) {
+                continue;
+            }
+            parentMatrix = parentgameObject->GetModelMatrix();
+        }
+        glm::vec3 worldPositionOfPickUp = parentMatrix * glm::vec4(pickUp.position, 1.0f);
+        float allowedPickupMinDistance = 0.4f;
+        glm::vec3 a = glm::vec3(worldPositionOfPickUp.x, 0, worldPositionOfPickUp.z);
+        glm::vec3 b = glm::vec3(GetFeetPosition().x, 0, GetFeetPosition().z);
+        float distanceToPickUp = glm::distance(a, b);
+
+        if (distanceToPickUp < allowedPickupMinDistance) {
+            pickUp.pickedUp = true;
+            _inventory.glockAmmo.total += 50.0f;
+            _pickUpText = "PICKED UP GLOCK AMMO";
+            _pickUpTextTimer = 2.0f;
+            Audio::PlayAudio("ItemPickUp.wav", 1.0f);
+        }
+    }
+    */
+    if (_isDead)
+    {
+        _health = 0;
+    }
 }
 
 void Player::Respawn()

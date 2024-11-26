@@ -97,7 +97,6 @@ class Player
 private:
     int32_t m_viewWeaponAnimatedGameObjectIndex = -1;
     int32_t m_characterModelAnimatedGameObjectIndex = -1;
-    int32_t m_playerIndex = -1;
     std::vector<PickUpText> m_pickUpTexts;
     glm::vec2 m_headBob = glm::vec2(0, 0);
     glm::vec2 m_breatheBob = glm::vec2(0, 0);
@@ -129,13 +128,16 @@ public:
     bool g_awaitingRespawn = true;
     int m_interactbleGameObjectIndex = -1;
     bool m_flashlightOn = true;
+    static inline int32_t m_playerIndex = -1;
 
     Player() = default;
     Player(int playerIndex);
     PhysXRayResult m_cameraRayResult;
 
     // Updates
-    void Update(float deltaTime);
+    void UpdatePlayer1(float deltaTime);
+    void UpdatePlayer2(float deltaTime);
+
     void UpdateRagdoll();
     void UpdateMouseLook(float deltaTime);
     void UpdateViewMatrix(float deltaTime);
@@ -234,7 +236,7 @@ public:
     // Misc getters
     int32_t GetViewWeaponAnimatedGameObjectIndex();
     int32_t GetCharacterModelAnimatedGameObjectIndex();
-    int32_t GetPlayerIndex();
+    static int32_t GetPlayerIndex();
     glm::vec3 GetMuzzleFlashPosition();
     glm::vec3 GetPistolCasingSpawnPostion();
     AnimatedGameObject* GetCharacterAnimatedGameObject();

@@ -137,7 +137,8 @@ namespace Game
         InputMulti::Update();
         for (Player& player : g_players)
         {
-            player.Update(deltaTime);
+            player.UpdatePlayer1(deltaTime);
+            //player.UpdatePlayer2(deltaTime);
         }
         InputMulti::ResetMouseOffsets();
         Scene::Update(deltaTime);
@@ -226,6 +227,16 @@ namespace Game
             shape->setFlag(PxShapeFlag::eVISUALIZATION, false);
         }
     }
+
+    std::string Game::GetPlayerNameByIndex(int index)
+    {
+        return g_players[index]._playerName;
+    }
+
+    //int Game::GetPlayerIndexByName(std::string name)
+    //{
+    //    //return g_players[]
+    //}
 
     const int GetPlayerCount()
     {
