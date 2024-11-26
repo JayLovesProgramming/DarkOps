@@ -27,29 +27,13 @@
 #include "Pickup.h"
 #include "Bullet.h"
 #include "SpawnPoint.h"
+#include "RTMesh.h"
+#include "RTInstance.h"
 
 constexpr static auto PROPOGATION_SPACING = 1;
 #define PROPOGATION_WIDTH (MAP_WIDTH / PROPOGATION_SPACING)
 #define PROPOGATION_HEIGHT (MAP_HEIGHT / PROPOGATION_SPACING)
 #define PROPOGATION_DEPTH (MAP_DEPTH / PROPOGATION_SPACING)
-
-struct RTMesh
-{
-    GLuint baseVertex = 0;
-    GLuint vertexCount = 0;
-    GLuint padding0 = 0;
-    GLuint padding1 = 0;
-};
-
-struct RTInstance
-{
-    glm::mat4 modelMatrix = glm::mat4(1);
-    glm::mat4 inverseModelMatrix = glm::mat4(1);
-    GLuint meshIndex = 0;
-    GLuint padding0 = 0;
-    GLuint padding1 = 0;
-    GLuint padding2 = 0;
-};
 
 namespace Scene
 {
