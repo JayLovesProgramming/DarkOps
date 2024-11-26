@@ -63,7 +63,6 @@ namespace Game
         g_gameSettings.skyBoxTint = glm::vec3(1);
 
         std::cout << "Game::Create() succeeded\n";
-
         // Edgecase bug - we crash after game has created
     }
 
@@ -82,14 +81,14 @@ namespace Game
 
         RapidHotload::Update();
 
-        // Delta time
+        // Delta Time
         g_lastFrame = g_thisFrame;
         g_thisFrame = glfwGetTime();
         double deltaTime = g_thisFrame - g_lastFrame;
         _deltaTimeAccumulator += deltaTime;
         g_time += deltaTime;
 
-        // CSG
+        // Constructive Solid Geometry (CSG)
         if (Input::KeyPressed(GLFW_KEY_O)) 
         {
             Physics::ClearCollisionLists();
@@ -193,12 +192,16 @@ namespace Game
 
         p1characterModel->LoadRagdoll("UnisexGuy3.rag", p1RagdollCollisionGroupFlags);
         p2characterModel->LoadRagdoll("UnisexGuy3.rag", p2RagdollCollisionGroupFlags);
+
         Game::g_players[0]._interactFlags = RaycastGroup::RAYCAST_ENABLED;
-        Game::g_players[0]._interactFlags &= ~RaycastGroup::PLAYER_1_RAGDOLL;
         Game::g_players[1]._interactFlags = RaycastGroup::RAYCAST_ENABLED;
+
+        Game::g_players[0]._interactFlags &= ~RaycastGroup::PLAYER_1_RAGDOLL;
         Game::g_players[1]._interactFlags &= ~RaycastGroup::PLAYER_2_RAGDOLL;
+
         Game::g_players[0]._bulletFlags = RaycastGroup::RAYCAST_ENABLED | RaycastGroup::PLAYER_2_RAGDOLL | RaycastGroup::PLAYER_3_RAGDOLL | RaycastGroup::PLAYER_4_RAGDOLL | RaycastGroup::DOBERMAN;
         Game::g_players[1]._bulletFlags = RaycastGroup::RAYCAST_ENABLED | RaycastGroup::PLAYER_1_RAGDOLL | RaycastGroup::PLAYER_3_RAGDOLL | RaycastGroup::PLAYER_4_RAGDOLL | RaycastGroup::DOBERMAN;
+        
         Game::g_players[0]._playerName = "Orion";
         Game::g_players[1]._playerName = "CrustyAssCracker";
 
@@ -438,13 +441,7 @@ namespace Game
         return _showDebugText;
     }
 
-
-    /*
-
-    █▀█ ▀█▀ █▀▀ █ █   █ █ █▀█ █▀▀
-    █▀▀  █  █   █▀▄   █ █ █▀▀ ▀▀█
-    ▀   ▀▀▀ ▀▀▀ ▀ ▀   ▀▀▀ ▀   ▀▀▀  */
-
+    // Pickups
     void SpawnAmmo(std::string type, glm::vec3 position, glm::vec3 rotation, bool wakeOnStart)
     {
         AmmoInfo* ammoInfo = WeaponManager::GetAmmoInfoByName(type);
