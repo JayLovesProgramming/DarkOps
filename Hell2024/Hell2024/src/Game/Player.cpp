@@ -32,7 +32,9 @@ void Player::UpdatePlayer1(float deltaTime)
     //std::cout << "-1: " << Game::GetPlayerNameByIndex(-1) << std::endl;
     //std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << std::endl;
     //std::cout << "Name: " << Game::GetPlayerByIndex(1)->_playerName << std::endl;
-    std::cout << _playerName << m_playerIndex << std::endl;
+    // 
+    //std::cout << _playerName << m_playerIndex << std::endl;
+    // 
     //std::cout << "1: " << Game::GetPlayerNameByIndex(1) << std::endl;
     //std::cout << "2: " << Game::GetPlayerNameByIndex(2) << std::endl;
     //std::cout << "3: " << Game::GetPlayerNameByIndex(3) << std::endl;*/
