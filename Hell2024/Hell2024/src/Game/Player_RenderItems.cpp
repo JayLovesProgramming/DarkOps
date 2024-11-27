@@ -5,11 +5,13 @@
 #include "../Game/Scene.h"
 #include "../Renderer/TextBlitter.h"
 #include "../Renderer/Renderer.h"
+#include "Round.h"
+
+#include "Player_RenderItems.h"
+
 
 std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
 {
-    std::vector<RenderItem2D> renderItems;
-
     hell::ivec2 debugTextLocation;
     debugTextLocation.x = RendererUtil::GetViewportLeftX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     debugTextLocation.y = RendererUtil::GetViewportTopY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
@@ -18,7 +20,6 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     pickupTextLocation.x = RendererUtil::GetViewportLeftX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     pickupTextLocation.y = RendererUtil::GetViewportBottomY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
 
-    hell::ivec2 viewportCenter;
     viewportCenter.x = RendererUtil::GetViewportCenterX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     viewportCenter.y = RendererUtil::GetViewportCenterY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
 
@@ -54,6 +55,11 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     if (RespawnAllowed())
     {
         renderItems.push_back(RendererUtil::CreateRenderItem2D("PressStart", viewportCenter, presentSize, Alignment::CENTERED));
+    }
+    else
+    {
+        RoundManager::drawRounds(&renderItems, viewportCenter, presentSize);
+        //renderItems.push_back(RendererUtil::CreateRenderItem2D("round1", viewportCenter, presentSize, Alignment::CENTERED));
     }
 
     //glm::vec3 cubePos(0, 1, 0);

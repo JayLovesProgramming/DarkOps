@@ -14,6 +14,8 @@
 #include "../Physics/Physics.h"
 #include "../Pathfinding/Pathfinding2.h"
 
+#include "Core/ImageManager.h"
+
 namespace BackEnd 
 {
     API _api = API::UNDEFINED;
@@ -128,6 +130,7 @@ namespace BackEnd
         Pathfinding2::Init();
         WeaponManager::Init();
         glfwShowWindow(BackEnd::GetWindowPointer());
+
     }
 
     void BeginFrame() 
@@ -140,6 +143,7 @@ namespace BackEnd
         // OpenGL
         if (GetAPI() == API::OPENGL) 
         {
+
             glfwSwapBuffers(_window);
         }
         // Vulkan
