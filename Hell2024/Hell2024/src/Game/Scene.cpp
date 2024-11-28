@@ -413,14 +413,14 @@ void Scene::LoadDefaultScene()
     g_staircases.clear();
 
     if (hardcoded) 
-    {
+ /*   {
         Staircase& stairCase3 = g_staircases.emplace_back();
         stairCase3.m_position = glm::vec3(-3.0f, 0, -3.1f);
         stairCase3.m_rotation = -HELL_PI * 0.5f;
         stairCase3.m_stepCount = 18;
-    }
+    }*/
 
-    LoadMapData("mappp.txt");
+    //LoadMapData("mappp.txt");
     for (Light& light : g_lights)
     {
         light.m_shadowMapIsDirty = true;

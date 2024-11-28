@@ -3,7 +3,7 @@
 class RoundManager
 {
 public:
-	inline static unsigned int currentRound = 2;
+	inline static unsigned int currentRound = 1;
     inline static bool areAllDogsKilled = false;
     inline static bool areAllZombiesKilled = false;
     inline static int zombiesThisRound = 5;
