@@ -31,8 +31,8 @@ void Player::UpdatePlayer1(float deltaTime)
     // 1 = CrustyAssCracker
     //std::cout << m_playerIndex << std::endl;
     //std::cout << _playerName << std::endl;
-    std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << std::endl;
-    std::cout << "1: " << Game::GetPlayerByIndex(1)->_playerName << std::endl;
+    //std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << std::endl;
+    //std::cout << "1: " << Game::GetPlayerByIndex(1)->_playerName << std::endl;
 
     if (g_awaitingRespawn)
     {
@@ -204,7 +204,7 @@ void Player::Respawn()
     }
 
     GiveDefaultLoadout();
-    SwitchWeapon("Knife", SPAWNING);
+    SwitchWeapon("Glock", SPAWNING);
 
     if (_characterController) 
     {
@@ -259,8 +259,8 @@ void Player::UpdateViewMatrix(float deltaTime)
 
     for (int i = 0; i < viewWeapon->m_jointWorldMatrices.size(); i++)
     {
-        if (Util::StrCmp(viewWeapon->m_jointWorldMatrices[i].name, "camera")
-            ) {
+        if (Util::StrCmp(viewWeapon->m_jointWorldMatrices[i].name, "camera")) 
+        {
             cameraMatrix = viewWeapon->m_jointWorldMatrices[i].worldMatrix;
         }
     }
@@ -304,7 +304,7 @@ void Player::UpdateViewMatrix(float deltaTime)
         model->_filename == "Shotgun" ||
         model->_filename == "Smith" ||
         model->_filename == "P90" ||
-        model->_filename == "SPAS")
+        model->_filename == "SPAS") // If weapon pull out animation is fucked, the camera will be fucked
     {
         cameraAnimation = inverse(cameraBindMatrix) * cameraMatrix;
     }
@@ -327,7 +327,7 @@ void Player::UpdateViewMatrix(float deltaTime)
         model->_filename == "Shotgun" ||
         model->_filename == "P90" ||
         model->_filename == "Smith" ||
-        model->_filename == "SPAS")
+        model->_filename == "SPAS") // If weapon pull out animation is fucked, the camera will be fucked
     {
         worldTransform.scale = glm::vec3(0.001);
         viewWeapon->m_cameraMatrix = worldTransform.to_mat4() * glm::inverse(cameraBindMatrix);

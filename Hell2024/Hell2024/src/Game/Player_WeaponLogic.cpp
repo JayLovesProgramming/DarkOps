@@ -7,17 +7,17 @@
 #include "Util.hpp"
 #include "Timer.hpp"
 
-void Player::GiveDefaultLoadout()
-{
+void Player::GiveDefaultLoadout() {
+
     GiveWeapon("Knife");
     // GiveWeapon("GoldenKnife");
-    //GiveWeapon("Glock");
-    //GiveWeapon("GoldenGlock");
-    //GiveWeapon("Tokarev");
-    //// GiveWeapon("Smith & Wesson");
-    //GiveWeapon("AKS74U");
-    //GiveWeapon("P90");
-    //GiveWeapon("Shotgun");
+    GiveWeapon("Glock");
+    GiveWeapon("GoldenGlock");
+    GiveWeapon("Tokarev");
+    // GiveWeapon("Smith & Wesson");
+    GiveWeapon("AKS74U");
+    GiveWeapon("P90");
+    GiveWeapon("Shotgun");
     GiveWeapon("SPAS");
 
     GiveAmmo("Glock", 80000);
@@ -26,7 +26,7 @@ void Player::GiveDefaultLoadout()
     GiveAmmo("Shotgun", 6666);
 
     GiveRedDotToWeapon("GoldenGlock");
-   // GiveSilencerToWeapon("Glock");
+    // GiveSilencerToWeapon("Glock");
 }
 
 // Logic
