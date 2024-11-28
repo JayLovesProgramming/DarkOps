@@ -212,7 +212,7 @@ void OpenGLBackEnd::InitMinimum()
     {
         //std::cout << "Debug GL context enabled\n";
         glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // makes sure errors are displayed synchronously
+        //glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // makes sure errors are displayed synchronously
         glDebugMessageCallback(glDebugOutput, nullptr);
     }
     else 

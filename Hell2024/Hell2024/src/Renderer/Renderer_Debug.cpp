@@ -658,15 +658,9 @@ FacingDirection DetermineFacingDirection(const glm::vec3& forwardVector, const g
     return FacingDirection::ALIGNED;
 }
 
-
-/*
- ▀█▀ █▀▀ █ █ ▀█▀
-  █  █▀▀ ▄▀▄  █
-  ▀  ▀▀▀ ▀ ▀  ▀  */
-
+// Text
 std::string& Renderer::GetDebugText() {
 
-    g_debugText = "";
     /*
     text += "Splitscreen mode: " + Util::SplitscreenModeToString(Game::GetSplitscreenMode()) + "\n";
     text += "Render mode: " + Util::RenderModeToString(_renderMode) + "\n";
@@ -716,8 +710,6 @@ std::string& Renderer::GetDebugText() {
     g_debugText += "Dog kills: " + std::to_string(Game::g_playerDeaths) + "\n"; 
     g_debugText += "Cam pos: " + Util::Vec3ToString(Game::GetPlayerByIndex(0)->GetViewPos()) + "\n";
     g_debugText += "\n";
-
-
 
     glm::vec3 rayTarget = Scene::g_lights[0].position;
 

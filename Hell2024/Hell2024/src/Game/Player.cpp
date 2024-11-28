@@ -1850,7 +1850,7 @@ void Player::Kill()
     _isDead = true;
     m_ignoreControl = true;
 
-    DropWeapons();
+    //DropWeapons();
 
     PxExtendedVec3 globalPose = PxExtendedVec3(-100, 0.1, -100);
     _characterController->setFootPosition(globalPose);

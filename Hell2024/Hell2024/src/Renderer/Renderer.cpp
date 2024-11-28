@@ -438,15 +438,15 @@ std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
     return TextBlitter::CreateText(text, location, viewportSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD);
 }
 
-std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playerCount) 
-{
+std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playerCount) {
+
     std::vector<RenderItem2D> renderItems;
 
-    for (int i = 0; i < playerCount; i++)
-    {
+    for (int i = 0; i < playerCount; i++) {
+
         // Debug Text
-        if (Game::DebugTextIsEnabled()) 
-        {
+        if (Game::DebugTextIsEnabled()) {
+
             std::string& text = Renderer::GetDebugText();
 
             int x = RendererUtil::GetViewportLeftX(i, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
@@ -455,17 +455,23 @@ std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playe
         }
 
         // Player HUD
+        if (i == 1)
+        {
+
+        }
         std::vector<RenderItem2D> playerHUD = Game::GetPlayerByIndex(i)->GetHudRenderItems(presentSize);
         RendererUtil::AddRenderItems(renderItems, playerHUD);
+
     }
 
-    if (Editor::IsOpen())
-    {
-        RendererUtil::AddRenderItems(renderItems, Editor::GetMenuRenderItems());
-    }
+    //if (Editor::IsOpen()) {
+    //    RendererUtil::AddRenderItems(renderItems, Editor::GetMenuRenderItems());
+    //}
 
     return renderItems;
 }
+
+
 
 std::vector<RenderItem2D> CreateRenderItems2DHiRes(hell::ivec2 gbufferSize, int playerCount) 
 {

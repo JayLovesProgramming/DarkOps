@@ -1182,12 +1182,7 @@ void RenderShadowMapss(RenderData& renderData)
     }
 }
 
-/*
-
- █  █ █▀▀ █▀▀ █▀▀█ 　 ▀█▀ █▀▀█ ▀▀█▀▀ █▀▀ █▀▀█ █▀▀ █▀▀█ █▀▀ █▀▀
- █  █ ▀▀█ █▀▀ █▄▄▀ 　  █  █  █   █   █▀▀ █▄▄▀ █▀▀ █▄▄█ █   █▀▀
- █▄▄█ ▀▀▀ ▀▀▀ ▀─▀▀ 　 ▀▀▀ ▀  ▀   ▀   ▀▀▀ ▀ ▀▀ ▀   ▀  ▀ ▀▀▀ ▀▀▀  */
-
+// User interface
 void RenderUI(std::vector<RenderItem2D>& renderItems, GLFrameBuffer& frameBuffer, bool clearScreen) 
 {
     //GLFrameBuffer& presentBuffer = OpenGLRenderer::_frameBuffers.gBuffer;
@@ -1276,6 +1271,30 @@ std::vector<Vertex> CreateSphereVertices(const Sphere& sphere, int segments, con
     }
     return vertices;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Debug pass
 void DebugPass(RenderData& renderData) 
