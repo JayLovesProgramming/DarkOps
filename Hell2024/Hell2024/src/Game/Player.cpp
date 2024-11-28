@@ -29,9 +29,10 @@ void Player::UpdatePlayer1(float deltaTime)
 {
     // 0 = Orion
     // 1 = CrustyAssCracker
-    //std::cout << GetPlayerIndex() << std::endl;
-    //std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << std::endl;
-    //std::cout << "1: " << Game::GetPlayerByIndex(1)->_playerName << std::endl;
+    //std::cout << m_playerIndex << std::endl;
+    //std::cout << _playerName << std::endl;
+    std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << std::endl;
+    std::cout << "1: " << Game::GetPlayerByIndex(1)->_playerName << std::endl;
 
     if (g_awaitingRespawn)
     {

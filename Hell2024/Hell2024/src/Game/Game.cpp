@@ -138,8 +138,8 @@ namespace Game
 
         for (Player& player : g_players)
         {
-            //std::cout << player._playerName << std::endl;
             player.UpdatePlayer1(deltaTime);
+
             //player.UpdatePlayer2(deltaTime);
         }
 

@@ -903,7 +903,7 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
         Gizmo::Draw(renderData.cameraData[0].projection, renderData.cameraData[0].view, g_frameBuffers.present.GetWidth(), g_frameBuffers.present.GetHeight());
     }
 
-    Triangle2DPass();
+    //Triangle2DPass();
     RenderUI(renderData.renderItems2D, g_frameBuffers.present, false);
 }
 
