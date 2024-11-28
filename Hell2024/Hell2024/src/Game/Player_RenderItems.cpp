@@ -58,7 +58,7 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     }
     else
     {
-        RoundManager::drawRounds(&renderItems, viewportCenter, presentSize);
+        RoundManager::drawRounds(&renderItems, viewportCenter);
         //renderItems.push_back(RendererUtil::CreateRenderItem2D("round1", viewportCenter, presentSize, Alignment::CENTERED));
     }
 

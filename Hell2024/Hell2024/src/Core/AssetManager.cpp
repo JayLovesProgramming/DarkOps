@@ -216,6 +216,21 @@ void AssetManager::FindAssetPaths()
             g_textures.emplace_back(Texture(info.fullpath, false));
         }
     }
+    auto roundCounterPicturePaths = std::filesystem::directory_iterator("res/textures/rounds/");
+    for (const auto& entry : roundCounterPicturePaths) {
+        FileInfo info = Util::GetFileInfo(entry);
+        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") {
+            g_textures.emplace_back(Texture(info.fullpath, false));
+        }
+    }
+    auto crosshairPaths = std::filesystem::directory_iterator("res/textures/crosshairs/");
+    for (const auto& entry : crosshairPaths) {
+        FileInfo info = Util::GetFileInfo(entry);
+        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") {
+            g_textures.emplace_back(Texture(info.fullpath, false));
+        }
+    }
+
     if (BackEnd::GetAPI() == API::OPENGL) {
         auto vatTexturePaths = std::filesystem::directory_iterator("res/textures/exr/");
         for (const auto& entry : vatTexturePaths) {

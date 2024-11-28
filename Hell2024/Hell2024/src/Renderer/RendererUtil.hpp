@@ -275,20 +275,22 @@ namespace RendererUtil
         }
         else if (alignment == Alignment::TOP_LEFT) 
         {
-            location.y -= texHeight;
+            // do nothing
         }
         else if (alignment == Alignment::BOTTOM_LEFT) 
         {
-            location.x -= texWidth;
+            // do nothing
         }
         else if (alignment == Alignment::BOTTOM_RIGHT) 
         {
-            location.x -= texWidth;
+            // do nothing
         }
         else if (alignment == Alignment::TOP_RIGHT) 
         {
+            location.x = viewportSize.x;
+            location.y = viewportSize.y - texWidth;
             location.x -= texWidth;
-            location.y -= texHeight;
+            location.y -= texWidth;
         }
 
         float finalX = ((location.x + (texWidth / 2.0f)) / viewportSize.x) * 2 - 1;
