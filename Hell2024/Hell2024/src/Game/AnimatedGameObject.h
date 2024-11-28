@@ -36,7 +36,7 @@ private:
     std::vector<SkinnedRenderItem> m_skinnedMeshRenderItems;
     uint32_t m_baseTransformIndex = 0;
     uint32_t m_baseSkinnedVertex = 0;
-    int32_t m_playerIndex = -1;
+    int32_t m_playerIndex = 0;
     Flag m_flag = Flag::NONE;
     bool m_isGold = false;
 

@@ -13,6 +13,7 @@
 #include "../Input/InputMulti.h"
 #include "../Physics/Physics.h"
 #include "../Pathfinding/Pathfinding2.h"
+#include "Renderer/ImGui/GUI_UI.h"
 
 #include "Core/ImageManager.h"
 
@@ -121,6 +122,9 @@ namespace BackEnd
             AssetManager::FindAssetPaths();
         }
 
+        // ImGui init
+        //HellImGui::Init(_window);
+
         // Init sub-systems
         Input::Init();
         Audio::Init();
@@ -130,7 +134,6 @@ namespace BackEnd
         Pathfinding2::Init();
         WeaponManager::Init();
         glfwShowWindow(BackEnd::GetWindowPointer());
-
     }
 
     void BeginFrame() 
@@ -140,6 +143,7 @@ namespace BackEnd
 
     void EndFrame()
     {
+
         // OpenGL
         if (GetAPI() == API::OPENGL) 
         {
@@ -150,6 +154,7 @@ namespace BackEnd
         else if (GetAPI() == API::VULKAN)
         {
         }
+
     }
 
     void UpdateSubSystems()
@@ -161,6 +166,8 @@ namespace BackEnd
 
     void CleanUp() 
     {
+        //HellImGui::cleanupImGui();
+
         if (GetWindowMode() == WindowedMode::FULLSCREEN)
         {
             ToggleFullscreen();

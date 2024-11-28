@@ -135,11 +135,14 @@ namespace Game
 
         // Player update
         InputMulti::Update();
+
         for (Player& player : g_players)
         {
+            //std::cout << player._playerName << std::endl;
             player.UpdatePlayer1(deltaTime);
             //player.UpdatePlayer2(deltaTime);
         }
+
         InputMulti::ResetMouseOffsets();
         Scene::Update(deltaTime);
 
@@ -168,6 +171,8 @@ namespace Game
 
     void CreatePlayers(unsigned int playerCount)
     {
+        std::cout << "Created " << playerCount << " players" << std::endl;
+
         g_players.clear();
         g_playerData.resize(4);
 

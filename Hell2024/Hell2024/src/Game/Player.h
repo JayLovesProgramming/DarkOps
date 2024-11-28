@@ -95,6 +95,7 @@ struct AmmoState
 class Player 
 {
 private:
+    int32_t m_playerIndex = -1;
     int32_t m_viewWeaponAnimatedGameObjectIndex = -1;
     int32_t m_characterModelAnimatedGameObjectIndex = -1;
     std::vector<PickUpText> m_pickUpTexts;
@@ -128,7 +129,6 @@ public:
     bool g_awaitingRespawn = true;
     int m_interactbleGameObjectIndex = -1;
     bool m_flashlightOn = true;
-    static inline int32_t m_playerIndex = -1;
 
     Player() = default;
     Player(int playerIndex);
@@ -136,7 +136,6 @@ public:
 
     // Updates
     void UpdatePlayer1(float deltaTime);
-    void UpdatePlayer2(float deltaTime);
 
     void UpdateRagdoll();
     void UpdateMouseLook(float deltaTime);
@@ -236,7 +235,7 @@ public:
     // Misc getters
     int32_t GetViewWeaponAnimatedGameObjectIndex();
     int32_t GetCharacterModelAnimatedGameObjectIndex();
-    static int32_t GetPlayerIndex();
+    int32_t GetPlayerIndex();
     glm::vec3 GetMuzzleFlashPosition();
     glm::vec3 GetPistolCasingSpawnPostion();
     AnimatedGameObject* GetCharacterAnimatedGameObject();
