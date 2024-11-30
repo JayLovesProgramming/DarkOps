@@ -937,12 +937,12 @@ void Player::UpdateWeaponSway(float deltaTime) {
     }
 }
 
-void Player::DropWeapons() {
-
+void Player::DropWeapons()
+{
     glm::vec3 spawnPos = GetFeetPosition() + glm::vec3(0, 1.5f, 0);
 
-    for (int i = 0; i < WeaponManager::GetWeaponCount(); i++) {
-
+    for (int i = 0; i < WeaponManager::GetWeaponCount(); i++) 
+    {
         WeaponState& weaponState = m_weaponStates[i];
         WeaponInfo* weaponInfo = WeaponManager::GetWeaponInfoByIndex(i);
 
@@ -959,7 +959,8 @@ void Player::DropWeapons() {
             weapon->SetRotationZ(-1.6f);
             weapon->SetModel(weaponInfo->pickupModelName);
             weapon->SetName("PickUp");
-            for (auto& it : weaponInfo->pickUpMeshMaterials) {
+            for (auto& it : weaponInfo->pickUpMeshMaterials)
+            {
                 weapon->SetMeshMaterialByMeshName(it.first, it.second);
             }
             //weapon->SetPickUpType(PickUpType::AKS74U);
@@ -973,6 +974,7 @@ void Player::DropWeapons() {
             weapon->SetCollisionType(CollisionType::PICKUP);
             //weapon->DisableShadows();
             weapon->m_collisionRigidBody.SetGlobalPose(weapon->_transform.to_mat4());
+            //break;
         }
     }
 }

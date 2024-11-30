@@ -638,11 +638,11 @@ void Scene::LoadDefaultScene()
     }
     */
 
-    SofaManager::CreateSofa();
-    CushionManager::CreateAllCushions();
-    MiscObjectsManager::SpawnChristmasTree();
-    MiscObjectsManager::SpawnChristmasBoxPresents();
-    MiscObjectsManager::SpawnPictureFrame();
+    //SofaManager::CreateSofa();
+    //CushionManager::CreateAllCushions();
+    //MiscObjectsManager::SpawnChristmasTree();
+    //MiscObjectsManager::SpawnChristmasBoxPresents();
+    //MiscObjectsManager::SpawnPictureFrame();
     //MiscObjectsManager::LoadHouseRailings();
 
     if (createTestCubes)

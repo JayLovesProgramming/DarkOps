@@ -155,6 +155,7 @@ namespace Input
 
     bool MouseWheelDown()
     {
+        // TODO: Implement a type of check to return if we are spamming the mouse wheel
         return _mouseWheelDown;
     }
 
@@ -165,6 +166,7 @@ namespace Input
 
     bool MouseWheelUp() 
     {
+        // TODO: Implement a type of check to return if we are spamming the mouse wheel
         return _mouseWheelUp;
     }
 

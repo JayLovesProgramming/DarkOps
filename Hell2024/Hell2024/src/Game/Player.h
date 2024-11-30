@@ -296,8 +296,6 @@ public:
     void UpdateViewWeaponLogicAndAnimations(float deltaTime);
 	void SpawnMuzzleFlash();
     void SpawnCasing(AmmoInfo* ammoInfo);
-    void SpawnAKS74UCasing();
-    void SpawnShotgunShell();
 	float GetMuzzleFlashTime();
 	float GetMuzzleFlashRotation();
 	float GetRadius();
