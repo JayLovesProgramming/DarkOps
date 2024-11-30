@@ -2,31 +2,47 @@
 #include "../BackEnd/BackEnd.h"
 #include "../Renderer/Renderer.h"
 #include "../Util.hpp"
+#include <chrono>
 
 namespace Input 
 {
     bool _keyPressed[372];
     bool _keyDown[372];
     bool _keyDownLastFrame[372];
+
     double _mouseX = 0;
     double _mouseY = 0;
+
     double _mouseOffsetX = 0;
     double _mouseOffsetY = 0;
-    int _mouseWheelValue = 0;
+
     int _sensitivity = 100;
+
+    int _mouseWheelValue = 0;
     bool _mouseWheelUp = false;
     bool _mouseWheelDown = false;
+
     bool _leftMouseDown = false;
     bool _rightMouseDown = false;
+
     bool _leftMousePressed = false;
     bool _rightMousePressed = false;
+
     bool _leftMouseDownLastFrame = false;
     bool _rightMouseDownLastFrame = false;
+
     bool _preventRightMouseHoldTillNextClick = false;
+
     int _mouseScreenX = 0;
     int _mouseScreenY = 0;
+
     int _scrollWheelYOffset = 0;
+
     GLFWwindow* _window;
+
+    std::chrono::steady_clock::time_point lastMouseWheelDownTime = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point lastMouseWheelUpTime = std::chrono::steady_clock::now();
+    const std::chrono::milliseconds cooldownDuration{ 3 };
 
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
@@ -43,48 +59,42 @@ namespace Input
         _mouseY = y;
     }
 
-    void Update()
+    static void HandleMouseWheel()
     {
-        if (KeyPressed(HELL_KEY_ESCAPE))
-        {
-            BackEnd::ForceCloseWindow();
-        }
-        if (KeyPressed(HELL_KEY_G)) 
-        {
-            BackEnd::ToggleFullscreen();
-        }
-        if (KeyPressed(HELL_KEY_H))
-        {
-            Renderer::HotloadShaders();
-        }
-
-        // Wheel
         _mouseWheelUp = false;
         _mouseWheelDown = false;
+
         _mouseWheelValue = GetScrollWheelYOffset();
+
         if (_mouseWheelValue < 0)
             _mouseWheelDown = true;
         if (_mouseWheelValue > 0)
             _mouseWheelUp = true;
-        ResetScrollWheelYOffset();
 
-        // Keyboard
+        ResetScrollWheelYOffset();
+    }
+
+    static void HandleKeyboardPresses()
+    {
         for (int i = 32; i < 349; i++)
         {
-            // down
+            // Down
             if (glfwGetKey(_window, i) == GLFW_PRESS)
                 _keyDown[i] = true;
             else
                 _keyDown[i] = false;
 
-            // press
+            // Pressed
             if (_keyDown[i] && !_keyDownLastFrame[i])
                 _keyPressed[i] = true;
             else
                 _keyPressed[i] = false;
             _keyDownLastFrame[i] = _keyDown[i];
         }
+    }
 
+    static void HandleMousePresses()
+    {
         // Mouse
         double x, y;
         glfwGetCursorPos(_window, &x, &y);
@@ -111,6 +121,26 @@ namespace Input
 
         if (_rightMousePressed)
             _preventRightMouseHoldTillNextClick = false;
+    }
+
+    void Update()
+    {
+        if (KeyPressed(HELL_KEY_ESCAPE))
+        {
+            BackEnd::ForceCloseWindow();
+        }
+        if (KeyPressed(HELL_KEY_G)) 
+        {
+            BackEnd::ToggleFullscreen();
+        }
+        if (KeyPressed(HELL_KEY_H))
+        {
+            Renderer::HotloadShaders();
+        }
+
+        HandleMouseWheel();
+        HandleKeyboardPresses();
+        HandleMousePresses();
     }
 
     bool KeyPressed(unsigned int keycode)
@@ -155,19 +185,32 @@ namespace Input
 
     bool MouseWheelDown()
     {
-        // TODO: Implement a type of check to return if we are spamming the mouse wheel
+        auto now = std::chrono::steady_clock::now();
+        if (now - lastMouseWheelDownTime < cooldownDuration)
+        {
+            return false;
+        }
+
+        lastMouseWheelDownTime = now;
         return _mouseWheelDown;
+    }
+
+    bool MouseWheelUp() 
+    {
+        auto now = std::chrono::steady_clock::now();
+        if (now - lastMouseWheelUpTime < cooldownDuration)
+        {
+            return false;
+        }
+
+        lastMouseWheelUpTime = now;
+        return _mouseWheelUp;
     }
 
     int GetMouseWheelValue()
     {
         return _mouseWheelValue;
-    }
 
-    bool MouseWheelUp() 
-    {
-        // TODO: Implement a type of check to return if we are spamming the mouse wheel
-        return _mouseWheelUp;
     }
 
     void PreventRightMouseHold()
