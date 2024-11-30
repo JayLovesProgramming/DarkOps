@@ -3,6 +3,8 @@
 #include "../Renderer/Renderer.h"
 #include "../Util.hpp"
 #include <chrono>
+#include "Game/AnimatedGameObject.h"
+#include "Game/Player.h"
 
 namespace Input 
 {

@@ -514,26 +514,26 @@ void Scene::LoadDefaultScene()
 
     std::cout << "[INFO] Light Count: " << g_lights.size() << "\n";
 
-    // Dobermann spawn lab
-    {
-        g_dobermann.clear();
+    //// Dobermann spawn lab
+    //{
+    //    g_dobermann.clear();
 
-        DobermannCreateInfo createInfo;
-        createInfo.position = glm::vec3(-1.7f, 0.4f, -1.2f);
-        createInfo.rotation = 0.7f;
-        createInfo.initalState = DobermannState::LAY;
-        Dobermann::AddDobermann(createInfo);
+    //    DobermannCreateInfo createInfo;
+    //    createInfo.position = glm::vec3(-1.7f, 0.4f, -1.2f);
+    //    createInfo.rotation = 0.7f;
+    //    createInfo.initalState = DobermannState::LAY;
+    //    Dobermann::AddDobermann(createInfo);
 
-        createInfo.position = glm::vec3(-2.46f, 0.4f, -3.08f);
-        createInfo.rotation = HELL_PI * 0.5f;
-        createInfo.initalState = DobermannState::LAY;
-        Dobermann::AddDobermann(createInfo);
+    //    createInfo.position = glm::vec3(-2.46f, 0.4f, -3.08f);
+    //    createInfo.rotation = HELL_PI * 0.5f;
+    //    createInfo.initalState = DobermannState::LAY;
+    //    Dobermann::AddDobermann(createInfo);
 
-        createInfo.position = glm::vec3(-1.77f, 0.4f, -5.66f);
-        createInfo.rotation = (1.3f);
-        createInfo.initalState = DobermannState::LAY;
-        Dobermann::AddDobermann(createInfo);
-    }
+    //    createInfo.position = glm::vec3(-1.77f, 0.4f, -5.66f);
+    //    createInfo.rotation = (1.3f);
+    //    createInfo.initalState = DobermannState::LAY;
+    //    Dobermann::AddDobermann(createInfo);
+    //}
 
     if (false)
     {

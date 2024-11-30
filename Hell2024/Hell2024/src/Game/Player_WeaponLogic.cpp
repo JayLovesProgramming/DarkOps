@@ -62,6 +62,7 @@ void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
         if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete())
         {
             _weaponAction = IDLE;
+            std::cout << "Anim complete" << std::endl;
         }
         // Fire
         if (PressedFire() && CanFire())

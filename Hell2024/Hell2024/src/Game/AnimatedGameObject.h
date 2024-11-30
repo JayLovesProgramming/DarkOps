@@ -89,7 +89,7 @@ public:
 
 	std::string GetName();
 	const glm::mat4 GetModelMatrix();
-    bool IsAnimationComplete();
+    bool IsAnimationComplete() const;
     bool AnimationIsPastPercentage(float percent);
     bool AnimationIsPastFrameNumber(int frameNumber);
     glm::vec3 GetScale();
