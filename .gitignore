@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Hell2024/Hell2024/src/Renderer/TextBlitting.cpp
+/Hell2024/Hell2024/src/Renderer/TextBlitting.cpp
