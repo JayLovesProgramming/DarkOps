@@ -3,7 +3,7 @@
 #include "../Core/Audio.hpp"
 #include "../Core/Floorplan.hpp"
 #include "../Input/Input.h"
-#include "../Renderer/RendererStorage.h"
+#include "../Renderer/RendererStorage.hpp"
 #include "../Util.hpp"
 
 const size_t AnimatedGameObject::GetAnimatedTransformCount() 

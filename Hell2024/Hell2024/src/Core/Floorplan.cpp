@@ -5,8 +5,8 @@
 #include "../Core/AssetManager.hpp"
 #include "../Core/Scene.h"
 #include "../EngineState.hpp"
-#include "../Renderer/TextBlitter.h"
-#include "../Types/Modular/ModularCommon.h"
+#include "../Renderer/TextBlitter.hpp"
+#include "../Types/Modular/ModularCommon.hpp"
 #include "../Util.hpp"
 
 namespace Floorplan {

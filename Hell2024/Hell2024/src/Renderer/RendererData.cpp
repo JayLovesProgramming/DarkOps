@@ -1,4 +1,4 @@
-#include "RendererData.h"
+#include "RendererData.hpp"
 #include "../Game/Game.h"
 #include "../Game/Scene.h"
 #include "Timer.hpp"

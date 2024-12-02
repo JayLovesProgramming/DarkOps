@@ -3,7 +3,7 @@
 // I want if a = a.png then draw a - not if a = char_64.png then use a
 // Char sheet needs updating
 
-#include "TextBlitter.h"
+#include "TextBlitter.hpp"
 #include "../BackEnd/BackEnd.hpp"
 #include "../Core/AssetManager.hpp"
 

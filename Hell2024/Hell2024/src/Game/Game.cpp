@@ -6,8 +6,8 @@
 #include "../Editor/Editor.h"
 #include "../Input/Input.h"
 #include "../Input/InputMulti.h"
-#include "../Renderer/GlobalIllumination.h"
-#include "../Renderer/Renderer.h"
+#include "../Renderer/GlobalIllumination.hpp"
+#include "../Renderer/Renderer.hpp"
 #include "../Pathfinding/Pathfinding2.h"
 #include "RapidHotload.hpp"
 

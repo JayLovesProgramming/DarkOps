@@ -1,4 +1,4 @@
-#include "RendererStorage.h"
+#include "RendererStorage.hpp"
 #include <iostream>
 
 namespace RendererStorage {

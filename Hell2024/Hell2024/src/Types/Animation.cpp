@@ -1,4 +1,4 @@
-#include "Animation.h"
+#include "Animation.hpp"
 #include "../Util.hpp"
 
 Animation::Animation(std::string fullPath)

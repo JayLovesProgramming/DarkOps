@@ -24,7 +24,7 @@
 #include "../../BackEnd/BackEnd.hpp"
 #include "../../Core/AssetManager.hpp"
 #include "../../Game/Scene.h"
-#include "../../ErrorChecking.h"
+#include "../../ErrorChecking.hpp"
 
 namespace VulkanBackEnd {
 

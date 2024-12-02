@@ -2,7 +2,7 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../../Renderer/RenderData.h"
+#include "../../Renderer/RenderData.hpp"
 
 namespace OpenGLRenderer 
 {

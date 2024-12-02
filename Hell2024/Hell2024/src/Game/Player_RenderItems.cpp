@@ -3,8 +3,8 @@
 #include "../Editor/Editor.h"
 #include "../Renderer/RendererUtil.hpp"
 #include "../Game/Scene.h"
-#include "../Renderer/TextBlitter.h"
-#include "../Renderer/Renderer.h"
+#include "../Renderer/TextBlitter.hpp"
+#include "../Renderer/Renderer.hpp"
 #include "Round.h"
 
 

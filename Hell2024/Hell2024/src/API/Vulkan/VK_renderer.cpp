@@ -2,9 +2,9 @@
 #include "VK_backend.h"
 #include "VK_assetManager.h"
 #include "VK_util.hpp"
-#include "../../Renderer/RenderData.h"
+#include "../../Renderer/RenderData.hpp"
 #include "RendererCommon.hpp"
-#include "../../Renderer/RendererStorage.h"
+#include "../../Renderer/RendererStorage.hpp"
 #include "../../Renderer/RendererUtil.hpp"
 #include "Types/VK_depthTarget.hpp"
 #include "Types/VK_descriptorSet.hpp"
@@ -17,10 +17,10 @@
 #include "../../Core/AssetManager.hpp"
 #include "../../Game/Game.h"
 #include "../../Game/Scene.h"
-#include "../../Renderer/GlobalIllumination.h"
-#include "../../Renderer/Renderer.h"
-#include "../../Renderer/TextBlitter.h"
-#include "../../Renderer/RendererData.h"
+#include "../../Renderer/GlobalIllumination.hpp"
+#include "../../Renderer/Renderer.hpp"
+#include "../../Renderer/TextBlitter.hpp"
+#include "../../Renderer/RendererData.hpp"
 
 namespace VulkanRenderer {
 

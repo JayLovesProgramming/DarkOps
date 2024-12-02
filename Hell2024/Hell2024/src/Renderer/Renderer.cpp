@@ -1,4 +1,4 @@
-﻿#include "Renderer.h"
+﻿#include "Renderer.hpp"
 #include <vector>
 #include <map>
 #include "../API/OpenGL/GL_renderer.hpp"
@@ -11,10 +11,10 @@
 #include "../Editor/Editor.h"
 #include "../Input/Input.h"
 #include "../Math/Raycasting.hpp"
-#include "../Renderer/GlobalIllumination.h"
-#include "../Renderer/RenderData.h"
-#include "../Renderer/RendererData.h"
-#include "../Renderer/TextBlitter.h"
+#include "../Renderer/GlobalIllumination.hpp"
+#include "../Renderer/RenderData.hpp"
+#include "../Renderer/RendererData.hpp"
+#include "../Renderer/TextBlitter.hpp"
 #include "../Renderer/RendererUtil.hpp"
 #include "../Renderer/Raytracing/Raytracing.h"
 #include "../Effects/MuzzleFlash.h"

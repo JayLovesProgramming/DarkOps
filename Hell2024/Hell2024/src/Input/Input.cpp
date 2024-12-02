@@ -1,6 +1,6 @@
 #include "Input.h"
 #include "../BackEnd/BackEnd.hpp"
-#include "../Renderer/Renderer.h"
+#include "../Renderer/Renderer.hpp"
 #include "../Util.hpp"
 #include <chrono>
 #include "Game/AnimatedGameObject.h"

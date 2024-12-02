@@ -7,7 +7,7 @@
 #include "../Core/Audio.hpp"
 #include "../Input/Input.h"
 #include "../Input/InputMulti.h"
-#include "../Renderer/TextBlitter.h"
+#include "../Renderer/TextBlitter.hpp"
 #include "../Renderer/RendererUtil.hpp"
 #include "HellCommon.hpp"
 #include "../Config.hpp"

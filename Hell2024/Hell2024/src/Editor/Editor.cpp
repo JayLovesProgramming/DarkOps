@@ -9,9 +9,9 @@
 #include "../Game/Scene.h"
 #include "../Input/Input.h"
 #include "../Pathfinding/Pathfinding2.h"
-#include "../Renderer/GlobalIllumination.h"
+#include "../Renderer/GlobalIllumination.hpp"
 #include "../Renderer/RendererUtil.hpp"
-#include "../Renderer/TextBlitter.h"
+#include "../Renderer/TextBlitter.hpp"
 #include "../Timer.hpp"
 #include "../Util.hpp"
 

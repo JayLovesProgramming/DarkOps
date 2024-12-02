@@ -1,4 +1,4 @@
-#include "Staircase.h"
+#include "Staircase.hpp"
 
 glm::mat4 Staircase::GetModelMatrix() 
 {

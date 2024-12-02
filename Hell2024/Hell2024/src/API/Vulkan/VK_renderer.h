@@ -2,7 +2,7 @@
 #include "Types/VK_descriptorSet.hpp"
 #include "Types/VK_raytracing.hpp"
 #include "../../Game/Light.h"
-#include "../../Renderer/RenderData.h"
+#include "../../Renderer/RenderData.hpp"
 #include "RendererCommon.hpp"
 #include "../../Util.hpp"
 

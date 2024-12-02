@@ -7,8 +7,8 @@
 #include "../Core/FBXImporter.hpp"
 #include "../BackEnd/BackEnd.hpp"
 #include "../Util.hpp"
-#include "../Tools/DDSHelpers.h"
-#include "../Tools/ImageTools.h"
+#include "../Tools/DDSHelpers.hpp"
+#include "../Tools/ImageTools.hpp"
 #include <future>
 #include <thread>
 #include <numeric>

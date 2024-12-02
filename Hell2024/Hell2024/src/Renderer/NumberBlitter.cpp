@@ -1,4 +1,4 @@
-#include "NumberBlitter.h"
+#include "NumberBlitter.hpp"
 #include <algorithm>
 #include <iostream>
 #include "../API/OpenGL/GL_backEnd.hpp"

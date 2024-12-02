@@ -25,7 +25,7 @@
 
 
 #include "Compressonator.h"
-#include "DDSHelpers.h"
+#include "DDSHelpers.hpp"
 #include <assert.h>
 #include <stdio.h>
 #include <ctype.h>

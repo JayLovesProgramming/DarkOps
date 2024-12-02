@@ -11,7 +11,7 @@
 #include "../Core/AssetManager.hpp"
 #include "../Game/Scene.h"
 #include "../Pathfinding/Pathfinding2.h"
-#include "../Renderer/GlobalIllumination.h"
+#include "../Renderer/GlobalIllumination.hpp"
 #include "../Timer.hpp"
 
 namespace CSG 

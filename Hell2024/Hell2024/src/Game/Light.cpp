@@ -3,7 +3,7 @@
 #include "../Editor/CSG.h"
 #include "../Math/Raycasting.hpp"
 #include "../Renderer/Raytracing/Raytracing.h"
-#include "../Renderer/GlobalIllumination.h"
+#include "../Renderer/GlobalIllumination.hpp"
 #include "../Util.hpp"
 
 void Light::FindVisibleCloudPoints()

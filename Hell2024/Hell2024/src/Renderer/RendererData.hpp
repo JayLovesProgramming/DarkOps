@@ -1,6 +1,6 @@
 #pragma once
 #include "HellCommon.hpp"
-#include "RenderData.h" // remove me later
+#include "RenderData.hpp" // remove me later
 
 struct DrawInfo {
     std::vector<DrawIndexedIndirectCommand> commands;

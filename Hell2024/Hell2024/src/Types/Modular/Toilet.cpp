@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Toilet.h"
+#include "Toilet.hpp"
 #include "../../Game/Scene.h"
 
 Toilet::Toilet(glm::vec3 position, float rotation)

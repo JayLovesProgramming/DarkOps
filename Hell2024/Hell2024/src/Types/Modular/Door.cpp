@@ -1,4 +1,4 @@
-#include "Door.h"
+#include "Door.hpp"
 #include "../../Core/AssetManager.hpp"
 #include "../../Game/Player.h"
 #include "../../Core/Audio.hpp"
