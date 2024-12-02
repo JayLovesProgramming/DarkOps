@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CSGCommon.h"
+#include "CSGCommon.hpp"
 #include "RendererCommon.hpp"
 #include "TinyCSG/tinycsg.hpp"
 #include <span>

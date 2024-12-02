@@ -1,7 +1,7 @@
 // TODO: MAKE THIS A LOT!!!! MORE MODULAR
 
-#include "Scene.h"
-#include "Player.h"
+#include "Scene.hpp"
+#include "Player.hpp"
 #include <memory>
 #include <stdlib.h>
 
@@ -9,16 +9,16 @@
 #include "../Core/AssetManager.hpp"
 #include "../Core/Audio.hpp"
 #include "../Core/JSON.hpp"
-#include "../Editor/CSG.h"
-#include "../Game/Game.h"
-#include "../Input/Input.h"
+#include "../Editor/CSG.hpp"
+#include "../Game/Game.hpp"
+#include "../Input/Input.hpp"
 #include "../Renderer/GlobalIllumination.hpp"
 #include "../Renderer/TextBlitter.hpp"
-#include "../Renderer/Raytracing/Raytracing.h"
+#include "../Renderer/Raytracing/Raytracing.hpp"
 #include "../Timer.hpp"
-#include "../Util.hpp"
-#include "MiscObjects.h"
-#include "Cushions.h"
+#include "../Utils/Util.hpp"
+#include "MiscObjects.hpp"
+#include "Cushions.hpp"
 
 int _volumetricBloodObjectsSpawnedThisFrame = 0;
 
@@ -1325,7 +1325,7 @@ AnimatedGameObject* Scene::GetAnimatedGameObjectByIndex(int32_t index, std::stri
         type != "viewWeaponModel" && 
         type != "viewWeapon")
     {
-        std::cout << type << std::endl;
+        // std::cout << type << std::endl;
     }
     //std::cout << "GetAnimatedGameObjectByIndex - Index Size = " << index << std::endl;
     //std::cout << "GetAnimatedGameObjectByIndex - Animated Game Objects Size = " << g_animatedGameObjects.size() << std::endl;
@@ -2207,7 +2207,7 @@ void Scene::ProcessBullets()
                     }
                     if (doIt) 
                     {
-                        std::cout << "Created bullet decal" << std::endl;
+                        //std::cout << "Created bullet decal" << std::endl;
                         // Bullet decal
                         PxRigidBody* parent = actor;
                         glm::mat4 parentMatrix = Util::PxMat44ToGlmMat4(actor->getGlobalPose());

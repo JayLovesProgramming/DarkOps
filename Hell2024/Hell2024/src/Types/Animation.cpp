@@ -1,5 +1,5 @@
 #include "Animation.hpp"
-#include "../Util.hpp"
+#include "../Utils/Util.hpp"
 
 Animation::Animation(std::string fullPath)
 {

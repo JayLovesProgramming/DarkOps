@@ -4,8 +4,8 @@
 #include "../API/Vulkan/VK_backEnd.h"
 #include "../API/Vulkan/VK_renderer.h"
 #include "../BackEnd/BackEnd.hpp"
-#include "../Game/Scene.h"
-#include "../Editor/CSG.h"
+#include "../Game/Scene.hpp"
+#include "../Editor/CSG.hpp"
 #include "../Timer.hpp"
 
 namespace GlobalIllumination

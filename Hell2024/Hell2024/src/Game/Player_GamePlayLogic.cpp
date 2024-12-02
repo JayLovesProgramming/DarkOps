@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "Player.hpp"
 #include "../Core/Audio.hpp"
 
 void Player::CheckForSuicide()

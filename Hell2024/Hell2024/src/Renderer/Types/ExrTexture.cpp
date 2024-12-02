@@ -1,4 +1,4 @@
-#include "ExrTexture.h"
+#include "ExrTexture.hpp"
 #define TINYEXR_IMPLEMENTATION
 #include "tinyexr.h"
 

@@ -1,16 +1,16 @@
-#include "csg.h"
+#include "CSG.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <future>
 #include <vector>
-#include "../Util.hpp"
+#include "../Utils/Util.hpp"
 #include "../API/OpenGL/GL_backEnd.hpp"
 #include "../BackEnd/Backend.hpp"
 #include "../Core/AssetManager.hpp"
-#include "../Game/Scene.h"
-#include "../Pathfinding/Pathfinding2.h"
+#include "../Game/Scene.hpp"
+#include "../Pathfinding/Pathfinding2.hpp"
 #include "../Renderer/GlobalIllumination.hpp"
 #include "../Timer.hpp"
 

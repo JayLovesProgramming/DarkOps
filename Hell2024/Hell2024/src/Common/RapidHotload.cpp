@@ -1,6 +1,6 @@
 #include "RapidHotload.hpp"
-#include "../Game/Game.h"
-#include "../Game/Scene.h"
+#include "../Game/Game.hpp"
+#include "../Game/Scene.hpp"
 
 void RapidHotload::Update() 
 {

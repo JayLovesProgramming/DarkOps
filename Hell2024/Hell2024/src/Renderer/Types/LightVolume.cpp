@@ -1,4 +1,4 @@
-#include "LightVolume.h"
+#include "LightVolume.hpp"
 #include "../../BackEnd/BackEnd.hpp"
 #include "RendererCommon.hpp"
 

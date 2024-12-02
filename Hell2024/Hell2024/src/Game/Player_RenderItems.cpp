@@ -1,11 +1,11 @@
-#include "Player.h"
-#include "Game.h"
-#include "../Editor/Editor.h"
+#include "Player.hpp"
+#include "Game.hpp"
+#include "../Editor/Editor.hpp"
 #include "../Renderer/RendererUtil.hpp"
-#include "../Game/Scene.h"
+#include "../Game/Scene.hpp"
 #include "../Renderer/TextBlitter.hpp"
 #include "../Renderer/Renderer.hpp"
-#include "Round.h"
+#include "Round.hpp"
 
 
 std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize) {

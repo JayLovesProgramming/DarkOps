@@ -4,21 +4,21 @@
 #include "../API/OpenGL/GL_renderer.hpp"
 #include "../API/Vulkan/VK_renderer.h"
 #include "../BackEnd/BackEnd.hpp"
-#include "../Game/Game.h"
-#include "../Game/Player.h"
-#include "../Game/Scene.h"
-#include "../Editor/CSG.h"
-#include "../Editor/Editor.h"
-#include "../Input/Input.h"
+#include "../Game/Game.hpp"
+#include "../Game/Player.hpp"
+#include "../Game/Scene.hpp"
+#include "../Editor/CSG.hpp"
+#include "../Editor/Editor.hpp"
+#include "../Input/Input.hpp"
 #include "../Math/Raycasting.hpp"
 #include "../Renderer/GlobalIllumination.hpp"
 #include "../Renderer/RenderData.hpp"
 #include "../Renderer/RendererData.hpp"
 #include "../Renderer/TextBlitter.hpp"
 #include "../Renderer/RendererUtil.hpp"
-#include "../Renderer/Raytracing/Raytracing.h"
-#include "../Effects/MuzzleFlash.h"
-#include "../Util.hpp"
+#include "../Renderer/Raytracing/Raytracing.hpp"
+#include "../Effects/MuzzleFlash.hpp"
+#include "../Utils/Util.hpp"
 
 #include "../Math/Frustum.hpp"
 
@@ -49,11 +49,6 @@ std::vector<glm::vec3> g_debugTriangleVertices = {
     glm::vec3(2.0f, 0.0f, 1.0f),
     glm::vec3(1.5f, 1.0f, 1.0f)
 };
-
-/*
- █▀▄ █▀▀ █▀█ █▀▄ █▀▀ █▀▄   █▀▀ █▀▄ █▀█ █▄█ █▀▀
- █▀▄ █▀▀ █ █ █ █ █▀▀ █▀▄   █▀▀ █▀▄ █▀█ █ █ █▀▀
- ▀ ▀ ▀▀▀ ▀ ▀ ▀▀  ▀▀▀ ▀ ▀   ▀   ▀ ▀ ▀ ▀ ▀ ▀ ▀▀▀ */
 
 void Renderer::RenderFrame()
 {

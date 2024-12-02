@@ -1,8 +1,8 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../Physics/Physics.h"
-#include "../Util.hpp"
+#include "../Physics/Physics.hpp"
+#include "../Utils/Util.hpp"
 
 struct BulletHoleDecal 
 {

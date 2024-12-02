@@ -1,6 +1,6 @@
-#include "Brush.h"
+#include "Brush.hpp"
 #include "Defines.hpp"
-#include "Util.hpp"
+#include "Utils/Util.hpp"
 
 static float signed_distance(const glm::vec3& point, const csg::plane_t& plane);
 static glm::vec3 project_point(const glm::vec3& point, const csg::plane_t& plane);

@@ -6,7 +6,7 @@
 #include "../API/Vulkan/VK_renderer.h"
 #include "../Core/FBXImporter.hpp"
 #include "../BackEnd/BackEnd.hpp"
-#include "../Util.hpp"
+#include "../Utils/Util.hpp"
 #include "../Tools/DDSHelpers.hpp"
 #include "../Tools/ImageTools.hpp"
 #include <future>

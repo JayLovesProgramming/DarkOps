@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../../Util.hpp"
+#include "../../Utils/Util.hpp"
 #include "../../API/OpenGL/Types/GL_cubemapTexture.h"
 //#include "../API/Vulkan/Types/VK_cubeMaptexture.h"
 

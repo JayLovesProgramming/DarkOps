@@ -1,4 +1,4 @@
-#include "Pathfinding2.h"
+#include "Pathfinding2.hpp"
 #include "recast/DebugDraw.h"
 #include "recast/RecastDebugDraw.h"
 #include <vector>
@@ -6,9 +6,9 @@
 #include "glm/glm.hpp"
 #include "../Timer.hpp"
 
-#include "../Editor/CSG.h"
-#include "../Input/Input.h"
-#include "../Game/Game.h"
+#include "../Editor/CSG.hpp"
+#include "../Input/Input.hpp"
+#include "../Game/Game.hpp"
 #include "../Core/AssetManager.hpp"
 
 class MyDebugDraw : public duDebugDraw

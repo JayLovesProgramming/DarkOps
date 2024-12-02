@@ -1,4 +1,4 @@
-#include "InputMulti.h"
+#include "InputMulti.hpp"
 #include "../BackEnd/BackEnd.hpp"
 #include <iostream>
 

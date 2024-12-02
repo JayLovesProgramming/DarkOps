@@ -4,7 +4,7 @@ extern "C" {
     __declspec(dllexport) unsigned __int32 NvOptimusEnablement = 0x1;
 }
 
-#include "Engine.hpp"
+#include "Core/Engine.hpp"
 #include <iostream>
 
 int main() 

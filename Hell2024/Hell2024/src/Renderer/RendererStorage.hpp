@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Types/VertexBuffer.h"
+#include "Types/VertexBuffer.hpp"
 
 namespace RendererStorage 
 {

@@ -23,8 +23,8 @@
 #include "VK_Renderer.h"
 #include "../../BackEnd/BackEnd.hpp"
 #include "../../Core/AssetManager.hpp"
-#include "../../Game/Scene.h"
-#include "../../ErrorChecking.hpp"
+#include "../../Game/Scene.hpp"
+#include "../../Utils/ErrorHandling/ErrorChecking.hpp"
 
 namespace VulkanBackEnd {
 

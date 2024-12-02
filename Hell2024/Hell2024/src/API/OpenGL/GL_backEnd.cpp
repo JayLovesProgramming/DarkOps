@@ -1,7 +1,7 @@
 #include "GL_backEnd.hpp"
 #include "Types/GL_vertexBuffer.hpp"
 #include "../../Core/AssetManager.hpp"
-#include "../../Util.hpp"
+#include "../../Utils/Util.hpp"
 #include <iostream>
 #include <string>
 

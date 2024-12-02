@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Types.hpp"
-#include "CSGCommon.h"
-#include "../Physics/Physics.h"
-#include "../Util.hpp"
+#include "CSGCommon.hpp"
+#include "../Physics/Physics.hpp"
+#include "../Utils/Util.hpp"
 
 struct CSGCube 
 {

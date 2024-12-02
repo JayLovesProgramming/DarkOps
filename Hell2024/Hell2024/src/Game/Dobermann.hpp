@@ -1,8 +1,8 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../Game/AnimatedGameObject.h"
-#include "../Pathfinding/Pathfinding2.h"
+#include "../Game/AnimatedGameObject.hpp"
+#include "../Pathfinding/Pathfinding2.hpp"
 
 #define DOG_MAX_HEALTH 45
 

@@ -1,6 +1,6 @@
-#include "Texture.h"
+#include "Texture.hpp"
 #include "../../BackEnd/BackEnd.hpp"
-#include "../../Util.hpp"
+#include "../../Utils/Util.hpp"
 
 Texture::Texture(std::string fullpath, bool compressed) 
 {

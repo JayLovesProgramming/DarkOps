@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "../../Util.hpp"
+#include "../../Utils/Util.hpp"
 
 struct ColorAttachment
 {

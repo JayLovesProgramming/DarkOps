@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HeightMap.h"
+#include "HeightMap.hpp"
 #include <stb_image.h>
 #include <iostream>
 

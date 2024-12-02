@@ -1,10 +1,10 @@
-#include "Input.h"
+#include "Input.hpp"
 #include "../BackEnd/BackEnd.hpp"
 #include "../Renderer/Renderer.hpp"
-#include "../Util.hpp"
+#include "../Utils/Util.hpp"
 #include <chrono>
-#include "Game/AnimatedGameObject.h"
-#include "Game/Player.h"
+#include "Game/AnimatedGameObject.hpp"
+#include "Game/Player.hpp"
 
 namespace Input 
 {

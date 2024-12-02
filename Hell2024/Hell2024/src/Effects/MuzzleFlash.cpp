@@ -1,4 +1,4 @@
-#include "MuzzleFlash.h"
+#include "MuzzleFlash.hpp"
 
 MuzzleFlash::MuzzleFlash() 
 {

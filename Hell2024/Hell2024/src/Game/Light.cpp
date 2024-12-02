@@ -1,10 +1,10 @@
-#include "Light.h"
-#include "../Game/Scene.h"
-#include "../Editor/CSG.h"
+#include "Light.hpp"
+#include "../Game/Scene.hpp"
+#include "../Editor/CSG.hpp"
 #include "../Math/Raycasting.hpp"
-#include "../Renderer/Raytracing/Raytracing.h"
+#include "../Renderer/Raytracing/Raytracing.hpp"
 #include "../Renderer/GlobalIllumination.hpp"
-#include "../Util.hpp"
+#include "../Utils/Util.hpp"
 
 void Light::FindVisibleCloudPoints()
 {

@@ -1,4 +1,4 @@
-#include "NavMesh.h"
+#include "NavMesh.hpp"
 #include <iostream>
 
 struct FastLZCompressor : public dtTileCacheCompressor 

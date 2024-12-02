@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CSGShape.h"
+#include "CSGShape.hpp"
 
 glm::mat4 CSGCube::GetModelMatrix()
 {

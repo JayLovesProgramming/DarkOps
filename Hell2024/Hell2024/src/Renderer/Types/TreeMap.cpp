@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TreeMap.h"
+#include "TreeMap.hpp"
 #include <stb_image.h>
 #include <iostream>
 

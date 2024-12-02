@@ -3,9 +3,9 @@
 #include "../Core/Audio.hpp"
 #include "../Physics/RigidBody.hpp"
 #include "../Physics/RigidStatic.hpp"
-#include "../Physics/Physics.h"
+#include "../Physics/Physics.hpp"
 #include "../Renderer/Types/Model.hpp"
-#include "../Util.hpp"
+#include "../Utils/Util.hpp"
 
 enum class OpenState { NONE, CLOSED, CLOSING, OPEN, OPENING };
 enum class OpenAxis { NONE, TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, ROTATION_POS_X, ROTATION_POS_Y, ROTATION_POS_Z, ROTATION_NEG_X, ROTATION_NEG_Y, ROTATION_NEG_Z };

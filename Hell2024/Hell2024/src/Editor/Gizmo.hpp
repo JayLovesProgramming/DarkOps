@@ -2,7 +2,7 @@
 
 #include "../../vendor/im3d/im3d.h"
 #include "../API/OpenGL/Types/GL_shader.h"
-#include "../Input/Input.h"
+#include "../Input/Input.hpp"
 
 namespace Gizmo 
 {

@@ -2,7 +2,7 @@
 
 #include <string>
 #include "RendererCommon.hpp"
-#include "../Physics/Physics.h"
+#include "../Physics/Physics.hpp"
 
 struct HeightMap
 {

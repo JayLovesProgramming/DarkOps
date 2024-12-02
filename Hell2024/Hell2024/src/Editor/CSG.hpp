@@ -4,8 +4,8 @@
 #include "TinyCSG/tinycsg.hpp"
 #include "../Physics/RigidStatic.hpp"
 #include <span>
-#include "CSGCommon.h"
-#include "brush.h"
+#include "CSGCommon.hpp"
+#include "Brush.hpp"
 
 static constexpr csg::volume_t AIR = 0;
 static constexpr csg::volume_t SOLID = 1;

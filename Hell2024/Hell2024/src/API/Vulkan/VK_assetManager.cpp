@@ -13,13 +13,13 @@
 #include <fstream>
 
 #include "../../Core/AssetManager.hpp"
-//#include "../../Types/Texture.h"
+//#include "../../Types/Texture.hpp"
 
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE
 #include "VK_BackEnd.h"
-#include "../../Util.hpp"
+#include "../../Utils/Util.hpp"
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE

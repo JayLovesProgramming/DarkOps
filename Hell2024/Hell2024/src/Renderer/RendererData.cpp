@@ -1,6 +1,6 @@
 #include "RendererData.hpp"
-#include "../Game/Game.h"
-#include "../Game/Scene.h"
+#include "../Game/Game.hpp"
+#include "../Game/Scene.hpp"
 #include "Timer.hpp"
 
 namespace RendererData {

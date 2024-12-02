@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Texture3D.h"
+#include "Texture3D.hpp"
 #include <glm/glm.hpp>
 
 struct LightVolume

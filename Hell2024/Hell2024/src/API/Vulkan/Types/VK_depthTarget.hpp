@@ -1,7 +1,7 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include "vk_mem_alloc.h"
-#include "../../../ErrorChecking.hpp"
+#include "../../../Utils/ErrorHandling/ErrorChecking.hpp"
 
 namespace Vulkan {
 

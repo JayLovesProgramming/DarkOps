@@ -1,15 +1,15 @@
 #pragma once
 #include "HellCommon.hpp"
 #include "../Math/Types.hpp"
-#include "../Renderer/Types/CubemapTexture.h"
-#include "../Renderer/Types/ExrTexture.h"
-#include "../Renderer/Types/HeightMap.h"
-#include "../Renderer/Types/TreeMap.h"
+#include "../Renderer/Types/CubemapTexture.hpp"
+#include "../Renderer/Types/ExrTexture.hpp"
+#include "../Renderer/Types/HeightMap.hpp"
+#include "../Renderer/Types/TreeMap.hpp"
 #include "../Renderer/Types/Mesh.hpp"
 #include "../Renderer/Types/Model.hpp"
 #include "../Renderer/Types/SkinnedMesh.hpp"
 #include "../Renderer/Types/SkinnedModel.h"
-#include "../Renderer/Types/Texture.h"
+#include "../Renderer/Types/Texture.hpp"
 
 namespace AssetManager {
 

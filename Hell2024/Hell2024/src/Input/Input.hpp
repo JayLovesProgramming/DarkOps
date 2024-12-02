@@ -1,6 +1,6 @@
 #pragma once
 
-#include "keycodes.h"
+#include "keycodes.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 

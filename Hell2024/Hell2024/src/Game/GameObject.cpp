@@ -1,8 +1,8 @@
 #pragma once
-#include "GameObject.h"
-#include "Scene.h"
-#include "../Input/Input.h"
-#include "../Config.hpp"
+#include "GameObject.hpp"
+#include "Scene.hpp"
+#include "../Input/Input.hpp"
+#include "../Common/Config.hpp"
 #include "../BackEnd/BackEnd.hpp"
 #include "../Core/AssetManager.hpp"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RendererCommon.hpp"
-#include "Types/LightVolume.h"
+#include "Types/LightVolume.hpp"
 #include <vector>
 
 namespace GlobalIllumination

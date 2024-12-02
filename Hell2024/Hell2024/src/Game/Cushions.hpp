@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Scene.h"
-#include "Sofa.h"
+#include "Scene.hpp"
+#include "Sofa.hpp"
 
 using Scene::CreateGameObject, Scene::GetGameObjectByIndex, Scene::GetGameObjectCount;
 

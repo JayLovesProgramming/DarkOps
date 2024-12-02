@@ -1,4 +1,4 @@
-#include "Ragdoll.h"
+#include "Ragdoll.hpp"
 #include "rapidjson/document.h"
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/istreamwrapper.h>
@@ -11,7 +11,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "../Util.hpp"
+#include "../Utils/Util.hpp"
 
 std::string FindParentJointName(std::string query)
 {

@@ -14,8 +14,8 @@
 #include "detour/DetourCommon.h"
 #include "detour/fastlz.h"
 
-#define MAX_POLYS 256
-#define EXPECTED_LAYERS_PER_TILE 4
+constexpr static auto MAX_POLYS = 256;
+constexpr static auto EXPECTED_LAYERS_PER_TILE = 4;
 
 enum class NavMeshRegionMode 
 {

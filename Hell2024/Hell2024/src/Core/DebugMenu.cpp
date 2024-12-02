@@ -3,9 +3,9 @@
 #include "DebugMenu.h"
 #include "Floorplan.hpp"
 #include "../Config.hpp"
-#include "../Game/Game.h"
-#include "../Game/Scene.h"
-#include "../Input/Input.h"
+#include "../Game/Game.hpp"
+#include "../Game/Scene.hpp"
+#include "../Input/Input.hpp"
 #include "../EngineState.hpp"
 #include <format>
 

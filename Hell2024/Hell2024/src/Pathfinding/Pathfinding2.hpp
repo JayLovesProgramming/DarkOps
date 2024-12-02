@@ -1,7 +1,7 @@
 #pragma once
 
 #include "recast/Recast.h"
-#include "NavMesh.h"
+#include "NavMesh.hpp"
 
 struct Path 
 {

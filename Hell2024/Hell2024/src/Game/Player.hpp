@@ -1,10 +1,10 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../Game/WeaponManager.h"
-#include "../Game/AnimatedGameObject.h"
-#include "../Input/keycodes.h"
-#include "../Physics/Physics.h"
+#include "../Game/WeaponManager.hpp"
+#include "../Game/AnimatedGameObject.hpp"
+#include "../Input/keycodes.hpp"
+#include "../Physics/Physics.hpp"
 #include "../Math/Frustum.hpp"
 #include "../Math/Types.hpp"
 

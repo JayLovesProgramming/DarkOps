@@ -1,4 +1,4 @@
-#include "CubemapTexture.h"
+#include "CubemapTexture.hpp"
 #include "../../BackEnd/BackEnd.hpp"
 
 void CubemapTexture::SetName(std::string name)

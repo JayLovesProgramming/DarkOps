@@ -1,10 +1,10 @@
 #pragma once
 #include "Types/VK_descriptorSet.hpp"
 #include "Types/VK_raytracing.hpp"
-#include "../../Game/Light.h"
+#include "../../Game/Light.hpp"
 #include "../../Renderer/RenderData.hpp"
 #include "RendererCommon.hpp"
-#include "../../Util.hpp"
+#include "../../Utils/Util.hpp"
 
 namespace VulkanRenderer {
 

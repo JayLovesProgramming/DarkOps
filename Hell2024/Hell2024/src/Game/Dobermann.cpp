@@ -1,7 +1,7 @@
-#include "Dobermann.h"
-#include "Scene.h"
-#include "../Input/Input.h"
-#include "../Game/Game.h"
+#include "Dobermann.hpp"
+#include "Scene.hpp"
+#include "../Input/Input.hpp"
+#include "../Game/Game.hpp"
 #include "../Timer.hpp"
 
 void Dobermann::Init() 

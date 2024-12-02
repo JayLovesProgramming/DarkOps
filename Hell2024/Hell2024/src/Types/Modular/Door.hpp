@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../../Physics/Physics.h"
+#include "../../Physics/Physics.hpp"
 
 struct Door 
 {

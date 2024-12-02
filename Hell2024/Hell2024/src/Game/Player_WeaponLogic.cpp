@@ -1,10 +1,10 @@
-﻿#include "Player.h"
-#include "Game.h"
-#include "Scene.h"
+﻿#include "Player.hpp"
+#include "Game.hpp"
+#include "Scene.hpp"
 #include "Core/Audio.hpp"
-#include "Input/Input.h"
-#include "Input/InputMulti.h"
-#include "Util.hpp"
+#include "Input/Input.hpp"
+#include "Input/InputMulti.hpp"
+#include "Utils/Util.hpp"
 #include "Timer.hpp"
 
 void Player::GiveDefaultLoadout()

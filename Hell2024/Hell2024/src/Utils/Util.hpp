@@ -12,7 +12,7 @@
 #include <filesystem>
 #include <assimp/matrix3x3.h>
 #include <assimp/matrix4x4.h>
-#include "Physics/Physics.h"
+#include "Physics/Physics.hpp"
 #include "rapidjson/document.h"
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/istreamwrapper.h>

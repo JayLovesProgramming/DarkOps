@@ -1,9 +1,9 @@
 #include "Engine.hpp"
 #include "BackEnd/BackEnd.hpp"
 #include "Core/AssetManager.hpp"
-#include "Game/Game.h"
+#include "Game/Game.hpp"
 #include "Renderer/Renderer.hpp"
-#include "Utils/ErrorHandling/LogErrors.h"
+#include "Utils/ErrorHandling/LogErrors.hpp"
 
 void Engine::Run() 
 {

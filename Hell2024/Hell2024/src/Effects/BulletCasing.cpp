@@ -1,7 +1,7 @@
-#include "BulletCasing.h"
-#include "../Util.hpp"
+#include "BulletCasing.hpp"
+#include "../Utils/Util.hpp"
 #include "../Core/Audio.hpp"
-#include "../Physics/Physics.h"
+#include "../Physics/Physics.hpp"
 
 constexpr static auto BULLET_CASING_LIFETIME = 2.0f;
 
