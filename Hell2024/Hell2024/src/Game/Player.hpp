@@ -119,11 +119,11 @@ private:
     glm::mat4 m_muzzleFlashMatrix = glm::mat4(1);
     OverlapReport m_interactOverlapReport;
     std::string overlapList;
-    float m_crosshairCrossSize = 0;
     float m_accuracyModifer = 0;
     bool m_firedThisFrame = false;
 
 public:
+    float m_crosshairCrossSize = 0;
     glm::mat4 m_weaponSwayMatrix = glm::mat4(1);
     bool m_pickUpInteractable = false;
     bool g_awaitingRespawn = true;
