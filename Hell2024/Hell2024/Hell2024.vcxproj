@@ -278,7 +278,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Common\Defines.h" />
     <ClInclude Include="src\Common\Enums.h" />
     <ClInclude Include="src\Common\RapidHotload.h" />
-    <ClInclude Include="src\Common\Types.h" />
+    <ClInclude Include="src\Common\Types.hpp" />
     <ClInclude Include="src\Core\ImageManager.h" />
     <ClInclude Include="src\Core\JSON.hpp" />
     <ClInclude Include="src\Core\CreateInfo.hpp" />
@@ -296,7 +296,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Game\RTMesh.h" />
     <ClInclude Include="src\Game\Sofa.h" />
     <ClInclude Include="src\Game\SpawnPoint.h" />
-    <ClInclude Include="src\Math\Frustum.h" />
+    <ClInclude Include="src\Math\Frustum.hpp" />
     <ClInclude Include="src\Renderer\ImGui\GUI_UI.h" />
     <ClInclude Include="src\Renderer\RendererData.h" />
     <ClInclude Include="src\Renderer\SSAO.hpp" />
@@ -311,7 +311,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Effects\BloodDecal.hpp" />
     <ClInclude Include="src\Math\Raycasting.hpp" />
     <ClInclude Include="src\Pathfinding\NavMesh.h" />
-    <ClInclude Include="src\Math\BVH.h" />
+    <ClInclude Include="src\Math\BVH.hpp" />
     <ClInclude Include="src\Renderer\Raytracing\BLAS.hpp" />
     <ClInclude Include="src\Renderer\Raytracing\Raytracing.h" />
     <ClInclude Include="src\Renderer\Raytracing\TLAS.hpp" />
@@ -369,7 +369,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Effects\BulletHoleDecal.hpp" />
     <ClInclude Include="src\Effects\MuzzleFlash.h" />
     <ClInclude Include="src\Engine.h" />
-    <ClInclude Include="src\Math\Types.h" />
+    <ClInclude Include="src\Math\Types.hpp" />
     <ClInclude Include="src\Physics\RigidBody.hpp" />
     <ClInclude Include="src\Physics\RigidStatic.hpp" />
     <ClInclude Include="src\API\OpenGL\Types\GL_gBuffer.h" />

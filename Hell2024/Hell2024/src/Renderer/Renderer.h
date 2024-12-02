@@ -2,7 +2,7 @@
 
 #include "RendererCommon.h"
 #include "Types/DetachedMesh.hpp"
-#include "Math/Frustum.h"
+#include "Math/Frustum.hpp"
 
 namespace Renderer
 {

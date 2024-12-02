@@ -1,4 +1,4 @@
-#include "Frustum.h"
+#include "Frustum.hpp"
 #include "../Util.hpp"
 
 void Frustum::Update(const glm::mat4& projectionView) 

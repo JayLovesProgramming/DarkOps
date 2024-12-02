@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Types.h"
+#include "Types.hpp"
 #include "CSGCommon.h"
 #include "../Physics/Physics.h"
 #include "../Util.hpp"

@@ -1,6 +1,6 @@
 #pragma once
 #include "HellCommon.h"
-#include "../Math/Types.h"
+#include "../Math/Types.hpp"
 #include "../Renderer/Types/CubemapTexture.h"
 #include "../Renderer/Types/ExrTexture.h"
 #include "../Renderer/Types/HeightMap.h"

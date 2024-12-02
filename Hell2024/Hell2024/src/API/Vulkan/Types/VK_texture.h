@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "VK_allocation.hpp"
-#include "Types.h"
+#include "Types.hpp"
 
 class VulkanTexture {
 

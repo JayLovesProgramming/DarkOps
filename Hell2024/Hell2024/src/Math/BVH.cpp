@@ -1,4 +1,4 @@
-#include "BVH.h"
+#include "BVH.hpp"
 #include <bvh/v2/bvh.h>
 #include <bvh/v2/vec.h>
 #include <bvh/v2/ray.h>

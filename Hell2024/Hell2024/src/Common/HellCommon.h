@@ -3,5 +3,5 @@
 #include "Defines.h"
 #include "Enums.h"
 #include "RendererCommon.h"
-#include "Types.h"
-#include "../Math/Types.h"
+#include "Types.hpp"
+#include "../Math/Types.hpp"

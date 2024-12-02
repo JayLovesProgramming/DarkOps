@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HellCommon.h"
-#include "../Math/Frustum.h"
+#include "../Math/Frustum.hpp"
 
 struct Light 
 {

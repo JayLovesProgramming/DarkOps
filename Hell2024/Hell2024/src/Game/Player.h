@@ -5,8 +5,8 @@
 #include "../Game/AnimatedGameObject.h"
 #include "../Input/keycodes.h"
 #include "../Physics/Physics.h"
-#include "../Math/Frustum.h"
-#include "../Math/Types.h"
+#include "../Math/Frustum.hpp"
+#include "../Math/Types.hpp"
 
 #define GLOCK_CLIP_SIZE 12
 #define GLOCK_MAX_AMMO_SIZE 200

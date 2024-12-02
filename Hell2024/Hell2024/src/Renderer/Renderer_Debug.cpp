@@ -7,9 +7,9 @@
 #include "../Pathfinding/Pathfinding2.h"
 #include "../Renderer/Raytracing/Raytracing.h"
 #include "../Renderer/RendererData.h"
-#include "../Math/Frustum.h"
+#include "../Math/Frustum.hpp"
 
-#include "../Math/BVH.h"
+#include "../Math/BVH.hpp"
 #include "tinycsg/tinycsg.hpp"
 
 #include "RapidHotload.h"
