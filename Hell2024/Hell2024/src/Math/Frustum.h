@@ -22,7 +22,7 @@ public:
     bool IntersectsAABBFast(const RenderItem3D& renderItem);
     bool IntersectsSphere(const Sphere& sphere);
     bool IntersectsPoint(const glm::vec3 point);
-    std::vector<glm::vec3> GetFrustumCorners();
+    std::vector<glm::vec3> GetFrustumCorners() ;
 
 private:
     Plane CreatePlane(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);

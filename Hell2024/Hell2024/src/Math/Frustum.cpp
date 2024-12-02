@@ -3,45 +3,45 @@
 
 void Frustum::Update(const glm::mat4& projectionView) 
 {
-
-    // Left clipping plane
+    // Left Clipping Plane
     m_planes[0].normal.x = projectionView[0][3] + projectionView[0][0];
     m_planes[0].normal.y = projectionView[1][3] + projectionView[1][0];
     m_planes[0].normal.z = projectionView[2][3] + projectionView[2][0];
     m_planes[0].offset = projectionView[3][3] + projectionView[3][0];
 
-    // Right clipping plane
+    // Right Clipping Plane
     m_planes[1].normal.x = projectionView[0][3] - projectionView[0][0];
     m_planes[1].normal.y = projectionView[1][3] - projectionView[1][0];
     m_planes[1].normal.z = projectionView[2][3] - projectionView[2][0];
     m_planes[1].offset = projectionView[3][3] - projectionView[3][0];
 
-    // Top clipping plane
+    // Top Clipping Plane
     m_planes[2].normal.x = projectionView[0][3] - projectionView[0][1];
     m_planes[2].normal.y = projectionView[1][3] - projectionView[1][1];
     m_planes[2].normal.z = projectionView[2][3] - projectionView[2][1];
     m_planes[2].offset = projectionView[3][3] - projectionView[3][1];
 
-    // Bottom clipping plane
+    // Bottom Clipping Plane
     m_planes[3].normal.x = projectionView[0][3] + projectionView[0][1];
     m_planes[3].normal.y = projectionView[1][3] + projectionView[1][1];
     m_planes[3].normal.z = projectionView[2][3] + projectionView[2][1];
     m_planes[3].offset = projectionView[3][3] + projectionView[3][1];
 
-    // Near clipping plane
+    // Near Clipping Plane
     m_planes[4].normal.x = projectionView[0][3] + projectionView[0][2];
     m_planes[4].normal.y = projectionView[1][3] + projectionView[1][2];
     m_planes[4].normal.z = projectionView[2][3] + projectionView[2][2];
     m_planes[4].offset = projectionView[3][3] + projectionView[3][2];
 
-    // Far clipping plane
+    // Far Clipping Plane
     m_planes[5].normal.x = projectionView[0][3] - projectionView[0][2];
     m_planes[5].normal.y = projectionView[1][3] - projectionView[1][2];
     m_planes[5].normal.z = projectionView[2][3] - projectionView[2][2];
     m_planes[5].offset = projectionView[3][3] - projectionView[3][2];
 
-    // Normalize planes
-    for (int i = 0; i < 6; i++) {
+    // Normalize Planes
+    for (int i = 0; i < 6; i++) 
+    {
         float magnitude = glm::length(m_planes[i].normal);
         m_planes[i].normal /= magnitude;
         m_planes[i].offset /= magnitude;
@@ -78,6 +78,7 @@ bool Frustum::IntersectsAABB(const AABB& aabb)
         glm::vec3(aabb.boundsMin.x, aabb.boundsMax.y, aabb.boundsMax.z), // Far-top-left
         glm::vec3(aabb.boundsMax.x, aabb.boundsMax.y, aabb.boundsMax.z)  // Far-top-right
     };
+
     for (int i = 0; i < 6; ++i)
     {
         int pointsOutside = 0;
@@ -109,6 +110,7 @@ bool Frustum::IntersectsAABB(const RenderItem3D& renderItem)
         glm::vec3(renderItem.aabbMin.x, renderItem.aabbMax.y, renderItem.aabbMax.z), // Far-top-left
         glm::vec3(renderItem.aabbMax.x, renderItem.aabbMax.y, renderItem.aabbMax.z)  // Far-top-right
     };
+
     for (int i = 0; i < 6; ++i)
     {
         int pointsOutside = 0;
@@ -134,8 +136,7 @@ bool Frustum::IntersectsAABBFast(const AABB& aabb)
         glm::vec3 min_corner = glm::vec3(
             m_planes[i].normal.x > 0 ? aabb.boundsMax.x : aabb.boundsMin.x,
             m_planes[i].normal.y > 0 ? aabb.boundsMax.y : aabb.boundsMin.y,
-            m_planes[i].normal.z > 0 ? aabb.boundsMax.z : aabb.boundsMin.z
-        );
+            m_planes[i].normal.z > 0 ? aabb.boundsMax.z : aabb.boundsMin.z);
 
         if (SignedDistance(min_corner, m_planes[i]) <= 0.0f)
         {
@@ -190,17 +191,17 @@ bool Frustum::IntersectsPoint(const glm::vec3 point)
     return true;
 }
 
-std::vector<glm::vec3> Frustum::GetFrustumCorners()
+std::vector<glm::vec3> Frustum::GetFrustumCorners() 
 {
     std::vector<glm::vec3> corners(8);
-    corners[0] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[2].normal, m_planes[2].offset, m_planes[4].normal, m_planes[4].offset); // Near bottom-left
-    corners[1] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[2].normal, m_planes[2].offset, m_planes[4].normal, m_planes[4].offset); // Near bottom-right
-    corners[2] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[3].normal, m_planes[3].offset, m_planes[4].normal, m_planes[4].offset); // Near top-left
-    corners[3] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[3].normal, m_planes[3].offset, m_planes[4].normal, m_planes[4].offset); // Near top-right  
-    corners[4] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[2].normal, m_planes[2].offset, m_planes[5].normal, m_planes[5].offset); // Far bottom-left
-    corners[5] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[2].normal, m_planes[2].offset, m_planes[5].normal, m_planes[5].offset); // Far bottom-right
-    corners[6] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[3].normal, m_planes[3].offset, m_planes[5].normal, m_planes[5].offset); // Far top-left
-    corners[7] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[3].normal, m_planes[3].offset, m_planes[5].normal, m_planes[5].offset); // Far top-right
+    corners[0] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[2].normal, m_planes[2].offset, m_planes[4].normal, m_planes[4].offset); // Near Bottom Left
+    corners[1] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[2].normal, m_planes[2].offset, m_planes[4].normal, m_planes[4].offset); // Near Bottom Right
+    corners[2] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[3].normal, m_planes[3].offset, m_planes[4].normal, m_planes[4].offset); // Near Top Left
+    corners[3] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[3].normal, m_planes[3].offset, m_planes[4].normal, m_planes[4].offset); // Near Top Right  
+    corners[4] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[2].normal, m_planes[2].offset, m_planes[5].normal, m_planes[5].offset); // Far Bottom Left
+    corners[5] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[2].normal, m_planes[2].offset, m_planes[5].normal, m_planes[5].offset); // Far Bottom Right
+    corners[6] = IntersectPlanes(m_planes[0].normal, m_planes[0].offset, m_planes[3].normal, m_planes[3].offset, m_planes[5].normal, m_planes[5].offset); // Far Top Left
+    corners[7] = IntersectPlanes(m_planes[1].normal, m_planes[1].offset, m_planes[3].normal, m_planes[3].offset, m_planes[5].normal, m_planes[5].offset); // Far Top Right
     return corners;
 }
 
