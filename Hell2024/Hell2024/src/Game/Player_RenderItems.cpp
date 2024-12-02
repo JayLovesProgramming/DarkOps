@@ -7,9 +7,8 @@
 #include "../Renderer/Renderer.hpp"
 #include "Round.hpp"
 
-
-std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize) {
-
+std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
+{
     std::vector<RenderItem2D> renderItems;
 
     hell::ivec2 debugTextLocation;
@@ -24,29 +23,32 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize) {
     viewportCenter.x = RendererUtil::GetViewportCenterX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     viewportCenter.y = RendererUtil::GetViewportCenterY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
 
-    if (Game::GetSplitscreenMode() == SplitscreenMode::NONE) {
+    if (Game::GetSplitscreenMode() == SplitscreenMode::NONE)
+    {
         pickupTextLocation.x += presentSize.x * 0.09f;
         pickupTextLocation.y += presentSize.y * 0.09f;
     }
-    else if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER) {
+    else if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER)
+    {
         pickupTextLocation.x += presentSize.x * 0.05f;
         pickupTextLocation.y += presentSize.y * 0.037f;
 
     }
-    else if (Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER) {
+    else if (Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER)
+    {
         pickupTextLocation.x += presentSize.x * 0.0375f;
         pickupTextLocation.y += presentSize.y * 0.035f;
     }
 
     // Text
-    if (!Game::DebugTextIsEnabled() && IsAlive() && !Editor::IsOpen()) {
+    if (!Game::DebugTextIsEnabled() && IsAlive() && !Editor::IsOpen())
+    {
         std::string text;
         text += "Health: " + std::to_string(_health) + "\n";
         text += "Kills: " + std::to_string(m_killCount) + "\n";
         //text += "Crosshair size: " + std::to_string(m_crosshairCrossSize) + "\n";
         //text += "Accuracy Modifier: " + std::to_string(m_accuracyModifer) + "\n";
         RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(text, debugTextLocation, presentSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD));
-
     }
 
     // Press Start
@@ -75,8 +77,8 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize) {
        renderItems.push_back(RendererUtil::CreateRenderItem2D("Icon_Light", {res.x, res.y}, presentSize, Alignment::CENTERED));
     }*/
 
-    if (IsAlive()) {
-
+    if (IsAlive()) 
+    {
         hell::ivec2 crosshairPos = viewportCenter;
         // if (GetCrosshairType() == CrosshairType::REGULAR) {
         //     renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
@@ -85,19 +87,11 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize) {
         //     renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairSquare", crosshairPos, presentSize, Alignment::CENTERED));
         // }
 
-
-
-
-       //  if (m_crosshairCrossSize > 5) {
-       //      renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossLeft", crosshairPos + hell::ivec2{-int(m_crosshairCrossSize), 0}, presentSize, Alignment::CENTERED));
-       //      renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossRight", crosshairPos + hell::ivec2{int(m_crosshairCrossSize), 0}, presentSize, Alignment::CENTERED));
-       //      renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossTop", crosshairPos + hell::ivec2{0, int(m_crosshairCrossSize)}, presentSize, Alignment::CENTERED));
-       //      renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossBottom", crosshairPos + hell::ivec2{0, -int(m_crosshairCrossSize)}, presentSize, Alignment::CENTERED));
-       //  }
-       //  else{
-       //       renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
-       //  }
-
+ 
+        renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossLeft", crosshairPos + hell::ivec2{ -int(m_crosshairCrossSize + Config::CROSSHAIR_GAP), 0 }, presentSize, Alignment::CENTERED));
+        renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossRight", crosshairPos + hell::ivec2{ int(m_crosshairCrossSize + Config::CROSSHAIR_GAP), 0 }, presentSize, Alignment::CENTERED));
+        renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossTop", crosshairPos + hell::ivec2{ 0, int(m_crosshairCrossSize + Config::CROSSHAIR_GAP) }, presentSize, Alignment::CENTERED));
+        renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossBottom", crosshairPos + hell::ivec2{ 0, -int(m_crosshairCrossSize + Config::CROSSHAIR_GAP) }, presentSize, Alignment::CENTERED));
 
         renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
 
@@ -113,7 +107,8 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize) {
         //for (int i = m_pickUpTexts.size() - 1; i >= 0; i--) {
         for (int i = 0; i < m_pickUpTexts.size(); i++) {
             pickUpTextToBlit += m_pickUpTexts[i].text;
-            if (m_pickUpTexts[i].count > 1) {
+            if (m_pickUpTexts[i].count > 1)
+            {
                 pickUpTextToBlit += " +" + std::to_string(m_pickUpTexts[i].count);
             }
             pickUpTextToBlit += "\n";
@@ -129,6 +124,8 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize) {
         RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(question, ivec2(80, 80), presentSize, Alignment::BOTTOM_LEFT, BitmapFontType::STANDARD, glm::vec2(scale)));
         */
     }
+
+    //std::cout << m_crosshairCrossSize << std::endl;
 
     return renderItems;
 }
@@ -377,11 +374,12 @@ void Player::UpdateAttachmentRenderItems()
     }
 }
 
-void Player::UpdateAttachmentGlassRenderItems() {
-
+void Player::UpdateAttachmentGlassRenderItems() 
+{
     m_attachmentGlassRenderItems.clear();
 
-    if (Editor::IsOpen() || !IsAlive()) {
+    if (Editor::IsOpen() || !IsAlive()) 
+    {
         return;
     }
 
@@ -390,7 +388,8 @@ void Player::UpdateAttachmentGlassRenderItems() {
     WeaponState* weaponState = GetCurrentWeaponState();
 
     // Red dot sight
-    if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && weaponState->hasScope) {
+    if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && weaponState->hasScope)
+    {
         glm::mat4 modelMatrix = viewWeaponAnimatedGameObject->GetModelMatrix() * m_weaponSwayMatrix * viewWeaponAnimatedGameObject->GetAnimatedTransformByBoneName("Weapon");
         static int materialIndex = AssetManager::GetMaterialIndex("RedDotSight");
         uint32_t modelIndex = AssetManager::GetModelIndexByName("Glock_RedDotSight");
@@ -411,10 +410,12 @@ void Player::UpdateAttachmentGlassRenderItems() {
     }
 }
 
-std::vector<RenderItem3D>& Player::GetAttachmentRenderItems() {
+std::vector<RenderItem3D>& Player::GetAttachmentRenderItems()
+{
     return m_attachmentRenderItems;
 }
 
-std::vector<RenderItem3D>& Player::GetAttachmentGlassRenderItems() {
+std::vector<RenderItem3D>& Player::GetAttachmentGlassRenderItems()
+{
     return m_attachmentGlassRenderItems;
 }

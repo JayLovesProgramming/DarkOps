@@ -2,6 +2,7 @@
 
 #include "Defines.hpp"
 #include "Enums.hpp"
+#include "Config.hpp"
 
 #include "RendererCommon.hpp"
 

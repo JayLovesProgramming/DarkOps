@@ -14,6 +14,7 @@
 #include "../Utils/Util.hpp"
 #include "../Timer.hpp"
 #include "RapidHotload.hpp"
+#include "Loadout.hpp"
 
 Player::Player(int playerIndex)
 {
@@ -203,7 +204,7 @@ void Player::Respawn()
         state.ammoOnHand = 0;
     }
 
-    GiveDefaultLoadout();
+    LoadoutManager::GiveInitialLoadout(this);
     SwitchWeapon("Glock", SPAWNING);
 
     if (_characterController) 

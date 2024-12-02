@@ -41,7 +41,7 @@ glm::mat4 VolumetricBloodSplatter::GetModelMatrix()
 
     Transform bloodMeshOffset;
 
-    if (m_type == 0)
+    if (m_type == 0) // TODO: Make it not have random indexing. Should be from 0 - 10 for example
         bloodMeshOffset.position = glm::vec3(-0.08f, -0.23f, -0.155f);
     else if (m_type == 7)
         bloodMeshOffset.position = glm::vec3(-0.2300000042f, -0.5000000000f, -0.2249999940f);

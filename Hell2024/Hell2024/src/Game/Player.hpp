@@ -171,7 +171,6 @@ public:
     void HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime);
     bool WeaponMagIsEmpty(WeaponState* weaponState);
 
-    void GiveDefaultLoadout();
     WeaponInfo* GetCurrentWeaponInfo();
     WeaponState* GetWeaponStateByName(std::string name);
     WeaponState* GetCurrentWeaponState();

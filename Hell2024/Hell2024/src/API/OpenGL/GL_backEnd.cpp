@@ -4,6 +4,12 @@
 #include "../../Utils/Util.hpp"
 #include <iostream>
 #include <string>
+#include <thread>
+#include <array>
+#include <memory>
+#include <cstdio>
+#include <string>
+#include <filesystem>
 
 namespace OpenGLBackEnd 
 {
@@ -191,31 +197,50 @@ void QuerySizes()
 
 void OpenGLBackEnd::InitMinimum()
 {
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) 
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD\n";
         return;
     }
 
+    // GPU Information
     GLint major, minor;
     glGetIntegerv(GL_MAJOR_VERSION, &major);
     glGetIntegerv(GL_MINOR_VERSION, &minor);
     const GLubyte* vendor = glGetString(GL_VENDOR);
     const GLubyte* renderer = glGetString(GL_RENDERER);
-    std::cout << "\nGPU: " << renderer << "\n";
-    std::cout << "GL version: " << major << "." << minor << "\n\n";
+    std::cout << "\n--- GPU Information ---\n";
+    std::cout << "Vendor: " << vendor << "\n";
+    std::cout << "Renderer: " << renderer << "\n";
+    std::cout << "OpenGL Version: " << major << "." << minor << "\n";
 
+    // CPU Information
+    std::cout << "\n--- CPU Information ---\n";
+
+    // Windows CPU info retrieval
+    int cpuInfo[4];
+    __cpuid(cpuInfo, 0x80000002);
+    __cpuid(cpuInfo, 0x80000003);
+    __cpuid(cpuInfo, 0x80000004);
+
+    char cpuBrandString[0x40];
+    memcpy(cpuBrandString, cpuInfo, sizeof(cpuInfo));
+    //std::cout << "CPU: " << cpuBrandString << "\n";
+
+    // Number of CPU Cores
+    std::cout << "CPU Cores: " << std::thread::hardware_concurrency() << "\n";
+
+    // Debug Context Check
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-
+    std::cout << "\n--- Debug Information ---\n";
     if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
     {
-        //std::cout << "Debug GL context enabled\n";
         glEnable(GL_DEBUG_OUTPUT);
-        //glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // makes sure errors are displayed synchronously
         glDebugMessageCallback(glDebugOutput, nullptr);
+        std::cout << "Debug GL context enabled\n";
     }
-    else 
+    else
     {
         std::cout << "Debug GL context not available\n";
     }

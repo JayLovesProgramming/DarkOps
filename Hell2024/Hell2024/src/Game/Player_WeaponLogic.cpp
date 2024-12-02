@@ -6,28 +6,7 @@
 #include "Input/InputMulti.hpp"
 #include "Utils/Util.hpp"
 #include "Timer.hpp"
-
-void Player::GiveDefaultLoadout()
-{
-    GiveWeapon("Knife");
-    // GiveWeapon("GoldenKnife");
-    GiveWeapon("Glock");
-    GiveWeapon("GoldenGlock");
-    GiveWeapon("Tokarev");
-    // GiveWeapon("Smith & Wesson");
-    GiveWeapon("AKS74U");
-    GiveWeapon("P90");
-    GiveWeapon("Shotgun");
-    GiveWeapon("SPAS");
-
-    GiveAmmo("Glock", 80000);
-    GiveAmmo("Tokarev", 200);
-    GiveAmmo("AKS74U", 999999);
-    GiveAmmo("Shotgun", 6666);
-
-    GiveRedDotToWeapon("GoldenGlock");
-    // GiveSilencerToWeapon("Glock");
-}
+#include "Crosshair.hpp"
 
 // Logic
 bool Player::WeaponMagIsEmpty(WeaponState* weaponState)
@@ -589,8 +568,8 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
     }
 }
 
-void Player::UpdateViewWeaponLogic(float deltaTime) {
-
+void Player::UpdateViewWeaponLogic(float deltaTime) 
+{
     AnimatedGameObject* viewWeapon = GetViewWeaponAnimatedGameObject();
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     WeaponState* weaponState = GetWeaponStateByName(weaponInfo->name);
@@ -604,8 +583,8 @@ void Player::UpdateViewWeaponLogic(float deltaTime) {
     HandleShotguns(viewWeapon, weaponInfo, weaponState, ammoState, ammoInfo, deltaTime);
 
     // Remove Smith bullets you don't have
-    if (weaponInfo->name == "Smith & Wesson") {
-       
+    if (weaponInfo->name == "Smith & Wesson")
+    {
         /*if (_weaponAction == RELOAD_REVOLVER_BEGIN && viewWeapon->AnimationIsPastFrameNumber(30)) {
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_0");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_1");
@@ -679,7 +658,8 @@ void Player::UpdateViewWeaponLogic(float deltaTime) {
     }
 
 
-    if (m_firedThisFrame) {
+    if (m_firedThisFrame)
+    {
         m_accuracyModifer = 1;
     }
 
@@ -687,9 +667,9 @@ void Player::UpdateViewWeaponLogic(float deltaTime) {
 
     viewWeapon->Update(deltaTime);
 
-
-    if (!PressingFire()) {
-        m_crosshairCrossSize = Util::FInterpTo(m_crosshairCrossSize, 0, deltaTime, 10.0);
+    if (!PressingFire())
+    {
+        m_crosshairCrossSize = CrosshairManager::CrosshairShrink(m_crosshairCrossSize, deltaTime);
     }
 }
 
@@ -708,7 +688,7 @@ bool Player::CanEnterADS()
 
     if (weaponInfo->name == "Tokarev")
     {
-        return false;
+        return true;
     }
     if (weaponInfo->name == "AKS74U") 
     {

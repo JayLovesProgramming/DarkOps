@@ -56,16 +56,21 @@ struct JSONObject
         data["bool"] = true;
 
         // Custom objects
-        struct Object {
+        struct Object 
+        {
             glm::vec3 a;
             glm::vec3 b;
         };
+
         std::vector<Object> objects = {
             { {1.0f, 2.0f, 3.0f}, {0.0f, 0.0f, 0.0f} },
             { {4.0f, 5.0f, 6.0f}, {0.1f, 0.1f, 0.1f} }
         };
+
         nlohmann::json jsonObjects = nlohmann::json::array();
-        for (const auto& object : objects) {
+
+        for (const auto& object : objects)
+        {
             nlohmann::json jsonObject;
             jsonObject["a"] = { {"x", object.a.x}, {"y", object.a.y}, {"z", object.a.z} };
             jsonObject["b"] = { {"x", object.b.x}, {"y", object.b.y}, {"z", object.b.z} };
@@ -94,7 +99,8 @@ struct JSONObject
         // Read from it
         std::cout << "array: ";
         std::vector<int> arr2 = data2["array"];
-        for (int i : arr2) {
+        for (int i : arr2)
+        {
             std::cout << i << " ";
         }
         int i = data2["int"];
@@ -109,29 +115,37 @@ struct JSONObject
 
         // Read custom objects
         std::vector<Object> loadedObjects;
-        for (const auto& jsonObject : data["objects"]) {
+        for (const auto& jsonObject : data["objects"]) 
+        {
             Object object;
             object.a = { jsonObject["a"]["x"], jsonObject["a"]["y"], jsonObject["a"]["z"] };
             object.b = { jsonObject["b"]["x"], jsonObject["b"]["y"], jsonObject["b"]["z"] };
             loadedObjects.push_back(object);
         }
-        for (const Object& object : loadedObjects) {
+
+        for (const Object& object : loadedObjects)
+        {
             std::cout << "a: (" << object.a.x << ", " << object.a.y << ", " << object.a.z << ") ";
             std::cout << "b: (" << object.b.x << ", " << object.b.y << ", " << object.b.z << ")\n";
         }
 
         // Error handling
         std::cout << "\n";
-        try {
+        try
+        {
             int test = data2["doesntexist"];
         }
-        catch (const nlohmann::json::exception& e) {
+        catch (const nlohmann::json::exception& e)
+        {
             std::cout << e.what() << '\n';
         }
-        try {
+
+        try 
+        {
             int test = data2["string"];
         }
-        catch (const nlohmann::json::exception& e) {
+        catch (const nlohmann::json::exception& e)
+        {
             std::cout << e.what() << '\n';
         }
     }
