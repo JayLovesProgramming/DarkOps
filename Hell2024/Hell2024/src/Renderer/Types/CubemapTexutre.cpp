@@ -1,5 +1,5 @@
 #include "CubemapTexture.h"
-#include "../../BackEnd/BackEnd.h"
+#include "../../BackEnd/BackEnd.hpp"
 
 void CubemapTexture::SetName(std::string name)
 {

@@ -357,7 +357,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Types\Modular\Toilet.h" />
     <ClInclude Include="src\Physics\Ragdoll.h" />
     <ClInclude Include="src\Core\VolumetricBloodSplatter.h" />
-    <ClInclude Include="src\API\OpenGL\GL_backEnd.h" />
+    <ClInclude Include="src\API\OpenGL\GL_backEnd.hpp" />
     <ClInclude Include="src\Input\Input.h" />
     <ClInclude Include="src\Input\keycodes.h" />
     <ClInclude Include="src\Physics\Physics.h" />
@@ -374,10 +374,10 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Physics\RigidStatic.hpp" />
     <ClInclude Include="src\API\OpenGL\Types\GL_gBuffer.h" />
     <ClInclude Include="src\Renderer\NumberBlitter.h" />
-    <ClInclude Include="src\API\OpenGL\GL_renderer.h" />
+    <ClInclude Include="src\API\OpenGL\GL_renderer.hpp" />
     <ClInclude Include="src\API\OpenGL\Types\GL_frameBuffer.hpp" />
     <ClInclude Include="src\API\OpenGL\Types\GL_presentBuffer.h" />
-    <ClInclude Include="src\BackEnd\BackEnd.h" />
+    <ClInclude Include="src\BackEnd\BackEnd.hpp" />
     <ClInclude Include="src\Common\RendererCommon.h" />
     <ClInclude Include="src\API\OpenGL\Types\GL_shader.h" />
     <ClInclude Include="src\API\OpenGL\Types\GL_shadowMap.h" />

@@ -1,5 +1,5 @@
 #include "VertexBuffer.h" 
-#include "../../BackEnd/BackEnd.h"
+#include "../../BackEnd/BackEnd.hpp"
 
 void VertexBuffer::AllocateSpace(int vertexCount)
 {

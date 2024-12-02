@@ -1,9 +1,9 @@
 #include "GlobalIllumination.h"
 #include <vector>
-#include "../API/OpenGL/GL_backEnd.h"
+#include "../API/OpenGL/GL_backEnd.hpp"
 #include "../API/Vulkan/VK_backEnd.h"
 #include "../API/Vulkan/VK_renderer.h"
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Game/Scene.h"
 #include "../Editor/CSG.h"
 #include "../Timer.hpp"

@@ -1,4 +1,4 @@
-// GL_renderer.h
+// GL_renderer.hpp
 #pragma once
 
 #include "HellCommon.h"

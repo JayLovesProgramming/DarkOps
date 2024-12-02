@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "../Input/Input.h"
 #include "../Config.hpp"
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Core/AssetManager.h"
 
 PxFilterData GetPxFilterDataFromCollisionType(CollisionType collisionType) {

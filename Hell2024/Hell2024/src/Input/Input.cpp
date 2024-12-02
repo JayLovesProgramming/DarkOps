@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Renderer/Renderer.h"
 #include "../Util.hpp"
 #include <chrono>

@@ -4,7 +4,7 @@
 // Char sheet needs updating
 
 #include "TextBlitter.h"
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Core/AssetManager.h"
 
 namespace TextBlitter {

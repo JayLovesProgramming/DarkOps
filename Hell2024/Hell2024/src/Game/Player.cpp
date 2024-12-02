@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "Scene.h"
 #include "WeaponManager.h"
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Core/Audio.hpp"
 #include "../Input/Input.h"
 #include "../Input/InputMulti.h"

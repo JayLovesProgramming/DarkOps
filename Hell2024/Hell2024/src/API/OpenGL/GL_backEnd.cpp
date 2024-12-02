@@ -1,4 +1,4 @@
-#include "GL_backEnd.h"
+#include "GL_backEnd.hpp"
 #include "Types/GL_vertexBuffer.hpp"
 #include "../../Core/AssetManager.h"
 #include "../../Util.hpp"

@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <iostream>
 
-#include "BackEnd/BackEnd.h"
+#include "BackEnd/BackEnd.hpp"
 
 // Function to load texture
 GLuint loadTexture() 

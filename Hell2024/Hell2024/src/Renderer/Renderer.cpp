@@ -1,9 +1,9 @@
 ﻿#include "Renderer.h"
 #include <vector>
 #include <map>
-#include "../API/OpenGL/GL_renderer.h"
+#include "../API/OpenGL/GL_renderer.hpp"
 #include "../API/Vulkan/VK_renderer.h"
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Game/Game.h"
 #include "../Game/Player.h"
 #include "../Game/Scene.h"

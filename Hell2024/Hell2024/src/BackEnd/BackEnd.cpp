@@ -1,8 +1,8 @@
-#include "BackEnd.h"
+#include "BackEnd.hpp"
 #include <iostream>
 #include <string>
-#include "../API/OpenGL/GL_backEnd.h"
-#include "../API/OpenGL/GL_renderer.h"
+#include "../API/OpenGL/GL_backEnd.hpp"
+#include "../API/OpenGL/GL_renderer.hpp"
 #include "../API/Vulkan/VK_backEnd.h"
 #include "../Core/AssetManager.h"
 #include "../Core/Audio.hpp"
@@ -38,16 +38,16 @@ namespace BackEnd
     void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     void window_focus_callback(GLFWwindow* window, int focused);
 
-    //      Core      //
     void Init(API api) 
     {
         _api = api;
 
-        if (GetAPI() == API::OPENGL) 
-        {
-            // Nothing required
-        }
-        else if (GetAPI() == API::VULKAN)
+        //if (GetAPI() == API::OPENGL) 
+        //{
+        //    // Nothing required
+        //}
+        //else 
+        if (GetAPI() == API::VULKAN)
         {
             VulkanBackEnd::CreateVulkanInstance();
         }
@@ -56,6 +56,7 @@ namespace BackEnd
         int height = 1080;
 
         glfwInit();
+
         glfwSetErrorCallback([](int error, const char* description) 
         { 
             std::cout << "GLFW Error (" << std::to_string(error) << "): " << description << "\n";
@@ -79,14 +80,18 @@ namespace BackEnd
         // Resolution and window size
         _monitor = glfwGetPrimaryMonitor();
         _mode = glfwGetVideoMode(_monitor);
+
         glfwWindowHint(GLFW_RED_BITS, _mode->redBits);
         glfwWindowHint(GLFW_GREEN_BITS, _mode->greenBits);
         glfwWindowHint(GLFW_BLUE_BITS, _mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, _mode->refreshRate);
+
         _fullscreenWidth = _mode->width;
         _fullscreenHeight = _mode->height;
+
         _windowedWidth = width;
         _windowedHeight = height;
+
         CreateGLFWWindow(WindowedMode::WINDOWED);
         if (_window == NULL) 
         {
@@ -94,16 +99,13 @@ namespace BackEnd
             glfwTerminate();
             return;
         }
+
         glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
         glfwSetWindowFocusCallback(_window, window_focus_callback);
 
-        if (GetAPI() == API::OPENGL)
-        {
-            AssetManager::FindAssetPaths();
-        }
-
         if (GetAPI() == API::OPENGL) 
         {
+            AssetManager::FindAssetPaths();
             glfwMakeContextCurrent(_window);
             OpenGLBackEnd::InitMinimum();
             OpenGLRenderer::Init_OpenGL();
@@ -115,6 +117,7 @@ namespace BackEnd
             VulkanBackEnd::InitMinimum();
             // VulkanRenderer minimum init is tangled in the above function
         }
+
         AssetManager::LoadFont();
 
         if (GetAPI() == API::VULKAN)
@@ -143,18 +146,15 @@ namespace BackEnd
 
     void EndFrame()
     {
-
         // OpenGL
         if (GetAPI() == API::OPENGL) 
         {
-
             glfwSwapBuffers(_window);
         }
         // Vulkan
         else if (GetAPI() == API::VULKAN)
         {
         }
-
     }
 
     void UpdateSubSystems()
@@ -175,7 +175,6 @@ namespace BackEnd
         glfwTerminate();
     }
 
-    // API
     void SetAPI(API api)
     {
         _api = api;
@@ -186,7 +185,6 @@ namespace BackEnd
         return _api;
     }
 
-    // Window
     GLFWwindow* GetWindowPointer() 
     {
         return _window;

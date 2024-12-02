@@ -1,5 +1,5 @@
 #include "Texture3D.h"
-#include "../../BackEnd/BackEnd.h"
+#include "../../BackEnd/BackEnd.hpp"
 
 int Texture3D::GetWidth() 
 {

@@ -6,8 +6,8 @@
 #include <future>
 #include <vector>
 #include "../Util.hpp"
-#include "../API/OpenGL/GL_backEnd.h"
-#include "../BackEnd/Backend.h"
+#include "../API/OpenGL/GL_backEnd.hpp"
+#include "../BackEnd/Backend.hpp"
 #include "../Core/AssetManager.h"
 #include "../Game/Scene.h"
 #include "../Pathfinding/Pathfinding2.h"

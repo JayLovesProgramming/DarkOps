@@ -5,7 +5,7 @@
 #include <memory>
 #include <stdlib.h>
 
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Core/AssetManager.h"
 #include "../Core/Audio.hpp"
 #include "../Core/JSON.hpp"

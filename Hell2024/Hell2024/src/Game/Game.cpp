@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 #include "Scene.h"
-#include "../BackEnd/BackEnd.h"
+#include "../BackEnd/BackEnd.hpp"
 #include "../Core/Audio.hpp"
 #include "../Editor/CSG.h"
 #include "../Editor/Editor.h"

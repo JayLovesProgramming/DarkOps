@@ -21,7 +21,7 @@
 #include "VK_assetManager.h"
 #include "vk_mem_alloc.h"
 #include "VK_Renderer.h"
-#include "../../BackEnd/BackEnd.h"
+#include "../../BackEnd/BackEnd.hpp"
 #include "../../Core/AssetManager.h"
 #include "../../Game/Scene.h"
 #include "../../ErrorChecking.h"
