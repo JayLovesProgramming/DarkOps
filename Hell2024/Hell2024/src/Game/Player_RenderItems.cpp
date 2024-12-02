@@ -62,34 +62,15 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     else if (IsAlive())
     {
         CrosshairManager::DrawCrosshair(viewportCenter, weaponInfo, &renderItems, m_crosshairCrossSize, presentSize);
-        RoundManager::drawRounds(&renderItems, viewportCenter);
-    }
+        RoundManager::DrawRounds(&renderItems, viewportCenter, presentSize);
 
-    //glm::vec3 cubePos(0, 1, 0);
-    //Player* player = Game::GetPlayerByIndex(0);
-    //glm::mat4 mvp = player->GetProjectionMatrix() * player->GetViewMatrix();
-    //auto res = Util::CalculateScreenSpaceCoordinates(cubePos, mvp, PRESENT_WIDTH, PRESENT_HEIGHT);
-    //renderItems.push_back(RendererUtil::CreateRenderItem2D("PressStart", {res.x, res.y}, presentSize, Alignment::CENTERED));
-
-
-    /*
-    for (Light& light : Scene::g_lights) {
-        glm::vec3 position = light.position;
-       Player* player = Game::GetPlayerByIndex(0);
-       glm::mat4 mvp = player->GetProjectionMatrix() * player->GetViewMatrix();
-       auto res = Util::CalculateScreenSpaceCoordinates(position, mvp, PRESENT_WIDTH, PRESENT_HEIGHT, true);
-       renderItems.push_back(RendererUtil::CreateRenderItem2D("Icon_Light", {res.x, res.y}, presentSize, Alignment::CENTERED));
-    }*/
-
-    if (IsAlive()) 
-    {
-     
         // Pickup text
         pickupTextLocation.y += m_pickUpTexts.size() * TextBlitter::GetLineHeight(BitmapFontType::STANDARD);
 
         std::string pickUpTextToBlit = "";
         //for (int i = m_pickUpTexts.size() - 1; i >= 0; i--) {
-        for (int i = 0; i < m_pickUpTexts.size(); i++) {
+        for (int i = 0; i < m_pickUpTexts.size(); i++)
+        {
             pickUpTextToBlit += m_pickUpTexts[i].text;
             if (m_pickUpTexts[i].count > 1)
             {
@@ -99,16 +80,27 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
         }
 
         RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(pickUpTextToBlit, pickupTextLocation, presentSize, Alignment::BOTTOM_LEFT, BitmapFontType::STANDARD));
-
-
-        /*
-        std::string question = "Will you take the [g]GLOCK[w]?\n";
-        question += ">YES  NO";
-        float scale = 1.5f;
-        RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(question, ivec2(80, 80), presentSize, Alignment::BOTTOM_LEFT, BitmapFontType::STANDARD, glm::vec2(scale)));
-        */
     }
 
+    //glm::vec3 cubePos(0, 1, 0);
+    //Player* player = Game::GetPlayerByIndex(0);
+    //glm::mat4 mvp = player->GetProjectionMatrix() * player->GetViewMatrix();
+    //auto res = Util::CalculateScreenSpaceCoordinates(cubePos, mvp, PRESENT_WIDTH, PRESENT_HEIGHT);
+    //renderItems.push_back(RendererUtil::CreateRenderItem2D("PressStart", {res.x, res.y}, presentSize, Alignment::CENTERED));
+    /*
+    for (Light& light : Scene::g_lights) {
+        glm::vec3 position = light.position;
+       Player* player = Game::GetPlayerByIndex(0);
+       glm::mat4 mvp = player->GetProjectionMatrix() * player->GetViewMatrix();
+       auto res = Util::CalculateScreenSpaceCoordinates(position, mvp, PRESENT_WIDTH, PRESENT_HEIGHT, true);
+       renderItems.push_back(RendererUtil::CreateRenderItem2D("Icon_Light", {res.x, res.y}, presentSize, Alignment::CENTERED));
+    }*/
+    /*
+    std::string question = "Will you take the [g]GLOCK[w]?\n";
+    question += ">YES  NO";
+    float scale = 1.5f;
+    RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(question, ivec2(80, 80), presentSize, Alignment::BOTTOM_LEFT, BitmapFontType::STANDARD, glm::vec2(scale)));
+    */
     //std::cout << m_crosshairCrossSize << std::endl;
 
     return renderItems;
@@ -226,7 +218,7 @@ void Player::UpdateAttachmentRenderItems()
 {
     m_attachmentRenderItems.clear();
 
-    if (Editor::IsOpen() || !IsAlive()) 
+    if (Editor::IsOpen() || IsDead()) 
     {
         return;
     }
@@ -235,7 +227,7 @@ void Player::UpdateAttachmentRenderItems()
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     WeaponState* weaponState = GetCurrentWeaponState();
 
-    // Red dot sight
+    // Red Dot Sight
     if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && weaponState->hasScope)
     {
         glm::mat4 modelMatrix = viewWeaponAnimatedGameObject->GetModelMatrix() * m_weaponSwayMatrix * viewWeaponAnimatedGameObject->GetAnimatedTransformByBoneName("Weapon");
@@ -244,6 +236,7 @@ void Player::UpdateAttachmentRenderItems()
         Model* model = AssetManager::GetModelByIndex(modelIndex);
         uint32_t& meshIndex = model->GetMeshIndices()[0];
         Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
+
         RenderItem3D& renderItem = m_attachmentRenderItems.emplace_back();
         renderItem.vertexOffset = mesh->baseVertex;
         renderItem.indexOffset = mesh->baseIndex;
@@ -251,6 +244,7 @@ void Player::UpdateAttachmentRenderItems()
         renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
         renderItem.meshIndex = meshIndex;
         renderItem.castShadow = false;
+
         Material* material = AssetManager::GetMaterialByIndex(materialIndex);
         if (viewWeaponAnimatedGameObject->IsGold())
         {
@@ -273,6 +267,7 @@ void Player::UpdateAttachmentRenderItems()
         Model* model = AssetManager::GetModelByIndex(modelIndex);
         uint32_t& meshIndex = model->GetMeshIndices()[0];
         Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
+
         RenderItem3D& renderItem = m_attachmentRenderItems.emplace_back();
         renderItem.vertexOffset = mesh->baseVertex;
         renderItem.indexOffset = mesh->baseIndex;
@@ -280,26 +275,32 @@ void Player::UpdateAttachmentRenderItems()
         renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
         renderItem.meshIndex = meshIndex;
         renderItem.castShadow = false;
+
         Material* material = AssetManager::GetMaterialByIndex(materialIndex);
-        if (viewWeaponAnimatedGameObject->IsGold()) {
+        if (viewWeaponAnimatedGameObject->IsGold())
+        {
             renderItem.baseColorTextureIndex = AssetManager::GetGoldBaseColorTextureIndex();
             renderItem.rmaTextureIndex = AssetManager::GetGoldRMATextureIndex();
         }
-        else {
+        else
+        {
             renderItem.baseColorTextureIndex = material->_basecolor;
             renderItem.rmaTextureIndex = material->_rma;
         }
     }
 
-    if (weaponInfo->name == "GoldenGlock" && false) {
+    if (weaponInfo->name == "GoldenGlock" && false) 
+    {
         // Laser
-        if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && viewWeaponAnimatedGameObject->_skinnedModel->_filename == "Glock") {
+        if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && viewWeaponAnimatedGameObject->_skinnedModel->_filename == "Glock")
+        {
             glm::mat4 modelMatrix = viewWeaponAnimatedGameObject->GetModelMatrix() * m_weaponSwayMatrix * viewWeaponAnimatedGameObject->GetAnimatedTransformByBoneName("Laser");
             static int materialIndex = AssetManager::GetMaterialIndex("GlockLaser");
             uint32_t modelIndex = AssetManager::GetModelIndexByName("Glock_Laser");
             Model* model = AssetManager::GetModelByIndex(modelIndex);
             uint32_t& meshIndex = model->GetMeshIndices()[0];
             Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
+
             RenderItem3D& renderItem = m_attachmentRenderItems.emplace_back();
             renderItem.vertexOffset = mesh->baseVertex;
             renderItem.indexOffset = mesh->baseIndex;
@@ -307,18 +308,21 @@ void Player::UpdateAttachmentRenderItems()
             renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
             renderItem.meshIndex = meshIndex;
             renderItem.castShadow = false;
+
             Material* material = AssetManager::GetMaterialByIndex(materialIndex);
-            if (viewWeaponAnimatedGameObject->IsGold()) {
+            if (viewWeaponAnimatedGameObject->IsGold()) 
+            {
                 renderItem.baseColorTextureIndex = AssetManager::GetGoldBaseColorTextureIndex();
                 renderItem.rmaTextureIndex = AssetManager::GetGoldRMATextureIndex();
             }
-            else {
+            else
+            {
                 renderItem.baseColorTextureIndex = material->_basecolor;
                 renderItem.rmaTextureIndex = material->_rma;
             }
         }
 
-        // Actual Lazer
+        // Actual Laser
         if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && viewWeaponAnimatedGameObject->_skinnedModel->_filename == "Glock") {
 
             glm::mat4 modelMatrix = viewWeaponAnimatedGameObject->GetModelMatrix() * m_weaponSwayMatrix * viewWeaponAnimatedGameObject->GetAnimatedTransformByBoneName("Laser");
@@ -336,6 +340,7 @@ void Player::UpdateAttachmentRenderItems()
             Model* model = AssetManager::GetModelByIndex(modelIndex);
             uint32_t& meshIndex = model->GetMeshIndices()[0];
             Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
+
             RenderItem3D& renderItem = m_attachmentRenderItems.emplace_back();
             renderItem.vertexOffset = mesh->baseVertex;
             renderItem.indexOffset = mesh->baseIndex;
@@ -345,12 +350,15 @@ void Player::UpdateAttachmentRenderItems()
             renderItem.emissiveColor = RED;
             renderItem.useEmissiveMask = true;
             renderItem.castShadow = false;
+
             Material* material = AssetManager::GetMaterialByIndex(materialIndex);
-            if (viewWeaponAnimatedGameObject->IsGold()) {
+            if (viewWeaponAnimatedGameObject->IsGold())
+            {
                 renderItem.baseColorTextureIndex = AssetManager::GetGoldBaseColorTextureIndex();
                 renderItem.rmaTextureIndex = AssetManager::GetGoldRMATextureIndex();
             }
-            else {
+            else
+            {
                 renderItem.baseColorTextureIndex = material->_basecolor;
                 renderItem.rmaTextureIndex = material->_rma;
             }
@@ -362,7 +370,7 @@ void Player::UpdateAttachmentGlassRenderItems()
 {
     m_attachmentGlassRenderItems.clear();
 
-    if (Editor::IsOpen() || !IsAlive()) 
+    if (Editor::IsOpen() || IsDead()) 
     {
         return;
     }
@@ -371,7 +379,7 @@ void Player::UpdateAttachmentGlassRenderItems()
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     WeaponState* weaponState = GetCurrentWeaponState();
 
-    // Red dot sight
+    // Red Dot Sight
     if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && weaponState->hasScope)
     {
         glm::mat4 modelMatrix = viewWeaponAnimatedGameObject->GetModelMatrix() * m_weaponSwayMatrix * viewWeaponAnimatedGameObject->GetAnimatedTransformByBoneName("Weapon");
@@ -380,6 +388,7 @@ void Player::UpdateAttachmentGlassRenderItems()
         Model* model = AssetManager::GetModelByIndex(modelIndex);
         uint32_t& meshIndex = model->GetMeshIndices()[1];
         Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
+
         RenderItem3D& renderItem = m_attachmentGlassRenderItems.emplace_back();
         renderItem.vertexOffset = mesh->baseVertex;
         renderItem.indexOffset = mesh->baseIndex;
@@ -387,6 +396,7 @@ void Player::UpdateAttachmentGlassRenderItems()
         renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
         renderItem.meshIndex = meshIndex;
         renderItem.castShadow = false;
+
         Material* material = AssetManager::GetMaterialByIndex(materialIndex);
         renderItem.baseColorTextureIndex = material->_basecolor;
         renderItem.rmaTextureIndex = material->_rma;
