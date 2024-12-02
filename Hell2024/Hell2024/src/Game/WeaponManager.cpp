@@ -4,85 +4,15 @@
 #include "Core/AssetManager.h"
 #include "Physics/Physics.h"
 
-namespace WeaponManager {
-
+namespace WeaponManager 
+{
     std::vector<AmmoInfo> g_ammos;
     std::vector<WeaponInfo> g_weapons;
     std::vector<WeaponAttachmentInfo> g_attachments;
 
-    void Init() {
 
-        g_weapons.clear();
-        g_ammos.clear();
-
-        // Attachments
-
-        WeaponAttachmentInfo glockSilencer = g_attachments.emplace_back();
-        glockSilencer.name = "Glock Silencer";
-        glockSilencer.materialName = "Glock Silencer";
-        glockSilencer.modelName = "Glock Silencer";
-        glockSilencer.isGold = false;
-
-        // Ammo
-
-        AmmoInfo& glockAmmo = g_ammos.emplace_back();
-        glockAmmo.name = "Glock";
-        glockAmmo.modelName = "GlockAmmoBox";
-        glockAmmo.convexMeshModelName = "GlockAmmoBox_ConvexMesh";
-        glockAmmo.materialName = "GlockAmmoBox";
-        glockAmmo.casingModelName = "Casing9mm";
-        glockAmmo.casingMaterialName = "Casing9mm";
-        glockAmmo.pickupAmount = 50;
-
-        AmmoInfo& tokarevAmmo = g_ammos.emplace_back();
-        tokarevAmmo.name = "Tokarev";
-        tokarevAmmo.modelName = "TokarevAmmoBox";
-        tokarevAmmo.convexMeshModelName = "TokarevAmmoBox_ConvexMesh";
-        tokarevAmmo.materialName = "TokarevAmmoBox";
-        tokarevAmmo.casingModelName = "Casing9mm";
-        tokarevAmmo.casingMaterialName = "Casing9mm";
-        tokarevAmmo.pickupAmount = 50;
-
-        AmmoInfo& smithAmmo = g_ammos.emplace_back();
-        smithAmmo.name = "Smith";
-        smithAmmo.modelName = "YOU NEED THIS MODEL";
-        smithAmmo.convexMeshModelName = "YOU NEED THIS MODEL";
-        smithAmmo.materialName = "YOU NEED THIS MATERIAL";
-        smithAmmo.casingModelName = "None";
-        smithAmmo.casingMaterialName = "None";
-        smithAmmo.pickupAmount = 50;
-
-        AmmoInfo& aks74uAmmo = g_ammos.emplace_back();
-        aks74uAmmo.name = "AKS74U";
-        aks74uAmmo.modelName = "TODO!!!";
-        aks74uAmmo.convexMeshModelName = "TODO!!!";
-        aks74uAmmo.materialName = "TODO!!!";
-        aks74uAmmo.pickupAmount = 666;
-        aks74uAmmo.casingModelName = "CasingAKS74U";
-        aks74uAmmo.casingMaterialName = "Casing_AkS74U";
-
-        AmmoInfo& shotgunAmmo = g_ammos.emplace_back();
-        shotgunAmmo.name = "Shotgun";
-        shotgunAmmo.modelName = "TODO!!!";
-        shotgunAmmo.convexMeshModelName = "TODO!!!";
-        shotgunAmmo.materialName = "TODO!!!";
-        shotgunAmmo.pickupAmount = 666;
-        shotgunAmmo.casingModelName = "Shell";
-        shotgunAmmo.casingMaterialName = "Shell";
-
-
-        AmmoInfo& p90Ammo = g_ammos.emplace_back();
-        p90Ammo.name = "P90";
-        p90Ammo.modelName = "TODO!!!";
-        p90Ammo.convexMeshModelName = "TODO!!!";
-        p90Ammo.materialName = "TODO!!!";
-        p90Ammo.pickupAmount = 666;
-        p90Ammo.casingModelName = "CasingAKS74U";
-        p90Ammo.casingMaterialName = "Casing_AkS74U";
-
-
-        // Weapons
-
+    static void AKS74U_INIT()
+    {
         WeaponInfo& aks74u = g_weapons.emplace_back();
         aks74u.name = "AKS74U";
         aks74u.modelName = "AKS74U";
@@ -145,7 +75,151 @@ namespace WeaponManager {
         aks74u.pickUpMeshMaterials["MagRelease_low"] = "AKS74U_2";
         aks74u.pickUpMeshMaterials["Magazine_Housing_low"] = "AKS74U_3";
         aks74u.pickUpMeshMaterials["BarrelTip_low"] = "AKS74U_4";
+    }
 
+    static void KNIFE_INIT()
+    {
+        WeaponInfo& knife = g_weapons.emplace_back();
+        knife.name = "Knife";
+        knife.modelName = "Knife";
+        knife.type = WeaponType::MELEE;
+        knife.damage = 20;
+        knife.animationNames.idle = "Knife_Idle";
+        knife.animationNames.walk = "Knife_Walk";
+        knife.animationNames.draw = "Knife_Draw";
+        knife.animationNames.fire.push_back("Knife_Swing0");
+        knife.animationNames.fire.push_back("Knife_Swing1");
+        knife.animationNames.fire.push_back("Knife_Swing2");
+        knife.audioFiles.fire.push_back("Knife.wav");
+        knife.meshMaterials["Knife"] = "Knife";
+        knife.meshMaterials["ArmsMale"] = "Hands";
+        knife.meshMaterials["ArmsFemale"] = "FemaleArms";
+        knife.hiddenMeshAtStart.push_back("ArmsFemale");
+    }
+
+    static void KNIFE_2_INIT()
+    {
+        WeaponInfo& knife2 = g_weapons.emplace_back();
+        knife2.name = "GoldenKnife";
+        knife2.modelName = "Knife";
+        knife2.type = WeaponType::MELEE;
+        knife2.damage = 200;
+        knife2.animationNames.idle = "Knife_Idle";
+        knife2.animationNames.walk = "Knife_Walk";
+        knife2.animationNames.draw = "Knife_Draw";
+        knife2.animationNames.fire.push_back("Knife_Swing0");
+        knife2.animationNames.fire.push_back("Knife_Swing1");
+        knife2.animationNames.fire.push_back("Knife_Swing2");
+        knife2.audioFiles.fire.push_back("Knife.wav");
+        knife2.meshMaterials["Knife"] = "Knife";
+        knife2.meshMaterials["ArmsMale"] = "Hands";
+        knife2.meshMaterials["ArmsFemale"] = "FemaleArms";
+        knife2.hiddenMeshAtStart.push_back("ArmsFemale");
+        knife2.isGold = true;
+    }
+
+    static void SMITHANDWESSON_INIT()
+    {
+        WeaponInfo& smith = g_weapons.emplace_back();
+        smith.name = "Smith & Wesson";
+        smith.type = WeaponType::PISTOL;
+        smith.damage = 50;
+        smith.modelName = "Smith";
+        smith.animationNames.idle = "Smith_Idle";
+        smith.animationNames.walk = "Smith_Walk";
+        smith.animationNames.revolverReloadBegin = "Smith_ReloadStart";
+        smith.animationNames.revolverReloadLoop = "Smith_ReloadLoop";
+        smith.animationNames.revolverReloadEnd = "Smith_ReloadEnd";
+        //smith.animationNames.reloadempty.push_back("Tokarev_ReloadEmpty");
+        smith.animationNames.fire.push_back("Smith_Fire0");
+        smith.animationNames.fire.push_back("Smith_Fire1");
+        smith.animationNames.fire.push_back("Smith_Fire2");
+        smith.animationSpeeds.fire = 1.0f;
+        smith.animationNames.draw = "Smith_Draw";
+        smith.meshMaterials["ArmsMale"] = "Hands";
+        smith.meshMaterials["ArmsFemale"] = "FemaleArms";
+        smith.meshMaterials["Smith"] = "Smith";
+        smith.meshMaterials["LoadedBullet"] = "SmithBullet";
+        smith.meshMaterials["Bullet_0"] = "SmithBullet";
+        smith.meshMaterials["Bullet_1"] = "SmithBullet";
+        smith.meshMaterials["Bullet_2"] = "SmithBullet";
+        smith.meshMaterials["Bullet_3"] = "SmithBullet";
+        smith.meshMaterials["Bullet_4"] = "SmithBullet";
+        smith.meshMaterials["Bullet_5"] = "SmithBullet";
+        smith.hiddenMeshAtStart.push_back("ArmsFemale");
+        smith.audioFiles.fire.push_back("Smith_Fire0.wav");
+        smith.audioFiles.fire.push_back("Smith_Fire1.wav");
+        smith.audioFiles.fire.push_back("Smith_Fire2.wav");
+        smith.audioFiles.revolverCocks.push_back("Smith_Cock0.wav");
+        smith.audioFiles.revolverCocks.push_back("Smith_Cock1.wav");
+        smith.audioFiles.revolverCocks.push_back("Smith_Cock2.wav");
+        smith.muzzleFlashBoneName = "muzzle";
+        smith.type = WeaponType::PISTOL;
+        smith.damage = 500;
+        smith.magSize = 6;
+        smith.casingEjectionBoneName = "Ejection";
+        smith.casingEjectionOffset = glm::vec3(-0.066, -0.007, 0.249);
+        smith.ammoType = "Tokarev";
+        smith.animationCancelPercentages.draw = 50.0f;
+        smith.animationCancelPercentages.fire = 5.0f;
+        smith.animationCancelPercentages.reload = 80.0f;
+        smith.animationCancelPercentages.reloadFromEmpty = 80.0f;
+        smith.revolverCockFrameNumber = 18;
+        smith.relolverStyleReload = true;
+    }
+
+    static void TOKAREV_INIT()
+    {
+        WeaponInfo& tokarev = g_weapons.emplace_back();
+        tokarev.name = "Tokarev";
+        tokarev.modelName = "Tokarev";
+        tokarev.animationNames.idle = "Tokarev_Idle";
+        tokarev.animationNames.walk = "Tokarev_Walk";
+        tokarev.animationNames.reload = "Tokarev_Reload";
+        tokarev.animationNames.reloadempty.push_back("Tokarev_ReloadEmpty");
+        tokarev.animationNames.fire.push_back("Tokarev_Fire0");
+        tokarev.animationNames.fire.push_back("Tokarev_Fire1");
+        tokarev.animationNames.fire.push_back("Tokarev_Fire2");
+        tokarev.animationSpeeds.fire = 1.0f;
+        tokarev.animationNames.draw = "Tokarev_Draw";
+        tokarev.animationNames.spawn = "Tokarev_Spawn";
+        tokarev.meshMaterials["ArmsMale"] = "Hands";
+        tokarev.meshMaterials["ArmsFemale"] = "FemaleArms";
+        tokarev.meshMaterials["TokarevBody"] = "Tokarev";
+        tokarev.meshMaterials["TokarevMag"] = "TokarevMag";
+        tokarev.meshMaterials["TokarevGripPolymer"] = "TokarevGrip";
+        tokarev.meshMaterials["TokarevGripWood"] = "TokarevGrip";
+        tokarev.hiddenMeshAtStart.push_back("ArmsFemale");
+        tokarev.hiddenMeshAtStart.push_back("TokarevGripWood");
+        //tokarev.hiddenMeshAtStart.push_back("TokarevGripPolymer");
+        tokarev.audioFiles.fire.push_back("Tokarev_Fire0.wav");
+        tokarev.audioFiles.fire.push_back("Tokarev_Fire1.wav");
+        tokarev.audioFiles.fire.push_back("Tokarev_Fire2.wav");
+        tokarev.audioFiles.fire.push_back("Tokarev_Fire3.wav");
+        tokarev.audioFiles.reload = "Tokarev_Reload.wav";
+        tokarev.audioFiles.reloadEmpty = "Tokarev_ReloadEmpty.wav";
+        tokarev.muzzleFlashBoneName = "Muzzle";
+        tokarev.type = WeaponType::PISTOL;
+        tokarev.damage = 22;
+        tokarev.magSize = 8;
+        tokarev.casingEjectionBoneName = "Ejection";
+        tokarev.casingEjectionOffset = glm::vec3(-0.066, -0.007, 0.249);
+        tokarev.ammoType = "Tokarev";
+        tokarev.animationCancelPercentages.draw = 50.0f;
+        tokarev.animationCancelPercentages.fire = 5.0f;
+        tokarev.animationCancelPercentages.reload = 80.0f;
+        tokarev.animationCancelPercentages.reloadFromEmpty = 80.0f;
+
+        tokarev.pistolSlideBoneName = "Slide";
+        tokarev.pistolSlideOffset = -5;
+        tokarev.pickupModelName = "Tokarev_Isolated";
+        tokarev.pickupConvexMeshModelName = "Tokarev_ConvexMesh";
+        tokarev.pickUpMeshMaterials["TokarevBody"] = "Tokarev";
+        tokarev.pickUpMeshMaterials["TokarevGripPolymer"] = "TokarevGrip";
+    }
+
+    static void GOLD_GLOCK_INIT()
+    {
         WeaponInfo& goldeneGlock = g_weapons.emplace_back();
         goldeneGlock.name = "GoldenGlock";
         goldeneGlock.modelName = "Glock";
@@ -203,141 +277,10 @@ namespace WeaponManager {
         goldeneGlock.pickupModelName = "Glock_Isolated";
         goldeneGlock.pickupConvexMeshModelName = "Glock_Isolated_ConvexMesh";
         goldeneGlock.pickUpMeshMaterials["Glock"] = "Gold";
+    }
 
-        WeaponInfo& knife = g_weapons.emplace_back();
-        knife.name = "Knife";
-        knife.modelName = "Knife";
-        knife.type = WeaponType::MELEE;
-        knife.damage = 20;
-        knife.animationNames.idle = "Knife_Idle";
-        knife.animationNames.walk = "Knife_Walk";
-        knife.animationNames.draw = "Knife_Draw";
-        knife.animationNames.fire.push_back("Knife_Swing0");
-        knife.animationNames.fire.push_back("Knife_Swing1");
-        knife.animationNames.fire.push_back("Knife_Swing2");
-        knife.audioFiles.fire.push_back("Knife.wav");
-        knife.meshMaterials["Knife"] = "Knife";
-        knife.meshMaterials["ArmsMale"] = "Hands";
-        knife.meshMaterials["ArmsFemale"] = "FemaleArms";
-        knife.hiddenMeshAtStart.push_back("ArmsFemale");
-
-
-        WeaponInfo& knife2 = g_weapons.emplace_back();
-        knife2.name = "GoldenKnife";
-        knife2.modelName = "Knife";
-        knife2.type = WeaponType::MELEE;
-        knife2.damage = 200;
-        knife2.animationNames.idle = "Knife_Idle";
-        knife2.animationNames.walk = "Knife_Walk";
-        knife2.animationNames.draw = "Knife_Draw";
-        knife2.animationNames.fire.push_back("Knife_Swing0");
-        knife2.animationNames.fire.push_back("Knife_Swing1");
-        knife2.animationNames.fire.push_back("Knife_Swing2");
-        knife2.audioFiles.fire.push_back("Knife.wav");
-        knife2.meshMaterials["Knife"] = "Knife";
-        knife2.meshMaterials["ArmsMale"] = "Hands";
-        knife2.meshMaterials["ArmsFemale"] = "FemaleArms";
-        knife2.hiddenMeshAtStart.push_back("ArmsFemale");
-        knife2.isGold = true;
-
-
-
-        WeaponInfo& smith = g_weapons.emplace_back();
-        smith.name = "Smith & Wesson";
-        smith.type = WeaponType::PISTOL;
-        smith.damage = 50;
-        smith.modelName = "Smith";
-        smith.animationNames.idle = "Smith_Idle";
-        smith.animationNames.walk = "Smith_Walk";
-        smith.animationNames.revolverReloadBegin = "Smith_ReloadStart";
-        smith.animationNames.revolverReloadLoop = "Smith_ReloadLoop";
-        smith.animationNames.revolverReloadEnd = "Smith_ReloadEnd";
-        //smith.animationNames.reloadempty.push_back("Tokarev_ReloadEmpty");
-        smith.animationNames.fire.push_back("Smith_Fire0");
-        smith.animationNames.fire.push_back("Smith_Fire1");
-        smith.animationNames.fire.push_back("Smith_Fire2");
-        smith.animationSpeeds.fire = 1.0f;
-        smith.animationNames.draw = "Smith_Draw";
-        smith.meshMaterials["ArmsMale"] = "Hands";
-        smith.meshMaterials["ArmsFemale"] = "FemaleArms";
-        smith.meshMaterials["Smith"] = "Smith";
-        smith.meshMaterials["LoadedBullet"] = "SmithBullet";
-        smith.meshMaterials["Bullet_0"] = "SmithBullet";
-        smith.meshMaterials["Bullet_1"] = "SmithBullet";
-        smith.meshMaterials["Bullet_2"] = "SmithBullet";
-        smith.meshMaterials["Bullet_3"] = "SmithBullet";
-        smith.meshMaterials["Bullet_4"] = "SmithBullet";
-        smith.meshMaterials["Bullet_5"] = "SmithBullet";
-        smith.hiddenMeshAtStart.push_back("ArmsFemale");
-        smith.audioFiles.fire.push_back("Smith_Fire0.wav");
-        smith.audioFiles.fire.push_back("Smith_Fire1.wav");
-        smith.audioFiles.fire.push_back("Smith_Fire2.wav");
-        smith.audioFiles.revolverCocks.push_back("Smith_Cock0.wav");
-        smith.audioFiles.revolverCocks.push_back("Smith_Cock1.wav");
-        smith.audioFiles.revolverCocks.push_back("Smith_Cock2.wav");
-        smith.muzzleFlashBoneName = "muzzle";
-        smith.type = WeaponType::PISTOL;
-        smith.damage = 500;
-        smith.magSize = 6;
-        smith.casingEjectionBoneName = "Ejection";
-        smith.casingEjectionOffset = glm::vec3(-0.066, -0.007, 0.249);
-        smith.ammoType = "Tokarev";
-        smith.animationCancelPercentages.draw = 50.0f;
-        smith.animationCancelPercentages.fire = 5.0f;
-        smith.animationCancelPercentages.reload = 80.0f;
-        smith.animationCancelPercentages.reloadFromEmpty = 80.0f;
-        smith.revolverCockFrameNumber = 18;
-        smith.relolverStyleReload = true;
-
-        WeaponInfo& tokarev = g_weapons.emplace_back();
-        tokarev.name = "Tokarev";
-        tokarev.modelName = "Tokarev";
-        tokarev.animationNames.idle = "Tokarev_Idle";
-        tokarev.animationNames.walk = "Tokarev_Walk";
-        tokarev.animationNames.reload = "Tokarev_Reload";
-        tokarev.animationNames.reloadempty.push_back("Tokarev_ReloadEmpty");
-        tokarev.animationNames.fire.push_back("Tokarev_Fire0");
-        tokarev.animationNames.fire.push_back("Tokarev_Fire1");
-        tokarev.animationNames.fire.push_back("Tokarev_Fire2");
-        tokarev.animationSpeeds.fire = 1.0f;
-        tokarev.animationNames.draw = "Tokarev_Draw";
-        tokarev.animationNames.spawn = "Tokarev_Spawn";
-        tokarev.meshMaterials["ArmsMale"] = "Hands";
-        tokarev.meshMaterials["ArmsFemale"] = "FemaleArms";
-        tokarev.meshMaterials["TokarevBody"] = "Tokarev";
-        tokarev.meshMaterials["TokarevMag"] = "TokarevMag";
-        tokarev.meshMaterials["TokarevGripPolymer"] = "TokarevGrip";
-        tokarev.meshMaterials["TokarevGripWood"] = "TokarevGrip";
-        tokarev.hiddenMeshAtStart.push_back("ArmsFemale");
-        tokarev.hiddenMeshAtStart.push_back("TokarevGripWood");
-        //tokarev.hiddenMeshAtStart.push_back("TokarevGripPolymer");
-        tokarev.audioFiles.fire.push_back("Tokarev_Fire0.wav");
-        tokarev.audioFiles.fire.push_back("Tokarev_Fire1.wav");
-        tokarev.audioFiles.fire.push_back("Tokarev_Fire2.wav");
-        tokarev.audioFiles.fire.push_back("Tokarev_Fire3.wav");
-        tokarev.audioFiles.reload = "Tokarev_Reload.wav";
-        tokarev.audioFiles.reloadEmpty = "Tokarev_ReloadEmpty.wav";
-        tokarev.muzzleFlashBoneName = "Muzzle";
-        tokarev.type = WeaponType::PISTOL;
-        tokarev.damage = 22;
-        tokarev.magSize = 8;
-        tokarev.casingEjectionBoneName = "Ejection";
-        tokarev.casingEjectionOffset = glm::vec3(-0.066, -0.007, 0.249);
-        tokarev.ammoType = "Tokarev";
-        tokarev.animationCancelPercentages.draw = 50.0f;
-        tokarev.animationCancelPercentages.fire = 5.0f;
-        tokarev.animationCancelPercentages.reload = 80.0f;
-        tokarev.animationCancelPercentages.reloadFromEmpty = 80.0f;
-
-        tokarev.pistolSlideBoneName = "Slide";
-        tokarev.pistolSlideOffset = -5;
-        tokarev.pickupModelName = "Tokarev_Isolated";
-        tokarev.pickupConvexMeshModelName = "Tokarev_ConvexMesh";
-        tokarev.pickUpMeshMaterials["TokarevBody"] = "Tokarev";
-        tokarev.pickUpMeshMaterials["TokarevGripPolymer"] = "TokarevGrip";
-
-
-
+    static void GLOCK_INIT()
+    {
         WeaponInfo& glock = g_weapons.emplace_back();
         glock.name = "Glock";
         glock.modelName = "Glock";
@@ -393,7 +336,10 @@ namespace WeaponManager {
         glock.pickupModelName = "Glock_Isolated";
         glock.pickupConvexMeshModelName = "Glock_Isolated_ConvexMesh";
         glock.pickUpMeshMaterials["Glock"] = "Glock";
+    }
 
+    static void SHOTGUN_INIT()
+    {
         WeaponInfo& shotgun = g_weapons.emplace_back();
         shotgun.name = "Shotgun";
         shotgun.modelName = "Shotgun";
@@ -437,9 +383,10 @@ namespace WeaponManager {
         shotgun.pickupModelName = "Shotgun_Isolated";
         shotgun.pickupConvexMeshModelName = "Shotgun_Isolated_ConvexMesh";
         shotgun.pickUpMeshMaterials["Shotgun_Mesh"] = "Shotgun";
+    }
 
-
-
+    static void SPAS_INIT()
+    {
         WeaponInfo& spas = g_weapons.emplace_back();
         spas.name = "SPAS";
         spas.modelName = "SPAS";
@@ -487,10 +434,10 @@ namespace WeaponManager {
         spas.pickUpMeshMaterials["SPAS12_Main"] = "SPAS_Main";
         spas.pickUpMeshMaterials["SPAS12_Moving"] = "SPAS_Moving";
         spas.pickUpMeshMaterials["SPAS12_Stamped"] = "SPAS_Stamped";
+    }
 
-
-
-
+    static void P90_INIT()
+    {
         WeaponInfo& p90 = g_weapons.emplace_back();
         p90.name = "P90";
         p90.modelName = "P90";
@@ -628,21 +575,137 @@ namespace WeaponManager {
         p90.animationNames.adsFire.push_back("P90_ADS_Fire0");
         p90.animationNames.adsFire.push_back("P90_ADS_Fire1");
         p90.animationNames.adsFire.push_back("P90_ADS_Fire2");
+    }
+
+    static void AMMO_P90_INIT()
+    {
+        AmmoInfo& p90Ammo = g_ammos.emplace_back();
+        p90Ammo.name = "P90";
+        p90Ammo.modelName = "TODO!!!";
+        p90Ammo.convexMeshModelName = "TODO!!!";
+        p90Ammo.materialName = "TODO!!!";
+        p90Ammo.pickupAmount = 666;
+        p90Ammo.casingModelName = "CasingAKS74U";
+        p90Ammo.casingMaterialName = "Casing_AkS74U";
+    }
+
+    static void AMMO_SHOTGUN_INIT()
+    {
+        AmmoInfo& shotgunAmmo = g_ammos.emplace_back();
+        shotgunAmmo.name = "Shotgun";
+        shotgunAmmo.modelName = "TODO!!!";
+        shotgunAmmo.convexMeshModelName = "TODO!!!";
+        shotgunAmmo.materialName = "TODO!!!";
+        shotgunAmmo.pickupAmount = 666;
+        shotgunAmmo.casingModelName = "Shell";
+        shotgunAmmo.casingMaterialName = "Shell";
+    }
+
+    static void AMMO_AKS74U_INIT()
+    {
+        AmmoInfo& aks74uAmmo = g_ammos.emplace_back();
+        aks74uAmmo.name = "AKS74U";
+        aks74uAmmo.modelName = "TODO!!!";
+        aks74uAmmo.convexMeshModelName = "TODO!!!";
+        aks74uAmmo.materialName = "TODO!!!";
+        aks74uAmmo.pickupAmount = 666;
+        aks74uAmmo.casingModelName = "CasingAKS74U";
+        aks74uAmmo.casingMaterialName = "Casing_AkS74U";
+    }
+        
+    static void AMMO_SMITHANDWESSON_INIT()
+    {
+        AmmoInfo& smithAmmo = g_ammos.emplace_back();
+        smithAmmo.name = "Smith";
+        smithAmmo.modelName = "YOU NEED THIS MODEL";
+        smithAmmo.convexMeshModelName = "YOU NEED THIS MODEL";
+        smithAmmo.materialName = "YOU NEED THIS MATERIAL";
+        smithAmmo.casingModelName = "None";
+        smithAmmo.casingMaterialName = "None";
+        smithAmmo.pickupAmount = 50;
+    }
+
+    static void AMMO_TOKAREV_INIT()
+    {
+        AmmoInfo& tokarevAmmo = g_ammos.emplace_back();
+        tokarevAmmo.name = "Tokarev";
+        tokarevAmmo.modelName = "TokarevAmmoBox";
+        tokarevAmmo.convexMeshModelName = "TokarevAmmoBox_ConvexMesh";
+        tokarevAmmo.materialName = "TokarevAmmoBox";
+        tokarevAmmo.casingModelName = "Casing9mm";
+        tokarevAmmo.casingMaterialName = "Casing9mm";
+        tokarevAmmo.pickupAmount = 50;
+    }
+
+    static void AMMO_GLOCK_INIT()
+    {
+        AmmoInfo& glockAmmo = g_ammos.emplace_back();
+        glockAmmo.name = "Glock";
+        glockAmmo.modelName = "GlockAmmoBox";
+        glockAmmo.convexMeshModelName = "GlockAmmoBox_ConvexMesh";
+        glockAmmo.materialName = "GlockAmmoBox";
+        glockAmmo.casingModelName = "Casing9mm";
+        glockAmmo.casingMaterialName = "Casing9mm";
+        glockAmmo.pickupAmount = 50;
+    }
+
+    static void ATTACHMENT_SILENCER_GLOCK_INIT()
+    {
+        WeaponAttachmentInfo glockSilencer = g_attachments.emplace_back();
+        glockSilencer.name = "Glock Silencer";
+        glockSilencer.materialName = "Glock Silencer";
+        glockSilencer.modelName = "Glock Silencer";
+        glockSilencer.isGold = false;
+    }
+
+    void Init() 
+    {
+        g_weapons.clear();
+        g_ammos.clear();
+
+        // Attachments
+        ATTACHMENT_SILENCER_GLOCK_INIT();
+
+        // Ammo
+        AMMO_GLOCK_INIT();
+        AMMO_TOKAREV_INIT();
+        AMMO_SMITHANDWESSON_INIT();
+        AMMO_AKS74U_INIT();
+        AMMO_SHOTGUN_INIT();
+        AMMO_P90_INIT();
+
+        // Weapons
+        KNIFE_INIT();
+        KNIFE_2_INIT();
+        SMITHANDWESSON_INIT();
+        TOKAREV_INIT();
+        GLOCK_INIT();
+        GOLD_GLOCK_INIT();
+        SHOTGUN_INIT();
+        SPAS_INIT();
+        P90_INIT();
+        AKS74U_INIT();
 
         SortList();
     }
 
-    void PreLoadWeaponPickUpConvexHulls() {
-        for (WeaponInfo& weaponInfo : g_weapons) {
-            if (weaponInfo.pickupModelName != UNDEFINED_STRING) {
+    void PreLoadWeaponPickUpConvexHulls()
+    {
+        for (WeaponInfo& weaponInfo : g_weapons) 
+        {
+            if (weaponInfo.pickupModelName != UNDEFINED_STRING) 
+            {
                 int pickUpModelIndex = AssetManager::GetModelIndexByName(weaponInfo.pickupModelName);
-                if (pickUpModelIndex != -1) {
+                if (pickUpModelIndex != -1) 
+                {
                     Physics::CreateTriangleMeshFromModelIndex(pickUpModelIndex);
                 }
             }
-            if (weaponInfo.pickupConvexMeshModelName != UNDEFINED_STRING) {
+            if (weaponInfo.pickupConvexMeshModelName != UNDEFINED_STRING)
+            {
                 int pickUpConvexModelIndex = AssetManager::GetModelIndexByName(weaponInfo.pickupConvexMeshModelName);
-                if (pickUpConvexModelIndex != -1) {
+                if (pickUpConvexModelIndex != -1) 
+                {
                     Physics::CreateTriangleMeshFromModelIndex(pickUpConvexModelIndex);
                 }
             }

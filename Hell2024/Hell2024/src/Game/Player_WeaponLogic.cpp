@@ -7,8 +7,8 @@
 #include "Util.hpp"
 #include "Timer.hpp"
 
-void Player::GiveDefaultLoadout() {
-
+void Player::GiveDefaultLoadout()
+{
     GiveWeapon("Knife");
     // GiveWeapon("GoldenKnife");
     GiveWeapon("Glock");
@@ -829,17 +829,22 @@ bool Player::InADS() {
 }
 
 
-bool Player::CanReload() {
-
+bool Player::CanReload() 
+{
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     WeaponState* weaponState = GetCurrentWeaponState();
     AnimatedGameObject* viewWeaponModel = GetViewWeaponAnimatedGameObject();
 
-    if (!HasControl()) {
+    if (!HasControl()) 
+    {
         return false;
     }
 
-    if (weaponState->ammoInMag < weaponInfo->magSize) {
+    std::cout << viewWeaponModel->AnimationIsPastPercentage(50.0f) << std::endl;
+   
+
+    if (weaponState->ammoInMag < weaponInfo->magSize) 
+    {
         return true;
     }
 
@@ -878,7 +883,8 @@ void Player::UpdateWeaponSway(float deltaTime) {
         AnimatedGameObject* viewWeapon = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeapon");
 
         float xMax = 4.0;
-        if (_zoom < 0.99f) {
+        if (_zoom < 0.99f) 
+        {
             xMax = 2.0f;
         }
 
@@ -913,7 +919,8 @@ void Player::UpdateWeaponSway(float deltaTime) {
         movementY = std::min(movementY, SWAY_MAX_Y);
         movementY = std::max(movementY, SWAY_MIN_Y);
 
-        if (InputMulti::RightMousePressed(m_mouseIndex)) {
+        if (InputMulti::RightMousePressed(m_mouseIndex))
+        {
             movementX *= 0.0f;
             movementY *= 0.0f;
         }
@@ -929,10 +936,12 @@ void Player::UpdateWeaponSway(float deltaTime) {
         m_weaponSwayMatrix = m_weaponSwayTransform.to_mat4();
 
         // Maybe you can combine the two below somehow by applying it at render time?
-        for (auto& transform : viewWeapon->_animatedTransforms.local) {
+        for (auto& transform : viewWeapon->_animatedTransforms.local)
+        {
             transform = m_weaponSwayMatrix * transform;
         }
-        for (auto& transform : viewWeapon->m_jointWorldMatrices) {
+        for (auto& transform : viewWeapon->m_jointWorldMatrices) 
+        {
          //   transform.worldMatrix = _weaponSwayMatrix * transform.worldMatrix;
         }
     }
@@ -1000,136 +1009,165 @@ void Player::SwitchWeapon(std::string name, WeaponAction weaponAction)
         viewWeaponAnimatedGameObject->EnableDrawingForAllMesh();
 
         // Is it gold?
-        if (weaponInfo->isGold) {
+        if (weaponInfo->isGold) 
+        {
             viewWeaponAnimatedGameObject->MakeGold();
         }
-        else {
+        else 
+        {
             viewWeaponAnimatedGameObject->MakeNotGold();
         }
+
         // Set animation
-        if (weaponAction == SPAWNING) {
+        if (weaponAction == SPAWNING)
+        {
             viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.spawn, 1.0f);
         }
-        if (weaponAction == DRAW_BEGIN) {
+        if (weaponAction == DRAW_BEGIN) 
+        {
             viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.draw, 1.0f);
         }
         // Set materials
-        for (auto& it : weaponInfo->meshMaterials) {
+        for (auto& it : weaponInfo->meshMaterials) 
+        {
             viewWeaponAnimatedGameObject->SetMeshMaterialByMeshName(it.first, it.second);
         }
         // Set materials by index
-        for (auto& it : weaponInfo->meshMaterialsByIndex) {
+        for (auto& it : weaponInfo->meshMaterialsByIndex) 
+        {
             viewWeaponAnimatedGameObject->SetMeshMaterialByMeshIndex(it.first, it.second);
         }
         // Hide mesh
-        for (auto& meshName : weaponInfo->hiddenMeshAtStart) {
+        for (auto& meshName : weaponInfo->hiddenMeshAtStart) 
+        {
             viewWeaponAnimatedGameObject->DisableDrawingForMeshByMeshName(meshName);
         }
         _weaponAction = weaponAction;
     }
 }
 
-void Player::SpawnMuzzleFlash() {
+void Player::SpawnMuzzleFlash() 
+{
     _muzzleFlashTimer = 0;
     _muzzleFlashRotation = Util::RandomFloat(0, HELL_PI * 2);
 }
 
-int Player::GetCurrentWeaponMagAmmo() {
+int Player::GetCurrentWeaponMagAmmo()
+{
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-    if (weaponInfo) {
+    if (weaponInfo)
+    {
         WeaponState* weaponState = GetWeaponStateByName(weaponInfo->name);
-        if (weaponState) {
+        if (weaponState) 
+        {
             return weaponState->ammoInMag;
         }
     }
     return 0;
 }
 
-int Player::GetCurrentWeaponTotalAmmo() {
+int Player::GetCurrentWeaponTotalAmmo()
+{
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-    if (weaponInfo) {
+    if (weaponInfo) 
+    {
         AmmoState* ammoState = GetAmmoStateByName(weaponInfo->ammoType);
-        if (ammoState) {
+        if (ammoState) 
+        {
             return ammoState->ammoOnHand;
         }
     }
     return 0;
 }
 
-WeaponInfo* Player::GetCurrentWeaponInfo() {
+WeaponInfo* Player::GetCurrentWeaponInfo() 
+{
     return WeaponManager::GetWeaponInfoByName(m_weaponStates[m_currentWeaponIndex].name);;
 }
 
-void Player::GiveWeapon(std::string name) {
+void Player::GiveWeapon(std::string name) 
+{
     WeaponState* state = GetWeaponStateByName(name);
     WeaponInfo* weaponInfo = WeaponManager::GetWeaponInfoByName(name);
-    if (state && weaponInfo) {
+    if (state && weaponInfo) 
+    {
         state->has = true;
         state->ammoInMag = weaponInfo->magSize;
     }
 }
 
-void Player::GiveAmmo(std::string name, int amount) {
+void Player::GiveAmmo(std::string name, int amount) 
+{
     AmmoState* state = GetAmmoStateByName(name);
-    if (state) {
+    if (state) 
+    {
         state->ammoOnHand += amount;
     }
 }
 
-void Player::GiveRedDotToWeapon(std::string name) {
+void Player::GiveRedDotToWeapon(std::string name) 
+{
     WeaponInfo* weaponInfo = WeaponManager::GetWeaponInfoByName(name);
     WeaponState* state = GetWeaponStateByName(name);
-    if (state && weaponInfo && weaponInfo->type == WeaponType::PISTOL) {
+    if (state && weaponInfo && weaponInfo->type == WeaponType::PISTOL) 
+    {
         state->hasScope = true;
     }
 }
 
-void Player::GiveSilencerToWeapon(std::string name) {
+void Player::GiveSilencerToWeapon(std::string name) 
+{
     WeaponInfo* weaponInfo = WeaponManager::GetWeaponInfoByName(name);
     WeaponState* state = GetWeaponStateByName(name);
-    if (state && weaponInfo && weaponInfo->type == WeaponType::PISTOL) {
+    if (state && weaponInfo && weaponInfo->type == WeaponType::PISTOL) 
+    {
         state->hasSilencer = true;
     }
 }
 
-WeaponState* Player::GetWeaponStateByName(std::string name) {
-    for (int i = 0; i < m_weaponStates.size(); i++) {
-        if (m_weaponStates[i].name == name) {
+WeaponState* Player::GetWeaponStateByName(std::string name) 
+{
+    for (int i = 0; i < m_weaponStates.size(); i++)
+    {
+        if (m_weaponStates[i].name == name) 
+        {
             return &m_weaponStates[i];
         }
     }
     return nullptr;
 }
 
-AmmoState* Player::GetAmmoStateByName(std::string name) {
-    for (int i = 0; i < m_ammoStates.size(); i++) {
-        if (m_ammoStates[i].name == name) {
+AmmoState* Player::GetAmmoStateByName(std::string name) 
+{
+    for (int i = 0; i < m_ammoStates.size(); i++) 
+    {
+        if (m_ammoStates[i].name == name) 
+        {
             return &m_ammoStates[i];
         }
     }
     return nullptr;
 }
 
-
-
-void Player::CheckForMeleeHits() {
-
+void Player::CheckForMeleeHits() 
+{
     const PxGeometry& overlapShape = _meleeHitCheckOverlapShape->getGeometry();
     const PxTransform shapePose(_characterController->getActor()->getGlobalPose());
 
     OverlapReport overlapReport = Physics::OverlapTest(overlapShape, shapePose, CollisionGroup::GENERIC_BOUNCEABLE | RAGDOLL);
 
-
-    for (int i = 0; i < Game::GetPlayerCount(); i++) {
-
+    for (int i = 0; i < Game::GetPlayerCount(); i++) 
+    {
         Player* otherPlayer = Game::GetPlayerByIndex(i);
 
-        if (otherPlayer == this) {
+        if (otherPlayer == this) 
+        {
             continue;
         }
 
         float distanceToOtherPlayer = glm::distance(otherPlayer->GetViewPos(), this->GetViewPos());
-        if (distanceToOtherPlayer < 2) {
+        if (distanceToOtherPlayer < 2)
+        {
             otherPlayer->Kill();
             IncrementKillCount();
 
@@ -1138,7 +1176,8 @@ void Player::CheckForMeleeHits() {
             // Apply force to their ragdoll
             AnimatedGameObject* hitCharacterModel = otherPlayer->GetCharacterAnimatedGameObject();
 
-            for (RigidComponent& rigidComponent : hitCharacterModel->_ragdoll._rigidComponents) {
+            for (RigidComponent& rigidComponent : hitCharacterModel->_ragdoll._rigidComponents)
+            {
                 float strength = 35;
                 strength *= rigidComponent.mass * 1.5f;
                 PxVec3 force = PxVec3(direction.x, direction.y,direction.z) * strength;

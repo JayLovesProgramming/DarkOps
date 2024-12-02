@@ -573,7 +573,7 @@ const glm::mat4 AnimatedGameObject::GetModelMatrix()
 
 bool AnimatedGameObject::IsAnimationComplete() const 
 {
-    std::cout << "Animation is complete" << _animationIsComplete << std::endl;
+    //std::cout << "Animation is complete" << _animationIsComplete << std::endl;
     return _animationIsComplete;
 }
 
@@ -785,7 +785,6 @@ void AnimatedGameObject::PrintMeshNames()
 
 void AnimatedGameObject::UpdateBoneTransformsFromRagdoll()
 {
-
     if (false)
     {
        // _debugBones.clear();
