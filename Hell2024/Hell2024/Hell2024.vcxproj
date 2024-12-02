@@ -290,6 +290,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Game\Bullet.hpp" />
     <ClInclude Include="src\Game\Crosshair.hpp" />
     <ClInclude Include="src\Game\Cushions.hpp" />
+    <ClInclude Include="src\Game\Inventory.hpp" />
     <ClInclude Include="src\Game\Loadout.hpp" />
     <ClInclude Include="src\Game\MiscObjects.hpp" />
     <ClInclude Include="src\Game\Pickup.hpp" />

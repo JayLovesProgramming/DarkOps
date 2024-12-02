@@ -2050,7 +2050,8 @@ CrosshairType Player::GetCrosshairType()
     else if (m_cameraRayResult.objectType == ObjectType::DOOR)
     {
         Door* door = (Door*)(m_cameraRayResult.parent);
-        if (door && door->IsInteractable(GetFeetPosition())) {
+        if (door && door->IsInteractable(GetFeetPosition())) 
+        {
             return CrosshairType::INTERACT;
         }
     }
@@ -2083,6 +2084,7 @@ void Player::SetKeyboardIndex(int32_t index)
 {
     m_keyboardIndex = index;
 }
+
 void Player::SetMouseIndex(int32_t index)
 {
     m_mouseIndex = index;

@@ -29,27 +29,28 @@ public:
     {
         hell::ivec2 crosshairPos = viewportCenter;
 
+        Player player;
+        if (player.GetCrosshairType() == CrosshairType::REGULAR)
+        {
+            renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossLeft", crosshairPos + hell::ivec2{ -int(m_crosshairCrossSize + Config::CROSSHAIR_GAP), 0 }, presentSize, Alignment::CENTERED));
+            renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossRight", crosshairPos + hell::ivec2{ int(m_crosshairCrossSize + Config::CROSSHAIR_GAP), 0 }, presentSize, Alignment::CENTERED));
+            renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossBottom", crosshairPos + hell::ivec2{ 0, -int(m_crosshairCrossSize + Config::CROSSHAIR_GAP) }, presentSize, Alignment::CENTERED));
+            if (weaponInfo->type != WeaponType::PISTOL) // COD BO6 inspired - If we have a pistol, remove the top crosshair line
+            {
+                renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossTop", crosshairPos + hell::ivec2{ 0, int(m_crosshairCrossSize + Config::CROSSHAIR_GAP + 1) /* +1 is a magic number to make it look properly centered */ }, presentSize, Alignment::CENTERED));
+            }
+            renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
+        }
+        else
+        {
+            std::cout << "Crosshair type: " << player.GetCrosshairType() << std::endl;
+        }
         // if (GetCrosshairType() == CrosshairType::REGULAR) {
         //     renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
         // }
         // else if (GetCrosshairType() == CrosshairType::INTERACT) {
         //     renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairSquare", crosshairPos, presentSize, Alignment::CENTERED));
         // }
-
-
-        renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossLeft", crosshairPos + hell::ivec2{ -int(m_crosshairCrossSize + Config::CROSSHAIR_GAP), 0 }, presentSize, Alignment::CENTERED));
-        renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossRight", crosshairPos + hell::ivec2{ int(m_crosshairCrossSize + Config::CROSSHAIR_GAP), 0 }, presentSize, Alignment::CENTERED));
-        renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossBottom", crosshairPos + hell::ivec2{ 0, -int(m_crosshairCrossSize + Config::CROSSHAIR_GAP) }, presentSize, Alignment::CENTERED));
-        if (weaponInfo->type != WeaponType::PISTOL) // COD BO6 inspired - If we have a pistol, remove the top crosshair line
-        {
-            renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossTop", crosshairPos + hell::ivec2{ 0, int(m_crosshairCrossSize + Config::CROSSHAIR_GAP + 1) /* +1 is a magic number to make it look properly centered */ }, presentSize, Alignment::CENTERED));
-        }
-        renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
-
-        static int texHeight = AssetManager::GetTextureByName("inventory_mockup")->GetHeight();
-        static int height = (presentSize.y - texHeight) / 2;
-
-        renderItems->push_back(RendererUtil::CreateRenderItem2D("inventory_mockup", { 40, height }, presentSize, Alignment::BOTTOM_LEFT));
 
     }
 };
