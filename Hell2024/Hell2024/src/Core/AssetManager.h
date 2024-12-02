@@ -1,5 +1,5 @@
 #pragma once
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../Math/Types.hpp"
 #include "../Renderer/Types/CubemapTexture.h"
 #include "../Renderer/Types/ExrTexture.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_access.hpp>
 #include "RendererCommon.h"

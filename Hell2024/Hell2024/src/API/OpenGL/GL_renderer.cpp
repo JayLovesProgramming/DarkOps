@@ -1,7 +1,7 @@
 ﻿#include "GL_renderer.hpp"
 #include "GL_backEnd.hpp"
 #include "Types/GL_gBuffer.h"
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "Types/GL_shader.h"
 #include "Types/GL_shadowMap.h"
 #include "Types/GL_shadowMapArray.h"

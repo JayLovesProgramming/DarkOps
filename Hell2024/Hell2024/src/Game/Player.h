@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../Game/WeaponManager.h"
 #include "../Game/AnimatedGameObject.h"
 #include "../Input/keycodes.h"

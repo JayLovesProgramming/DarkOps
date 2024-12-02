@@ -1,5 +1,5 @@
 #pragma once
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "RenderData.h" // remove me later
 
 struct DrawInfo {

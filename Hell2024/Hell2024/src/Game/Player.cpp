@@ -9,7 +9,7 @@
 #include "../Input/InputMulti.h"
 #include "../Renderer/TextBlitter.h"
 #include "../Renderer/RendererUtil.hpp"
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../Config.hpp"
 #include "../Util.hpp"
 #include "../Timer.hpp"

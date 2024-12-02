@@ -1,5 +1,5 @@
 #pragma once
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 
 #pragma warning(push, 0)
 #include "PxPhysicsAPI.h"

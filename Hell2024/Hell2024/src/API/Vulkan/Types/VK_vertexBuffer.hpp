@@ -1,5 +1,5 @@
 #pragma once
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include <glad/glad.h>
 #include "vk_allocation.hpp"
 #include "../VK_BackEnd.h"

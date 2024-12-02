@@ -1,7 +1,7 @@
 // GL_renderer.hpp
 #pragma once
 
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../../Renderer/RenderData.h"
 
 namespace OpenGLRenderer 

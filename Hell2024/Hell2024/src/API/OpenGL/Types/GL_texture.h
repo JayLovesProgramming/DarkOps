@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Compressonator.h>

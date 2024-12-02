@@ -286,7 +286,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Editor\CSGPlane.hpp" />
     <ClInclude Include="src\Editor\CSGShape.h" />
     <ClInclude Include="src\Editor\Editor.h" />
-    <ClInclude Include="src\Common\HellCommon.h" />
+    <ClInclude Include="src\Common\HellCommon.hpp" />
     <ClInclude Include="src\Game\Bullet.h" />
     <ClInclude Include="src\Game\Cushions.h" />
     <ClInclude Include="src\Game\MiscObjects.h" />

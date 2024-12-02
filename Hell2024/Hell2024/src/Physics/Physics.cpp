@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include "iostream"
 #include "../Core/AssetManager.h"
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../Util.hpp"
 
 /*

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Physics.h"
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../Util.hpp"
 
 struct RigidStatic 

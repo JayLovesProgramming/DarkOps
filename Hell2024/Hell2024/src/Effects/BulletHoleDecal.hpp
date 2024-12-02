@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../Physics/Physics.h"
 #include "../Util.hpp"
 

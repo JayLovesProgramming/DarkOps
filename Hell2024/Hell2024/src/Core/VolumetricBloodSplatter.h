@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../API/OpenGL/Types/GL_shader.h"
 #include "../Renderer/Types/Model.hpp"
 

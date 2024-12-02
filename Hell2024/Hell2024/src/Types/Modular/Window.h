@@ -1,5 +1,5 @@
 #pragma once
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../../Physics/Physics.h"
 
 class Window {

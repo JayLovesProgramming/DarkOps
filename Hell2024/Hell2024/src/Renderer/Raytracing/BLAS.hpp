@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HellCommon.h"
+#include "HellCommon.hpp"
 #include "../../Util.hpp"
 #include <vector>
 #include <algorithm>
