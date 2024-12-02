@@ -3,7 +3,7 @@
 #include "HellCommon.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_access.hpp>
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 
 struct Plane 
 {

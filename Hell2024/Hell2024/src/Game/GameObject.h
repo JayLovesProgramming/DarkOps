@@ -1,5 +1,5 @@
 #pragma once
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 #include "../Core/Audio.hpp"
 #include "../Physics/RigidBody.hpp"
 #include "../Physics/RigidStatic.hpp"

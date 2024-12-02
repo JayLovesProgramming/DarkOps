@@ -1,6 +1,6 @@
-#include "FbxImporter.h"
+#include "FbxImporter.hpp"
 #include "HellCommon.hpp"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 #include "../Util.hpp"
 
 void FbxImporter::LoadAnimation(Animation* animation) 

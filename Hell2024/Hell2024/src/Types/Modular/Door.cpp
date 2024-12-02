@@ -1,5 +1,5 @@
 #include "Door.h"
-#include "../../Core/AssetManager.h"
+#include "../../Core/AssetManager.hpp"
 #include "../../Game/Player.h"
 #include "../../Core/Audio.hpp"
 #include "../../Util.hpp"

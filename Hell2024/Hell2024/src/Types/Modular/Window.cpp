@@ -1,5 +1,5 @@
 #include "Window.h"
-#include "../../Core/AssetManager.h"
+#include "../../Core/AssetManager.hpp"
 #include "../../Util.hpp"
 
 Window::Window() {

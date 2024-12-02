@@ -8,7 +8,7 @@
 #include "../Util.hpp"
 #include "../API/OpenGL/GL_backEnd.hpp"
 #include "../BackEnd/Backend.hpp"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 #include "../Game/Scene.h"
 #include "../Pathfinding/Pathfinding2.h"
 #include "../Renderer/GlobalIllumination.h"

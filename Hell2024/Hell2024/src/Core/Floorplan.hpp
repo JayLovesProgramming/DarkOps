@@ -4,7 +4,7 @@
 
 #define WORLD_WIDTH MAP_WIDTH
 #define WORLD_DEPTH MAP_DEPTH
-#define  WORLD_GRID_SPACING 0.1f
+constexpr static auto WORLD_GRID_SPACING = 0.1f;
 
 namespace Floorplan 
 {

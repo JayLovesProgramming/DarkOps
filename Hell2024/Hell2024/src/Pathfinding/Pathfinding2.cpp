@@ -9,7 +9,7 @@
 #include "../Editor/CSG.h"
 #include "../Input/Input.h"
 #include "../Game/Game.h"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 
 class MyDebugDraw : public duDebugDraw
 {

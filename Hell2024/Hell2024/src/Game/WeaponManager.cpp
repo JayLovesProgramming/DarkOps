@@ -1,7 +1,7 @@
 #include "WeaponManager.h"
 #include <vector>
 #include <algorithm>
-#include "Core/AssetManager.h"
+#include "Core/AssetManager.hpp"
 #include "Physics/Physics.h"
 
 namespace WeaponManager 

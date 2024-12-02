@@ -1,6 +1,6 @@
-#include "VolumetricBloodSplatter.h"
+#include "VolumetricBloodSplatter.hpp"
 #include "../API/OpenGL/GL_backEnd.hpp"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 
 GLuint VolumetricBloodSplatter::s_vao;
 GLuint VolumetricBloodSplatter::s_buffer_mode_matrices;

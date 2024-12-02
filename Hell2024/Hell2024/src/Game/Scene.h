@@ -10,7 +10,7 @@
 #include "../Effects/BloodDecal.hpp"
 #include "../Effects/BulletCasing.h"
 #include "../Effects/BulletHoleDecal.hpp"
-#include "../Core/VolumetricBloodSplatter.h"
+#include "../Core/VolumetricBloodSplatter.hpp"
 #include "../Editor/CSG.h"
 #include "../Game/Player.h"
 #include "../Game/Dobermann.h"

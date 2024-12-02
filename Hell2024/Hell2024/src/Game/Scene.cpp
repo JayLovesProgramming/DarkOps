@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #include "../BackEnd/BackEnd.hpp"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 #include "../Core/Audio.hpp"
 #include "../Core/JSON.hpp"
 #include "../Editor/CSG.h"

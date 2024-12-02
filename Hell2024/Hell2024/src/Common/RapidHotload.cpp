@@ -1,4 +1,4 @@
-#include "RapidHotload.h"
+#include "RapidHotload.hpp"
 #include "../Game/Game.h"
 #include "../Game/Scene.h"
 

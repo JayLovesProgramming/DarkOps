@@ -3,7 +3,7 @@
 #include "Defines.hpp"
 #include "Enums.hpp"
 
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 
 #include "Types.hpp"
 #include "../Math/Types.hpp"

@@ -4,7 +4,7 @@
 #include "../API/OpenGL/GL_backEnd.hpp"
 #include "../API/OpenGL/GL_renderer.hpp"
 #include "../API/Vulkan/VK_backEnd.h"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 #include "../Core/Audio.hpp"
 #include "../Editor/CSG.h"
 #include "../Editor/Gizmo.hpp"
@@ -15,7 +15,7 @@
 #include "../Pathfinding/Pathfinding2.h"
 #include "Renderer/ImGui/GUI_UI.h"
 
-#include "Core/ImageManager.h"
+#include "Core/ImageManager.hpp"
 
 namespace BackEnd 
 {

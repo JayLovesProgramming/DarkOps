@@ -9,7 +9,7 @@
 #include "../Renderer/GlobalIllumination.h"
 #include "../Renderer/Renderer.h"
 #include "../Pathfinding/Pathfinding2.h"
-#include "RapidHotload.h"
+#include "RapidHotload.hpp"
 
 namespace Game
 {

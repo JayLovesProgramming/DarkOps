@@ -2,7 +2,7 @@
 
 #include "HellCommon.hpp"
 #include "../../API/OpenGL/Types/GL_shader.h"
-#include "../../Core/AssetManager.h"
+#include "../../Core/AssetManager.hpp"
 #include "../../Game/GameObject.h"
 
 struct Toilet

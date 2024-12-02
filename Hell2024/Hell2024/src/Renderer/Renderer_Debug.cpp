@@ -12,7 +12,7 @@
 #include "../Math/BVH.hpp"
 #include "tinycsg/tinycsg.hpp"
 
-#include "RapidHotload.h"
+#include "RapidHotload.hpp"
 
 /*
  █▀█ █▀█ ▀█▀ █▀█ ▀█▀ █▀▀

@@ -1,6 +1,6 @@
 #include "Engine.h"
 #include "BackEnd/BackEnd.hpp"
-#include "Core/AssetManager.h"
+#include "Core/AssetManager.hpp"
 #include "Game/Game.h"
 #include "Renderer/Renderer.h"
 #include "Utils/ErrorHandling/LogErrors.h"

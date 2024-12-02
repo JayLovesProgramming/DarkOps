@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 #include <string>
 #include <vector>
 

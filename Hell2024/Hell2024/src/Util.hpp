@@ -20,7 +20,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/prettywriter.h>
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 
 namespace Util 
 {

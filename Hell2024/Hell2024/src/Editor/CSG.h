@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 #include "TinyCSG/tinycsg.hpp"
 #include "../Physics/RigidStatic.hpp"
 #include <span>

@@ -1,6 +1,6 @@
 #include "Raytracing.h"
 #include "../../BackEnd/BackEnd.hpp"
-#include "../../Core/AssetManager.h"
+#include "../../Core/AssetManager.hpp"
 #include <vector>
 
 #include <iostream>

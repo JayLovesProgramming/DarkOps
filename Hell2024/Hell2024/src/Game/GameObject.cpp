@@ -4,7 +4,7 @@
 #include "../Input/Input.h"
 #include "../Config.hpp"
 #include "../BackEnd/BackEnd.hpp"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 
 PxFilterData GetPxFilterDataFromCollisionType(CollisionType collisionType) {
 

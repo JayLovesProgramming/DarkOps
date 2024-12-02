@@ -13,7 +13,7 @@
 #include "../Config.hpp"
 #include "../Util.hpp"
 #include "../Timer.hpp"
-#include "RapidHotload.h"
+#include "RapidHotload.hpp"
 
 Player::Player(int playerIndex)
 {

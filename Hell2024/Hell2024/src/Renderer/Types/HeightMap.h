@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 #include "../Physics/Physics.h"
 
 struct HeightMap

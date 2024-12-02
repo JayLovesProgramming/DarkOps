@@ -12,7 +12,7 @@
 #include <string>
 #include <fstream>
 
-#include "../../Core/AssetManager.h"
+#include "../../Core/AssetManager.hpp"
 //#include "../../Types/Texture.h"
 
 // GET THIS OUT OF HERE

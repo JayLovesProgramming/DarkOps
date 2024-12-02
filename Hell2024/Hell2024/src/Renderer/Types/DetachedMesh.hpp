@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 #include "../../API/Vulkan/Types/vk_detachedMesh.hpp"
 #include "../../API/OpenGL/Types/gl_detachedMesh.hpp"
 #include "../../BackEnd/BackEnd.hpp"

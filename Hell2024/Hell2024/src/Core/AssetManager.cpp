@@ -1,10 +1,10 @@
 ﻿#define TINYOBJLOADER_IMPLEMENTATION
-#include "AssetManager.h"
+#include "AssetManager.hpp"
 #include "../API/OpenGL/GL_backEnd.hpp"
 #include "../API/OpenGL/GL_renderer.hpp"
 #include "../API/Vulkan/VK_backEnd.h"
 #include "../API/Vulkan/VK_renderer.h"
-#include "../Core/FBXImporter.h"
+#include "../Core/FBXImporter.hpp"
 #include "../BackEnd/BackEnd.hpp"
 #include "../Util.hpp"
 #include "../Tools/DDSHelpers.h"

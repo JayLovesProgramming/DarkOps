@@ -9,7 +9,7 @@
 #include "Types/GL_CubeMap2.h"
 #include "Types/GL_frameBuffer.hpp"
 #include "../../BackEnd/BackEnd.hpp"
-#include "../../Core/AssetManager.h"
+#include "../../Core/AssetManager.hpp"
 #include "../../Game/Scene.h"
 #include "../../Game/Game.h"
 #include "../../Editor/CSG.h"
@@ -25,7 +25,7 @@
 #include "../../Renderer/SSAO.hpp"
 #include "Timer.hpp"
 
-#include "RapidHotload.h"
+#include "RapidHotload.hpp"
 
 const static auto TILE_SIZE = 24;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RendererCommon.h"
+#include "RendererCommon.hpp"
 #include "Types/DetachedMesh.hpp"
 #include "../Game/AnimatedGameObject.h"
 

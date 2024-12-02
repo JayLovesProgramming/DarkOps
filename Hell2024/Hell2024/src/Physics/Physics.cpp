@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include "iostream"
-#include "../Core/AssetManager.h"
+#include "../Core/AssetManager.hpp"
 #include "HellCommon.hpp"
 #include "../Util.hpp"
 
