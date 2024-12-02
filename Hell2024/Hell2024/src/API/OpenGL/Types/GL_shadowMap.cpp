@@ -1,6 +1,6 @@
 #include "GL_shadowMap.h"
 #include <glad/glad.h>
-#include "Defines.h"
+#include "Defines.hpp"
 
 void ShadowMap::Init()
 {

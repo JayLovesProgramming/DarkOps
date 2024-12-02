@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Defines.h"
-#include "Enums.h"
+#include "Defines.hpp"
+#include "Enums.hpp"
 #include "RendererCommon.h"
 #include "Types.hpp"
 #include "../Math/Types.hpp"

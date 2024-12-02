@@ -7,7 +7,6 @@
 #include "../Core/FBXImporter.h"
 #include "../BackEnd/BackEnd.hpp"
 #include "../Util.hpp"
-#include "../Types/Enums.h"
 #include "../Tools/DDSHelpers.h"
 #include "../Tools/ImageTools.h"
 #include <future>

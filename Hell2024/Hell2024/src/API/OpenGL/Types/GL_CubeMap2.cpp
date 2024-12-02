@@ -1,6 +1,6 @@
 #include "GL_CubeMap2.h"
 #include <glad/glad.h>
-#include "Defines.h"
+#include "Defines.hpp"
 
 void CubeMap2::Init(unsigned int size) 
 {

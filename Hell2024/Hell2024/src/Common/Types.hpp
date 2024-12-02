@@ -13,8 +13,8 @@
 //#include "Math.h"
 #include <gli/gli.hpp>
 #pragma warning(pop)
-#include "Defines.h"
-#include "Enums.h"
+#include "Defines.hpp"
+#include "Enums.hpp"
 
 struct TriangleIntersectionResult
 {

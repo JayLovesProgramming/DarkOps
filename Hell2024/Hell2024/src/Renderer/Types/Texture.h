@@ -5,7 +5,6 @@
 #include <memory>
 #include "../../API/OpenGL/Types/GL_texture.h"
 #include "../../API/Vulkan/Types/VK_texture.h"
-#include "../../Types/Enums.h"
 
 class Texture
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HellCommon.h"
-#include "Enums.h"
+#include "Enums.hpp"
 
 namespace Editor 
 {

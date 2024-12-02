@@ -275,8 +275,8 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\API\Vulkan\Types\VK_vertexBuffer.hpp" />
     <ClInclude Include="src\API\Vulkan\VK_common.h" />
     <ClInclude Include="src\API\Vulkan\Vk_util.hpp" />
-    <ClInclude Include="src\Common\Defines.h" />
-    <ClInclude Include="src\Common\Enums.h" />
+    <ClInclude Include="src\Common\Defines.hpp" />
+    <ClInclude Include="src\Common\Enums.hpp" />
     <ClInclude Include="src\Common\RapidHotload.h" />
     <ClInclude Include="src\Common\Types.hpp" />
     <ClInclude Include="src\Core\ImageManager.h" />
@@ -304,7 +304,6 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Renderer\Types\TreeMap.h" />
     <ClInclude Include="src\Tools\DDSHelpers.h" />
     <ClInclude Include="src\Tools\ImageTools.h" />
-    <ClInclude Include="src\Types\Enums.h" />
     <ClInclude Include="src\Game\Dobermann.h" />
     <ClInclude Include="src\Pathfinding\Pathfinding2.h" />
     <ClInclude Include="src\Game\WeaponManager.h" />

@@ -1,6 +1,6 @@
 #include "GL_shadowMapArray.h"
 #include <glad/glad.h>
-#include "Defines.h"
+#include "Defines.hpp"
 
 void ShadowMapArray::Init(unsigned int numberOfCubemaps) 
 {
