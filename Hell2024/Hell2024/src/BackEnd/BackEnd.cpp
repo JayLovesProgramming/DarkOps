@@ -1,37 +1,48 @@
 #include "BackEnd.hpp"
-#include <iostream>
-#include <string>
-#include "../API/OpenGL/GL_backEnd.hpp"
-#include "../API/OpenGL/GL_renderer.hpp"
-#include "../API/Vulkan/VK_backEnd.h"
-#include "../Core/AssetManager.hpp"
-#include "../Core/Audio.hpp"
-#include "../Editor/CSG.hpp"
-#include "../Editor/Gizmo.hpp"
-#include "../Game/WeaponManager.hpp"
-#include "../Input/Input.hpp"
-#include "../Input/InputMulti.hpp"
-#include "../Physics/Physics.hpp"
-#include "../Pathfinding/Pathfinding2.hpp"
+#include "API/OpenGL/GL_backEnd.hpp"
+#include "API/OpenGL/GL_renderer.hpp"
+#include "API/Vulkan/VK_backEnd.h"
+#include "Core/AssetManager.hpp"
+#include "Core/Audio.hpp"
+#include "Editor/CSG.hpp"
+#include "Editor/Gizmo.hpp"
+#include "Game/WeaponManager.hpp"
+#include "Input/Input.hpp"
+#include "Input/InputMulti.hpp"
+#include "Physics/Physics.hpp"
+#include "Pathfinding/Pathfinding2.hpp"
 #include "Renderer/ImGui/GUI_UI.h"
-
 #include "Core/ImageManager.hpp"
 
 namespace BackEnd 
 {
     API _api = API::UNDEFINED;
+
     GLFWwindow* _window = NULL;
+
     WindowedMode _windowedMode = WindowedMode::WINDOWED;
+
     GLFWmonitor* _monitor;
+
     const GLFWvidmode* _mode;
+
+    int width = 1920;
+    int height = 1080;
+
     bool _forceCloseWindow = false;
     bool _windowHasFocus = true;
+
+    std::string _windowName = "Unloved";
+
     int _windowedWidth = 0;
     int _windowedHeight = 0;
+
     int _fullscreenWidth = 0;
     int _fullscreenHeight = 0;
+
     int _currentWindowWidth = 0;
     int _currentWindowHeight = 0;
+
     int _presentTargetWidth = 0;
     int _presentTargetHeight = 0;
 
@@ -42,18 +53,10 @@ namespace BackEnd
     {
         _api = api;
 
-        //if (GetAPI() == API::OPENGL) 
-        //{
-        //    // Nothing required
-        //}
-        //else 
-        if (GetAPI() == API::VULKAN)
+        if (_api == API::VULKAN)
         {
             VulkanBackEnd::CreateVulkanInstance();
         }
-
-        int width = 1920;
-        int height = 1080;
 
         glfwInit();
 
@@ -86,11 +89,13 @@ namespace BackEnd
         glfwWindowHint(GLFW_BLUE_BITS, _mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, _mode->refreshRate);
 
-        _fullscreenWidth = _mode->width;
+        // _mode-> width - 1920 
+        // _mode -> height - 1080
+        _fullscreenWidth = _mode->width; 
         _fullscreenHeight = _mode->height;
 
-        _windowedWidth = width;
-        _windowedHeight = height;
+        _windowedWidth = _mode->width;
+        _windowedHeight = _mode->height;
 
         CreateGLFWWindow(WindowedMode::WINDOWED);
         if (_window == NULL) 
