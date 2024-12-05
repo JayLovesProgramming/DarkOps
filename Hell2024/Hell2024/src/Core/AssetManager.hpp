@@ -11,11 +11,12 @@
 #include "../Renderer/Types/SkinnedModel.h"
 #include "../Renderer/Types/Texture.hpp"
 
-namespace AssetManager {
-
+namespace AssetManager
+{
     // Asset Loading
     void FindAssetPaths();
     void LoadNextItem();
+    void LoadSkinnedModels();
     void AddItemToLoadLog(std::string item);
     bool LoadingComplete();
     std::vector<std::string>& GetLoadLog();

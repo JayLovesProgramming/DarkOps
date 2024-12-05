@@ -384,10 +384,7 @@ RenderData CreateRenderData()
     return renderData;
 }
 
-/*
- █▀▄ █▀▀ █▀▄ █ █ █▀▀   █   ▀█▀ █▀█ █▀▀ █▀▀     █   █▀█ █▀█ ▀█▀ █▀█ ▀█▀ █▀▀
- █ █ █▀▀ █▀▄ █ █ █ █   █    █  █ █ █▀▀ ▀▀█   ▄▀    █▀▀ █ █  █  █ █  █  ▀▀█
- ▀▀  ▀▀▀ ▀▀  ▀▀▀ ▀▀▀   ▀▀▀ ▀▀▀ ▀ ▀ ▀▀▀ ▀▀▀   ▀     ▀   ▀▀▀ ▀▀▀ ▀ ▀  ▀  ▀▀▀ */
+// Debug Lines/Points
 
 float AngleBetween(const glm::vec2& a, const glm::vec2& b)
 {

@@ -1,14 +1,16 @@
 ﻿#define TINYOBJLOADER_IMPLEMENTATION
+
 #include "AssetManager.hpp"
-#include "../API/OpenGL/GL_backEnd.hpp"
-#include "../API/OpenGL/GL_renderer.hpp"
-#include "../API/Vulkan/VK_backEnd.h"
-#include "../API/Vulkan/VK_renderer.h"
-#include "../Core/FBXImporter.hpp"
-#include "../BackEnd/BackEnd.hpp"
-#include "../Utils/Util.hpp"
-#include "../Tools/DDSHelpers.hpp"
-#include "../Tools/ImageTools.hpp"
+
+#include "API/OpenGL/GL_backEnd.hpp"
+#include "API/OpenGL/GL_renderer.hpp"
+#include "API/Vulkan/VK_backEnd.h"
+#include "API/Vulkan/VK_renderer.h"
+#include "Core/FBXImporter.hpp"
+#include "BackEnd/BackEnd.hpp"
+#include "Utils/Util.hpp"
+#include "Tools/DDSHelpers.hpp"
+#include "Tools/ImageTools.hpp"
 #include <future>
 #include <thread>
 #include <numeric>
@@ -18,6 +20,7 @@
 #include <vector>
 #include <stb_image.h>
 #include "tiny_obj_loader.h"
+#include "Utils/Convert/Slashes.hpp"
 
 struct CMPTextureData
 {
@@ -112,6 +115,23 @@ void AssetManager::LoadCMPTextureData(CMPTextureData* cmpTextureData)
     LoadDDSFile(cmpTextureData->m_compressedFilePath.c_str(), cmpTextureData->m_cmpTexture);
 }
 
+void AssetManager::LoadSkinnedModels()
+{
+    for (const auto& entry : std::filesystem::recursive_directory_iterator("res/models/FBX/"))
+    {
+        if (!entry.is_regular_file()) continue; // Skip directories, symlinks, etc.
+
+        FileInfo info = Util::GetFileInfo(entry);
+
+        if (info.filetype == "fbx")
+        {
+            std::string convertedPath = ReplaceBackwardSlashesToForward(info.fullpath); // This avoids any loading issues. If the string contains backward slashes, it does NOT load
+            g_skinnedModels.emplace_back(convertedPath);
+        }
+    }
+}
+
+
 void AssetManager::FindAssetPaths() 
 {
     // Cubemap Textures
@@ -140,8 +160,9 @@ void AssetManager::FindAssetPaths()
         }
     }
 
+
     // Models
-    auto modelPaths = std::filesystem::directory_iterator("res/models/");
+    auto modelPaths = std::filesystem::directory_iterator("res/models/OBJ/");
     for (const auto& entry : modelPaths)
     {
         FileInfo info = Util::GetFileInfo(entry);
@@ -149,16 +170,10 @@ void AssetManager::FindAssetPaths()
         {
             g_models.emplace_back(info.fullpath);
         }
-    }
+    };
 
-    // Skinned models
-    auto skinnedModelPaths = std::filesystem::directory_iterator("res/models/");
-    for (const auto& entry : skinnedModelPaths) {
-        FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "fbx") {
-            g_skinnedModels.emplace_back(info.fullpath.c_str());
-        }
-    }
+    // Skinned Models
+    LoadSkinnedModels();
 
     // Load compressed DDS textures if OpenGL
     if (BackEnd::GetAPI() == API::OPENGL) {
@@ -247,7 +262,8 @@ void AssetManager::AddItemToLoadLog(std::string item) {
 }
 
 
-std::vector<std::string>& AssetManager::GetLoadLog() {
+std::vector<std::string>& AssetManager::GetLoadLog() 
+{
     return g_loadLog;
 }
 
@@ -270,7 +286,7 @@ void AssetManager::LoadNextItem() {
         if (cmpTextureData.m_loadingState == LoadingState::AWAITING_LOADING_FROM_DISK) {
             cmpTextureData.m_loadingState = LoadingState::LOADING_FROM_DISK;
             _futures.push_back(std::async(std::launch::async, LoadCMPTextureData, &cmpTextureData));
-            AddItemToLoadLog(cmpTextureData.m_compressedFilePath);
+            //AddItemToLoadLog(cmpTextureData.m_compressedFilePath);
             return;
         }
     }
@@ -278,7 +294,7 @@ void AssetManager::LoadNextItem() {
     for (CubemapTexture& cubemapTexture : g_cubemapTextures) {
         if (cubemapTexture.m_awaitingLoadingFromDisk) {
             cubemapTexture.m_awaitingLoadingFromDisk = false;
-            AddItemToLoadLog(cubemapTexture.m_fullPath);
+            //AddItemToLoadLog(cubemapTexture.m_fullPath);
             _futures.push_back(std::async(std::launch::async, LoadCubemapTexture, &cubemapTexture));
             return;
         }
@@ -287,7 +303,7 @@ void AssetManager::LoadNextItem() {
     for (Animation& animation: g_animations) {
         if (animation.m_awaitingLoadingFromDisk) {
             animation.m_awaitingLoadingFromDisk = false;
-            AddItemToLoadLog(animation.m_fullPath);
+            //AddItemToLoadLog(animation.m_fullPath);
             _futures.push_back(std::async(std::launch::async, LoadAnimation, &animation));
             return;
         }
@@ -315,7 +331,7 @@ void AssetManager::LoadNextItem() {
     for (Model& model : g_models) {
         if (model.m_awaitingLoadingFromDisk) {
             model.m_awaitingLoadingFromDisk = false;
-            AddItemToLoadLog(model.m_fullPath);
+            //AddItemToLoadLog(model.m_fullPath);
             _futures.push_back(std::async(std::launch::async, LoadModel, &model));
             return;
         }
@@ -336,7 +352,7 @@ void AssetManager::LoadNextItem() {
         if (texture.GetLoadingState() == LoadingState::AWAITING_LOADING_FROM_DISK) {
             texture.SetLoadingState(LoadingState::LOADING_FROM_DISK);
             _futures.push_back(std::async(std::launch::async, LoadTexture, &texture));
-            AddItemToLoadLog(texture.m_fullPath);
+            //AddItemToLoadLog(texture.m_fullPath);
             return;
         }
     }
@@ -369,7 +385,7 @@ void AssetManager::LoadNextItem() {
                 std::cout << cmpTextureData.m_textureName << " not found \n";
             }
         }
-        AddItemToLoadLog("Uploading CMPTextures to GPU");
+        AddItemToLoadLog("Uploading CMP Textures -> GPU");
         g_completedLoadingTasks.g_cmpTexturesBaked = true;
         return;
     }
@@ -378,7 +394,7 @@ void AssetManager::LoadNextItem() {
         for (Texture& texture : g_textures) {
             texture.Bake();
         }
-        AddItemToLoadLog("Uploading textures to GPU");
+        AddItemToLoadLog("Uploading Textures -> GPU");
         g_completedLoadingTasks.g_texturesBaked = true;
         return;
     }
@@ -389,7 +405,7 @@ void AssetManager::LoadNextItem() {
                 cubemapTexture.GetGLTexture().Bake();
             }
         }
-        AddItemToLoadLog("Upload cubemap textures to GPU");
+        AddItemToLoadLog("Uploading Cubemap Textures -> GPU");
         g_completedLoadingTasks.g_cubemapTexturesBaked = true;
         return;
     }
@@ -444,6 +460,7 @@ void AssetManager::LoadNextItem() {
         g_treeMap.Load("res/textures/heightmaps/TreeMap.png");
         g_heightMap.Load("res/textures/heightmaps/HeightMap.png", 20.0f);
         g_heightMap.UploadToGPU();
+        AddItemToLoadLog("Uploading Heightmap -> GPU");
     }
     else if (BackEnd::GetAPI() == API::VULKAN)
     {
@@ -452,6 +469,7 @@ void AssetManager::LoadNextItem() {
 
     // We're done
     g_completedLoadingTasks.g_all = true;
+    AddItemToLoadLog("Loading Complete");
 
     for (auto& text : g_loadLog) 
     {
@@ -1306,9 +1324,14 @@ Texture* AssetManager::GetTextureByName(const std::string& name)
 
 bool AssetManager::TextureExists(const std::string& filename) 
 {
-    for (Texture& texture : g_textures)
-        if (texture.GetFilename() == filename)
+    for (Texture& texture : g_textures) // Iterate over all the textures
+    {
+        if (texture.GetFilename() == filename) // If texture file name matches the given file name return true
+        {
             return true;
+        }
+    }
+        
     return false;
 }
 
@@ -1331,10 +1354,8 @@ hell::ivec2 AssetManager::GetTextureSizeByName(const char* textureName)
     {
         return hell::ivec2(texture->GetWidth(), texture->GetHeight());
     }
-    else 
-    {
-        return hell::ivec2(0, 0);
-    }
+
+    return hell::ivec2(0, 0);
 }
 
 // Cubemap texture
@@ -1357,6 +1378,7 @@ int AssetManager::GetCubemapTextureIndexByName(const std::string& name)
             return i;
         }
     }
+
     std::cout << "AssetManager::GetCubemapTextureIndexByName() failed because '" << name << "' does not exist\n";
     return -1;
 }
