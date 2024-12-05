@@ -55,6 +55,7 @@ void Dobermann::AddDobermann(DobermannCreateInfo& createInfo)
     dobermann.m_currentRotation = createInfo.rotation;
     dobermann.m_initialRotation = createInfo.rotation;
     dobermann.Init();
+    Audio::PlayAudio("NextWeapon.wav", 0.5f);
 }
 
 void Dobermann::GiveDamage(int amount, int targetPlayerIndex) 

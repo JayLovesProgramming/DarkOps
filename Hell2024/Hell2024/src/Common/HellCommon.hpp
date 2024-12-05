@@ -7,4 +7,4 @@
 #include "RendererCommon.hpp"
 
 #include "Types.hpp"
-#include "../Math/Types.hpp"
+#include "Math/Types.hpp"

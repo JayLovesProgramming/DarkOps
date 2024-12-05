@@ -1,7 +1,12 @@
 #pragma once
 
-#include "HellCommon.hpp"
 #include <map>
+#include <string>
+#include <iostream>
+#include <vector>
+
+#include "Defines.hpp"
+#include "RendererCommon.hpp"
 
 struct SQT 
 {

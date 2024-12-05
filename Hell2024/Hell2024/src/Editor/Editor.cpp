@@ -581,7 +581,9 @@ namespace Editor {
         if (!Input::LeftMouseDown() && g_isDraggingMenu) {
             g_isDraggingMenu = false;
         }
-        if (Input::KeyPressed(HELL_KEY_SPACE)) {
+
+        if (Input::KeyPressed(HELL_KEY_SPACE)) 
+        {
             g_menuLocation = hell::ivec2(360, PRESENT_HEIGHT - 60);
         }
         if (Input::KeyPressed(HELL_KEY_I)) {

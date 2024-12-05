@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HellCommon.hpp"
+#include "Defines.hpp"
 #include <string>
 #include <unordered_map>
 

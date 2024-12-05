@@ -1,19 +1,18 @@
 #pragma once
 
-#include "HellCommon.hpp"
-#include "../Game/WeaponManager.hpp"
-#include "../Game/AnimatedGameObject.hpp"
-#include "../Input/keycodes.hpp"
-#include "../Physics/Physics.hpp"
-#include "../Math/Frustum.hpp"
-#include "../Math/Types.hpp"
+#include "Game/WeaponManager.hpp"
+#include "Game/AnimatedGameObject.hpp"
+#include "Input/keycodes.hpp"
+#include "Physics/Physics.hpp"
+#include "Math/Frustum.hpp"
+#include "Math/Types.hpp"
 
-#define GLOCK_CLIP_SIZE 12
-#define GLOCK_MAX_AMMO_SIZE 200
-#define AKS74U_MAG_SIZE 30
-#define AKS74U_MAX_AMMO_SIZE 9999
-#define SHOTGUN_AMMO_SIZE 8
-#define SHOTGUN_MAX_AMMO_SIZE 9999
+constexpr static auto GLOCK_CLIP_SIZE = 12;
+constexpr static auto GLOCK_MAX_AMMO_SIZE = 200;
+constexpr static auto AKS74U_MAG_SIZE = 30;
+constexpr static auto AKS74U_MAX_AMMO_SIZE = 9999;
+constexpr static auto SHOTGUN_AMMO_SIZE = 8;
+constexpr static auto SHOTGUN_MAX_AMMO_SIZE = 9999;
 
 struct Ammo 
 {
@@ -205,6 +204,7 @@ public:
     int32_t GetMouseIndex();
     void SetKeyboardIndex(int32_t index);
     void SetMouseIndex(int32_t index);
+    void RotateWeapons(bool nextWeapon);
     bool PressingWalkForward();
     bool PressingWalkBackward();
     bool PressingWalkLeft();
@@ -221,6 +221,7 @@ public:
     bool PresingJump();
     bool PressedCrouch();
     bool PressedNextWeapon();
+    bool PressedPreviousWeapon();
     bool PressingADS();
     bool PressedADS();
     bool PressedEscape();

@@ -354,7 +354,7 @@ namespace Game
         }
     }
 
-    void RespawnAllPlayers()
+    static void RespawnAllPlayers()
     {
         for (Player& player : g_players) 
         {
@@ -362,7 +362,7 @@ namespace Game
         }
     }
 
-    void RespawnAllDeadPlayers()
+    static void RespawnAllDeadPlayers()
     {
         for (Player& player : g_players)
         {
@@ -371,6 +371,60 @@ namespace Game
             }
         }
     }
+
+    static void SetPlayerControls(int keyPressed)
+    {
+        switch (keyPressed) 
+        {
+        case 1: // HELL_KEY_1
+            SetPlayerKeyboardAndMouseIndex(0, 0, 0); // SAME 1(keyboard) 1(mouse)
+            SetPlayerKeyboardAndMouseIndex(1, 1, 1); // SAME 0(keyboard) 0(mouse)
+            SetPlayerKeyboardAndMouseIndex(2, 1, 1); // SAME
+            SetPlayerKeyboardAndMouseIndex(3, 1, 1); // SAME
+            break;
+        case 2: // HELL_KEY_2
+            SetPlayerKeyboardAndMouseIndex(0, 1, 1);
+            SetPlayerKeyboardAndMouseIndex(1, 0, 0);
+            SetPlayerKeyboardAndMouseIndex(2, 1, 1);
+            SetPlayerKeyboardAndMouseIndex(3, 1, 1);
+            break;
+        case 3: // HELL_KEY_3
+            SetPlayerKeyboardAndMouseIndex(0, 1, 1);
+            SetPlayerKeyboardAndMouseIndex(1, 1, 1);
+            SetPlayerKeyboardAndMouseIndex(2, 0, 0);
+            SetPlayerKeyboardAndMouseIndex(3, 1, 1);
+            break;
+        case 4: // HELL_KEY_4
+            SetPlayerKeyboardAndMouseIndex(0, 1, 1);
+            SetPlayerKeyboardAndMouseIndex(1, 1, 1);
+            SetPlayerKeyboardAndMouseIndex(2, 1, 1);
+            SetPlayerKeyboardAndMouseIndex(3, 0, 0);
+            break;
+        default:
+            break;
+        }
+    }
+
+    static void CheckInputAndSetPlayerControls() 
+    {
+        if (Input::KeyPressed(HELL_KEY_1)) 
+        {
+            SetPlayerControls(1);
+        }
+        else if (Input::KeyPressed(HELL_KEY_2))
+        {
+            SetPlayerControls(2);
+        }
+        else if (Input::KeyPressed(HELL_KEY_3))
+        {
+            SetPlayerControls(3);
+        }
+        else if (Input::KeyPressed(HELL_KEY_4))
+        {
+            SetPlayerControls(4);
+        }
+    }
+
 
     void EvaluateDebugKeyPresses() 
     {
@@ -394,45 +448,17 @@ namespace Game
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Renderer::ToggleProbes();
         }
+
         if (!Editor::IsOpen()) 
         {
-            if (Input::KeyPressed(HELL_KEY_1))
-            {
-                SetPlayerKeyboardAndMouseIndex(0, 0, 0);
-                SetPlayerKeyboardAndMouseIndex(1, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(2, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(3, 1, 1);
-                //PrintPlayerControlIndices();
-            }
-            if (Input::KeyPressed(HELL_KEY_2))
-            {
-                SetPlayerKeyboardAndMouseIndex(0, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(1, 0, 0);
-                SetPlayerKeyboardAndMouseIndex(2, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(3, 1, 1);
-                //PrintPlayerControlIndices();
-            }
-            if (Input::KeyPressed(HELL_KEY_3)) 
-            {
-                SetPlayerKeyboardAndMouseIndex(0, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(1, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(2, 0, 0);
-                SetPlayerKeyboardAndMouseIndex(3, 1, 1);
-                //PrintPlayerControlIndices();
-            }
-            if (Input::KeyPressed(HELL_KEY_4)) 
-            {
-                SetPlayerKeyboardAndMouseIndex(0, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(1, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(2, 1, 1);
-                SetPlayerKeyboardAndMouseIndex(3, 0, 0);
-                //PrintPlayerControlIndices();
-            }
+            CheckInputAndSetPlayerControls();
         }
+
         if (Input::KeyPressed(HELL_KEY_J)) 
         {
             RespawnAllDeadPlayers();
         }
+
         if (Input::KeyPressed(HELL_KEY_K)) 
         {
             if (Editor::IsOpen()) 
@@ -445,6 +471,7 @@ namespace Game
                 RespawnAllPlayers();
             }
         }
+
         if (Input::KeyPressed(HELL_KEY_GRAVE_ACCENT))
         {
             _showDebugText = !_showDebugText;

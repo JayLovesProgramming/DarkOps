@@ -2,7 +2,6 @@
 
 #include "HellCommon.hpp"
 
-
 namespace BackEnd 
 {
     // Core

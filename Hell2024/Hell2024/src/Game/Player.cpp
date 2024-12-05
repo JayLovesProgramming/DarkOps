@@ -395,6 +395,7 @@ void Player::CheckForAndEvaluateRespawnPress()
             PressedInteract() ||
             PresingJump() ||
             PressedNextWeapon() ||
+            PressedPreviousWeapon() ||
             autoRespawn)
         {
             Respawn();
@@ -403,25 +404,58 @@ void Player::CheckForAndEvaluateRespawnPress()
     }
 }
 
-void Player::CheckForAndEvaluateNextWeaponPress()
+void Player::RotateWeapons(bool nextWeapon)
 {
-    if (HasControl() && PressedNextWeapon())
+    if (nextWeapon)
     {
-        m_currentWeaponIndex++;
+        m_currentWeaponIndex++; // Give next weapon
+        Audio::PlayAudio("NextWeapon.wav", 0.5f);
+    }
+    else
+    {
+        m_currentWeaponIndex--; // Give previous weapon
+        Audio::PlayAudio("NextWeapon.wav", 0.5f);
+    }
+
+    if (m_currentWeaponIndex == m_weaponStates.size())
+    {
+        m_currentWeaponIndex = 0;
+    }
+
+    while (!m_weaponStates[m_currentWeaponIndex].has)
+    {
+        if (nextWeapon)
+        {
+            m_currentWeaponIndex++; // Give next weapon
+        }
+        else
+        {
+            m_currentWeaponIndex--; // Give previous weapon
+        }
+
         if (m_currentWeaponIndex == m_weaponStates.size())
         {
             m_currentWeaponIndex = 0;
         }
-        while (!m_weaponStates[m_currentWeaponIndex].has) 
-        {
-            m_currentWeaponIndex++;
-            if (m_currentWeaponIndex == m_weaponStates.size())
-            {
-                m_currentWeaponIndex = 0;
-            }
-        }
-        Audio::PlayAudio("NextWeapon.wav", 0.5f);
-        SwitchWeapon(m_weaponStates[m_currentWeaponIndex].name, DRAW_BEGIN);
+    }
+
+    SwitchWeapon(m_weaponStates[m_currentWeaponIndex].name, DRAW_BEGIN);
+}
+
+void Player::CheckForAndEvaluateNextWeaponPress()
+{
+    if (!HasControl())
+    {
+        return;
+    }
+
+    if (PressedNextWeapon())
+    {
+        RotateWeapons(true);
+    }
+    else if (PressedPreviousWeapon())
+    {
+        RotateWeapons(false);
     }
 }
 
@@ -754,13 +788,13 @@ void Player::CheckForDebugKeyPresses()
     AnimatedGameObject* characterModel = Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "characterModel");
     AnimatedGameObject* viewWeaponModel = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponModel");
 
-    if (Input::KeyPressed(HELL_KEY_7))
-    {
-        std::cout << "\nCURRENT WEAPON JOINTS\n";
-        for (int i = 0; i < viewWeaponModel->_skinnedModel->m_joints.size(); i++) {
-            std::cout << i << ": " << viewWeaponModel->_skinnedModel->m_joints[i].m_name << "\n";
-        }
-    }
+    //if (Input::KeyPressed(HELL_KEY_7))
+    //{
+    //    std::cout << "\nCURRENT WEAPON JOINTS\n";
+    //    for (int i = 0; i < viewWeaponModel->_skinnedModel->m_joints.size(); i++) {
+    //        std::cout << i << ": " << viewWeaponModel->_skinnedModel->m_joints[i].m_name << "\n";
+    //    }
+    //}
     if (Input::KeyPressed(HELL_KEY_8))
     {
         std::cout << "\nCURRENT WEAPON MESH NAMES\n";
@@ -1778,7 +1812,20 @@ bool Player::PressedNextWeapon()
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
-        return Input::MouseWheelDown() || Input::MouseWheelUp();
+        return Input::MouseWheelUp();
+    }
+    else
+    {
+        //return InputMulti::ButtonPressed(_controllerIndex, _controls.NEXT_WEAPON);
+        return false;
+    }
+}
+
+bool Player::PressedPreviousWeapon()
+{
+    if (_inputType == InputType::KEYBOARD_AND_MOUSE)
+    {
+        return Input::MouseWheelDown();
     }
     else
     {

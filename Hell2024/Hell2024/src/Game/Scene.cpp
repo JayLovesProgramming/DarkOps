@@ -514,26 +514,26 @@ void Scene::LoadDefaultScene()
 
     std::cout << "[INFO] Light Count: " << g_lights.size() << "\n";
 
-    //// Dobermann spawn lab
-    //{
-    //    g_dobermann.clear();
+    // Dobermann spawn lab
+    {
+        g_dobermann.clear();
 
-    //    DobermannCreateInfo createInfo;
-    //    createInfo.position = glm::vec3(-1.7f, 0.4f, -1.2f);
-    //    createInfo.rotation = 0.7f;
-    //    createInfo.initalState = DobermannState::LAY;
-    //    Dobermann::AddDobermann(createInfo);
+        DobermannCreateInfo createInfo;
+        createInfo.position = glm::vec3(-1.7f, 0.0f, -1.2f);
+        createInfo.rotation = 0.7f;
+        createInfo.initalState = DobermannState::LAY;
+        Dobermann::AddDobermann(createInfo);
 
-    //    createInfo.position = glm::vec3(-2.46f, 0.4f, -3.08f);
-    //    createInfo.rotation = HELL_PI * 0.5f;
-    //    createInfo.initalState = DobermannState::LAY;
-    //    Dobermann::AddDobermann(createInfo);
+        createInfo.position = glm::vec3(-2.46f, 0.0f, -3.08f);
+        createInfo.rotation = HELL_PI * 0.5f;
+        createInfo.initalState = DobermannState::LAY;
+        Dobermann::AddDobermann(createInfo);
 
-    //    createInfo.position = glm::vec3(-1.77f, 0.4f, -5.66f);
-    //    createInfo.rotation = (1.3f);
-    //    createInfo.initalState = DobermannState::LAY;
-    //    Dobermann::AddDobermann(createInfo);
-    //}
+        createInfo.position = glm::vec3(-1.77f, 0.0f, -5.66f);
+        createInfo.rotation = (1.3f);
+        createInfo.initalState = DobermannState::LAY;
+        Dobermann::AddDobermann(createInfo);
+     }
 
     if (false)
     {
@@ -1823,99 +1823,99 @@ void Scene::CreateVolumetricBlood(glm::vec3 position, glm::vec3 rotation, glm::v
     _volumetricBloodObjectsSpawnedThisFrame++;
 }
 
-void Scene::Update_OLD(float deltaTime)
-{
-    EvaluateDebugKeyPresses();
-
-    // OLD SHIT BELOW
-
-    _volumetricBloodObjectsSpawnedThisFrame = 0;
-
-    for (VolumetricBloodSplatter& volumetricBloodSplatter : _volumetricBloodSplatters)
-    {
-        volumetricBloodSplatter.Update(deltaTime);
-    }
-
-    for (vector<VolumetricBloodSplatter>::iterator it = _volumetricBloodSplatters.begin(); it != _volumetricBloodSplatters.end();) 
-    {
-        if (it->m_CurrentTime > 0.9f)
-            it = _volumetricBloodSplatters.erase(it);
-        else
-            ++it;
-    }
-
-    static int i = 0;
-    i++;
-
-    // Move light source 3 to the lamp
-    GameObject* lamp = GetGameObjectByName("Lamp");
-    if (lamp && i > 2)
-    {
-        glm::mat4 lampMatrix = lamp->GetModelMatrix();
-        Transform globeTransform;
-        globeTransform.position = glm::vec3(0, 0.45f, 0);
-        glm::mat4 worldSpaceMatrix = lampMatrix * globeTransform.to_mat4();
-        Scene::g_lights[3].position = Util::GetTranslationFromMatrix(worldSpaceMatrix);
-    }
-   // Scene::_lights[3].isDirty = true;
-
-    GameObject* ak = GetGameObjectByName("AKS74U_Carlos");
-   // ak->_transform.rotation = glm::vec3(0, 0, 0);
-    if (Input::KeyPressed(HELL_KEY_SPACE) && false)
-    {
-        std::cout << "updating game object: " << ak->_name << "\n";
-        //ak->_editorRaycastBody->setGlobalPose(PxTransform(Util::GlmMat4ToPxMat44(ak->GetModelMatrix())));
-        Transform transform = ak->_transform;
-		PxQuat quat = Util::GlmQuatToPxQuat(glm::quat(transform.rotation));
-		PxTransform trans = PxTransform(PxVec3(transform.position.x, transform.position.y, transform.position.z), quat);
-		//ak->_editorRaycastBody->setGlobalPose(PxTransform(Util::GlmMat4ToPxMat44(trans.to_mat4())));
-		//ak->_editorRaycastBody->setGlobalPose(trans);
-    }
-
-    Game::SetPlayerGroundedStates();
-    ProcessBullets();
-
-    for (BulletCasing& bulletCasing : g_bulletCasings)
-    {
-        bulletCasing.Update(deltaTime);
-    }
-
-    for (Toilet& toilet : _toilets)
-    {
-        toilet.Update(deltaTime);
-    }
-
-	for (PickUp& pickUp : _pickUps)
-    {
-        pickUp.Update(deltaTime);
-	}
-
-    if (Input::KeyPressed(HELL_KEY_T))
-    {
-        for (Light& light : Scene::g_lights)
-        {
-            light.m_shadowMapIsDirty = true;
-        }
-    }
-
-       /*
-    for (AnimatedGameObject& animatedGameObject : g_animatedGameObjects) {
-        animatedGameObject.Update(deltaTime);
-    }*/
-
-    for (GameObject& gameObject : g_gameObjects)
-    {
-        gameObject.Update(deltaTime);
-    }
-
-    for (Door& door : g_doors)
-    {
-        door.Update(deltaTime);
-    }
-
-    UpdateRTInstanceData();
-    ProcessPhysicsCollisions();
-}
+//void Scene::Update_OLD(float deltaTime)
+//{
+//    EvaluateDebugKeyPresses();
+//
+//    // OLD SHIT BELOW
+//
+//    _volumetricBloodObjectsSpawnedThisFrame = 0;
+//
+//    for (VolumetricBloodSplatter& volumetricBloodSplatter : _volumetricBloodSplatters)
+//    {
+//        volumetricBloodSplatter.Update(deltaTime);
+//    }
+//
+//    for (vector<VolumetricBloodSplatter>::iterator it = _volumetricBloodSplatters.begin(); it != _volumetricBloodSplatters.end();) 
+//    {
+//        if (it->m_CurrentTime > 0.9f)
+//            it = _volumetricBloodSplatters.erase(it);
+//        else
+//            ++it;
+//    }
+//
+//    static int i = 0;
+//    i++;
+//
+//    // Move light source 3 to the lamp
+//    GameObject* lamp = GetGameObjectByName("Lamp");
+//    if (lamp && i > 2)
+//    {
+//        glm::mat4 lampMatrix = lamp->GetModelMatrix();
+//        Transform globeTransform;
+//        globeTransform.position = glm::vec3(0, 0.45f, 0);
+//        glm::mat4 worldSpaceMatrix = lampMatrix * globeTransform.to_mat4();
+//        Scene::g_lights[3].position = Util::GetTranslationFromMatrix(worldSpaceMatrix);
+//    }
+//   // Scene::_lights[3].isDirty = true;
+//
+//    GameObject* ak = GetGameObjectByName("AKS74U_Carlos");
+//   // ak->_transform.rotation = glm::vec3(0, 0, 0);
+//    if (Input::KeyPressed(HELL_KEY_SPACE) && false)
+//    {
+//        std::cout << "updating game object: " << ak->_name << "\n";
+//        //ak->_editorRaycastBody->setGlobalPose(PxTransform(Util::GlmMat4ToPxMat44(ak->GetModelMatrix())));
+//        Transform transform = ak->_transform;
+//		PxQuat quat = Util::GlmQuatToPxQuat(glm::quat(transform.rotation));
+//		PxTransform trans = PxTransform(PxVec3(transform.position.x, transform.position.y, transform.position.z), quat);
+//		//ak->_editorRaycastBody->setGlobalPose(PxTransform(Util::GlmMat4ToPxMat44(trans.to_mat4())));
+//		//ak->_editorRaycastBody->setGlobalPose(trans);
+//    }
+//
+//    Game::SetPlayerGroundedStates();
+//    ProcessBullets();
+//
+//    for (BulletCasing& bulletCasing : g_bulletCasings)
+//    {
+//        bulletCasing.Update(deltaTime);
+//    }
+//
+//    for (Toilet& toilet : _toilets)
+//    {
+//        toilet.Update(deltaTime);
+//    }
+//
+//	for (PickUp& pickUp : _pickUps)
+//    {
+//        pickUp.Update(deltaTime);
+//	}
+//
+//    if (Input::KeyPressed(HELL_KEY_T))
+//    {
+//        for (Light& light : Scene::g_lights)
+//        {
+//            light.m_shadowMapIsDirty = true;
+//        }
+//    }
+//
+//       /*
+//    for (AnimatedGameObject& animatedGameObject : g_animatedGameObjects) {
+//        animatedGameObject.Update(deltaTime);
+//    }*/
+//
+//    for (GameObject& gameObject : g_gameObjects)
+//    {
+//        gameObject.Update(deltaTime);
+//    }
+//
+//    for (Door& door : g_doors)
+//    {
+//        door.Update(deltaTime);
+//    }
+//
+//    UpdateRTInstanceData();
+//    ProcessPhysicsCollisions();
+//}
 
 //
 //void Scene::DirtyAllLights() {

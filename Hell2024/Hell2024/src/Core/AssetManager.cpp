@@ -1166,6 +1166,7 @@ bool AssetManager::ModelExists(const std::string& filename)
     {
         return texture.GetName() == filename;
     }
+    return false;
 }
 
 unsigned int AssetManager::GetQuadMeshIndex()
