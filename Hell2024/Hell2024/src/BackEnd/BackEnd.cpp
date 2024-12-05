@@ -97,7 +97,7 @@ namespace BackEnd
         _windowedWidth = _mode->width;
         _windowedHeight = _mode->height;
 
-        CreateGLFWWindow(WindowedMode::WINDOWED);
+        CreateGLFWWindow(WindowedMode::FULLSCREEN);
         if (_window == NULL) 
         {
             std::cout << "Failed to create GLFW window\n";

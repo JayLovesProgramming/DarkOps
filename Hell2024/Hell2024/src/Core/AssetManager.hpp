@@ -1,15 +1,18 @@
 #pragma once
+
 #include "HellCommon.hpp"
-#include "../Math/Types.hpp"
-#include "../Renderer/Types/CubemapTexture.hpp"
-#include "../Renderer/Types/ExrTexture.hpp"
-#include "../Renderer/Types/HeightMap.hpp"
-#include "../Renderer/Types/TreeMap.hpp"
-#include "../Renderer/Types/Mesh.hpp"
-#include "../Renderer/Types/Model.hpp"
-#include "../Renderer/Types/SkinnedMesh.hpp"
-#include "../Renderer/Types/SkinnedModel.h"
-#include "../Renderer/Types/Texture.hpp"
+
+#include "Math/Types.hpp"
+
+#include "Renderer/Types/CubemapTexture.hpp"
+#include "Renderer/Types/ExrTexture.hpp"
+#include "Renderer/Types/HeightMap.hpp"
+#include "Renderer/Types/TreeMap.hpp"
+#include "Renderer/Types/Mesh.hpp"
+#include "Renderer/Types/Model.hpp"
+#include "Renderer/Types/SkinnedMesh.hpp"
+#include "Renderer/Types/SkinnedModel.h"
+#include "Renderer/Types/Texture.hpp"
 
 namespace AssetManager
 {
@@ -21,7 +24,7 @@ namespace AssetManager
     bool LoadingComplete();
     std::vector<std::string>& GetLoadLog();
 
-    // Vertex data
+    // Vertex Data
     std::vector<Vertex>& GetVertices();
     std::vector<uint32_t>& GetIndices();
     std::vector<WeightedVertex>& GetWeightedVertices();
@@ -30,8 +33,6 @@ namespace AssetManager
     void UploadWeightedVertexData();
 
     // Mesh
-    Mesh* GetMeshByModelNameAndMeshName(const std::string& modelName, const std::string& meshName);
-    Mesh* GetMeshByModelNameAndMeshIndex(const std::string& modelName, int meshIndex);
     Mesh* GetMeshByIndex(int index);
     Mesh* GetQuadMesh();
     int GetMeshIndexByName(const std::string& name);
@@ -42,7 +43,6 @@ namespace AssetManager
     Model* GetModelByIndex(int index);
     int GetModelIndexByName(const std::string& name);
     void LoadModel(Model* model);
-    void LoadModelAssimp(const std::string& filepath);
     bool ModelExists(const std::string& name);
     void CreateHardcodedModels();
 

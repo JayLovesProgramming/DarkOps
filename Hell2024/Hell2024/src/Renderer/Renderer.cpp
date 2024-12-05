@@ -1,26 +1,36 @@
 ﻿#include "Renderer.hpp"
+
 #include <vector>
 #include <map>
-#include "../API/OpenGL/GL_renderer.hpp"
-#include "../API/Vulkan/VK_renderer.h"
-#include "../BackEnd/BackEnd.hpp"
-#include "../Game/Game.hpp"
-#include "../Game/Player.hpp"
-#include "../Game/Scene.hpp"
-#include "../Editor/CSG.hpp"
-#include "../Editor/Editor.hpp"
-#include "../Input/Input.hpp"
-#include "../Math/Raycasting.hpp"
-#include "../Renderer/GlobalIllumination.hpp"
-#include "../Renderer/RenderData.hpp"
-#include "../Renderer/RendererData.hpp"
-#include "../Renderer/TextBlitter.hpp"
-#include "../Renderer/RendererUtil.hpp"
-#include "../Renderer/Raytracing/Raytracing.hpp"
-#include "../Effects/MuzzleFlash.hpp"
-#include "../Utils/Util.hpp"
 
-#include "../Math/Frustum.hpp"
+#include "API/OpenGL/GL_renderer.hpp"
+#include "API/Vulkan/VK_renderer.h"
+
+#include "BackEnd/BackEnd.hpp"
+
+#include "Game/Game.hpp"
+#include "Game/Player.hpp"
+#include "Game/Scene.hpp"
+
+#include "Editor/CSG.hpp"
+#include "Editor/Editor.hpp"
+
+#include "Input/Input.hpp"
+
+#include "Math/Raycasting.hpp"
+
+#include "Renderer/GlobalIllumination.hpp"
+#include "Renderer/RenderData.hpp"
+#include "Renderer/RendererData.hpp"
+#include "Renderer/TextBlitter.hpp"
+#include "Renderer/RendererUtil.hpp"
+#include "Renderer/Raytracing/Raytracing.hpp"
+
+#include "Effects/MuzzleFlash.hpp"
+
+#include "Utils/Util.hpp"
+
+#include "Math/Frustum.hpp"
 
 IndirectDrawInfo CreateIndirectDrawInfo(std::vector<RenderItem3D>& potentialRenderItems, int playerCount);
 MultiDrawIndirectDrawInfo CreateMultiDrawIndirectDrawInfo(std::vector<RenderItem3D>& renderItems);
@@ -81,18 +91,14 @@ void Renderer::RenderFrame()
     }
 }
 
-/*
- █▀▀ █▀▄ █▀▀ █▀█ ▀█▀ █▀▀   █▀▄ █▀▀ █▀█ █▀▄ █▀▀ █▀▄   █▀▄ █▀█ ▀█▀ █▀█
- █   █▀▄ █▀▀ █▀█  █  █▀▀   █▀▄ █▀▀ █ █ █ █ █▀▀ █▀▄   █ █ █▀█  █  █▀█
- ▀▀▀ ▀ ▀ ▀▀▀ ▀ ▀  ▀  ▀▀▀   ▀ ▀ ▀▀▀ ▀ ▀ ▀▀  ▀▀▀ ▀ ▀   ▀▀  ▀ ▀  ▀  ▀ ▀ */
-
 RenderData CreateRenderData()
 {
-    // Viewport size
+    // Viewport Size
     hell::ivec2 viewportSize = { PRESENT_WIDTH, PRESENT_HEIGHT };
     hell::ivec2 viewportDoubleSize = { PRESENT_WIDTH * 2, PRESENT_HEIGHT * 2 };
 
-    if (Editor::IsOpen()) {
+    if (Editor::IsOpen()) 
+    {
         Game::GetPlayerByIndex(0)->ForceSetViewMatrix(Editor::GetViewMatrix());
     }
 
@@ -121,14 +127,15 @@ RenderData CreateRenderData()
     std::vector<RenderItem3D> shadowMapGeometryRenderItems;
     for (RenderItem3D& renderItem : geometryRenderItems) 
     {
-        if (renderItem.castShadow) {
+        if (renderItem.castShadow)
+        {
             shadowMapGeometryRenderItems.push_back(renderItem);
         }
     }
 
     RenderData renderData;
 
-    // Player count
+    // Player Count
     if (Game::GetSplitscreenMode() == SplitscreenMode::NONE)
     {
         renderData.playerCount = 1;
@@ -145,10 +152,7 @@ RenderData CreateRenderData()
     // Create render items
     renderData.renderItems.geometry = Scene::GetGeometryRenderItems();
 
-    /*
-     █▀▀ █▀▀ █▀█ █▄█ █▀▀ ▀█▀ █▀▄ █ █
-     █ █ █▀▀ █ █ █ █ █▀▀  █  █▀▄  █
-     ▀▀▀ ▀▀▀ ▀▀▀ ▀ ▀ ▀▀▀  ▀  ▀ ▀  ▀  */
+    // Geometry
 
     std::vector<RenderItem3D> sceneGeometryRenderItems = Scene::GetGeometryRenderItems();
     for (int i = 0; i < renderData.playerCount; i++) 
@@ -175,32 +179,29 @@ RenderData CreateRenderData()
         */
         //renderData.geometryDrawInfo[i] = CreateMultiDrawIndirectDrawInfo(playerGeometryRenderItems);
 
-
     }
-
 
     //renderData.geometryDrawInfo = CreateIndirectDrawInfo(sceneGeometryRenderItems, renderData.playerCount);
     //renderData.bulletHoleDecalDrawInfo = CreateIndirectDrawInfo(sceneDecalRenderItems, renderData.playerCount);
 
+    // Decals
 
-    /*
-     █▀▄ █▀▀ █▀▀ █▀█ █   █▀▀
-     █ █ █▀▀ █   █▀█ █   ▀▀█
-     ▀▀  ▀▀▀ ▀▀▀ ▀ ▀ ▀▀▀ ▀▀▀ */
-
-    /*for (int i = 0; i < renderData.playerCount; i++) {
+    /*for (int i = 0; i < renderData.playerCount; i++) 
+    {
         Player* player = Game::GetPlayerByIndex(i);
         Frustum& frustum = player->m_frustum;
         //int culled = 0;
         std::vector<RenderItem3D> playerDecalRenderItems = sceneDecalRenderItems;
 
         // Frustum cull remove them
-        for (int j = 0; j < playerDecalRenderItems.size(); j++) {
+        for (int j = 0; j < playerDecalRenderItems.size(); j++)
+        {
             RenderItem3D& renderItem = playerDecalRenderItems[j];
             Sphere sphere;
             sphere.radius = 0.015;
             sphere.origin = Util::GetTranslationFromMatrix(renderItem.modelMatrix);
-            if (!frustum.IntersectsSphere(sphere)) {
+            if (!frustum.IntersectsSphere(sphere)) 
+            {
                 playerDecalRenderItems.erase(playerDecalRenderItems.begin() + j);
                 //culled++;
                 j--;
@@ -385,7 +386,6 @@ RenderData CreateRenderData()
 }
 
 // Debug Lines/Points
-
 float AngleBetween(const glm::vec2& a, const glm::vec2& b)
 {
     float dot = glm::dot(glm::normalize(a), glm::normalize(b));
@@ -408,13 +408,13 @@ void MoveTowards(glm::vec2& position, const glm::vec2& target, glm::vec2& curren
 }
 
 // Render Data
-std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
+static std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
 {
     int desiredTotalLines = 40;
     float linesPerPresentHeight = (float)PRESENT_HEIGHT / (float)TextBlitter::GetLineHeight(BitmapFontType::STANDARD);
     float scaleRatio = (float)desiredTotalLines / (float)linesPerPresentHeight;
-    float loadingScreenWidth = PRESENT_WIDTH * scaleRatio;
-    float loadingScreenHeight = PRESENT_HEIGHT * scaleRatio;
+    float loadingScreenWidth = PRESENT_WIDTH;
+    float loadingScreenHeight = PRESENT_HEIGHT;
 
     std::string text = "";
     int maxLinesDisplayed = 40;
@@ -430,15 +430,15 @@ std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
     return TextBlitter::CreateText(text, location, viewportSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD);
 }
 
-std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playerCount) {
-
+std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playerCount) 
+{
     std::vector<RenderItem2D> renderItems;
 
-    for (int i = 0; i < playerCount; i++) {
-
+    for (int i = 0; i < playerCount; i++) 
+    {
         // Debug Text
-        if (Game::DebugTextIsEnabled()) {
-
+        if (Game::DebugTextIsEnabled())
+        {
             std::string& text = Renderer::GetDebugText();
 
             int x = RendererUtil::GetViewportLeftX(i, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
@@ -462,8 +462,6 @@ std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playe
 
     return renderItems;
 }
-
-
 
 std::vector<RenderItem2D> CreateRenderItems2DHiRes(hell::ivec2 gbufferSize, int playerCount) 
 {
@@ -1050,6 +1048,8 @@ void Renderer::RenderLoadingScreen()
             VulkanRenderer::RenderLoadingScreen(renderItems);
         }
     }
+
+    //std::cout << "Present Final Image" << std::endl;
     //PresentFinalImage();
 }
 

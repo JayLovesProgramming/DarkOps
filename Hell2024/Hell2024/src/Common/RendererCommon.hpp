@@ -2,6 +2,7 @@
 
 #define GLM_FORCE_SILENT_WARNINGS
 #define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -9,29 +10,27 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#define PRESENT_WIDTH 960//832
-#define PRESENT_HEIGHT 540//468
-
-#define POINT_CLOUD_SPACING 0.4f
+constexpr static auto PRESENT_WIDTH = 960; //832
+constexpr static auto PRESENT_HEIGHT = 540; //468
+constexpr static auto POINT_CLOUD_SPACING = 0.4f;
 //#define PROBE_SPACING 0.375f
-#define PROBE_SPACING 0.5f
-
-#define TEXTURE_ARRAY_SIZE 1024
-#define MAX_RENDER_OBJECTS_3D 4096
-#define MAX_RENDER_OBJECTS_2D 4096
-#define MAX_TLAS_OBJECT_COUNT 4096
-#define FRAME_OVERLAP 2
-#define MAX_LIGHTS 300
-#define MAX_SHADOW_CASTING_LIGHTS 16
-#define MAX_ANIMATED_TRANSFORMS 2048
-#define MAX_INSTANCES 4096
-#define MAX_INDIRECT_COMMANDS 4096
-#define MAX_GLASS_MESH_COUNT 128
-#define MAX_DECAL_COUNT 4096
-#define MAX_BLOOD_DECAL_COUNT 1024
-#define MAX_VAT_INSTANCE_COUNT 16
-#define MAX_CSG_CUBE_COUNT 4096
-#define MAX_SKINNED_MESH 96
+constexpr static auto PROBE_SPACING = 0.5f;
+constexpr static auto TEXTURE_ARRAY_SIZE = 1024;
+constexpr static auto MAX_RENDER_OBJECTS_3D = 4096;
+constexpr static auto MAX_RENDER_OBJECTS_2D = 4096;
+constexpr static auto MAX_TLAS_OBJECT_COUNT = 4096;
+constexpr static auto FRAME_OVERLAP = 2;
+constexpr static auto MAX_LIGHTS = 300;
+constexpr static auto MAX_SHADOW_CASTING_LIGHTS = 16;
+constexpr static auto MAX_ANIMATED_TRANSFORMS = 2048;
+constexpr static auto MAX_INSTANCES = 4096;
+constexpr static auto MAX_INDIRECT_COMMANDS = 4096;
+constexpr static auto MAX_GLASS_MESH_COUNT = 128;
+constexpr static auto MAX_DECAL_COUNT = 4096;
+constexpr static auto MAX_BLOOD_DECAL_COUNT = 1024;
+constexpr static auto MAX_VAT_INSTANCE_COUNT = 16;
+constexpr static auto MAX_CSG_CUBE_COUNT = 4096;
+constexpr static auto MAX_SKINNED_MESH = 96;
 
 enum Alignment 
 {
