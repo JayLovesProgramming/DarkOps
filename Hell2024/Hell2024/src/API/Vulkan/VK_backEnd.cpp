@@ -1,19 +1,9 @@
-﻿/*
-
-███    ███ ███    █▄   ▄█          ▄█   ▄█▄    ▄████████ ███▄▄▄▄        ▀█████████▄     ▄████████  ▄████████    ▄█   ▄█▄    ▄████████ ███▄▄▄▄   ████████▄
-███    ███ ███    ███ ███         ███ ▄███▀   ███    ███ ███▀▀▀██▄        ███    ███   ███    ███ ███    ███   ███ ▄███▀   ███    ███ ███▀▀▀██▄ ███   ▀███
-███    ███ ███    ███ ███         ███▐██▀     ███    ███ ███   ███        ███    ███   ███    ███ ███    █▀    ███▐██▀     ███    █▀  ███   ███ ███    ███
-███    ███ ███    ███ ███        ▄█████▀      ███    ███ ███   ███       ▄███▄▄▄██▀    ███    ███ ███         ▄█████▀     ▄███▄▄▄     ███   ███ ███    ███
-███    ███ ███    ███ ███       ▀▀█████▄    ▀███████████ ███   ███      ▀▀███▀▀▀██▄  ▀███████████ ███        ▀▀█████▄    ▀▀███▀▀▀     ███   ███ ███    ███
-███    ███ ███    ███ ███         ███▐██▄     ███    ███ ███   ███        ███    ██▄   ███    ███ ███    █▄    ███▐██▄     ███    █▄  ███   ███ ███    ███
- ▀█▄  ▄█▀  ███    ███ ███▌    ▄   ███ ▀███▄   ███    ███ ███   ███        ███    ███   ███    ███ ███    ███   ███ ▀███▄   ███    ███ ███   ███ ███   ▄███
-  ▀████▀   ████████▀  █████▄▄██   ███   ▀█▀   ███    █▀   ▀█   █▀       ▄█████████▀    ███    █▀  ████████▀    ███   ▀█▀   ██████████  ▀█   █▀  ████████▀
-
-*/
-#define GLM_FORCE_SILENT_WARNINGS
+﻿#define GLM_FORCE_SILENT_WARNINGS
+#define GLM_FORCE_CXX11
 #define GLM_ENABLE_EXPERIMENTAL
 #define VMA_IMPLEMENTATION
 #define GLFW_INCLUDE_VULKAN
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "VK_backEnd.h"
@@ -21,14 +11,16 @@
 #include "VK_assetManager.h"
 #include "vk_mem_alloc.h"
 #include "VK_Renderer.h"
-#include "../../BackEnd/BackEnd.hpp"
-#include "../../Core/AssetManager.hpp"
-#include "../../Game/Scene.hpp"
-#include "../../Utils/ErrorHandling/ErrorChecking.hpp"
 
-namespace VulkanBackEnd {
+#include "BackEnd/BackEnd.hpp"
+#include "Core/AssetManager.hpp"
+#include "Game/Scene.hpp"
+#include "Utils/ErrorHandling/ErrorChecking.hpp"
 
-    struct UploadContext {
+namespace VulkanBackEnd
+{
+    struct UploadContext 
+    {
         VkFence _uploadFence;
         VkCommandPool _commandPool;
         VkCommandBuffer _commandBuffer;
@@ -88,9 +80,7 @@ namespace VulkanBackEnd {
 
     RayTracingScratchBuffer CreateScratchBuffer(VkDeviceSize size);
 
-
-   // void CreateTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR> instances, AccelerationStructure& outTLAS);
-
+    // void CreateTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR> instances, AccelerationStructure& outTLAS);
 
     //void UpdateStaticDescriptorSet();
 
@@ -105,59 +95,74 @@ namespace VulkanBackEnd {
     inline AllocatedBuffer _rtInstancesBuffer;
     inline Buffer _pointCloudBuffer;
 
-    VkDevice GetDevice() {
+    VkDevice GetDevice() 
+    {
         return _device;
     }
-    VkSurfaceKHR GetSurface() {
+    VkSurfaceKHR GetSurface()
+    {
         return _surface;
     }
-    VkSwapchainKHR GetSwapchain() {
+    VkSwapchainKHR GetSwapchain() 
+    {
         return _swapchain;
     }
-    int32_t GetFrameIndex() {
+    int32_t GetFrameIndex()
+    {
         return _frameNumber % FRAME_OVERLAP;
     }
-    VkQueue GetGraphicsQueue() {
+    VkQueue GetGraphicsQueue()
+    {
         return _graphicsQueue;
     }
-    FrameData& GetCurrentFrame() {
+    FrameData& GetCurrentFrame() 
+    {
         return _frames[GetFrameIndex()];
     }
-    FrameData& GetFrameByIndex(int index) {
+    FrameData& GetFrameByIndex(int index) 
+    {
         return _frames[index];
     }
-    VmaAllocator GetAllocator() {
+    VmaAllocator GetAllocator()
+    {
         return _allocator;
     }
-    VkDescriptorPool GetDescriptorPool() {
+    VkDescriptorPool GetDescriptorPool() 
+    {
         return _descriptorPool;
     }
-    VkSampler VulkanBackEnd::GetSampler() {
+    VkSampler VulkanBackEnd::GetSampler()
+    {
         return _sampler;
     }
-    std::vector<VkImage>& GetSwapchainImages() {
+    std::vector<VkImage>& GetSwapchainImages() 
+    {
         return _swapchainImages;
     }
-    void VulkanBackEnd::AdvanceFrameIndex() {
+    void VulkanBackEnd::AdvanceFrameIndex() 
+    {
         _frameNumber++;
     }
 }
 
-bool VulkanBackEnd::FrameBufferWasResized() {
+bool VulkanBackEnd::FrameBufferWasResized() 
+{
     return _frameBufferResized;
 }
 
-void VulkanBackEnd::MarkFrameBufferAsResized() {
+void VulkanBackEnd::MarkFrameBufferAsResized()
+{
     _frameBufferResized = true;
 }
 
-void VulkanBackEnd::HandleFrameBufferResized() {
+void VulkanBackEnd::HandleFrameBufferResized() 
+{
     RecreateDynamicSwapchain();
     _frameBufferResized = false;
 }
 
-void VulkanBackEnd::InitMinimum() {
-
+void VulkanBackEnd::InitMinimum()
+{
     SetGLFWSurface();
     SelectPhysicalDevice();
     CreateSwapchain();
@@ -175,13 +180,16 @@ void VulkanBackEnd::InitMinimum() {
     VulkanRenderer::CreateStorageBuffers();
 }
 
-void VulkanBackEnd::SetGLFWSurface() {
+void VulkanBackEnd::SetGLFWSurface()
+{
     glfwCreateWindowSurface(_instance, BackEnd::GetWindowPointer(), nullptr, &_surface);
 }
 
-void VulkanBackEnd::CreateVulkanInstance() {
+void VulkanBackEnd::CreateVulkanInstance() 
+{
+    std::cout << "Created Vulkan Instance" << std::endl;
     vkb::InstanceBuilder builder;
-    builder.set_app_name("Unloved");
+    builder.set_app_name((BackEnd::_windowName + " (Vulkan)").c_str());
     builder.request_validation_layers(_enableValidationLayers);
     builder.use_default_debug_messenger();
     builder.require_api_version(1, 3, 0);
@@ -190,8 +198,8 @@ void VulkanBackEnd::CreateVulkanInstance() {
     _debugMessenger = _bootstrapInstance.debug_messenger;
 }
 
-void VulkanBackEnd::SelectPhysicalDevice() {
-
+void VulkanBackEnd::SelectPhysicalDevice() 
+{
     vkb::PhysicalDeviceSelector selector{ _bootstrapInstance };
     selector.add_required_extension(VK_KHR_MAINTENANCE_4_EXTENSION_NAME);					// Hides shader warnings for unused variables
     selector.add_required_extension(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);				// Dynamic rendering
@@ -261,8 +269,10 @@ void VulkanBackEnd::SelectPhysicalDevice() {
 
     // Check if extension is supported
     //bool maintenance4ExtensionSupported = false;
-    for (const auto& extension : availableExtensions) {
-        if (std::string(extension.extensionName) == VK_KHR_RAY_QUERY_EXTENSION_NAME) {
+    for (const auto& extension : availableExtensions)
+    {
+        if (std::string(extension.extensionName) == VK_KHR_RAY_QUERY_EXTENSION_NAME) 
+        {
             //maintenance4ExtensionSupported = true;
             std::cout << "VK_KHR_RAY_QUERY_EXTENSION_NAME is supported\n";
             break;
@@ -294,7 +304,8 @@ void VulkanBackEnd::SelectPhysicalDevice() {
 
     auto instanceVersion = VK_API_VERSION_1_0;
     auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
-    if (vkEnumerateInstanceVersion) {
+    if (vkEnumerateInstanceVersion)
+    {
         vkEnumerateInstanceVersion(&instanceVersion);
     }
 
@@ -303,13 +314,15 @@ void VulkanBackEnd::SelectPhysicalDevice() {
     uint32_t patch = VK_VERSION_PATCH(instanceVersion);
     std::cout << "Vulkan: " << major << "." << minor << "." << patch << "\n\n";
 
-    if (_printAvaliableExtensions) {
+    if (_printAvaliableExtensions) 
+    {
         uint32_t deviceExtensionCount = 0;
         vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &deviceExtensionCount, nullptr);
         std::vector<VkExtensionProperties> deviceExtensions(deviceExtensionCount);
         vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &deviceExtensionCount, deviceExtensions.data());
         std::cout << "Available device extensions:\n";
-        for (const auto& extension : deviceExtensions) {
+        for (const auto& extension : deviceExtensions)
+        {
             std::cout << ' ' << extension.extensionName << "\n";
         }
         std::cout << "\n";
@@ -318,7 +331,8 @@ void VulkanBackEnd::SelectPhysicalDevice() {
         std::vector<VkExtensionProperties> extensions(extensionCount);
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
         std::cout << "Available instance extensions:\n";
-        for (const auto& extension : extensions) {
+        for (const auto& extension : extensions)
+        {
             std::cout << ' ' << extension.extensionName << "\n";
         }
         std::cout << "\n";
@@ -355,8 +369,8 @@ void VulkanBackEnd::SelectPhysicalDevice() {
     vkGetPhysicalDeviceFeatures2(_physicalDevice, &deviceFeatures2);
 }
 
-void VulkanBackEnd::CreateSwapchain() {
-
+void VulkanBackEnd::CreateSwapchain()
+{
     _currentWindowExtent.width = BackEnd::GetCurrentWindowWidth();
     _currentWindowExtent.height = BackEnd::GetCurrentWindowHeight();
 
@@ -386,7 +400,8 @@ void VulkanBackEnd::CreateCommandBuffers()
     commandPoolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     commandPoolInfo.pNext = nullptr;
 
-    for (int i = 0; i < FRAME_OVERLAP; i++) {
+    for (int i = 0; i < FRAME_OVERLAP; i++) 
+    {
         VK_CHECK(vkCreateCommandPool(_device, &commandPoolInfo, nullptr, &_frames[i]._commandPool));
         VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
         commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -397,13 +412,13 @@ void VulkanBackEnd::CreateCommandBuffers()
         VK_CHECK(vkAllocateCommandBuffers(_device, &commandBufferAllocateInfo, &_frames[i]._commandBuffer));
     }
 
-    //create command pool for upload context
+    // Create Command pool for Upload Context
     VkCommandPoolCreateInfo uploadCommandPoolInfo = {};
     uploadCommandPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     uploadCommandPoolInfo.flags = 0;
     uploadCommandPoolInfo.pNext = nullptr;
 
-    //create command buffer for upload context
+    // Create Command pool for Upload Context
     VK_CHECK(vkCreateCommandPool(_device, &uploadCommandPoolInfo, nullptr, &_uploadContext._commandPool));
     VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
     commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -414,9 +429,8 @@ void VulkanBackEnd::CreateCommandBuffers()
     VK_CHECK(vkAllocateCommandBuffers(_device, &commandBufferAllocateInfo, &_uploadContext._commandBuffer));
 }
 
-
-void VulkanBackEnd::CreateSyncStructures() {
-
+void VulkanBackEnd::CreateSyncStructures() 
+{
     VkFenceCreateInfo fenceCreateInfo = {};
     fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
@@ -427,7 +441,8 @@ void VulkanBackEnd::CreateSyncStructures() {
     semaphoreCreateInfo.flags = 0;
     semaphoreCreateInfo.pNext = nullptr;
 
-    for (int i = 0; i < FRAME_OVERLAP; i++) {
+    for (int i = 0; i < FRAME_OVERLAP; i++) 
+    {
         VK_CHECK(vkCreateFence(_device, &fenceCreateInfo, nullptr, &_frames[i]._renderFence));
         VK_CHECK(vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_frames[i]._presentSemaphore));
         VK_CHECK(vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_frames[i]._renderSemaphore));
@@ -441,7 +456,8 @@ void VulkanBackEnd::CreateSyncStructures() {
     VK_CHECK(vkCreateFence(_device, &uploadFenceCreateInfo, nullptr, &_uploadContext._uploadFence));
 }
 
-void VulkanBackEnd::CreateSampler() {
+void VulkanBackEnd::CreateSampler() 
+{
     VkSamplerCreateInfo samplerInfo = {};
     samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -461,7 +477,8 @@ void VulkanBackEnd::CreateSampler() {
     vkCreateSampler(_device, &samplerInfo, nullptr, &_sampler);
 }
 
-void VulkanBackEnd::AddDebugName(VkBuffer buffer, const char* name) {
+void VulkanBackEnd::AddDebugName(VkBuffer buffer, const char* name)
+{
     VkDebugUtilsObjectNameInfoEXT nameInfo = {};
     nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
     nameInfo.objectType = VK_OBJECT_TYPE_BUFFER;
@@ -470,7 +487,8 @@ void VulkanBackEnd::AddDebugName(VkBuffer buffer, const char* name) {
     vkSetDebugUtilsObjectNameEXT(_device, &nameInfo);
 }
 
-void VulkanBackEnd::AddDebugName(VkDescriptorSetLayout descriptorSetLayout, const char* name) {
+void VulkanBackEnd::AddDebugName(VkDescriptorSetLayout descriptorSetLayout, const char* name)
+{
     VkDebugUtilsObjectNameInfoEXT nameInfo = {};
     nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
     nameInfo.objectType = VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT;
@@ -479,14 +497,16 @@ void VulkanBackEnd::AddDebugName(VkDescriptorSetLayout descriptorSetLayout, cons
     vkSetDebugUtilsObjectNameEXT(_device, &nameInfo);
 }
 
-uint64_t VulkanBackEnd::GetBufferDeviceAddress(VkBuffer buffer) {
+uint64_t VulkanBackEnd::GetBufferDeviceAddress(VkBuffer buffer) 
+{
     VkBufferDeviceAddressInfoKHR bufferDeviceAI{};
     bufferDeviceAI.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
     bufferDeviceAI.buffer = buffer;
     return vkGetBufferDeviceAddressKHR(_device, &bufferDeviceAI);
 }
 
-void VulkanBackEnd::CreateAccelerationStructureBuffer(AccelerationStructure& accelerationStructure, VkAccelerationStructureBuildSizesInfoKHR buildSizeInfo) {
+void VulkanBackEnd::CreateAccelerationStructureBuffer(AccelerationStructure& accelerationStructure, VkAccelerationStructureBuildSizesInfoKHR buildSizeInfo)
+{
     VmaAllocationCreateInfo vmaallocInfo = {};
     vmaallocInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
     vmaallocInfo.usage = VMA_MEMORY_USAGE_AUTO;
@@ -500,7 +520,8 @@ void VulkanBackEnd::CreateAccelerationStructureBuffer(AccelerationStructure& acc
 }
 
 
-RayTracingScratchBuffer VulkanBackEnd::CreateScratchBuffer(VkDeviceSize size) {
+RayTracingScratchBuffer VulkanBackEnd::CreateScratchBuffer(VkDeviceSize size)
+{
     RayTracingScratchBuffer scratchBuffer{};
 
     VmaAllocationCreateInfo vmaallocInfo = {};
@@ -522,8 +543,8 @@ RayTracingScratchBuffer VulkanBackEnd::CreateScratchBuffer(VkDeviceSize size) {
     return scratchBuffer;
 }
 
-AccelerationStructure VulkanBackEnd::CreateBottomLevelAccelerationStructure(Mesh& mesh) {
-
+AccelerationStructure VulkanBackEnd::CreateBottomLevelAccelerationStructure(Mesh& mesh)
+{
     VkDeviceOrHostAddressConstKHR vertexBufferDeviceAddress{};
     VkDeviceOrHostAddressConstKHR indexBufferDeviceAddress{};
 
@@ -782,11 +803,13 @@ void VulkanBackEnd::ImmediateSubmit(std::function<void(VkCommandBuffer cmd)>&& f
     vkResetCommandPool(_device, _uploadContext._commandPool, 0);
 }
 
-bool VulkanBackEnd::StillLoading() {
+bool VulkanBackEnd::StillLoading()
+{
     return _thereAreStillAssetsToLoad;
 }
 
-void VulkanBackEnd::PrepareSwapchainForPresent(VkCommandBuffer commandBuffer, uint32_t swapchainImageIndex) {
+void VulkanBackEnd::PrepareSwapchainForPresent(VkCommandBuffer commandBuffer, uint32_t swapchainImageIndex) 
+{
     VkImageSubresourceRange range;
     range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     range.baseMipLevel = 0;
@@ -804,37 +827,45 @@ void VulkanBackEnd::PrepareSwapchainForPresent(VkCommandBuffer commandBuffer, ui
     vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &swapChainBarrier);
 }
 
-void VulkanBackEnd::RecreateDynamicSwapchain() {
-    while (_currentWindowExtent.width == 0 || _currentWindowExtent.height == 0) {
+void VulkanBackEnd::RecreateDynamicSwapchain()
+{
+    while (_currentWindowExtent.width == 0 || _currentWindowExtent.height == 0)
+    {
         _currentWindowExtent.width = BackEnd::GetCurrentWindowWidth();
         _currentWindowExtent.height = BackEnd::GetCurrentWindowHeight();
         glfwWaitEvents();
     }
+
     vkDeviceWaitIdle(_device);
-    for (int i = 0; i < _swapchainImages.size(); i++) {
+    for (int i = 0; i < _swapchainImages.size(); i++)
+    {
         vkDestroyImageView(_device, _swapchainImageViews[i], nullptr);
     }
     vkDestroySwapchainKHR(_device, _swapchain, nullptr);
     CreateSwapchain();
 }
 
-uint32_t alignedSize(uint32_t value, uint32_t alignment) {
+uint32_t alignedSize(uint32_t value, uint32_t alignment)
+{
     return (value + alignment - 1) & ~(alignment - 1);
 }
 
-void VulkanBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
-
-    if (_mainVertexBuffer._buffer != VK_NULL_HANDLE) {
+void VulkanBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+{
+    if (_mainVertexBuffer._buffer != VK_NULL_HANDLE)
+    {
         vkDeviceWaitIdle(_device);                                                                  // This feels fucked
         vmaDestroyBuffer(_allocator, _mainVertexBuffer._buffer, _mainVertexBuffer._allocation);
     }
-    if (_mainIndexBuffer._buffer != VK_NULL_HANDLE) {
+
+    if (_mainIndexBuffer._buffer != VK_NULL_HANDLE) 
+    {
         vkDeviceWaitIdle(_device);                                                                  // This feels fucked
         vmaDestroyBuffer(_allocator, _mainIndexBuffer._buffer, _mainIndexBuffer._allocation);
     }
 
-    /* Vertices */ {
-
+    // Vertices
+    {
         const size_t bufferSize = vertices.size() * sizeof(Vertex);
         VkBufferCreateInfo stagingBufferInfo = {};
         stagingBufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -917,8 +948,8 @@ void VulkanBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<
     }
 }
 
-void VulkanBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices) {
-
+void VulkanBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices)
+{
     /*
     if (_mainSkinnedVertexBuffer._buffer != VK_NULL_HANDLE) {
         vkDeviceWaitIdle(_device);                                                                  // This feels fucked
@@ -1030,12 +1061,8 @@ void VulkanBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertic
 
 }
 
-
-//                      //
-//      Raytracing      //
-//                      //
-
-void VulkanBackEnd::InitRayTracing() {
+void VulkanBackEnd::InitRayTracing() 
+{
 
     std::cout << "Raytracing init successful\n";
 
@@ -1054,25 +1081,30 @@ void VulkanBackEnd::InitRayTracing() {
     std::cout << "init raytracing\n";
 }
 
-VkTransformMatrixKHR GlmMat4ToVkTransformMatrix(glm::mat4 matrix) {
+VkTransformMatrixKHR GlmMat4ToVkTransformMatrix(glm::mat4 matrix) 
+{
     matrix = glm::transpose(matrix);
     VkTransformMatrixKHR vkTransformMatrix;
-    for (int x = 0; x < 4; x++) {
-        for (int y = 0; y < 4; y++) {
+    for (int x = 0; x < 4; x++)
+    {
+        for (int y = 0; y < 4; y++)
+        {
             vkTransformMatrix.matrix[x][y] = matrix[x][y];
         }
     }
     return vkTransformMatrix;
 }
 
-std::vector<VkAccelerationStructureInstanceKHR> VulkanBackEnd::CreateTLASInstancesFromRenderItems(std::vector<RenderItem3D>& renderItems) {
-
+std::vector<VkAccelerationStructureInstanceKHR> VulkanBackEnd::CreateTLASInstancesFromRenderItems(std::vector<RenderItem3D>& renderItems)
+{
     int instanceCustomIndex = 0;
     std::vector<VkAccelerationStructureInstanceKHR> instances;
-    for (RenderItem3D& renderItem : renderItems) {
 
+    for (RenderItem3D& renderItem : renderItems) 
+    {
         // Replace this with a bit flag maybe? cause castShadow is not even what this checking here.
-        if (!renderItem.castShadow) {
+        if (!renderItem.castShadow)
+        {
             continue;
         }
 
@@ -1089,9 +1121,10 @@ std::vector<VkAccelerationStructureInstanceKHR> VulkanBackEnd::CreateTLASInstanc
     return instances;
 }
 
-void VulkanBackEnd::CreateTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR> instances, AccelerationStructure& outTLAS) {
-
-    if (instances.size() == 0) {
+void VulkanBackEnd::CreateTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR> instances, AccelerationStructure& outTLAS)
+{
+    if (instances.size() == 0)
+    {
         return;
     }
 
@@ -1221,15 +1254,13 @@ void VulkanBackEnd::CreateTopLevelAccelerationStructure(std::vector<VkAccelerati
     vmaDestroyBuffer(_allocator, _rtInstancesBuffer._buffer, _rtInstancesBuffer._allocation);
 }
 
-
-//                       //
-//      Point Cloud      //
-//                       //
-
-void VulkanBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointCloud) {
-    if (pointCloud.empty()) {
+void VulkanBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointCloud)
+{
+    if (pointCloud.empty())
+    {
         return;
     }
+
     const size_t bufferSize = sizeof(CloudPoint) * pointCloud.size();
     _pointCloudBuffer.Create(_allocator, bufferSize, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
@@ -1259,33 +1290,29 @@ void VulkanBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointC
 
 }
 
-Buffer* VulkanBackEnd::GetPointCloudBuffer() {
+Buffer* VulkanBackEnd::GetPointCloudBuffer()
+{
     return &_pointCloudBuffer;
 }
 
-void VulkanBackEnd::DestroyPointCloudBuffer() {
+void VulkanBackEnd::DestroyPointCloudBuffer() 
+{
     _pointCloudBuffer.Destroy(_allocator);
 }
 
-
-//                     //
-//      Callbacks      //
-//                     //
-
-void VulkanBackEnd::FramebufferResizeCallback(GLFWwindow* window, int width, int height) {
+void VulkanBackEnd::FramebufferResizeCallback(GLFWwindow* window, int width, int height)
+{
     _frameBufferResized = true;
 }
 
-
-
-
-void VulkanBackEnd::AllocateSkinnedVertexBufferSpace(int vertexCount) {
-
+void VulkanBackEnd::AllocateSkinnedVertexBufferSpace(int vertexCount) 
+{
     // Check if there is enough space
-    if (g_allocatedSkinnedVertexBufferSize < vertexCount * sizeof(Vertex)) {
-
+    if (g_allocatedSkinnedVertexBufferSize < vertexCount * sizeof(Vertex)) 
+    {
         // Destroy old buffer
-        if (g_mainSkinnedVertexBuffer._buffer != VK_NULL_HANDLE) {
+        if (g_mainSkinnedVertexBuffer._buffer != VK_NULL_HANDLE) 
+        {
             vmaDestroyBuffer(_allocator, g_mainSkinnedVertexBuffer._buffer, g_mainSkinnedVertexBuffer._allocation);
         }
         // Create new one

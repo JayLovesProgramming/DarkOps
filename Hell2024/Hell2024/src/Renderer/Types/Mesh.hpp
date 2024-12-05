@@ -1,5 +1,6 @@
 #pragma once
 
+#define GLM_FORCE_CXX11
 #include <glm/glm.hpp>
 #include <string>
 #include "../../API/Vulkan/Types/VK_raytracing.hpp"

@@ -1,4 +1,5 @@
 #pragma once
+#define GLM_FORCE_CXX11
 
 #include "Texture3D.hpp"
 #include <glm/glm.hpp>

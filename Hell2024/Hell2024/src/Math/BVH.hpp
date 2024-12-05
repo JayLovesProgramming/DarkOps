@@ -1,5 +1,6 @@
 #pragma once
 
+#define GLM_FORCE_CXX11
 #include <vector>
 #include <glm/glm.hpp>
 

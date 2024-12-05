@@ -1,15 +1,16 @@
+#define GLM_FORCE_CXX11
 #include "Pathfinding2.hpp"
 #include "recast/DebugDraw.h"
 #include "recast/RecastDebugDraw.h"
 #include <vector>
 #include <iostream>
 #include "glm/glm.hpp"
-#include "../Timer.hpp"
+#include "Timer.hpp"
 
-#include "../Editor/CSG.hpp"
-#include "../Input/Input.hpp"
-#include "../Game/Game.hpp"
-#include "../Core/AssetManager.hpp"
+#include "Editor/CSG.hpp"
+#include "Input/Input.hpp"
+#include "Game/Game.hpp"
+#include "Core/AssetManager.hpp"
 
 class MyDebugDraw : public duDebugDraw
 {

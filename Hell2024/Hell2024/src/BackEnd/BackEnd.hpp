@@ -4,6 +4,8 @@
 
 namespace BackEnd 
 {
+    extern std::string _windowName;
+
     // Core
     void Init(API api);
     void BeginFrame();

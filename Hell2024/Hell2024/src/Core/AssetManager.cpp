@@ -1,4 +1,5 @@
 ﻿#define TINYOBJLOADER_IMPLEMENTATION
+#define GLM_FORCE_CXX11
 
 #include "AssetManager.hpp"
 

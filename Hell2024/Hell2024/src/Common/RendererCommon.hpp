@@ -2,6 +2,7 @@
 
 #define GLM_FORCE_SILENT_WARNINGS
 #define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_CXX11
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

@@ -41,7 +41,7 @@ namespace Game
 
         GlobalIllumination::RecalculateGI();
 
-        CreatePlayers(2);
+        CreatePlayers(3);
 
         Scene::Init();
 

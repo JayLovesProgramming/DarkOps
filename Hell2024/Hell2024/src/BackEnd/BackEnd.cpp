@@ -1,18 +1,35 @@
 #include "BackEnd.hpp"
+
+// API
 #include "API/OpenGL/GL_backEnd.hpp"
 #include "API/OpenGL/GL_renderer.hpp"
 #include "API/Vulkan/VK_backEnd.h"
+
+// CORE
 #include "Core/AssetManager.hpp"
 #include "Core/Audio.hpp"
+#include "Core/ImageManager.hpp"
+
+// EDITOR
 #include "Editor/CSG.hpp"
 #include "Editor/Gizmo.hpp"
+
+// GAME
 #include "Game/WeaponManager.hpp"
+
+// INPUT
 #include "Input/Input.hpp"
 #include "Input/InputMulti.hpp"
+
+// PHYSICS
 #include "Physics/Physics.hpp"
+
+// PHYSICS
 #include "Pathfinding/Pathfinding2.hpp"
+
+// RENDERER
 #include "Renderer/ImGui/GUI_UI.h"
-#include "Core/ImageManager.hpp"
+
 
 namespace BackEnd 
 {
@@ -32,8 +49,6 @@ namespace BackEnd
     bool _forceCloseWindow = false;
     bool _windowHasFocus = true;
 
-    std::string _windowName = "Unloved";
-
     int _windowedWidth = 0;
     int _windowedHeight = 0;
 
@@ -46,8 +61,27 @@ namespace BackEnd
     int _presentTargetWidth = 0;
     int _presentTargetHeight = 0;
 
+    std::string _windowName = "Dark Ops : Zombies";
+
     void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     void window_focus_callback(GLFWwindow* window, int focused);
+
+    static GLFWimage LoadWindowIcon(const std::string& iconPath)
+    {
+        GLFWimage icon;
+        int channels;
+        icon.pixels = stbi_load(iconPath.c_str(), &icon.width, &icon.height, &channels, 4);
+
+        if (icon.pixels)
+        {
+            std::cerr << "Failed to load window icon: " << iconPath << std::endl;
+            icon.width = 0;
+            icon.height = 0;
+            icon.pixels = nullptr;
+        }
+
+        return icon;
+    }
 
     void Init(API api) 
     {
@@ -62,10 +96,11 @@ namespace BackEnd
 
         glfwSetErrorCallback([](int error, const char* description) 
         { 
-            std::cout << "GLFW Error (" << std::to_string(error) << "): " << description << "\n";
+            std::cout << "GLFW Error (" << std::to_string(error) << "): " << description << "/n";
         });
 
-        if (GetAPI() == API::OPENGL) 
+        //InitWindowHints();
+        if (GetAPI() == API::OPENGL)
         {
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -77,6 +112,7 @@ namespace BackEnd
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
             glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         }
+
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
 
@@ -100,7 +136,7 @@ namespace BackEnd
         CreateGLFWWindow(WindowedMode::FULLSCREEN);
         if (_window == NULL) 
         {
-            std::cout << "Failed to create GLFW window\n";
+            std::cout << "Failed to create GLFW window/n";
             glfwTerminate();
             return;
         }
@@ -206,16 +242,25 @@ namespace BackEnd
         {
             _currentWindowWidth = _windowedWidth;
             _currentWindowHeight = _windowedHeight;
-            _window = glfwCreateWindow(_windowedWidth, _windowedHeight, "Unloved", NULL, NULL);
+            _window = glfwCreateWindow(_windowedWidth, _windowedHeight, (BackEnd::_windowName + " (OpenGL)").c_str(), NULL, NULL);
             glfwSetWindowPos(_window, 0, 0);
         }
         else if (windowedMode == WindowedMode::FULLSCREEN)
         {
             _currentWindowWidth = _fullscreenWidth;
             _currentWindowHeight = _fullscreenHeight;
-            _window = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight, "Unloved", _monitor, NULL);
+            _window = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight, (BackEnd::_windowName + " (OpenGL)").c_str(), _monitor, NULL);
         }
         _windowedMode = windowedMode;
+
+        GLFWimage _windowIcon = LoadWindowIcon("E:/Hell2024Projects/Hell2024/Hell2024/Hell2024/res/icons/darkopsicon.png");
+
+        if (_windowIcon.pixels)
+        {
+            glfwSetWindowIcon(_window, 1, &_windowIcon);
+            // Free the image after setting the icon
+            stbi_image_free(_windowIcon.pixels);
+        }
     }
 
     void SetWindowedMode(const WindowedMode& windowedMode)
