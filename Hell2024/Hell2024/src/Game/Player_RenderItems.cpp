@@ -64,7 +64,7 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     {
         CrosshairManager::DrawCrosshair(viewportCenter, weaponInfo, &renderItems, m_crosshairCrossSize, presentSize);
         RoundManager::DrawRounds(&renderItems, viewportCenter, presentSize);
-        InventoryManager::DrawInventory(&renderItems, presentSize);
+        //InventoryManager::DrawInventory(&renderItems, presentSize);
 
         // Pickup text
         pickupTextLocation.y += m_pickUpTexts.size() * TextBlitter::GetLineHeight(BitmapFontType::STANDARD);
