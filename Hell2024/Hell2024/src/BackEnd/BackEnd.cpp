@@ -72,7 +72,7 @@ namespace BackEnd
         int channels;
         icon.pixels = stbi_load(iconPath.c_str(), &icon.width, &icon.height, &channels, 4);
 
-        if (icon.pixels)
+        if (!icon.pixels)
         {
             std::cerr << "Failed to load window icon: " << iconPath << std::endl;
             icon.width = 0;

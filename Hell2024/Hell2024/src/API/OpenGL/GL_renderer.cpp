@@ -877,7 +877,7 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
 
     LightCullingPass(renderData);
     LightingPass(renderData);
-    //SSAOPass();
+    SSAOPass();
     SkyBoxPass(renderData);
     DebugTileViewPass(renderData);
 
@@ -2105,6 +2105,7 @@ void LightVolumePrePass(RenderData& renderData)
             found = true;
         }
     }
+
     if (found) 
     {
         ComputeShader& computeShader = OpenGLRenderer::g_shaders.lightVolumeFromPositionAndRadius;
@@ -2112,7 +2113,7 @@ void LightVolumePrePass(RenderData& renderData)
         computeShader.SetInt("lightCount", Scene::g_lights.size());
         int invocationCount = std::ceil(Scene::g_lights.size() / 64.0f);
         glDispatchCompute(invocationCount, 1, 1);
-        std::cout << "Computing light volume AABBs from position/radius\n";
+        //std::cout << "Computing light volume AABBs from position/radius\n";
     }
 
     // Light volume from world pos cube map

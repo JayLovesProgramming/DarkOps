@@ -62,7 +62,7 @@ namespace Game
         g_gameSettings.takeDamageOutside = false;
         g_gameSettings.skyBoxTint = glm::vec3(1);
 
-        std::cout << "Game::Create() succeeded\n";
+        // std::cout << "Game::Create() succeeded\n";
         // Edgecase bug - we crash after game has created
     }
 
