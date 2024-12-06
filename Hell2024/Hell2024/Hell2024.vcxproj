@@ -300,6 +300,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Game\RTMesh.hpp" />
     <ClInclude Include="src\Game\Sofa.hpp" />
     <ClInclude Include="src\Game\SpawnPoint.hpp" />
+    <ClInclude Include="src\LoadingScreen\InitialWindow.hpp" />
     <ClInclude Include="src\Math\Frustum.hpp" />
     <ClInclude Include="src\Renderer\ImGui\GUI_UI.h" />
     <ClInclude Include="src\Renderer\RendererData.hpp" />

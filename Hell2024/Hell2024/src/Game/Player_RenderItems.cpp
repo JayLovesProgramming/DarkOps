@@ -292,7 +292,7 @@ void Player::UpdateAttachmentRenderItems()
         }
     }
 
-    if (weaponInfo->name == "GoldenGlock" && false) 
+    if (weaponInfo->name == "GoldenGlock") 
     {
         // Laser
         if (weaponInfo && weaponState && weaponInfo->type == WeaponType::PISTOL && viewWeaponAnimatedGameObject->_skinnedModel->_filename == "Glock")

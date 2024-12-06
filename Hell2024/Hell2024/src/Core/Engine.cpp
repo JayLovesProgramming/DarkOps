@@ -4,6 +4,7 @@
 #include "Game/Game.hpp"
 #include "Renderer/Renderer.hpp"
 #include "Utils/ErrorHandling/LogErrors.hpp"
+#include "LoadingScreen/InitialWindow.hpp"
 
 void Engine::Run() 
 {
@@ -11,13 +12,23 @@ void Engine::Run()
     //BuildWarningLogger logger;
     //logger.monitorBuild("E:\\Hell2024\\Hell2024\\Hell2024.sln");
 
+    std::cout << "Loading screen starting" << std::endl;
+
+    InitLoadingScreen();
+
+    while (!finishedLoading)
+    {
+
+    }
+
+    std::cout << "Loading screen finished" << std::endl;
+
     BackEnd::Init(API::OPENGL);
 
     while (BackEnd::WindowIsOpen()) 
     {
         BackEnd::BeginFrame();
         BackEnd::UpdateSubSystems();
-
         // Load files from disk
         if (!AssetManager::LoadingComplete())
         {
@@ -28,7 +39,6 @@ void Engine::Run()
         else if (!Game::IsLoaded())
         {
             Game::Create();
-
             AssetManager::UploadVertexData(); // Edge case bug here
             AssetManager::UploadWeightedVertexData();
         }
