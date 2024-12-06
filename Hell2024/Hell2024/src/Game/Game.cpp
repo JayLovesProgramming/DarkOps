@@ -44,13 +44,14 @@ namespace Game
         CreatePlayers(3);
 
         Scene::Init();
+        Audio::PlayAudio("INTRO_EVIL_LAUGH_02.wav", 0.6f);
 
-        Model* model = AssetManager::GetModelByName("SPAS_Isolated");
+  /*      Model* model = AssetManager::GetModelByName("SPAS_Isolated");
         for (auto& idx : model->GetMeshIndices())
         {
             Mesh* mesh = AssetManager::GetMeshByIndex(idx);
             std:cout << mesh->name << "\n";
-        }
+        }*/
         
         std::cout << "\n";
 
@@ -84,7 +85,8 @@ namespace Game
         // Delta Time
         g_lastFrame = g_thisFrame;
         g_thisFrame = glfwGetTime();
-        double deltaTime = g_thisFrame - g_lastFrame;
+
+        deltaTime = g_thisFrame - g_lastFrame;
         _deltaTimeAccumulator += deltaTime;
         g_time += deltaTime;
 

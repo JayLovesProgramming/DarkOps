@@ -264,33 +264,37 @@ namespace RendererUtil
         float width = (1.0f / viewportSize.x) * texWidth;
         float height = (1.0f / viewportSize.y) * texHeight;
 
+        // Bottom
         if (alignment == Alignment::BOTTOM_LEFT) 
         {
-            // do nothing
+            // DONE
+            location.x = width;
+            location.y = height;
         }
+        else if (alignment == Alignment::BOTTOM_RIGHT)
+        {
+            // TODO: Properly calculate bottom right
+            location.x = viewportSize.x - (width);
+            location.y = viewportSize.y - (height);
+            std::cout << location.x << ", " << location.y << std::endl;
+        }
+
+        // Top
+        else if (alignment == Alignment::TOP_LEFT)
+        {
+            // TODO: Properly calculate top left
+        }
+        else if (alignment == Alignment::TOP_RIGHT)
+        {
+            // DONE
+            location.x = viewportSize.x - width - texWidth;
+            location.y = viewportSize.y - height - texHeight;
+        }
+
         else if (alignment == Alignment::CENTERED) 
         {
             location.x -= texWidth * 0.5f;
             location.y -= texHeight * 0.5f;
-        }
-        else if (alignment == Alignment::TOP_LEFT) 
-        {
-            // do nothing
-        }
-        else if (alignment == Alignment::BOTTOM_LEFT) 
-        {
-            // do nothing
-        }
-        else if (alignment == Alignment::BOTTOM_RIGHT) 
-        {
-            // do nothing
-        }
-        else if (alignment == Alignment::TOP_RIGHT) 
-        {
-            location.x = viewportSize.x;
-            location.y = viewportSize.y - texWidth;
-            location.x -= texWidth;
-            location.y -= texWidth;
         }
 
         float finalX = ((location.x + (texWidth / 2.0f)) / viewportSize.x) * 2 - 1;

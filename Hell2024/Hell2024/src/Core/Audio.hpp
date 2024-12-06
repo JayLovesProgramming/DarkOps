@@ -103,6 +103,7 @@ namespace Audio
 
 	inline AudioHandle PlayAudio(std::string filename, float volume, bool stopIfPlaying = false)
     {
+        std::cout << "Playing Audio: " << filename << std::endl;
 		// Load if needed
 		if (g_loadedAudio.find(filename) == g_loadedAudio.end())
         {

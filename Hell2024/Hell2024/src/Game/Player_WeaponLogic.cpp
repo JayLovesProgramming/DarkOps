@@ -383,26 +383,34 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
         //std::cout << "Current weapon is: SHOTGUN" << std::endl;
 
         // Empty
-        if (CanFire() && PressedFire() && WeaponMagIsEmpty(weaponState)) {
+        if (CanFire() && PressedFire() && WeaponMagIsEmpty(weaponState))
+        {
             Audio::PlayAudio("Dry_Fire.wav", 0.8f);
         }
 
         // Idle
-        if (_weaponAction == IDLE) {
-            if (Player::IsMoving()) {
+        if (_weaponAction == IDLE) 
+        {
+            if (Player::IsMoving()) 
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.walk, 1.0f);
             }
-            else {
+            else 
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.idle, 1.0f);
             }
         }
+
         // Draw
-        if (_weaponAction == DRAW_BEGIN) {
+        if (_weaponAction == DRAW_BEGIN)
+        {
             viewWeapon->PlayAnimation(weaponInfo->animationNames.draw, 1.0f);
             _weaponAction = DRAWING;
         }
+
         // Drawing
-        if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete())
+        {
             _weaponAction = IDLE;
         }
 
@@ -421,8 +429,8 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
         if (_weaponAction == MELEE && viewWeapon->IsAnimationComplete()) {
             _weaponAction = IDLE;
         }
-        // hit shit
 
+        // hit shit
         int frameNumber = GetViewWeaponAnimatedGameObject()->GetAnimationFrameNumber();
         int hitFrame = 9;
         int hitFrameWindow = 6;
@@ -431,23 +439,23 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
         }
 
         // Fire
-        if (triggeredFire && CanFire()) {
-
+        if (triggeredFire && CanFire())
+        {
             // Has ammo
-            if (weaponState->ammoInMag > 0) {
+            if (weaponState->ammoInMag > 0)
+            {
                 _weaponAction = FIRE;
                 std::string aninName = "Shotgun_Fire";
                 std::string audioName = "Shotgun_Fire.wav";
                 viewWeapon->PlayAnimation(aninName, 1.0f);
                 Audio::PlayAudio(audioName, 1.0f);
                 SpawnMuzzleFlash();
-                for (int i = 0; i < 12; i++) {
+                for (int i = 0; i < 12; i++) 
+                {
                     SpawnBullet(0.1, Weapon::SHOTGUN);
                 }
                 m_shellEjectionState = ShellEjectionState::AWAITING_SHELL_EJECTION;
-
-
-                // SpawnShotgunShell();
+                m_crosshairCrossSize = 40;
                 weaponState->ammoInMag--;
             }
         }
@@ -722,11 +730,13 @@ bool Player::CanFire()
     AnimatedGameObject* viewWeaponGameObject = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeaponGameObject");
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
 
-    if (!HasControl() || IsDead()) {
+    if (!HasControl() || IsDead()) 
+    {
         return false;
     }
 
-    if (weaponInfo->type == WeaponType::PISTOL || weaponInfo->type == WeaponType::AUTOMATIC) {
+    if (weaponInfo->type == WeaponType::PISTOL || weaponInfo->type == WeaponType::AUTOMATIC) 
+    {
         return (
             _weaponAction == IDLE ||
             _weaponAction == DRAWING && viewWeaponGameObject->AnimationIsPastPercentage(weaponInfo->animationCancelPercentages.draw) ||

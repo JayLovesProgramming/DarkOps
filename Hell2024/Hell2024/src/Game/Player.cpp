@@ -205,7 +205,7 @@ void Player::Respawn()
     }
 
     LoadoutManager::GiveInitialLoadout(this);
-    SwitchWeapon("Glock", SPAWNING);
+    SwitchWeapon("Tokarev", SPAWNING);
 
     if (_characterController) 
     {
@@ -214,7 +214,8 @@ void Player::Respawn()
     }
     _position = spawnPoint.position;
     _rotation = spawnPoint.rotation;
-    Audio::PlayAudio("Glock_Equip.wav", 0.5f);
+    //Audio::PlayAudio("Glock_Equip.wav", 0.5f);
+
     //std::cout << "Respawn " << m_playerIndex << "\n";
     g_awaitingRespawn = false;
 }

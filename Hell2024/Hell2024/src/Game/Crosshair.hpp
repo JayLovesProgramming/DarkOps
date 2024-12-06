@@ -39,7 +39,10 @@ public:
             {
                 renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossTop", crosshairPos + hell::ivec2{ 0, int(m_crosshairCrossSize + Config::CROSSHAIR_GAP + 1) /* +1 is a magic number to make it look properly centered */ }, presentSize, Alignment::CENTERED));
             }
-            renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
+            else if (weaponInfo->type == WeaponType::PISTOL)
+            {
+                renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));
+            }
         }
         else
         {

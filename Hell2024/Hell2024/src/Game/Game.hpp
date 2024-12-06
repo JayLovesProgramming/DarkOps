@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Player.hpp"
 
 namespace Game
@@ -10,6 +12,8 @@ namespace Game
         bool takeDamageOutside = false;
         glm::vec3 skyBoxTint = glm::vec3(1);
     };
+
+    static double deltaTime = 0.00;
 
     void Create();
     void CreatePlayers(unsigned int playerCount);
