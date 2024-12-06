@@ -927,23 +927,30 @@ void GameObject::SetCollidesWithGroup(PxU32 collisionGroup) {
 }*/
 
 
-void GameObject::UpdateRenderItems() {
+void GameObject::UpdateRenderItems() 
+{
     renderItems.clear();
-    for (int i = 0; i < model->GetMeshIndices().size(); i++) {
+
+    for (int i = 0; i < model->GetMeshIndices().size(); i++)
+    {
         uint32_t& meshIndex = model->GetMeshIndices()[i];
         Mesh* mesh = AssetManager::GetMeshByIndex(meshIndex);
+
         RenderItem3D& renderItem = renderItems.emplace_back();
         renderItem.vertexOffset = mesh->baseVertex;
         renderItem.indexOffset = mesh->baseIndex;
         renderItem.modelMatrix = GetModelMatrix();
         renderItem.inverseModelMatrix = inverse(renderItem.modelMatrix);
         renderItem.meshIndex = meshIndex;
+
         Material* material = AssetManager::GetMaterialByIndex(_meshMaterialIndices[i]);
-        if (m_isGold) {
+        if (m_isGold)
+        {
             renderItem.baseColorTextureIndex = AssetManager::GetGoldBaseColorTextureIndex();
             renderItem.rmaTextureIndex = AssetManager::GetGoldRMATextureIndex();
         }
-        else {
+        else 
+        {
             renderItem.baseColorTextureIndex = material->_basecolor;
             renderItem.rmaTextureIndex = material->_rma;
         }

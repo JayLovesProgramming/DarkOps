@@ -591,6 +591,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <None Include="res\shaders\Vulkan\path_shadow.rmiss" />
     <None Include="res\vulkan_shaders\raygen.rgen" />
     <None Include="res\vulkan_shaders\shadow.rmiss" />
+    <None Include="Todo.MD" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\maps\mappp.txt" />

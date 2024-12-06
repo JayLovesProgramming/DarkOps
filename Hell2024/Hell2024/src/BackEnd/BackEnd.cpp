@@ -1,4 +1,5 @@
 #include "BackEnd.hpp"
+#include "GameWindow.hpp"
 
 // API
 #include "API/OpenGL/GL_backEnd.hpp"
@@ -99,19 +100,7 @@ namespace BackEnd
             std::cout << "GLFW Error (" << std::to_string(error) << "): " << description << "/n";
         });
 
-        //InitWindowHints();
-        if (GetAPI() == API::OPENGL)
-        {
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-            glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
-        }
-        else if (GetAPI() == API::VULKAN)
-        {
-            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-            glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-        }
+        InitWindowHints();
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
