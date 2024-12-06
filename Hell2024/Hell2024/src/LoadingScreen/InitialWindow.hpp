@@ -6,7 +6,7 @@ constexpr static auto loadingScreenWidth = 1280;
 constexpr static auto loadingScreenHeight = 720;
 static auto finishedLoading = false;
 
-
+// TODO: Draw a image for background
 void drawCircle(float cx, float cy, float radius, int num_segments)
 {
 	glBegin(GL_POLYGON);
@@ -20,6 +20,7 @@ void drawCircle(float cx, float cy, float radius, int num_segments)
 	glEnd();
 }
 
+// TODO: Draw a image for background
 void drawLoadingAnimation(float angle) 
 {
 	glClear(GL_COLOR_BUFFER_BIT);
