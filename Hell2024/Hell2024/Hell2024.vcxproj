@@ -55,6 +55,7 @@
     <IntDir>$(SolutionDir)\$(ProjectName)\Build\Intermediate\Release\</IntDir>
     <CopyLocalDeploymentContent>false</CopyLocalDeploymentContent>
     <TargetName>Hell2024</TargetName>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

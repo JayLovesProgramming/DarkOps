@@ -2,40 +2,24 @@
 
 #include "HellCommon.hpp"
 
-constexpr static auto loadingScreenWidth = 1280;
-constexpr static auto loadingScreenHeight = 720;
+constexpr static auto loadingScreenWidth = 1024;
+constexpr static auto loadingScreenHeight = 576;
 static auto finishedLoading = false;
 
-// TODO: Draw a image for background
-void drawCircle(float cx, float cy, float radius, int num_segments)
+void CenterWindowOnScreen(GLFWwindow* loadingWindow)
 {
-	glBegin(GL_POLYGON);
-	for (int i = 0; i < num_segments; ++i)
+	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
+	if (videoMode)
 	{
-		float theta = 2.0f * 3.14159f * float(i) / float(num_segments);
-		float x = radius * cosf(theta);
-		float y = radius * sinf(theta);
-		glVertex2f(x + cx, y + cy);
+		int screenWidth = videoMode->width;
+		int screenHeight = videoMode->height;
+
+		int windowX = (screenWidth - loadingScreenWidth) / 2;
+		int windowY = (screenHeight - loadingScreenHeight) / 2;
+
+		glfwSetWindowPos(loadingWindow, windowX, windowY);
 	}
-	glEnd();
-}
-
-// TODO: Draw a image for background
-void drawLoadingAnimation(float angle) 
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	// Draw a rotating circle (loader)
-	glPushMatrix();
-	glTranslatef(loadingScreenWidth / 2, loadingScreenHeight / 2, 0); // Move to center of screen
-	glRotatef(angle, 0.0f, 0.0f, 1.0f); // Rotate the circle
-
-	glColor3f(1.0f, 0.0f, 0.0f); // Set color to red
-	drawCircle(0.0f, 0.0f, 50.0f, 50); // Draw the circle
-
-	glPopMatrix();
-
-	// Optionally, draw a progress bar or text
 }
 
 void InitLoadingScreen()
@@ -56,6 +40,8 @@ void InitLoadingScreen()
 		return;
 	}
 
+	CenterWindowOnScreen(loadingWindow);
+
 	glfwMakeContextCurrent(loadingWindow);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -64,22 +50,12 @@ void InitLoadingScreen()
 		return;
 	}
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 
-	float angle = 0.0f;
 	float loadingProgress = 0.0f;
 
 	while (!glfwWindowShouldClose(loadingWindow) && !finishedLoading)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// Update the animation
-		angle += 1.0f; // Rotate by 1 degree per frame
-		if (angle >= 360.0f) angle = 0.0f; // Reset angle after a full rotation
-		// Draw loading animation
-		drawLoadingAnimation(angle);
-
-		// Simulate loading progress (you can replace this with real loading logic)
 		loadingProgress += 0.0001f;
 		if (loadingProgress >= 1.0f) 
 		{
