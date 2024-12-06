@@ -1,4 +1,4 @@
-#define GLM_FORCE_CXX11
+
 #include "Pathfinding2.hpp"
 #include "recast/DebugDraw.h"
 #include "recast/RecastDebugDraw.h"

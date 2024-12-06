@@ -215,7 +215,7 @@ void InitLoadingScreen()
 		std::cout << "Loading progress: " << loadingProgress << std::endl;
 	}
 
-	finishedLoading = true; // Fallback
+	//finishedLoading = true; // Fallback
 
 	glDeleteTextures(1, &backgroundImage);
 	glfwDestroyWindow(loadingWindow);

@@ -1,5 +1,5 @@
 #pragma once
-#define GLM_FORCE_CXX11
+
 
 #include "glm/glm.hpp"
 

@@ -276,7 +276,7 @@ namespace RendererUtil
             // TODO: Properly calculate bottom right
             location.x = viewportSize.x - (width);
             location.y = viewportSize.y - (height);
-            std::cout << location.x << ", " << location.y << std::endl;
+            //std::cout << location.x << ", " << location.y << std::endl;
         }
 
         // Top

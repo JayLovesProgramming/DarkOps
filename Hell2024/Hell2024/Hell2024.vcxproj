@@ -54,7 +54,7 @@
     <OutDir>$(SolutionDir)\$(ProjectName)\Build\Release\</OutDir>
     <IntDir>$(SolutionDir)\$(ProjectName)\Build\Intermediate\Release\</IntDir>
     <CopyLocalDeploymentContent>false</CopyLocalDeploymentContent>
-    <TargetName>Hell2024</TargetName>
+    <TargetName>DarkOps</TargetName>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -594,6 +594,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <None Include="res\shaders\Vulkan\path_shadow.rmiss" />
     <None Include="res\vulkan_shaders\raygen.rgen" />
     <None Include="res\vulkan_shaders\shadow.rmiss" />
+    <None Include="Tips.MD" />
     <None Include="Todo.MD" />
   </ItemGroup>
   <ItemGroup>

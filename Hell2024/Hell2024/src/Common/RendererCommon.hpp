@@ -2,7 +2,6 @@
 
 #define GLM_FORCE_SILENT_WARNINGS
 #define GLM_ENABLE_EXPERIMENTAL
-#define GLM_FORCE_CXX11
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,8 +13,8 @@
 // TODO: Rename these to resoultion something
 // RESOLUTION !! Oooo cool
 // 720p currently, can increase after optimizing shizzz
-constexpr static auto PRESENT_WIDTH = 1280; // 832
-constexpr static auto PRESENT_HEIGHT = 768; // 468
+constexpr static auto PRESENT_WIDTH = 960; // 832
+constexpr static auto PRESENT_HEIGHT = 540; // 468
 
 constexpr static auto POINT_CLOUD_SPACING = 0.4f;
 //#define PROBE_SPACING 0.375f

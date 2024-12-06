@@ -86,7 +86,7 @@ namespace Editor {
     hell::ivec2 g_menuLocation = hell::ivec2(76, 460);
     hell::ivec2 g_backgroundLocation = hell::ivec2(0, 0);
     hell::ivec2 g_backgroundSize = hell::ivec2(0, 0);
-    hell::ivec2 g_dragOffset = hell::ivec2(0, 0);     
+    hell::ivec2 g_dragOffset = hell::ivec2(0, 0);
 
     MenuType GetCurrentMenuType() {
         return g_currentMenuType;
@@ -138,7 +138,7 @@ namespace Editor {
 
     void CheckForVertexSelection() {
         if (g_selectedObjectType != ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE &&
-            g_selectedObjectType != ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE && 
+            g_selectedObjectType != ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE &&
             g_selectedObjectType != ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
             g_selectedVertexIndex = -1;
         }
@@ -149,7 +149,7 @@ namespace Editor {
     }
 
     void UpdateSelectedObjectGizmo() {
-               
+
         glm::mat4 projection = Game::GetPlayerByIndex(0)->GetProjectionMatrix();
 
         // Update gizmo with correct matrix if required
@@ -391,7 +391,7 @@ namespace Editor {
                     }
                 }
 
-                
+
 
                 if (moveAxis != Axis::NONE) {
                     RebuildEverything();
@@ -506,7 +506,7 @@ namespace Editor {
 
 
         // Check for hover
-        g_hoveredObjectType = ObjectType::UNDEFINED;
+        g_hoveredObjectType == ObjectType::UNDEFINED;
         g_hoveredObjectIndex = -1;
         glm::mat4 projection = player->GetProjectionMatrix();
         PxU32 hitFlags = RaycastGroup::RAYCAST_ENABLED;
@@ -581,9 +581,7 @@ namespace Editor {
         if (!Input::LeftMouseDown() && g_isDraggingMenu) {
             g_isDraggingMenu = false;
         }
-
-        if (Input::KeyPressed(HELL_KEY_SPACE)) 
-        {
+        if (Input::KeyPressed(HELL_KEY_SPACE)) {
             g_menuLocation = hell::ivec2(360, PRESENT_HEIGHT - 60);
         }
         if (Input::KeyPressed(HELL_KEY_I)) {
@@ -695,7 +693,7 @@ namespace Editor {
             mouseX < g_backgroundLocation.x + g_backgroundSize.x &&
             mouseY > adjustedBackgroundY &&
             mouseY < adjustedBackgroundY + g_backgroundSize.y
-        );
+            );
     }
 
     void EnterEditor() {
@@ -1200,7 +1198,7 @@ namespace Editor {
                 SetCurrentMenuType(MenuType::NONE);
             }
 
-            
+
 
             //
             // g_insertMenuOpen = false;

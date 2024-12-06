@@ -141,8 +141,6 @@ namespace Game
         for (Player& player : g_players)
         {
             player.UpdatePlayer1(deltaTime);
-
-            //player.UpdatePlayer2(deltaTime);
         }
 
         InputMulti::ResetMouseOffsets();
@@ -173,8 +171,6 @@ namespace Game
 
     void CreatePlayers(unsigned int playerCount)
     {
-        std::cout << "Created " << playerCount << " players" << std::endl;
-
         g_players.clear();
         g_playerData.resize(4);
 
@@ -233,6 +229,8 @@ namespace Game
             rigid.pxRigidBody->getShapes(&shape, 1);
             shape->setFlag(PxShapeFlag::eVISUALIZATION, false);
         }
+
+        std::cout << "[INFO] Created " << g_players.size() << " Players" << std::endl;
     }
 
     std::string Game::GetPlayerNameByIndex(int index)

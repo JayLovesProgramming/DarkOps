@@ -47,6 +47,7 @@ void Player::UpdatePlayer1(float deltaTime)
     glm::vec3 origin = GetFeetPosition() + glm::vec3(0, 0.1f, 0);
     PxU32 raycastFlags = RaycastGroup::RAYCAST_ENABLED;
     PhysXRayResult rayResult = Util::CastPhysXRay(origin, glm::vec3(0, -1, 0), 10, raycastFlags);
+
     if (rayResult.hitFound && rayResult.objectType == ObjectType::HEIGHT_MAP)
     {
         m_isOutside = true;
@@ -497,6 +498,7 @@ void Player::CheckForDeath()
 {
     if (!_isDead && _health <= 0)
     {
+        std::cout << "KILL A" << std::endl;
         Kill();
     }
 }
@@ -2044,6 +2046,7 @@ void Player::CheckForMeleeHit()
                             std::string file = "Death0.wav";
                             Audio::PlayAudio(file.c_str(), 1.0f);
                             otherPlayer->Kill();
+                            std::cout << "KILL E" << std::endl;
                             m_killCount++;
                         }
                     }

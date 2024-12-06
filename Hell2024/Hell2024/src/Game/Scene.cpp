@@ -1580,10 +1580,13 @@ std::vector<RenderItem3D> Scene::GetGeometryRenderItems()
     // Staircase
     static Model* model = AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName("Staircase"));
     static int materialIndex = AssetManager::GetMaterialIndex("Stairs01");
-    for (Staircase& staircase: Scene::g_staircases) {
+    for (Staircase& staircase: Scene::g_staircases)
+    {
         Transform segmentOffset;
-        for (int i = 0; i < staircase.m_stepCount / 3; i++) {
-            for (auto& meshIndex : model->GetMeshIndices()) {
+        for (int i = 0; i < staircase.m_stepCount / 3; i++) 
+        {
+            for (auto& meshIndex : model->GetMeshIndices()) 
+            {
                 RenderItem3D renderItem;
                 renderItem.meshIndex = meshIndex;
                 renderItem.modelMatrix = staircase.GetModelMatrix() * segmentOffset.to_mat4();
@@ -1599,20 +1602,26 @@ std::vector<RenderItem3D> Scene::GetGeometryRenderItems()
         }
     }
 
-    for (GameObject& gameObject : Scene::g_gameObjects) {
+    for (GameObject& gameObject : Scene::g_gameObjects)
+    {
         renderItems.reserve(renderItems.size() + gameObject.GetRenderItems().size());
         renderItems.insert(std::end(renderItems), std::begin(gameObject.GetRenderItems()), std::end(gameObject.GetRenderItems()));
     }
-    for (Door& door : Scene::g_doors) {
+
+    for (Door& door : Scene::g_doors)
+    {
         renderItems.reserve(renderItems.size() + door.GetRenderItems().size());
         renderItems.insert(std::end(renderItems), std::begin(door.GetRenderItems()), std::end(door.GetRenderItems()));
     }
-    for (Window& window : Scene::g_windows) {
+
+    for (Window& window : Scene::g_windows) 
+    {
         renderItems.reserve(renderItems.size() + window.GetRenderItems().size());
         renderItems.insert(std::end(renderItems), std::begin(window.GetRenderItems()), std::end(window.GetRenderItems()));
     }
 
-    for (int i = 0; i < Game::GetPlayerCount(); i++) {
+    for (int i = 0; i < Game::GetPlayerCount(); i++)
+    {
         Player* player = Game::GetPlayerByIndex(i);
         renderItems.reserve(renderItems.size() + player->GetAttachmentRenderItems().size());
         renderItems.insert(std::end(renderItems), std::begin(player->GetAttachmentRenderItems()), std::end(player->GetAttachmentRenderItems()));
@@ -2100,6 +2109,8 @@ void Scene::ProcessBullets()
                             if (parentPlayerHit->_health == 0)
                             {
                                 parentPlayerHit->Kill();
+                                std::cout << "KILL B" << std::endl;
+
                                 if (parentPlayerHit != Game::GetPlayerByIndex(0)) 
                                 {
                                     Game::GetPlayerByIndex(0)->IncrementKillCount();

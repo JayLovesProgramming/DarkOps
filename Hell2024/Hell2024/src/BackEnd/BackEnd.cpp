@@ -140,7 +140,7 @@ namespace BackEnd
             OpenGLBackEnd::InitMinimum();
             OpenGLRenderer::Init_OpenGL();
             Gizmo::Init();
-            glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+            glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE); // ? What does this do exactly?
         }
         else if (GetAPI() == API::VULKAN)
         {

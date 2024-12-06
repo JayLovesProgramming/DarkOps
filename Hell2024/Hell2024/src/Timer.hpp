@@ -34,6 +34,6 @@ struct Timer
         _timerResults[_name].allTimes += time;
         _timerResults[_name].sampleCount++;
      
-        std::cout << _name << ": " << spacing << std::format("{:.4f}", time) << "ms      average: " << std::format("{:.4f}", _timerResults[_name].allTimes / _timerResults[_name].sampleCount) << "ms\n";
+        //  std::cout << _name << ": " << spacing << std::format("{:.4f}", time) << "ms      average: " << std::format("{:.4f}", _timerResults[_name].allTimes / _timerResults[_name].sampleCount) << "ms\n";
     }
 };

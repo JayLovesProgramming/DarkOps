@@ -1159,6 +1159,7 @@ void Player::CheckForMeleeHits()
         if (distanceToOtherPlayer < 2)
         {
             otherPlayer->Kill();
+            std::cout << "KILL C" << std::endl;
             IncrementKillCount();
 
             glm::vec3 direction = glm::normalize(otherPlayer->GetViewPos() - this->GetViewPos());
