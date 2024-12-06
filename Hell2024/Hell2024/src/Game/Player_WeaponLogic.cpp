@@ -694,10 +694,10 @@ bool Player::CanEnterADS()
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     WeaponState* weaponState = GetCurrentWeaponState();
 
-    if (weaponInfo->name == "Tokarev")
-    {
-        return true;
-    }
+    //if (weaponInfo->name == "Tokarev")
+    //{
+    //    return true;
+    //}
     if (weaponInfo->name == "AKS74U") 
     {
         return false;

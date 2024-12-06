@@ -18,6 +18,7 @@ namespace BackEnd
     const API GetAPI();
 
     // Window
+    GLFWimage LoadWindowIcon(const std::string& iconPath);
     GLFWwindow* GetWindowPointer();
     const WindowedMode& GetWindowMode();
     void SetWindowPointer(GLFWwindow* window);
