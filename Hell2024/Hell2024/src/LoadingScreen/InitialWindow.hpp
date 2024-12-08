@@ -188,7 +188,7 @@ void InitLoadingScreen()
 
 	glViewport(0, 0, loadingScreenWidth, loadingScreenHeight);
 
-	GLuint backgroundImage = LoadInitialWindowBackground("E:/Hell2024Projects/Hell2024/Hell2024/Hell2024/res/icons/test.png");
+	GLuint backgroundImage = LoadInitialWindowBackground("res/icons/test.png");
 	if (!backgroundImage)
 	{
 		std::cerr << "Failed to load background texture" << std::endl;

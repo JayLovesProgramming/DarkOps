@@ -242,7 +242,7 @@ namespace BackEnd
         }
         _windowedMode = windowedMode;
 
-        GLFWimage _windowIcon = LoadWindowIcon("E:/Hell2024Projects/Hell2024/Hell2024/Hell2024/res/icons/darkopsicon.png");
+        GLFWimage _windowIcon = LoadWindowIcon("res/icons/darkopsicon.png");
 
         if (_windowIcon.pixels)
         {
