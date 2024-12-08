@@ -1,0 +1,10 @@
+newmtl mtl_t6_wpn_minigun
+Kd 1.0000 1.0000 1.0000
+Ns 1
+illum 0
+map_Kd ..\\_images\\__-gmtl_t6_wpn_minigun_spc-rg_9dec8b98.dds
+newmtl mtl_t6_wpn_minigun_ammo_noalpha
+Kd 1.0000 1.0000 1.0000
+Ns 1
+illum 0
+map_Kd ..\\_images\\__-gmtl_t6_wpn_minigun_ammo_s_e99f4cd1.dds
