@@ -5,6 +5,7 @@
 
 #include "stb_image.h"
 #include "BackEnd/BackEnd.hpp"
+#include "LoadingScreen/TextRenderer.h"
 
 enum class WindowPositions 
 {
@@ -17,19 +18,6 @@ enum class WindowPositions
 	TOP_CENTERED
 };
 
-constexpr static auto loadingScreenWidth = 1024;
-constexpr static auto loadingScreenHeight = 576;
-constexpr static WindowPositions windowPosition = WindowPositions::CENTERED;
-
-static bool finishedLoading = false;
-static int windowX;
-static int windowY;
-
-// Debug
-constexpr static auto debugInitialWindow = true;
-constexpr static auto loadingTime = debugInitialWindow ? 0.0005f : 0.005f; // Load slower to clearly see the loading process
-static auto loadingProgress = 0.0f;
-
 // GIF
 struct GifData
 {
@@ -40,6 +28,22 @@ struct GifData
 	int* delays;
 	unsigned char** frameData;
 };
+
+constexpr static auto loadingScreenWidth = 1024;
+constexpr static auto loadingScreenHeight = 576;
+constexpr static WindowPositions windowPosition = WindowPositions::CENTERED;
+
+static bool finishedLoading = false;
+static int windowX;
+static int windowY;
+
+constexpr static float gifSize = 0.0f;
+constexpr static float gifWidth = gifSize;
+
+// Debug
+constexpr static auto debugInitialWindow = true;
+constexpr static auto loadingTime = debugInitialWindow ? 0.0005f : 0.005f; // Load slower to clearly see the loading process
+static auto loadingProgress = 0.0f;
 
 // LOAD
 GifData LoadGif(const char* filePath)
@@ -155,16 +159,25 @@ void DrawGifFrame(const GifData& gifData, int frameIndex, float x, float y, floa
 	}
 
 	GLuint textureID;
-
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
+	// Enable alpha blending for transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Set texture parameters to support transparency
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gifData.width, gifData.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, gifData.frameData[frameIndex]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	// When drawing, use white color to preserve original image colors
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
@@ -175,6 +188,7 @@ void DrawGifFrame(const GifData& gifData, int frameIndex, float x, float y, floa
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 
 	glDeleteTextures(1, &textureID);
 }
@@ -296,6 +310,9 @@ void InitLoadingScreen()
 	int currentFrame = 0;
 	double lastFrameTime = glfwGetTime();
 
+	// Load text stuff
+	TextRenderer_INITIAL textRenderer("res/fonts/DroidSans.ttf");
+
 	while (!glfwWindowShouldClose(loadingWindow) && !finishedLoading)
 	{
 		loadingProgress += loadingTime;
@@ -308,15 +325,14 @@ void InitLoadingScreen()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		DrawInitialWindowBackground(backgroundImage, loadingProgress);
+		static float aspectRatio = static_cast<float>(gifData.width) / gifData.height;
+		static float gifHeight = gifSize / aspectRatio;
+		
+		//std::cout << gifWidth << ", " << gifHeight << std::endl;
+		//float textColor[] = { 1.0f, 1.0f, 1.0f }; // White color
+  //      textRenderer.RenderText("Loading...", 0.6f, -0.9f, 0.5f, textColor); // wip
 
-		float gifSize = 0.8f;
-		float aspectRatio = static_cast<float>(gifData.width) / gifData.height;
-		float gifWidth = gifSize;
-		float gifHeight = gifSize / aspectRatio;
-		float gifY = -0.9f;
-		DrawGifFrame(gifData, currentFrame, -gifWidth / 2, gifY, gifWidth, gifHeight);
-
-		//DrawGifFrame(gifData, currentFrame, -0.5f, -0.5f, 1.0f, 1.0f);
+		DrawGifFrame(gifData, currentFrame, 0.8, -0.9, 0.1, 0.1 * 1.5);
 
 		// Update GIF frame
 		double currentTime = glfwGetTime();
@@ -335,7 +351,7 @@ void InitLoadingScreen()
 		glfwPollEvents();
 	}
 
-	//finishedLoading = true; // Fallback
+	finishedLoading = true;
 	stbi_image_free(gifData.data);
 	delete[] gifData.delays;
 	delete[] gifData.frameData;
