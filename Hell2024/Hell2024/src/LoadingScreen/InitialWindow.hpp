@@ -25,6 +25,11 @@ static bool finishedLoading = false;
 static int windowX;
 static int windowY;
 
+// Debug
+constexpr static auto debugInitialWindow = true;
+constexpr static auto loadingTime = debugInitialWindow ? 0.0005f : 0.005f; // Load slower to clearly see the loading process
+static auto loadingProgress = 0.0f;
+
 GLuint LoadInitialWindowBackground(const char* filePath)
 {
 	int width, height, nrChannels;
@@ -70,23 +75,39 @@ void DrawRoundedRectangle(float x, float y, float width, float height, float rad
 	// Render the background texture with rounded corners similarly
 }
 
-void DrawInitialWindowBackground(GLuint textureID)
+void DrawInitialWindowBackground(GLuint textureID, float loadingProgress)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, -1.0f); // Bottom-left
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, -1.0f);  // Bottom-right
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 1.0f);   // Top-right
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 1.0f);  // Top-left
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, -1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, -1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 1.0f);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 
-	DrawRoundedRectangle(-1.0f, -1.0f, 1.0f, 1.0f, 0.1f);
+	DrawRoundedRectangle(-1.0f, -1.0f, 2.0f, 2.0f, 0.1f);
+
+	// Draw loading circle
+	float centerX = 0.0f;
+	float centerY = -0.8f;
+	float radius = 0.1f;
+	int segments = 60;
+
+	glPushMatrix();
+	glTranslatef(centerX, centerY, 0.0f);
+	glRotatef(loadingProgress * 360.0f, 0.0f, 0.0f, 1.0f);
+
+	glPopMatrix();
+
+	// Reset color
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
+
 
 
 void SetWindowPosition(GLFWwindow* loadingWindow)
@@ -170,7 +191,7 @@ void InitLoadingScreen()
 
 	SetWindowPosition(loadingWindow);
 
-	GLFWimage _windowIcon = BackEnd::LoadWindowIcon("E:/Hell2024Projects/Hell2024/Hell2024/Hell2024/res/icons/darkopsicon.png");
+	GLFWimage _windowIcon = BackEnd::LoadWindowIcon("res/icons/darkopsicon.png");
 	if (_windowIcon.pixels)
 	{
 		glfwSetWindowIcon(loadingWindow, 1, &_windowIcon);
@@ -182,7 +203,7 @@ void InitLoadingScreen()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cerr << "Failed to initialize GLAD/n";
+		std::cerr << "Failed to initialize GLAD" << std::endl;
 		return;
 	}
 
@@ -195,11 +216,10 @@ void InitLoadingScreen()
 		return;
 	}
 
-	float loadingProgress = 0.0f;
 
 	while (!glfwWindowShouldClose(loadingWindow) && !finishedLoading)
 	{
-		loadingProgress += 0.005f;
+		loadingProgress += loadingTime;
 		if (loadingProgress >= 1.0f) 
 		{
 			loadingProgress = 1.0f;
@@ -208,11 +228,15 @@ void InitLoadingScreen()
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		DrawInitialWindowBackground(backgroundImage);
+		DrawInitialWindowBackground(backgroundImage, loadingProgress);
 
 		glfwSwapBuffers(loadingWindow);
 		glfwPollEvents();
-		std::cout << "Loading progress: " << loadingProgress << std::endl;
+
+		if (debugInitialWindow)
+		{
+			std::cout << "Loading progress: " << loadingProgress << std::endl;
+		}
 	}
 
 	//finishedLoading = true; // Fallback
@@ -221,7 +245,9 @@ void InitLoadingScreen()
 	glfwDestroyWindow(loadingWindow);
 	//glfwTerminate();
 
-
-	std::cout << "Terminated loading screen" << std::endl;
+	if (debugInitialWindow)
+	{
+		std::cout << "Terminated loading screen" << std::endl;
+	}
 	return;
 }
