@@ -30,6 +30,63 @@ constexpr static auto debugInitialWindow = true;
 constexpr static auto loadingTime = debugInitialWindow ? 0.0005f : 0.005f; // Load slower to clearly see the loading process
 static auto loadingProgress = 0.0f;
 
+// GIF
+struct GifData
+{
+	unsigned char* data;
+	int width;
+	int height;
+	int frames;
+	int* delays;
+	unsigned char** frameData;
+};
+
+// LOAD
+GifData LoadGif(const char* filePath)
+{
+	GifData gifData = { nullptr };
+	FILE* file = nullptr;
+	errno_t err;
+
+	err = fopen_s(&file, filePath, "rb");
+	if (err != 0 || !file)
+	{
+		std::cerr << "Failed to open GIF file: " << filePath << std::endl;
+		return gifData;
+	}
+
+	fseek(file, 0, SEEK_END);
+	long fileSize = ftell(file);
+	fseek(file, 0, SEEK_SET);
+
+	unsigned char* buffer = new unsigned char[fileSize];
+	fread(buffer, 1, fileSize, file);
+	fclose(file);
+
+	int* delays = nullptr;
+	int x, y, z, comp;
+	gifData.data = stbi_load_gif_from_memory(buffer, fileSize, &delays, &gifData.width, &gifData.height, &gifData.frames, &comp, 4);
+
+	if (gifData.data) 
+	{
+		gifData.delays = delays;
+		gifData.frameData = new unsigned char* [gifData.frames];
+		int frameSize = gifData.width * gifData.height * 4;
+		for (int i = 0; i < gifData.frames; ++i) 
+		{
+			gifData.frameData[i] = gifData.data + (i * frameSize);
+		}
+	}
+	else 
+	{
+		std::cerr << "Failed to load GIF: " << filePath << std::endl;
+	}
+
+	delete[] buffer;
+	return gifData;
+}
+
+// LOAD
 GLuint LoadInitialWindowBackground(const char* filePath)
 {
 	int width, height, nrChannels;
@@ -56,25 +113,7 @@ GLuint LoadInitialWindowBackground(const char* filePath)
 	return textureID;
 }
 
-void DrawRoundedRectangle(float x, float y, float width, float height, float radius)
-{
-	int segments = 30; // Number of segments for the rounded corners
-	float angleStep = 2.0f * HELL_PI / segments;
-
-	// Top-left corner
-	for (int i = 0; i < segments; ++i)
-	{
-		float angle = i * angleStep;
-		float xOffset = cos(angle) * radius;
-		float yOffset = sin(angle) * radius;
-
-		glVertex2f(x + xOffset, y + height - radius + yOffset);  // top-left corner
-	}
-
-	// Repeat for other corners...
-	// Render the background texture with rounded corners similarly
-}
-
+// DRAW
 void DrawInitialWindowBackground(GLuint textureID, float loadingProgress)
 {
 	glEnable(GL_TEXTURE_2D);
@@ -90,8 +129,6 @@ void DrawInitialWindowBackground(GLuint textureID, float loadingProgress)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 
-	DrawRoundedRectangle(-1.0f, -1.0f, 2.0f, 2.0f, 0.1f);
-
 	// Draw loading circle
 	float centerX = 0.0f;
 	float centerY = -0.8f;
@@ -103,12 +140,44 @@ void DrawInitialWindowBackground(GLuint textureID, float loadingProgress)
 	glRotatef(loadingProgress * 360.0f, 0.0f, 0.0f, 1.0f);
 
 	glPopMatrix();
-
 	// Reset color
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
 }
 
+// DRAW
+void DrawGifFrame(const GifData& gifData, int frameIndex, float x, float y, float width, float height)
+{
+	if (frameIndex >= gifData.frames)
+	{
+		std::cerr << "Invalid frame index" << std::endl;
+		return;
+	}
 
+	GLuint textureID;
+
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gifData.width, gifData.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, gifData.frameData[frameIndex]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width, y);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y + height);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y + height);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	glDeleteTextures(1, &textureID);
+}
 
 void SetWindowPosition(GLFWwindow* loadingWindow)
 {
@@ -216,6 +285,16 @@ void InitLoadingScreen()
 		return;
 	}
 
+    // Load the GIF
+    GifData gifData = LoadGif("res/icons/loading_throbber.gif");
+    if (!gifData.data)
+    {
+        std::cerr << "Failed to load GIF" << std::endl;
+        return;
+    }
+
+	int currentFrame = 0;
+	double lastFrameTime = glfwGetTime();
 
 	while (!glfwWindowShouldClose(loadingWindow) && !finishedLoading)
 	{
@@ -230,17 +309,36 @@ void InitLoadingScreen()
 
 		DrawInitialWindowBackground(backgroundImage, loadingProgress);
 
-		glfwSwapBuffers(loadingWindow);
-		glfwPollEvents();
+		float gifSize = 0.8f;
+		float aspectRatio = static_cast<float>(gifData.width) / gifData.height;
+		float gifWidth = gifSize;
+		float gifHeight = gifSize / aspectRatio;
+		float gifY = -0.9f;
+		DrawGifFrame(gifData, currentFrame, -gifWidth / 2, gifY, gifWidth, gifHeight);
+
+		//DrawGifFrame(gifData, currentFrame, -0.5f, -0.5f, 1.0f, 1.0f);
+
+		// Update GIF frame
+		double currentTime = glfwGetTime();
+		if (currentTime - lastFrameTime > gifData.delays[currentFrame] / 1000.0)
+		{
+			currentFrame = (currentFrame + 1) % gifData.frames;
+			lastFrameTime = currentTime;
+		}
 
 		if (debugInitialWindow)
 		{
 			std::cout << "Loading progress: " << loadingProgress << std::endl;
 		}
+
+		glfwSwapBuffers(loadingWindow);
+		glfwPollEvents();
 	}
 
 	//finishedLoading = true; // Fallback
-
+	stbi_image_free(gifData.data);
+	delete[] gifData.delays;
+	delete[] gifData.frameData;
 	glDeleteTextures(1, &backgroundImage);
 	glfwDestroyWindow(loadingWindow);
 	//glfwTerminate();
@@ -249,5 +347,4 @@ void InitLoadingScreen()
 	{
 		std::cout << "Terminated loading screen" << std::endl;
 	}
-	return;
 }
