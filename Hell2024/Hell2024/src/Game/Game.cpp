@@ -44,7 +44,7 @@ namespace Game
         CreatePlayers(3);
 
         Scene::Init();
-        Audio::PlayAudio("INTRO_EVIL_LAUGH_02.wav", 0.6f);
+        //Audio::PlayAudio("INTRO_EVIL_LAUGH_02.wav", 0.6f);
 
   /*      Model* model = AssetManager::GetModelByName("SPAS_Isolated");
         for (auto& idx : model->GetMeshIndices())

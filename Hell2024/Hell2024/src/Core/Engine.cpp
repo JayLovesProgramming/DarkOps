@@ -41,8 +41,6 @@ void Engine::Run()
             Game::Create();
             AssetManager::UploadVertexData(); // Edge case bug here
             AssetManager::UploadWeightedVertexData();
-
-   
         }
         // The game
         else if (Game::IsLoaded() && AssetManager::LoadingComplete()) 

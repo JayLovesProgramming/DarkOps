@@ -117,7 +117,7 @@ namespace OpenGLBackEnd
     }
 }
 
-GLenum glCheckError_(const char* file, int line) 
+static GLenum glCheckError_(const char* file, int line) 
 {
     GLenum errorCode;
 
@@ -141,9 +141,13 @@ GLenum glCheckError_(const char* file, int line)
 
 #define glCheckError() glCheckError_(__FILE__, __LINE__)
 
-void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei /*length*/, const char* message, const void* /*userParam*/) 
+static void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei /*length*/, const char* message, const void* /*userParam*/) 
 {
-    if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return; // ignore these non-significant error codes
+    if (id == 131169 || id == 131185 || id == 131218 || id == 131204)
+    {
+        //std::cout << "Non-significant error code: " << id << std::endl;
+        return; // ignore these non-significant error codes
+    }
 
     // 131185 = This code is associated with a message from NVIDIA drivers.
     // It's generated when a call to glBufferData is successful, which is more of an informational message than an actual error1
@@ -217,18 +221,22 @@ static void QuerySizes()
 
 void OpenGLBackEnd::InitMinimum()
 {
+    // GLAD Initialization
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD\n";
+        std::cerr << "Failed to initialize GLAD" << "\n"; // Let us know if GLAD initialization fails
         return;
     }
 
     // GPU Information
     GLint major, minor;
+
     glGetIntegerv(GL_MAJOR_VERSION, &major);
     glGetIntegerv(GL_MINOR_VERSION, &minor);
+
     const GLubyte* vendor = glGetString(GL_VENDOR);
     const GLubyte* renderer = glGetString(GL_RENDERER);
+
     std::cout << "\n--- GPU Information ---\n";
     std::cout << "Vendor: " << vendor << "\n";
     std::cout << "Renderer: " << renderer << "\n";
@@ -258,11 +266,11 @@ void OpenGLBackEnd::InitMinimum()
     {
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(glDebugOutput, nullptr);
-        std::cout << "Debug GL context enabled\n";
+        std::cout << "Debug GL: Enabled" << "\n";
     }
     else
     {
-        std::cout << "Debug GL context not available\n";
+        std::cout << "Debug GL: Disabled" << "\n";
     }
 
     //QuerySizes();
@@ -273,6 +281,7 @@ void OpenGLBackEnd::InitMinimum()
 
 void OpenGLBackEnd::AllocateSkinnedVertexBufferSpace(int vertexCount)
 {
+    // Generate a new Vertex Array Object if `g_skinnedVertexDataVAO` does NOT exist
     if (g_skinnedVertexDataVAO == 0)
     {
         glGenVertexArrays(1, &g_skinnedVertexDataVAO);
@@ -290,24 +299,40 @@ void OpenGLBackEnd::AllocateSkinnedVertexBufferSpace(int vertexCount)
         // Create new one
         glBindVertexArray(g_skinnedVertexDataVAO);
         glGenBuffers(1, &g_skinnedVertexDataVBO);
+
+        // Bind the new Vertex Array Object and the new VBO
         glBindBuffer(GL_ARRAY_BUFFER, g_skinnedVertexDataVBO);
+        // Allocates buffer data with `glBufferData`, setting the size to `vertexCount * sizeof(Vertex)`
         glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(Vertex), nullptr, GL_STATIC_DRAW);
+
+        // Set up the vertex attributes
+        // Attribute 0: Position (3 Floats)
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+
+        // Attribute 1: Normal (3 Floats)
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+
+        // Attribute 2: UV (2 Floats)
         glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+
+        // Attribute 2: Tangent (3 Floats)
         glEnableVertexAttribArray(3);
         glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+
+        // Unbind the array buffer
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        // Update `g_allocatedSkinnedVertexBufferSize` with the new buffer size
         g_allocatedSkinnedVertexBufferSize = vertexCount * sizeof(Vertex);
     }
 }
 
 void OpenGLBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 {
+    // If the Vertex Array Object does exist, delete the buffers from the VBO and EBO, and vertex arrays from the VBO
     if (_vertexDataVAO != 0)
     {
         glDeleteVertexArrays(1, &_vertexDataVAO);
@@ -315,34 +340,44 @@ void OpenGLBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<
         glDeleteBuffers(1, &_vertexDataEBO);
     }
 
+    // Generate vertex arrays for `_vertexDataVAO`
     glGenVertexArrays(1, &_vertexDataVAO);
+    // Generate buffers for `_vertexDataVBO` and `_vertexDataEBO`
     glGenBuffers(1, &_vertexDataVBO);
     glGenBuffers(1, &_vertexDataEBO);
 
+    // Bind the vertex array to the Vertex Array Object
     glBindVertexArray(_vertexDataVAO);
+    // Bind the buffer to the VBO
     glBindBuffer(GL_ARRAY_BUFFER, _vertexDataVBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vertexDataEBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), &indices[0], GL_STATIC_DRAW);
 
+    // Set up the vertex attributes
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+
     glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
 
+    // Cleanup
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    std::cout << "[LOADED] Vertex Data" << std::endl;
+    //std::cout << "[LOADED] Vertex Data" << std::endl;
 }
 
 void OpenGLBackEnd::UploadConstructiveSolidGeometry(std::vector<CSGVertex>& vertices, std::vector<uint32_t>& indices)
 {
-    if (vertices.empty())
+    if (vertices.empty()) // Assert?? or nah?
     {
         return;
     }
@@ -387,17 +422,17 @@ void OpenGLBackEnd::UploadConstructiveSolidGeometry(std::vector<CSGVertex>& vert
 
 void OpenGLBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices)
 {
-    if (vertices.empty() || indices.empty())
-    {
-        return;
-    }
+    std::cout << "UPLOADED UploadWeightedVertexData" << std::endl;
+    assert(!indices.empty());
+    assert(!vertices.empty());
+    assert(_weightedVertexDataVAO != 0);
 
-    if (_weightedVertexDataVAO != 0) 
-    {
-        glDeleteVertexArrays(1, &_weightedVertexDataVAO);
-        glDeleteBuffers(1, &_weightedVertexDataVBO);
-        glDeleteBuffers(1, &_weightedVertexDataEBO);
-    }
+    //if (_weightedVertexDataVAO != 0) // Assert?
+    //{
+    //    glDeleteVertexArrays(1, &_weightedVertexDataVAO);
+    //    glDeleteBuffers(1, &_weightedVertexDataVBO);
+    //    glDeleteBuffers(1, &_weightedVertexDataEBO);
+    //}
 
     glGenVertexArrays(1, &_weightedVertexDataVAO);
     glGenBuffers(1, &_weightedVertexDataVBO);
