@@ -1,7 +1,9 @@
 #include "GL_BackEnd.hpp"
+
 #include "Types/GL_vertexBuffer.hpp"
 #include "Core/AssetManager.hpp"
 #include "Utils/Util.hpp"
+
 #include <iostream>
 #include <string>
 #include <thread>
@@ -35,6 +37,11 @@ namespace OpenGLBackEnd
     GLuint g_triangle2DVAO = 0;
     GLuint g_triangle2DVBO = 0;
 
+    // Non-weighted Vertex Data
+    // - Represents static geometry
+    // - Each vertex has a fixed position in 3D space
+    // - Used for rigid objects that don't deform
+
     GLuint GetVertexDataVAO()
     {
         return _vertexDataVAO;
@@ -49,6 +56,15 @@ namespace OpenGLBackEnd
     {
         return _vertexDataEBO;
     }
+
+    // Weighted Vertex Data
+    // - Used for deformable geometry, often in sketetal animation
+    // - Each vertex is influenced by one or more "bones" or influence points
+    // - Vertices can move and deform based on the movement of these influences
+    // - Includes additional attributes like bone indices and weights for each vertex
+
+    // In skeletal animation, weighted vertices allow for smooth deformation of a mesh as the underlying skeleton moves. 
+    // The vertex shader calculates a weighted average of bone trasforms to determine the final position of each vertex, creating fluid animations
 
     GLuint GetWeightedVertexDataVAO()
     {
@@ -129,6 +145,10 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
 {
     if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return; // ignore these non-significant error codes
 
+    // 131185 = This code is associated with a message from NVIDIA drivers.
+    // It's generated when a call to glBufferData is successful, which is more of an informational message than an actual error1
+    // The message typically includes details about buffer object allocation and memory usage.
+
     std::cout << "---------------\n";
     std::cout << "Debug message (" << id << "): " << message << "\n";
 
@@ -166,7 +186,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
         }    std::cout << "\n\n\n";
 }
 
-void QuerySizes() 
+static void QuerySizes() 
 {
     GLint max_layers;
 
@@ -244,6 +264,8 @@ void OpenGLBackEnd::InitMinimum()
     {
         std::cout << "Debug GL context not available\n";
     }
+
+    //QuerySizes();
 
     // Clear screen to black
     glClear(GL_COLOR_BUFFER_BIT);
@@ -409,44 +431,59 @@ void OpenGLBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointC
 {
     static int allocatedBufferSize = 0;
 
-    if (g_pointCloudVAO == 0) 
+    if (g_pointCloudVAO == 0) // If the Vertex Array Object (VAO) does NOT exist, create a new VAO and VBO
     {
         glGenVertexArrays(1, &g_pointCloudVAO);
         glGenBuffers(1, &g_pointCloudVBO);
     }
 
-    if (pointCloud.empty())
-    {
-        return;
-    }
+    assert(pointCloud.empty());
+    //if (pointCloud.empty())
+    //{
+    //    return;
+    //}
 
+    // Bind the Vertex Array Object (VAO) for the point cloud
     glBindVertexArray(g_pointCloudVAO);
 
+    // Check if the current point cloud data fits within the previously allocated buffer
     if (pointCloud.size() * sizeof(CloudPoint) <= allocatedBufferSize)
     {
+        // If it fits in the buffer, update the existing `glBufferSubData` 
         glBindBuffer(GL_ARRAY_BUFFER, g_pointCloudVBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, (GLuint)pointCloud.size() * sizeof(CloudPoint), &pointCloud[0]);
     }
     else
     {
+        // If it does NOT fit in the buffer, it deletes the old buffer, creates a new one, and uploads the data using `glBufferData`
         glDeleteBuffers(1, &g_pointCloudVBO);
         glGenBuffers(1, &g_pointCloudVBO);
         glBindBuffer(GL_ARRAY_BUFFER, g_pointCloudVBO);
         glBufferData(GL_ARRAY_BUFFER, pointCloud.size() * sizeof(CloudPoint), &pointCloud[0], GL_STATIC_DRAW);
     }
 
+    // Set up three vertex attributes
+    // Attribute 0: Position (3 Floats)
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(CloudPoint), (void*)0);
+
+    // Attribute 1: Normal (3 Floats)
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(CloudPoint), (void*)offsetof(CloudPoint, normal));
+
+    // Attribute 2: Direct Lighting (3 Floats)
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(CloudPoint), (void*)offsetof(CloudPoint, directLighting));
+
+    // Clean up
+    // Unbinds the Vertex Array Object and VBO
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // Update the `allocatedBufferSize` to reflect the current buffer size
     allocatedBufferSize = pointCloud.size() * sizeof(CloudPoint);
 }
 
-void OpenGLBackEnd::UploadTriangle2DData(std::vector<glm::vec2>& vertices)
+void OpenGLBackEnd::UploadTriangle2DData(std::vector<glm::vec2>& vertices) // Not used currently
 {
     static int allocatedBufferSize = 0;
 
@@ -488,7 +525,7 @@ GLuint OpenGLBackEnd::GetTriangles2DVAO()
     return g_triangle2DVAO;
 }
 
-GLuint OpenGLBackEnd::GetTriangles2DVBO() 
+GLuint OpenGLBackEnd::GetTriangles2DVBO() // Not used currently
 {
     return g_triangle2DVBO;
 }

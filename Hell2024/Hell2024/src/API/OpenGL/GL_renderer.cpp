@@ -1710,8 +1710,10 @@ void GeometryPass(RenderData& renderData)
 void P90MagPass(RenderData& renderData)
 {
     GLFrameBuffer& gBuffer = OpenGLRenderer::g_frameBuffers.gBuffer;
+
     Shader& frontFaceShader = OpenGLRenderer::g_shaders.p90MagFrontFaceLighting;
     Shader& backFaceShader = OpenGLRenderer::g_shaders.p90MagBackFaceLighting;
+
     ComputeShader& frontfaceCompositeShader = OpenGLRenderer::g_shaders.p90MagFrontFaceComposite;
     ComputeShader& backfaceCompositeShader = OpenGLRenderer::g_shaders.p90MagBackFaceComposite;
 
@@ -1781,10 +1783,12 @@ void P90MagPass(RenderData& renderData)
         gBuffer.GetColorAttachmentSlotByName("P90MagSpecular"),
         gBuffer.GetColorAttachmentSlotByName("P90MagDirectLighting") 
     };
+
     glDrawBuffers(2, attachments2);
     glBindVertexArray(OpenGLBackEnd::GetSkinnedVertexDataVAO());
     glBindBuffer(GL_ARRAY_BUFFER, OpenGLBackEnd::GetSkinnedVertexDataVBO());
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, OpenGLBackEnd::GetWeightedVertexDataEBO());
+
     glDepthMask(GL_TRUE);
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
