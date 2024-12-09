@@ -1,6 +1,6 @@
 #include "GlobalIllumination.hpp"
 #include <vector>
-#include "API/OpenGL/GL_backEnd.hpp"
+#include "API/OpenGL/GL_BackEnd.hpp"
 #include "API/Vulkan/VK_backEnd.h"
 #include "API/Vulkan/VK_renderer.h"
 #include "BackEnd/BackEnd.hpp"

@@ -2,7 +2,7 @@
 
 #include <string>
 #include "Utils/Util.hpp"
-#include "API/OpenGL/Types/GL_cubemapTexture.h"
+#include "API/OpenGL/Types/GL_CubemapTexture.h"
 //#include "../API/Vulkan/Types/VK_cubeMaptexture.h"
 
 struct CubemapTexture 

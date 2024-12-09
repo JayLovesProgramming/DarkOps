@@ -1,6 +1,6 @@
 #include "VolumetricBloodSplatter.hpp"
 
-#include "API/OpenGL/GL_backEnd.hpp"
+#include "API/OpenGL/GL_BackEnd.hpp"
 #include "Core/AssetManager.hpp"
 
 GLuint VolumetricBloodSplatter::s_vao;

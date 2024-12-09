@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GL_cubemapTexture.h"
+#include "GL_CubemapTexture.h"
 #include <stb_image.h>
 #include <glad/glad.h>
 #include <vector>

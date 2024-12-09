@@ -2,7 +2,7 @@
 
 #include "RendererCommon.hpp"
 #include "API/Vulkan/Types/vk_detachedMesh.hpp"
-#include "API/OpenGL/Types/gl_detachedMesh.hpp"
+#include "API/OpenGL/Types/GL_DetachedMesh.hpp"
 #include "BackEnd/BackEnd.hpp"
 
 struct DetachedMesh 

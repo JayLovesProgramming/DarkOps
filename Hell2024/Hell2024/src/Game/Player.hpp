@@ -2,7 +2,7 @@
 
 #include "Game/WeaponManager.hpp"
 #include "Game/AnimatedGameObject.hpp"
-#include "Input/keycodes.hpp"
+#include "Input/Keycodes.hpp"
 #include "Physics/Physics.hpp"
 #include "Math/Frustum.hpp"
 #include "Math/Types.hpp"

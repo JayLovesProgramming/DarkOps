@@ -2,7 +2,7 @@
 #include "GameWindow.hpp"
 
 // API
-#include "API/OpenGL/GL_backEnd.hpp"
+#include "API/OpenGL/GL_BackEnd.hpp"
 #include "API/OpenGL/GL_renderer.hpp"
 #include "API/Vulkan/VK_backEnd.h"
 
