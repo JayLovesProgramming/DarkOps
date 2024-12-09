@@ -1,4 +1,4 @@
-#include "SkinnedModel.h"
+#include "SkinnedModel.hpp"
 #include "../../Utils/Util.hpp"
 
 

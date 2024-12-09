@@ -11,7 +11,7 @@
 #include "Renderer/Types/Mesh.hpp"
 #include "Renderer/Types/Model.hpp"
 #include "Renderer/Types/SkinnedMesh.hpp"
-#include "Renderer/Types/SkinnedModel.h"
+#include "Renderer/Types/SkinnedModel.hpp"
 #include "Renderer/Types/Texture.hpp"
 
 namespace AssetManager

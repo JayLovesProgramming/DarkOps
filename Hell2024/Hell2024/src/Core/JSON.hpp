@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "nlohmann/json.hpp"
 #include <fstream>
 #include <string>
@@ -9,7 +8,6 @@
 
 struct JSONObject 
 {
-
     nlohmann::json data;
 
     void WriteString(std::string elementName, std::string value)

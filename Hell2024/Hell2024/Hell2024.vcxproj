@@ -342,7 +342,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Renderer\Types\Mesh.hpp" />
     <ClInclude Include="src\Renderer\Types\Model.hpp" />
     <ClInclude Include="src\Renderer\Types\SkinnedMesh.hpp" />
-    <ClInclude Include="src\Renderer\Types\SkinnedModel.h" />
+    <ClInclude Include="src\Renderer\Types\SkinnedModel.hpp" />
     <ClInclude Include="src\Renderer\Types\Texture.hpp" />
     <ClInclude Include="src\Renderer\Types\Texture3D.hpp" />
     <ClInclude Include="src\Types\Animation.hpp" />

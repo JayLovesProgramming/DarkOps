@@ -1,7 +1,8 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../Renderer/Types/SkinnedModel.h"
+#include "Renderer/Types/SkinnedModel.hpp"
+
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags

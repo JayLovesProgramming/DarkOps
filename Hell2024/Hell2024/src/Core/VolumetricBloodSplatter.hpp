@@ -1,8 +1,8 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../API/OpenGL/Types/GL_shader.h"
-#include "../Renderer/Types/Model.hpp"
+#include "API/OpenGL/Types/GL_shader.h"
+#include "Renderer/Types/Model.hpp"
 
 struct VolumetricBloodSplatter 
 {
