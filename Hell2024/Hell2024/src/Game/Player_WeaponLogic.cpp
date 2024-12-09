@@ -1,4 +1,5 @@
 ﻿#include "Player.hpp"
+
 #include "Game.hpp"
 #include "Scene.hpp"
 #include "Core/Audio.hpp"
@@ -8,7 +9,6 @@
 #include "Timer.hpp"
 #include "Crosshair.hpp"
 
-// Logic
 bool Player::WeaponMagIsEmpty(WeaponState* weaponState)
 {
     return weaponState->ammoInMag <= 0;
@@ -44,10 +44,8 @@ void Player::PlayerRevovlerCockSound(WeaponInfo* weaponInfo)
 
 void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
 {
-    // Melee
     if (weaponInfo->type == WeaponType::MELEE)
     {
-        // Idle
         if (_weaponAction == IDLE) 
         {
             if (Player::IsMoving())
@@ -74,8 +72,7 @@ void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
         // Fire
         if (PressedFire() && CanFire())
         {
-            if (_weaponAction == DRAWING ||
-                _weaponAction == IDLE ||
+            if (_weaponAction == DRAWING || _weaponAction == IDLE ||
                 _weaponAction == FIRE && viewWeapon->AnimationIsPastPercentage(25.0f) ||
                 _weaponAction == RELOAD && viewWeapon->AnimationIsPastPercentage(80.0f))
             {
@@ -89,7 +86,7 @@ void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
                     int rand = std::rand() % weaponInfo->animationNames.fire.size();
                     viewWeapon->PlayAnimation(weaponInfo->animationNames.fire[rand], weaponInfo->animationSpeeds.fire);
                 }
-                //CheckForMeleeHit();
+                CheckForMeleeHit();
             }
         }
         if (_weaponAction == FIRE && viewWeapon->IsAnimationComplete())
@@ -121,10 +118,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
                 Audio::PlayAudio("Dry_Fire.wav", 0.8f);
             }
 
-            if (_weaponAction == ADS_IN ||
-                _weaponAction == ADS_IDLE ||
-                _weaponAction == ADS_FIRE
-                )
+            if (_weaponAction == ADS_IN || _weaponAction == ADS_IDLE || _weaponAction == ADS_FIRE)
             {
                 current = Util::FInterpTo(current, max, deltaTime, speed);
                 _zoom -= zoomSpeed;
@@ -135,15 +129,15 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
                 _zoom += zoomSpeed;
             }
             // move the weapon down if you are in ads
-            /*if (InADS()) {
+            if (InADS()) 
+            {
                 glm::vec3 offset = GetCameraUp() * current;
                 glm::vec3 offset2 = GetCameraForward() * current;
                 glm::vec3 position = Player::GetViewPos() - offset + offset2;
                 viewWeapon->SetPosition(position);
-            }*/
+            }
         }
 
-        // ZOOM
         _zoom = std::max(0.575f, _zoom);
         _zoom = std::min(1.0f, _zoom);
 
@@ -169,8 +163,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
         // ADS out
         if (!PressingADS()) 
         {
-            if (_weaponAction == ADS_IN ||
-                _weaponAction == ADS_IDLE)
+            if (_weaponAction == ADS_IN || _weaponAction == ADS_IDLE)
             {
                 _weaponAction = ADS_OUT;
                 viewWeapon->PlayAnimation(weaponInfo->animationNames.adsOut, adsInOutSpeed);
@@ -191,7 +184,6 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
 
         if (triggeredFire && CanFire() && InADS())
         {
-            // Has ammo
             if (!WeaponMagIsEmpty(weaponState))
             {
                 _weaponAction = ADS_FIRE;
