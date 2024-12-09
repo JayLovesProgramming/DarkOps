@@ -2,9 +2,9 @@
 #include <vector>
 #include <unordered_map>
 #include "iostream"
-#include "../Core/AssetManager.hpp"
+#include "Core/AssetManager.hpp"
 #include "HellCommon.hpp"
-#include "../Utils/Util.hpp"
+#include "Utils/Util.hpp"
 
 /*
 #ifdef _DEBUG

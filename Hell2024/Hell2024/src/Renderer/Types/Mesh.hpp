@@ -1,9 +1,8 @@
 #pragma once
 
-
 #include <glm/glm.hpp>
 #include <string>
-#include "../../API/Vulkan/Types/VK_raytracing.hpp"
+#include "API/Vulkan/Types/VK_raytracing.hpp"
 
 struct Mesh 
 {

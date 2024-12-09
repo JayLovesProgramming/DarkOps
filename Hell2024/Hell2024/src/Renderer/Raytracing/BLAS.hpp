@@ -1,11 +1,12 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../../Utils/Util.hpp"
+#include "Utils/Util.hpp"
+
 #include <vector>
 #include <algorithm>
 
-#define BVH_BINS 8
+constexpr static auto BVH_BINS = 8;
 
 struct Bin
 {

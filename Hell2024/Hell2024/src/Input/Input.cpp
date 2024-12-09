@@ -1,7 +1,7 @@
 #include "Input.hpp"
-#include "../BackEnd/BackEnd.hpp"
-#include "../Renderer/Renderer.hpp"
-#include "../Utils/Util.hpp"
+#include "BackEnd/BackEnd.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Utils/Util.hpp"
 #include <chrono>
 #include "Game/AnimatedGameObject.hpp"
 #include "Game/Player.hpp"

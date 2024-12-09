@@ -1,23 +1,25 @@
 ﻿#include "Renderer.hpp"
-#include "../Physics/Physics.hpp"
-#include "../Editor/Editor.hpp"
-#include "../Game/Game.hpp"
-#include "../Game/Scene.hpp"
-#include "../Renderer/GlobalIllumination.hpp"
-#include "../Pathfinding/Pathfinding2.hpp"
-#include "../Renderer/Raytracing/Raytracing.hpp"
-#include "../Renderer/RendererData.hpp"
-#include "../Math/Frustum.hpp"
 
-#include "../Math/BVH.hpp"
+#include "Physics/Physics.hpp"
+
+#include "Editor/Editor.hpp"
+
+#include "Game/Game.hpp"
+#include "Game/Scene.hpp"
+
+#include "Renderer/GlobalIllumination.hpp"
+
+#include "Pathfinding/Pathfinding2.hpp"
+
+#include "Renderer/Raytracing/Raytracing.hpp"
+#include "Renderer/RendererData.hpp"
+
+#include "Math/Frustum.hpp"
+
+#include "Math/BVH.hpp"
 #include "tinycsg/tinycsg.hpp"
 
 #include "RapidHotload.hpp"
-
-/*
- █▀█ █▀█ ▀█▀ █▀█ ▀█▀ █▀▀
- █▀▀ █ █  █  █ █  █  ▀▀█
- ▀   ▀▀▀ ▀▀▀ ▀ ▀  ▀  ▀▀▀ */
 
 std::string g_debugText = "";
 

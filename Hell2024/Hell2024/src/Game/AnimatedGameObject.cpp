@@ -1,10 +1,10 @@
 #include "AnimatedGameObject.hpp"
-#include "../Core/AssetManager.hpp"
-#include "../Core/Audio.hpp"
-#include "../Core/Floorplan.hpp"
-#include "../Input/Input.hpp"
-#include "../Renderer/RendererStorage.hpp"
-#include "../Utils/Util.hpp"
+#include "Core/AssetManager.hpp"
+#include "Core/Audio.hpp"
+#include "Core/Floorplan.hpp"
+#include "Input/Input.hpp"
+#include "Renderer/RendererStorage.hpp"
+#include "Utils/Util.hpp"
 
 const size_t AnimatedGameObject::GetAnimatedTransformCount() 
 {

@@ -1,5 +1,5 @@
 #include "InputMulti.hpp"
-#include "../BackEnd/BackEnd.hpp"
+#include "BackEnd/BackEnd.hpp"
 #include <iostream>
 
 #define NOMINMAX

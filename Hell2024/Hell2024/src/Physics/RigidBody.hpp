@@ -2,8 +2,8 @@
 
 #include "Physics.hpp"
 #include "HellCommon.hpp"
-#include "../Utils/Util.hpp"
-#include "../Renderer/Types/Model.hpp"
+#include "Utils/Util.hpp"
+#include "Renderer/Types/Model.hpp"
 
 struct RigidBody 
 {

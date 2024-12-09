@@ -9,7 +9,7 @@
 #include <bvh/v2/stack.h>
 #include <bvh/v2/tri.h>
 #include <iostream>
-#include "../Timer.hpp"
+#include "Timer.hpp"
 
 // Type aliases for Bounding Volume Hierarchy (BVH) components
 using Scalar = float;

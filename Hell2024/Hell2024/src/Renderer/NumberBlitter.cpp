@@ -1,7 +1,9 @@
 #include "NumberBlitter.hpp"
+
 #include <algorithm>
 #include <iostream>
-#include "../API/OpenGL/GL_backEnd.hpp"
+
+#include "API/OpenGL/GL_backEnd.hpp"
 
 unsigned int VAO = 0;
 unsigned int VBO = 0;

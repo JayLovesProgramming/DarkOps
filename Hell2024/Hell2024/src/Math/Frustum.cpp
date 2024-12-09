@@ -1,5 +1,5 @@
 #include "Frustum.hpp"
-#include "../Utils/Util.hpp"
+#include "Utils/Util.hpp"
 
 void Frustum::Update(const glm::mat4& projectionView) 
 {

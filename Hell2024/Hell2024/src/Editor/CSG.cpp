@@ -6,14 +6,14 @@
 #include <iostream>
 #include <future>
 #include <vector>
-#include "../Utils/Util.hpp"
-#include "../API/OpenGL/GL_backEnd.hpp"
-#include "../BackEnd/Backend.hpp"
-#include "../Core/AssetManager.hpp"
-#include "../Game/Scene.hpp"
-#include "../Pathfinding/Pathfinding2.hpp"
-#include "../Renderer/GlobalIllumination.hpp"
-#include "../Timer.hpp"
+#include "Utils/Util.hpp"
+#include "API/OpenGL/GL_backEnd.hpp"
+#include "BackEnd/Backend.hpp"
+#include "Core/AssetManager.hpp"
+#include "Game/Scene.hpp"
+#include "Pathfinding/Pathfinding2.hpp"
+#include "Renderer/GlobalIllumination.hpp"
+#include "Timer.hpp"
 
 namespace CSG 
 {

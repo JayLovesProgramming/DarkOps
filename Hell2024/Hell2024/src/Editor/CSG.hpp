@@ -2,7 +2,7 @@
 
 #include "RendererCommon.hpp"
 #include "TinyCSG/tinycsg.hpp"
-#include "../Physics/RigidStatic.hpp"
+#include "Physics/RigidStatic.hpp"
 #include <span>
 #include "CSGCommon.hpp"
 #include "Brush.hpp"

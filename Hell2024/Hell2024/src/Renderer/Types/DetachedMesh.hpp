@@ -1,9 +1,9 @@
 #pragma once
 
 #include "RendererCommon.hpp"
-#include "../../API/Vulkan/Types/vk_detachedMesh.hpp"
-#include "../../API/OpenGL/Types/gl_detachedMesh.hpp"
-#include "../../BackEnd/BackEnd.hpp"
+#include "API/Vulkan/Types/vk_detachedMesh.hpp"
+#include "API/OpenGL/Types/gl_detachedMesh.hpp"
+#include "BackEnd/BackEnd.hpp"
 
 struct DetachedMesh 
 {

@@ -1,27 +1,31 @@
 #pragma once
+
 #include "HellCommon.hpp"
 #include "vk_allocation.hpp"
 #include <vector>
 #include "../VK_backEnd.h"
 
-struct VulkanDetachedMesh {
-
+struct VulkanDetachedMesh
+{
     AllocatedBuffer vertexBuffer;
     AllocatedBuffer indexBuffer;
     uint32_t vertexCount;
     uint32_t indexCount;
 
-    const size_t GetVertexCount() {
+    const size_t GetVertexCount()
+    {
         return vertexCount;
     }
 
-    const size_t GetIndexCount() {
+    const size_t GetIndexCount()
+    {
         return indexCount;
     }
 
-    void UpdateVertexBuffer(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
-
-        if (vertices.size() == 0 || indices.size() == 0) {
+    void UpdateVertexBuffer(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+    {
+        if (vertices.size() == 0 || indices.size() == 0)
+        {
             vertexCount = 0;
             indexCount = 0;
             return;
@@ -31,11 +35,13 @@ struct VulkanDetachedMesh {
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
 
         // Delete the old buffers if they exist
-        if (vertexBuffer._buffer != VK_NULL_HANDLE) {
+        if (vertexBuffer._buffer != VK_NULL_HANDLE)
+        {
             vkDeviceWaitIdle(device);                                                           // THIS FEELS NASTY
             vmaDestroyBuffer(allocator, vertexBuffer._buffer, vertexBuffer._allocation);
         }
-        if (indexBuffer._buffer != VK_NULL_HANDLE) {
+        if (indexBuffer._buffer != VK_NULL_HANDLE) 
+        {
             vkDeviceWaitIdle(device);                                                           // THIS FEELS NASTY
             vmaDestroyBuffer(allocator, indexBuffer._buffer, indexBuffer._allocation);
         }
@@ -43,9 +49,8 @@ struct VulkanDetachedMesh {
         vertexCount = (uint32_t)vertices.size();
         indexCount = (uint32_t)indices.size();
 
-
-        /* Vertices */ {
-
+        // Vertices
+        {
             const size_t bufferSize = vertices.size() * sizeof(Vertex);
             VkBufferCreateInfo stagingBufferInfo = {};
             stagingBufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -83,8 +88,8 @@ struct VulkanDetachedMesh {
             vmaDestroyBuffer(allocator, stagingBuffer._buffer, stagingBuffer._allocation);
         }
 
-        /* Indices */ {
-
+        // Indices 
+        {
             const size_t bufferSize = indices.size() * sizeof(uint32_t);
             VkBufferCreateInfo stagingBufferInfo = {};
             stagingBufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -123,9 +128,10 @@ struct VulkanDetachedMesh {
     }
 
     // You're not using this anywhere yet. The debug points and lines have indices.
-    void UpdateVertexBuffer(std::vector<Vertex>& vertices) {
-
-        if (vertices.size() == 0) {
+    void UpdateVertexBuffer(std::vector<Vertex>& vertices)
+    {
+        if (vertices.size() == 0) 
+        {
             vertexCount = 0;
             return;
         }
@@ -134,11 +140,13 @@ struct VulkanDetachedMesh {
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
 
         // Delete the old buffers if they exist
-        if (vertexBuffer._buffer != VK_NULL_HANDLE) {
+        if (vertexBuffer._buffer != VK_NULL_HANDLE)
+        {
             vkDeviceWaitIdle(device);                                                           // THIS FEELS NASTY
             vmaDestroyBuffer(allocator, vertexBuffer._buffer, vertexBuffer._allocation);
         }
-        if (indexBuffer._buffer != VK_NULL_HANDLE) {
+        if (indexBuffer._buffer != VK_NULL_HANDLE) 
+        {
             vkDeviceWaitIdle(device);                                                           // THIS FEELS NASTY
             vmaDestroyBuffer(allocator, indexBuffer._buffer, indexBuffer._allocation);
         }
@@ -146,8 +154,8 @@ struct VulkanDetachedMesh {
         vertexCount = (uint32_t)vertices.size();
         indexCount = 0;
 
-        /* Vertices */ {
-
+        // Vertices
+        {
             const size_t bufferSize = vertices.size() * sizeof(Vertex);
             VkBufferCreateInfo stagingBufferInfo = {};
             stagingBufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

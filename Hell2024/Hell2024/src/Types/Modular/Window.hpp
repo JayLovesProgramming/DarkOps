@@ -1,9 +1,10 @@
 #pragma once
+
 #include "HellCommon.hpp"
-#include "../../Physics/Physics.hpp"
+#include "Physics/Physics.hpp"
 
-class Window {
-
+class Window 
+{
 public:
 
 	PxRigidStatic* raycastBody = NULL;

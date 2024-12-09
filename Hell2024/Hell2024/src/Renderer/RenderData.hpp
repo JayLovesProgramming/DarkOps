@@ -2,7 +2,7 @@
 
 #include "RendererCommon.hpp"
 #include "Types/DetachedMesh.hpp"
-#include "../Game/AnimatedGameObject.hpp"
+#include "Game/AnimatedGameObject.hpp"
 
 /*
 struct PlayerInstanceDataOffsets {

@@ -2,8 +2,8 @@
 
 #include "Types.hpp"
 #include "CSGCommon.hpp"
-#include "../Physics/Physics.hpp"
-#include "../Utils/Util.hpp"
+#include "Physics/Physics.hpp"
+#include "Utils/Util.hpp"
 
 struct CSGCube 
 {

@@ -1,6 +1,9 @@
+#pragma once
+
 #include "Window.hpp"
-#include "../../Core/AssetManager.hpp"
-#include "../../Utils/Util.hpp"
+
+#include "Core/AssetManager.hpp"
+#include "Utils/Util.hpp"
 
 Window::Window() 
 {
@@ -33,7 +36,6 @@ void Window::CreatePhysicsObjects()
 	CleanUp(); // removes old PhysX objects
 
 	{
-
 		PhysicsFilterData filterData2;
 		filterData2.raycastGroup = RaycastGroup::RAYCAST_ENABLED;
 		filterData2.collisionGroup = NO_COLLISION;
@@ -48,7 +50,9 @@ void Window::CreatePhysicsObjects()
 		PxMat44 m2 = Util::GlmMat4ToPxMat44(GetModelMatrix());
 		PxTransform transform2 = PxTransform(m2);
 		raycastBody->setGlobalPose(transform2);
-	}/*
+	}
+	
+	/*
 	{
 		OpenGLMesh* mesh = &model->_meshes[1];
 		if (!mesh->_triangleMesh) {

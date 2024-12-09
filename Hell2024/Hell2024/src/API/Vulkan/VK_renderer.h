@@ -1,13 +1,14 @@
 #pragma once
+
 #include "Types/VK_descriptorSet.hpp"
 #include "Types/VK_raytracing.hpp"
-#include "../../Game/Light.hpp"
-#include "../../Renderer/RenderData.hpp"
+#include "Game/Light.hpp"
+#include "Renderer/RenderData.hpp"
 #include "RendererCommon.hpp"
-#include "../../Utils/Util.hpp"
+#include "Utils/Util.hpp"
 
-namespace VulkanRenderer {
-
+namespace VulkanRenderer
+{
     // Minimum init
     void CreateMinimumShaders();
     void CreatePipelinesMinimum();

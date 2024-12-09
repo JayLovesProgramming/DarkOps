@@ -2,9 +2,9 @@
 
 #include "Utils/Util.hpp"
 #include "HellCommon.hpp"
-#include "../Renderer/RendererUtil.hpp"
+#include "Renderer/RendererUtil.hpp"
 #include "Player.hpp"
-#include "../Renderer/Renderer.hpp"
+#include "Renderer/Renderer.hpp"
 
 class CrosshairManager
 {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "../BackEnd/BackEnd.hpp"
-#include "../Core/AssetManager.hpp"
+#include "BackEnd/BackEnd.hpp"
+#include "Core/AssetManager.hpp"
 
 namespace RendererUtil 
 {

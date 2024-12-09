@@ -1,10 +1,12 @@
 #pragma once
 
 #include "RendererCommon.hpp"
+
 #include <map>
 #include <vector>
 #include <assert.h>
-#include "../../Types/Animation.hpp"
+
+#include "Types/Animation.hpp"
 #include "SkinnedMesh.hpp"
 
 struct Joint 

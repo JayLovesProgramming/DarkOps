@@ -1,25 +1,25 @@
 ﻿#include "Editor.hpp"
 #include "CSG.hpp"
 #include "Gizmo.hpp"
-#include "../BackEnd/BackEnd.hpp"
-#include "../Core/Audio.hpp"
-#include "../Core/CreateInfo.hpp"
-#include "../Core/JSON.hpp"
-#include "../Game/Game.hpp"
-#include "../Game/Scene.hpp"
-#include "../Input/Input.hpp"
-#include "../Pathfinding/Pathfinding2.hpp"
-#include "../Renderer/GlobalIllumination.hpp"
-#include "../Renderer/RendererUtil.hpp"
-#include "../Renderer/TextBlitter.hpp"
-#include "../Timer.hpp"
-#include "../Utils/Util.hpp"
+#include "BackEnd/BackEnd.hpp"
+#include "Core/Audio.hpp"
+#include "Core/CreateInfo.hpp"
+#include "Core/JSON.hpp"
+#include "Game/Game.hpp"
+#include "Game/Scene.hpp"
+#include "Input/Input.hpp"
+#include "Pathfinding/Pathfinding2.hpp"
+#include "Renderer/GlobalIllumination.hpp"
+#include "Renderer/RendererUtil.hpp"
+#include "Renderer/TextBlitter.hpp"
+#include "Timer.hpp"
+#include "Utils/Util.hpp"
 
-#define MENU_SELECT_AUDIO "SELECT.wav"
-#define MENU_SELECT_VOLUME 1.0f
+constexpr static auto MENU_SELECT_AUDIO = "SELECT.wav";
+constexpr static auto MENU_SELECT_VOLUME = 1.0f;
 
-namespace Editor {
-
+namespace Editor
+{
     enum class InteractionType { HOVERED, SELECTED };
 
     struct MenuItem {

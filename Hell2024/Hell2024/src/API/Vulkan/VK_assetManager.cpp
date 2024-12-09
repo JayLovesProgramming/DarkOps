@@ -12,14 +12,14 @@
 #include <string>
 #include <fstream>
 
-#include "../../Core/AssetManager.hpp"
+#include "Core/AssetManager.hpp"
 //#include "../../Types/Texture.hpp"
 
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE
 #include "VK_BackEnd.h"
-#include "../../Utils/Util.hpp"
+#include "Utils/Util.hpp"
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE
 // GET THIS OUT OF HERE

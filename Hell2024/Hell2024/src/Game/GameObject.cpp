@@ -1,10 +1,10 @@
 #pragma once
 #include "GameObject.hpp"
 #include "Scene.hpp"
-#include "../Input/Input.hpp"
-#include "../Common/Config.hpp"
-#include "../BackEnd/BackEnd.hpp"
-#include "../Core/AssetManager.hpp"
+#include "Input/Input.hpp"
+#include "Common/Config.hpp"
+#include "BackEnd/BackEnd.hpp"
+#include "Core/AssetManager.hpp"
 
 PxFilterData GetPxFilterDataFromCollisionType(CollisionType collisionType) {
 

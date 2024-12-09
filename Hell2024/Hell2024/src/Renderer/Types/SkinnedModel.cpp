@@ -1,6 +1,5 @@
 #include "SkinnedModel.hpp"
-#include "../../Utils/Util.hpp"
-
+#include "Utils/Util.hpp"
 
 SkinnedModel::~SkinnedModel() 
 {

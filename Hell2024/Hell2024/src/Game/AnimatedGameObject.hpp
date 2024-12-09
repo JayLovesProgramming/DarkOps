@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Renderer/Types/SkinnedModel.hpp"
-#include "../Renderer/Types/VertexBuffer.hpp"
-#include "../Physics/Ragdoll.hpp"
+#include "Renderer/Types/SkinnedModel.hpp"
+#include "Renderer/Types/VertexBuffer.hpp"
+#include "Physics/Ragdoll.hpp"
 
 struct MeshRenderingEntry 
 {

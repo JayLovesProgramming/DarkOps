@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include "../Physics/Physics.hpp"
+#include "Physics/Physics.hpp"
 
 struct RigidComponent 
 {

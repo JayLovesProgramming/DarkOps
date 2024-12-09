@@ -2,10 +2,10 @@
 #include "VK_backend.h"
 #include "VK_assetManager.h"
 #include "VK_util.hpp"
-#include "../../Renderer/RenderData.hpp"
+#include "Renderer/RenderData.hpp"
 #include "RendererCommon.hpp"
-#include "../../Renderer/RendererStorage.hpp"
-#include "../../Renderer/RendererUtil.hpp"
+#include "Renderer/RendererStorage.hpp"
+#include "Renderer/RendererUtil.hpp"
 #include "Types/VK_depthTarget.hpp"
 #include "Types/VK_descriptorSet.hpp"
 #include "Types/VK_computePipeline.hpp"
@@ -13,18 +13,19 @@
 #include "Types/VK_renderTarget.hpp"
 #include "Types/VK_shader.hpp"
 #include "Types/VK_detachedMesh.hpp"
-#include "../../BackEnd/BackEnd.hpp"
-#include "../../Core/AssetManager.hpp"
-#include "../../Game/Game.hpp"
-#include "../../Game/Scene.hpp"
-#include "../../Renderer/GlobalIllumination.hpp"
-#include "../../Renderer/Renderer.hpp"
-#include "../../Renderer/TextBlitter.hpp"
-#include "../../Renderer/RendererData.hpp"
+#include "BackEnd/BackEnd.hpp"
+#include "Core/AssetManager.hpp"
+#include "Game/Game.hpp"
+#include "Game/Scene.hpp"
+#include "Renderer/GlobalIllumination.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/TextBlitter.hpp"
+#include "Renderer/RendererData.hpp"
 
-namespace VulkanRenderer {
-
-    struct Shaders {
+namespace VulkanRenderer 
+{
+    struct Shaders 
+    {
         Vulkan::Shader gBuffer;
         Vulkan::Shader gBufferSkinned;
         Vulkan::Shader lighting;
@@ -42,7 +43,8 @@ namespace VulkanRenderer {
         Vulkan::ComputeShader emissiveComposite;
     } _shaders;
 
-    struct RenderTargets {
+    struct RenderTargets
+    {
         Vulkan::RenderTarget present;
         Vulkan::RenderTarget loadingScreen;
         Vulkan::RenderTarget gBufferBasecolor;
@@ -56,9 +58,8 @@ namespace VulkanRenderer {
         Vulkan::DepthTarget gbufferDepth;
     } _renderTargets;
 
-
-
-    struct BlurFrameBuffers {
+    struct BlurFrameBuffers 
+    {
         std::vector<Vulkan::RenderTarget> p1A;
         std::vector<Vulkan::RenderTarget> p1B;
         std::vector<Vulkan::RenderTarget> p2A;
@@ -69,7 +70,8 @@ namespace VulkanRenderer {
         std::vector<Vulkan::RenderTarget> p4B;
     } g_blurRenderTargets;
 
-    struct Pipelines {
+    struct Pipelines
+    {
         Pipeline gBuffer;
         Pipeline gBufferSkinned;
         Pipeline lighting;
@@ -89,7 +91,8 @@ namespace VulkanRenderer {
         ComputePipeline emissiveComposite;
     } _pipelines;
 
-    struct DescriptorSets {
+    struct DescriptorSets
+    {
         DescriptorSet dynamic;
         DescriptorSet allTextures;
         DescriptorSet renderTargets;
@@ -104,15 +107,10 @@ namespace VulkanRenderer {
 
     Raytracer _raytracer;
 
-
     PFN_vkCmdTraceRaysKHR vkCmdTraceRaysKHR;
     PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR;
 
-
-    //                                       //
     //      Helper Forward Declarations      //
-    //                                       //
-
     void SetViewportSize(VkCommandBuffer commandBuffer, int width, int height);
     void SetViewportSize(VkCommandBuffer commandBuffer, Vulkan::RenderTarget renderTarget);
     void BindPipeline(VkCommandBuffer commandBuffer, Pipeline& pipeline);
@@ -123,10 +121,7 @@ namespace VulkanRenderer {
     void BlitRenderTargetIntoSwapChain(VkCommandBuffer commandBuffer, Vulkan::RenderTarget& renderTarget, uint32_t swapchainImageIndex, BlitDstCoords& blitDstCoords);
     void UpdateTLAS(std::vector<RenderItem3D>& renderItems);
 
-    //                                            //
     //      Render Pass Forward Declarations      //
-    //                                            //
-
     void BeginRendering();
     //void UpdateIndirectCommandBuffer(RenderData& renderData);
     void ComputeSkin(RenderData& renderData);
@@ -145,16 +140,15 @@ namespace VulkanRenderer {
     void DrawBulletDecals(RenderData& renderData);
     void MuzzleFlashPass(RenderData& renderData);
 
-    //                   //
     //      Shaders      //
-    //                   //
-
-    void CreateMinimumShaders() {
+    void CreateMinimumShaders() 
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         _shaders.textBlitter.Load(device, "VK_ui.vert", "VK_ui.frag");
     }
 
-    void CreateShaders() {
+    void CreateShaders() 
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
 
         _shaders.gBuffer.Load(device, "VK_gbuffer.vert", "VK_gbuffer.frag");
@@ -169,7 +163,6 @@ namespace VulkanRenderer {
         _shaders.horizontalBlur.Load(device, "VK_blurHorizontal.vert", "VK_blur.frag");
         _shaders.verticalBlur.Load(device, "VK_blurVertical.vert", "VK_blur.frag");
 
-
         _shaders.glass.Load(device, "VK_glass.vert", "VK_glass.frag");
         _shaders.postProcessing.Load(device, "VK_postProcessing.comp");
         _shaders.computeSkin.Load(device, "VK_compute_skin.comp");
@@ -178,26 +171,24 @@ namespace VulkanRenderer {
         _raytracer.LoadShaders(device, "path_raygen.rgen", "path_miss.rmiss", "path_shadow.rmiss", "path_closesthit.rchit");
     }
 
-    void VulkanRenderer::HotloadShaders() {
+    void VulkanRenderer::HotloadShaders() 
+    {
         std::cout << "Hotloading shaders...\n";
         VkDevice device = VulkanBackEnd::GetDevice();
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
         vkDeviceWaitIdle(device);
         CreateShaders();
-        if (_raytracer.LoadShaders(device, "path_raygen.rgen", "path_miss.rmiss", "path_shadow.rmiss", "path_closesthit.rchit")) {
+        if (_raytracer.LoadShaders(device, "path_raygen.rgen", "path_miss.rmiss", "path_shadow.rmiss", "path_closesthit.rchit"))
+        {
             _raytracer.Cleanup(device, allocator);
             CreatePipelines();
             VulkanBackEnd::InitRayTracing();
         }
     }
 
-
-    //                     //
     //      Pipelines      //
-    //                     //
-
-    void CreatePipelinesMinimum() {
-
+    void CreatePipelinesMinimum() 
+    {
         // Create UI pipeline and pipeline layout
         VkDevice device = VulkanBackEnd::GetDevice();
         _pipelines.ui.PushDescriptorSetLayout(_descriptorSets.dynamic.layout);
@@ -225,11 +216,10 @@ namespace VulkanRenderer {
         _pipelines.uiHiRes.SetDepthWrite(false);
         _pipelines.uiHiRes.SetCompareOp(VK_COMPARE_OP_ALWAYS);
         _pipelines.uiHiRes.Build(device, _shaders.textBlitter.vertexShader, _shaders.textBlitter.fragmentShader, { VK_FORMAT_R8G8B8A8_UNORM });
-
     }
 
-    void CreatePipelines() {
-
+    void CreatePipelines()
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
 
         // GBuffer
@@ -348,7 +338,6 @@ namespace VulkanRenderer {
         _pipelines.debugPointCloud.SetCompareOp(VK_COMPARE_OP_ALWAYS);
         _pipelines.debugPointCloud.Build(device, _shaders.debugPointCloud.vertexShader, _shaders.debugPointCloud.fragmentShader, { VK_FORMAT_R8G8B8A8_UNORM });
 
-
         // Bullet hole decals
         _pipelines.bulletHoleDecals.PushDescriptorSetLayout(_descriptorSets.dynamic.layout);
         _pipelines.bulletHoleDecals.PushDescriptorSetLayout(_descriptorSets.allTextures.layout);
@@ -363,7 +352,6 @@ namespace VulkanRenderer {
         _pipelines.bulletHoleDecals.SetDepthWrite(true);
         _pipelines.bulletHoleDecals.SetCompareOp(VK_COMPARE_OP_LESS_OR_EQUAL);
         _pipelines.bulletHoleDecals.Build(device, _shaders.bulletDecals.vertexShader, _shaders.bulletDecals.fragmentShader, { VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_R16G16B16A16_SNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_R16G16B16A16_SFLOAT });
-
 
         // Glass
         _pipelines.glass.PushDescriptorSetLayout(_descriptorSets.dynamic.layout);
@@ -380,7 +368,6 @@ namespace VulkanRenderer {
         _pipelines.glass.SetCompareOp(VK_COMPARE_OP_LESS_OR_EQUAL);
         _pipelines.glass.Build(device, _shaders.glass.vertexShader, _shaders.glass.fragmentShader, { VK_FORMAT_R8G8B8A8_UNORM });
 
-
         // Flipbook
         _pipelines.flipbook.PushDescriptorSetLayout(_descriptorSets.dynamic.layout);
         _pipelines.flipbook.PushDescriptorSetLayout(_descriptorSets.allTextures.layout);
@@ -395,7 +382,6 @@ namespace VulkanRenderer {
         _pipelines.flipbook.SetDepthWrite(false);
         _pipelines.flipbook.SetCompareOp(VK_COMPARE_OP_LESS_OR_EQUAL);
         _pipelines.flipbook.Build(device, _shaders.flipbook.vertexShader, _shaders.flipbook.fragmentShader, { VK_FORMAT_R8G8B8A8_UNORM });
-
 
         // Horizontal Blur
         _pipelines.horizontalBlur.PushDescriptorSetLayout(_descriptorSets.dynamic.layout);
@@ -428,17 +414,11 @@ namespace VulkanRenderer {
         _pipelines.verticalBlur.SetDepthWrite(false);
         _pipelines.verticalBlur.SetCompareOp(VK_COMPARE_OP_ALWAYS);
         _pipelines.verticalBlur.Build(device, _shaders.verticalBlur.vertexShader, _shaders.verticalBlur.fragmentShader, { VK_FORMAT_R8G8B8A8_UNORM });
-
-
     }
 
-
-    //                          //
     //      Render Targets      //
-    //                          //
-
-    void CreateRenderTargets() {
-
+    void CreateRenderTargets() 
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
 
@@ -461,9 +441,8 @@ namespace VulkanRenderer {
         RecreateBlurBuffers();
     }
 
-
-    void CreatePlayerRenderTargets(int presentWidth, int presentHeight) {
-
+    void CreatePlayerRenderTargets(int presentWidth, int presentHeight) 
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
 
@@ -478,8 +457,6 @@ namespace VulkanRenderer {
         _renderTargets.raytracing.cleanup(device, allocator);
         _renderTargets.glass.cleanup(device, allocator);
         _renderTargets.gBufferEmissive.cleanup(device, allocator);
-
-
 
         uint32_t gBufferWidth = presentWidth * 2;
         uint32_t gBufferHeight = presentHeight * 2;
@@ -503,41 +480,47 @@ namespace VulkanRenderer {
         _renderTargets.raytracing = Vulkan::RenderTarget(device, allocator, VK_FORMAT_R32G32B32A32_SFLOAT, gBufferWidth, gBufferHeight, usageFlags, "Raytracing Render target");
 
         static bool firstRun = true;
-        if (!firstRun) {
+        if (!firstRun) 
+        {
             UpdateSamplerDescriptorSet();
             UpdateRayTracingDecriptorSet();
         }
         firstRun = false;
     }
 
-
-
-
-    void RecreateBlurBuffers() {
-
+    void RecreateBlurBuffers()
+    {
         // Destroy any existing textures
-        for (auto& renderTarget : g_blurRenderTargets.p1A) {
+        for (auto& renderTarget : g_blurRenderTargets.p1A)
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
-        for (auto& renderTarget : g_blurRenderTargets.p2A) {
+        for (auto& renderTarget : g_blurRenderTargets.p2A)
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
-        for (auto& renderTarget : g_blurRenderTargets.p3A) {
+        for (auto& renderTarget : g_blurRenderTargets.p3A) 
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
-        for (auto& renderTarget : g_blurRenderTargets.p4A) {
+        for (auto& renderTarget : g_blurRenderTargets.p4A)
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
-        for (auto& renderTarget : g_blurRenderTargets.p1B) {
+        for (auto& renderTarget : g_blurRenderTargets.p1B)
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
-        for (auto& renderTarget : g_blurRenderTargets.p2B) {
+        for (auto& renderTarget : g_blurRenderTargets.p2B) 
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
-        for (auto& renderTarget : g_blurRenderTargets.p3B) {
+        for (auto& renderTarget : g_blurRenderTargets.p3B)
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
-        for (auto& renderTarget : g_blurRenderTargets.p4B) {
+        for (auto& renderTarget : g_blurRenderTargets.p4B) 
+        {
             renderTarget.cleanup(VulkanBackEnd::GetDevice(), VulkanBackEnd::GetAllocator());
         }
         g_blurRenderTargets.p1A.clear();
@@ -560,20 +543,22 @@ namespace VulkanRenderer {
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
         VkImageUsageFlags usageFlags = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 
-        for (int i = 0; i < 4; i++) {
-
+        for (int i = 0; i < 4; i++) 
+        {
             g_blurRenderTargets.p1A.emplace_back();
             g_blurRenderTargets.p1B.emplace_back();
             g_blurRenderTargets.p1A[i] = Vulkan::RenderTarget(device, allocator, VK_FORMAT_R8G8B8A8_UNORM, bufferWidth, bufferHeight, usageFlags, "One of the billion blur render targets");
             g_blurRenderTargets.p1B[i] = Vulkan::RenderTarget(device, allocator, VK_FORMAT_R8G8B8A8_UNORM, bufferWidth, bufferHeight, usageFlags, "One of the billion blur render targets");
 
-            if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER || Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER) {
+            if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER || Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER)
+            {
                 g_blurRenderTargets.p2A.emplace_back();
                 g_blurRenderTargets.p2B.emplace_back();
                 g_blurRenderTargets.p2A[i] = Vulkan::RenderTarget(device, allocator, VK_FORMAT_R8G8B8A8_UNORM, bufferWidth, bufferHeight, usageFlags, "One of the billion blur render targets");
                 g_blurRenderTargets.p2B[i] = Vulkan::RenderTarget(device, allocator, VK_FORMAT_R8G8B8A8_UNORM, bufferWidth, bufferHeight, usageFlags, "One of the billion blur render targets");
             }
-            if (Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER) {
+            if (Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER) 
+            {
                 g_blurRenderTargets.p3A.emplace_back();
                 g_blurRenderTargets.p3B.emplace_back();
                 g_blurRenderTargets.p3A[i] = Vulkan::RenderTarget(device, allocator, VK_FORMAT_R8G8B8A8_UNORM, bufferWidth, bufferHeight, usageFlags, "One of the billion blur render targets");
@@ -588,18 +573,9 @@ namespace VulkanRenderer {
         }
     }
 
-
-
-
-
-
-
-    //                           //
     //      Descriptor Sets      //
-    //                           //
-
-    void CreateDescriptorSets() {
-
+    void CreateDescriptorSets() 
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         VkSampler sampler = VulkanBackEnd::GetSampler();
         VkDescriptorPool descriptorPool = VulkanBackEnd::GetDescriptorPool();
@@ -714,9 +690,6 @@ namespace VulkanRenderer {
         _descriptorSets.blurTargetsP1.AllocateSet(device, descriptorPool);
         VulkanBackEnd::AddDebugName(_descriptorSets.blurTargetsP1.layout, "Player 1 blur targets Descriptor Set Layout");
 
-
-
-
         // All textures UPDATE
         VkDescriptorImageInfo samplerImageInfo = {};
         samplerImageInfo.sampler = sampler;
@@ -724,38 +697,41 @@ namespace VulkanRenderer {
         VulkanBackEnd::AddDebugName(_descriptorSets.allTextures.layout, "AllTextures Descriptor Set Layout");
     }
 
-    DescriptorSet& VulkanRenderer::GetDynamicDescriptorSet() {
+    DescriptorSet& VulkanRenderer::GetDynamicDescriptorSet()
+    {
         return _descriptorSets.dynamic;
     }
 
-    DescriptorSet& VulkanRenderer::GetAllTexturesDescriptorSet() {
+    DescriptorSet& VulkanRenderer::GetAllTexturesDescriptorSet()
+    {
         return _descriptorSets.allTextures;
     }
 
-    DescriptorSet& VulkanRenderer::GetRenderTargetsDescriptorSet() {
+    DescriptorSet& VulkanRenderer::GetRenderTargetsDescriptorSet()
+    {
         return _descriptorSets.renderTargets;
     }
 
-    DescriptorSet& VulkanRenderer::GetRaytracingDescriptorSet() {
+    DescriptorSet& VulkanRenderer::GetRaytracingDescriptorSet()
+    {
         return _descriptorSets.raytracing;
     }
 
-    void UpdateSamplerDescriptorSet() {
+    void UpdateSamplerDescriptorSet()
+    {
 
         VkDevice device = VulkanBackEnd::GetDevice();
         vkDeviceWaitIdle(device); // Otherwise when this function is called within the loading screen, we get validation error. Find better fix!
 
         // All textures
         VkDescriptorImageInfo textureImageInfo[TEXTURE_ARRAY_SIZE];
-        for (uint32_t i = 0; i < TEXTURE_ARRAY_SIZE; ++i) {
+        for (uint32_t i = 0; i < TEXTURE_ARRAY_SIZE; ++i)
+        {
             textureImageInfo[i].sampler = nullptr;
             textureImageInfo[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             textureImageInfo[i].imageView = (i < AssetManager::GetTextureCount()) ? AssetManager::GetTextureByIndex(i)->GetVKTexture().imageView : AssetManager::GetTextureByIndex(0)->GetVKTexture().imageView; // Fill with dummy if you exceed the amount of textures we loaded off disk. Can't have no junk data.
             //std::cout << i << ": " << textureImageInfo[i].imageView << "\n";
         }
-
-
-
 
         _descriptorSets.allTextures.Update(device, 1, TEXTURE_ARRAY_SIZE, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, textureImageInfo);
 
@@ -782,7 +758,6 @@ namespace VulkanRenderer {
         storageImageDescriptor.imageView = _renderTargets.gBufferEmissive._view;
         _descriptorSets.renderTargets.Update(device, 8, 1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, &storageImageDescriptor);
 
-
         storageImageDescriptor.imageView = g_blurRenderTargets.p1A[0]._view;
         _descriptorSets.blurTargetsP1.Update(device, 0, 1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, &storageImageDescriptor);
         storageImageDescriptor.imageView = g_blurRenderTargets.p1A[1]._view;
@@ -800,10 +775,10 @@ namespace VulkanRenderer {
         _descriptorSets.blurTargetsP1.Update(device, 6, 1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, &storageImageDescriptor);
         storageImageDescriptor.imageView = g_blurRenderTargets.p1B[3]._view;
         _descriptorSets.blurTargetsP1.Update(device, 7, 1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, &storageImageDescriptor);
-
     }
 
-    void UpdateRayTracingDecriptorSet() {
+    void UpdateRayTracingDecriptorSet()
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         VkDescriptorImageInfo storageImageDescriptor = {};
         storageImageDescriptor.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
@@ -813,20 +788,19 @@ namespace VulkanRenderer {
         _descriptorSets.raytracing.Update(device, 0, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VulkanBackEnd::_mainVertexBuffer._buffer);
         _descriptorSets.raytracing.Update(device, 1, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VulkanBackEnd::_mainIndexBuffer._buffer);
         _descriptorSets.raytracing.Update(device, 2, 1, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, &storageImageDescriptor);
-
     }
 
-    void UpdateGlobalIlluminationDescriptorSet() {
+    void UpdateGlobalIlluminationDescriptorSet()
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         _descriptorSets.globalIllumination.Update(device, 0, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VulkanBackEnd::GetPointCloudBuffer()->buffer);
     }
 
-    //                           //
     //      Storage Buffers      //
-    //                           //
-
-    void CreateStorageBuffers() {
-        for (int i = 0; i < FRAME_OVERLAP; i++) {
+    void CreateStorageBuffers()
+    {
+        for (int i = 0; i < FRAME_OVERLAP; i++)
+        {
             VmaAllocator allocator = VulkanBackEnd::GetAllocator();
             FrameData& frame = VulkanBackEnd::GetFrameByIndex(i);
             frame.buffers.renderItems2D.Create(allocator, sizeof(RenderItem2D) * MAX_RENDER_OBJECTS_2D, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
@@ -836,7 +810,6 @@ namespace VulkanRenderer {
             frame.buffers.animatedTransforms.Create(allocator, sizeof(glm::mat4) * MAX_ANIMATED_TRANSFORMS, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
             frame.buffers.bulletDecalInstanceData.Create(allocator, sizeof(RenderItem3D) * MAX_DECAL_COUNT, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
             frame.buffers.tlasRenderItems.Create(allocator, sizeof(RenderItem3D) * MAX_RENDER_OBJECTS_3D, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
 
             frame.buffers.renderItems3D.Create(allocator, sizeof(RenderItem3D) * MAX_RENDER_OBJECTS_3D * PLAYER_COUNT, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
@@ -852,7 +825,8 @@ namespace VulkanRenderer {
             Buffer skinnedMeshTransformBaseIndices;
 
             // Player draw command buffers
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) 
+            {
                 frame.buffers.drawCommandBuffers[i].geometry.Create(allocator, sizeof(DrawIndexedIndirectCommand) * MAX_INDIRECT_COMMANDS, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
                 frame.buffers.drawCommandBuffers[i].bulletHoleDecals.Create(allocator, sizeof(DrawIndexedIndirectCommand) * MAX_INDIRECT_COMMANDS, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
                 frame.buffers.drawCommandBuffers[i].glass.Create(allocator, sizeof(DrawIndexedIndirectCommand) * MAX_INDIRECT_COMMANDS, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
@@ -865,8 +839,10 @@ namespace VulkanRenderer {
         }
     }
 
-    void UpdateStorageBuffer(DescriptorSet& descriptorSet, uint32_t bindngIndex, Buffer& buffer, void* data, size_t size) {
-        if (size == 0) {
+    void UpdateStorageBuffer(DescriptorSet& descriptorSet, uint32_t bindngIndex, Buffer& buffer, void* data, size_t size)
+    {
+        if (size == 0) 
+        {
             //std::cout << "UpdateStorageBuffer() called but size was 0\n";
             return;
         }
@@ -877,30 +853,29 @@ namespace VulkanRenderer {
         descriptorSet.Update(device, bindngIndex, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, buffer.buffer);
     }
 
-
-    //                      //
     //      Raytracing      //
-    //                      //
-
-    Raytracer& GetRaytracer() {
+    Raytracer& GetRaytracer()
+    {
         return _raytracer;
     }
 
-    void LoadRaytracingFunctionPointer() {
+    void LoadRaytracingFunctionPointer()
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         vkCmdTraceRaysKHR = reinterpret_cast<PFN_vkCmdTraceRaysKHR>(vkGetDeviceProcAddr(device, "vkCmdTraceRaysKHR"));
         vkDestroyAccelerationStructureKHR = reinterpret_cast<PFN_vkDestroyAccelerationStructureKHR>(vkGetDeviceProcAddr(device, "vkDestroyAccelerationStructureKHR"));
     }
 
-    void VulkanRenderer::UpdateTLAS(std::vector<RenderItem3D>& renderItems) {
-
+    void VulkanRenderer::UpdateTLAS(std::vector<RenderItem3D>& renderItems) 
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
 
         // Find a better place to put this. And remove anything that doesn't need to happen in here.
         static bool blasCreated = false;
-        if (!blasCreated) {
+        if (!blasCreated)
+        {
             VulkanBackEnd::InitRayTracing();
             _descriptorSets.raytracing.Update(device, 0, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VulkanBackEnd::_mainVertexBuffer._buffer);
             _descriptorSets.raytracing.Update(device, 1, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VulkanBackEnd::_mainIndexBuffer._buffer);
@@ -917,12 +892,9 @@ namespace VulkanRenderer {
         _descriptorSets.dynamic.Update(device, 3, 1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, &currentFrame.tlas.handle);
     }
 
-
-    //                            //
     //      Helper Functions      //
-    //                            //
-
-    void SetViewportSize(VkCommandBuffer commandBuffer, int width, int height) {
+    void SetViewportSize(VkCommandBuffer commandBuffer, int width, int height)
+    {
         VkViewport viewport{};
         viewport.width = width;
         viewport.height = height;
@@ -938,36 +910,43 @@ namespace VulkanRenderer {
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
     }
 
-    void SetViewportSize(VkCommandBuffer commandBuffer, Vulkan::RenderTarget renderTarget) {
+    void SetViewportSize(VkCommandBuffer commandBuffer, Vulkan::RenderTarget renderTarget)
+    {
         SetViewportSize(commandBuffer, renderTarget._extent.width, renderTarget._extent.height);
     }
 
-    void BindPipeline(VkCommandBuffer commandBuffer, Pipeline& pipeline) {
+    void BindPipeline(VkCommandBuffer commandBuffer, Pipeline& pipeline)
+    {
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline._handle);
     }
 
-    void BindPipeline(VkCommandBuffer commandBuffer, ComputePipeline& pipeline) {
+    void BindPipeline(VkCommandBuffer commandBuffer, ComputePipeline& pipeline) 
+    {
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline.GetHandle());
     }
 
-    void BindDescriptorSet(VkCommandBuffer commandBuffer, Pipeline& pipeline, uint32_t setIndex, DescriptorSet& descriptorSet) {
+    void BindDescriptorSet(VkCommandBuffer commandBuffer, Pipeline& pipeline, uint32_t setIndex, DescriptorSet& descriptorSet) 
+    {
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline._layout, setIndex, 1, &descriptorSet.handle, 0, nullptr);
     }
 
-    void BindDescriptorSet(VkCommandBuffer commandBuffer, ComputePipeline& pipeline, uint32_t setIndex, DescriptorSet& descriptorSet) {
+    void BindDescriptorSet(VkCommandBuffer commandBuffer, ComputePipeline& pipeline, uint32_t setIndex, DescriptorSet& descriptorSet)
+    {
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.GetLayout(), setIndex, 1, &descriptorSet.handle, 0, nullptr);
     }
 
-    void BindRayTracingPipeline(VkCommandBuffer commandBuffer, VkPipeline pipeline) {
+    void BindRayTracingPipeline(VkCommandBuffer commandBuffer, VkPipeline pipeline)
+    {
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, pipeline);
     }
 
-    void BindRayTracingDescriptorSet(VkCommandBuffer commandBuffer, VkPipelineLayout pipelineLayout, uint32_t setIndex, DescriptorSet& descriptorSet) {
+    void BindRayTracingDescriptorSet(VkCommandBuffer commandBuffer, VkPipelineLayout pipelineLayout, uint32_t setIndex, DescriptorSet& descriptorSet)
+    {
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, pipelineLayout, setIndex, 1, &descriptorSet.handle, 0, nullptr);
     }
 
-    void BlitRenderTargetIntoSwapChain(VkCommandBuffer commandBuffer, Vulkan::RenderTarget& renderTarget, uint32_t swapchainImageIndex, BlitDstCoords& blitDstCoords) {
-
+    void BlitRenderTargetIntoSwapChain(VkCommandBuffer commandBuffer, Vulkan::RenderTarget& renderTarget, uint32_t swapchainImageIndex, BlitDstCoords& blitDstCoords)
+    {
         renderTarget.insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_ACCESS_MEMORY_READ_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
         VkImageSubresourceRange range;
         range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1016,8 +995,8 @@ namespace VulkanRenderer {
         vkCmdBlitImage(commandBuffer, renderTarget._image, srcLayout, VulkanBackEnd::GetSwapchainImages()[swapchainImageIndex], dstLayout, regionCount, &region, VkFilter::VK_FILTER_NEAREST);
     }
 
-    void BlitRenderTarget(VkCommandBuffer commandBuffer, Vulkan::RenderTarget& source, Vulkan::RenderTarget& destination, VkFilter filter, BlitDstCoords blitDstCoords) {
-
+    void BlitRenderTarget(VkCommandBuffer commandBuffer, Vulkan::RenderTarget& source, Vulkan::RenderTarget& destination, VkFilter filter, BlitDstCoords blitDstCoords)
+    {
         source.insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_ACCESS_MEMORY_READ_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
         destination.insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_MEMORY_READ_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
 
@@ -1048,7 +1027,8 @@ namespace VulkanRenderer {
         vkCmdBlitImage(commandBuffer, source._image, srcLayout, destination._image, dstLayout, regionCount, &region, filter);
     }
 
-    VkCommandBufferBeginInfo CommandBufferBeginInfo() {
+    VkCommandBufferBeginInfo CommandBufferBeginInfo()
+    {
         VkCommandBufferBeginInfo commandBufferBeginInfo = {};
         commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         commandBufferBeginInfo.pNext = nullptr;
@@ -1057,15 +1037,9 @@ namespace VulkanRenderer {
         return commandBufferBeginInfo;
     }
 
-
-
-
-    //                               //
     //      Begin/End Rendering      //
-    //                               //
-
-    void BeginRendering() {
-
+    void BeginRendering()
+    {
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
         VkCommandBuffer commandBuffer = currentFrame._commandBuffer;
         VkCommandBufferBeginInfo commandBufferBeginInfo = CommandBufferBeginInfo();
@@ -1073,8 +1047,8 @@ namespace VulkanRenderer {
         VK_CHECK(vkBeginCommandBuffer(commandBuffer, &commandBufferBeginInfo));
     }
 
-    void EndRendering(Vulkan::RenderTarget& renderTarget, RenderData& renderData) {
-
+    void EndRendering(Vulkan::RenderTarget& renderTarget, RenderData& renderData)
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         int32_t frameIndex = VulkanBackEnd::GetFrameIndex();
         VkQueue graphicsQueue = VulkanBackEnd::GetGraphicsQueue();
@@ -1145,13 +1119,14 @@ namespace VulkanRenderer {
         presentInfo.pImageIndices = &swapchainImageIndex;
         result = vkQueuePresentKHR(graphicsQueue, &presentInfo);
 
-        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || VulkanBackEnd::FrameBufferWasResized()) {
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || VulkanBackEnd::FrameBufferWasResized())
+        {
             VulkanBackEnd::HandleFrameBufferResized();
         }
     }
 
-    void EndLoadingScreenRendering(Vulkan::RenderTarget& renderTarget, RenderData& renderData) {
-
+    void EndLoadingScreenRendering(Vulkan::RenderTarget& renderTarget, RenderData& renderData)
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         int32_t frameIndex = VulkanBackEnd::GetFrameIndex();
         VkQueue graphicsQueue = VulkanBackEnd::GetGraphicsQueue();
@@ -1199,19 +1174,17 @@ namespace VulkanRenderer {
         presentInfo.pImageIndices = &swapchainImageIndex;
         result = vkQueuePresentKHR(graphicsQueue, &presentInfo);
 
-        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || VulkanBackEnd::FrameBufferWasResized()) {
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || VulkanBackEnd::FrameBufferWasResized())
+        {
             VulkanBackEnd::HandleFrameBufferResized();
         }
     }
 
-
-    //
     //      Indirect commands
-    //
-
-    void UpdateIndirectCommandBuffer(VkBuffer commandsBuffer, std::vector<DrawIndexedIndirectCommand>& commands) {
-
-        if (commands.empty()) {
+    void UpdateIndirectCommandBuffer(VkBuffer commandsBuffer, std::vector<DrawIndexedIndirectCommand>& commands) 
+    {
+        if (commands.empty()) 
+        {
             //std::cout << "UpdateIndirectCommandBuffer() ERROR, commands was size 0\n";
             return;
         }
@@ -1283,40 +1256,27 @@ namespace VulkanRenderer {
         vmaDestroyBuffer(allocator, stagingBuffer._buffer, stagingBuffer._allocation);
     }*/
 
-
-    //                  //
     //      Fences      //
-    //                  //
-
-    void WaitForFence() {
+    void WaitForFence()
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
         VkFence renderFence = currentFrame._renderFence;
         vkWaitForFences(device, 1, &renderFence, VK_TRUE, UINT64_MAX);
-
     }
-    void ResetFence() {
+
+    void ResetFence()
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
         VkFence renderFence = currentFrame._renderFence;
         vkResetFences(device, 1, &renderFence);
     }
 
-    /*
-       ▄████████    ▄████████ ███▄▄▄▄   ████████▄     ▄████████    ▄████████         ▄███████▄    ▄████████    ▄████████    ▄████████    ▄████████    ▄████████
-      ███    ███   ███    ███ ███▀▀▀██▄ ███   ▀███   ███    ███   ███    ███        ███    ███   ███    ███   ███    ███   ███    ███   ███    ███   ███    ███
-      ███    ███   ███    █▀  ███   ███ ███    ███   ███    █▀    ███    ███        ███    ███   ███    ███   ███    █▀    ███    █▀    ███    █▀    ███    █▀
-     ▄███▄▄▄▄██▀  ▄███▄▄▄     ███   ███ ███    ███  ▄███▄▄▄      ▄███▄▄▄▄██▀        ███    ███   ███    ███   ███          ███         ▄███▄▄▄       ███
-    ▀▀███▀▀▀▀▀   ▀▀███▀▀▀     ███   ███ ███    ███ ▀▀███▀▀▀     ▀▀███▀▀▀▀▀        ▀█████████▀  ▀███████████ ▀███████████ ▀███████████ ▀▀███▀▀▀     ▀███████████
-    ▀███████████   ███    █▄  ███   ███ ███    ███   ███    █▄  ▀███████████        ███          ███    ███          ███          ███   ███    █▄           ███
-      ███    ███   ███    ███ ███   ███ ███   ▄███   ███    ███   ███    ███        ███          ███    ███    ▄█    ███    ▄█    ███   ███    ███    ▄█    ███
-      ███    ███   ██████████  ▀█   █▀  ████████▀    ██████████   ███    ███       ▄████▀        ███    █▀   ▄████████▀   ▄████████▀    ██████████  ▄████████▀
-      ███    ███                                                  ███    ███                                                                                     */
-
-
-    void RenderLoadingScreen(std::vector<RenderItem2D>& renderItems) {
-
-        if (BackEnd::WindowIsMinimized()) {
+    void RenderLoadingScreen(std::vector<RenderItem2D>& renderItems)
+    {
+        if (BackEnd::WindowIsMinimized())
+        {
             return;
         }
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
@@ -1334,8 +1294,8 @@ namespace VulkanRenderer {
         EndLoadingScreenRendering(_renderTargets.loadingScreen, renderData);
     }
 
-    void PostProcessingPass(RenderData& renderData) {
-
+    void PostProcessingPass(RenderData& renderData)
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
         VkCommandBuffer commandBuffer = currentFrame._commandBuffer;
@@ -1348,16 +1308,18 @@ namespace VulkanRenderer {
         vkCmdDispatch(commandBuffer, _renderTargets.lighting.GetWidth() / 16, _renderTargets.lighting.GetHeight() / 4, 1);
     }
 
-    void VulkanRenderer::RenderFrame(RenderData& renderData) {
-
-        if (BackEnd::WindowIsMinimized()) {
+    void VulkanRenderer::RenderFrame(RenderData& renderData)
+    {
+        if (BackEnd::WindowIsMinimized()) 
+        {
             return;
         }
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
 
         // One time only update the compute skinning descriptor set with the weighted vertex buffer 
         static bool runOnce = true;
-        if (runOnce) {
+        if (runOnce)
+        {
             VulkanRenderer::UpdateRayTracingDecriptorSet();
             _descriptorSets.computeSkinning.Update(VulkanBackEnd::GetDevice(), 0, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VulkanBackEnd::_mainWeightedVertexBuffer._buffer);
             runOnce = false;
@@ -1370,9 +1332,9 @@ namespace VulkanRenderer {
 
         UpdateStorageBuffer(_descriptorSets.dynamic, 4, currentFrame.buffers.lights, renderData.lights.data(), sizeof(GPULight) * renderData.lights.size());
 
-
         // Commands
-        for (int i = 0; i < renderData.playerCount; i++) {
+        for (int i = 0; i < renderData.playerCount; i++) 
+        {
             UpdateIndirectCommandBuffer(currentFrame.buffers.drawCommandBuffers[i].geometry.buffer, RendererData::g_geometryDrawInfo[i].commands);
             UpdateIndirectCommandBuffer(currentFrame.buffers.drawCommandBuffers[i].bulletHoleDecals.buffer, RendererData::g_bulletDecalDrawInfo[i].commands);
             UpdateIndirectCommandBuffer(currentFrame.buffers.drawCommandBuffers[i].glass.buffer, renderData.glassDrawInfo.commands);
@@ -1382,9 +1344,8 @@ namespace VulkanRenderer {
         UpdateStorageBuffer(_descriptorSets.dynamic, 2, currentFrame.buffers.renderItems3D, &RendererData::g_geometryRenderItems[0], sizeof(RenderItem3D) * RendererData::g_geometryRenderItems.size());
         UpdateStorageBuffer(_descriptorSets.dynamic, 8, currentFrame.buffers.bulletDecalInstanceData, &RendererData::g_bulletDecalRenderItems[0], sizeof(RenderItem3D) * RendererData::g_bulletDecalRenderItems.size());
 
-
         UpdateStorageBuffer(_descriptorSets.dynamic, 0, currentFrame.buffers.cameraData, &renderData.cameraData, sizeof(CameraData) * PLAYER_COUNT);
-     //   UpdateStorageBuffer(_descriptorSets.dynamic, 2, currentFrame.buffers.renderItems3D, renderData.geometryDrawInfo.renderItems.data(), sizeof(RenderItem3D) * renderData.geometryDrawInfo.renderItems.size());
+        //   UpdateStorageBuffer(_descriptorSets.dynamic, 2, currentFrame.buffers.renderItems3D, renderData.geometryDrawInfo.renderItems.data(), sizeof(RenderItem3D) * renderData.geometryDrawInfo.renderItems.size());
 
         UpdateStorageBuffer(_descriptorSets.uiHiRes, 1, currentFrame.buffers.renderItems2DHiRes, renderData.renderItems2DHiRes.data(), sizeof(RenderItem2D) * renderData.renderItems2DHiRes.size());
 
@@ -1393,10 +1354,9 @@ namespace VulkanRenderer {
 
         UpdateStorageBuffer(_descriptorSets.dynamic, 6, currentFrame.buffers.animatedRenderItems3D, renderData.allSkinnedRenderItems.data(), sizeof(SkinnedRenderItem) * renderData.allSkinnedRenderItems.size());
 
-
         // You can most likely delete this, because compute skinning uses a different helicopter set
-       // You can most likely delete this, because compute skinning uses a different helicopter set
-       // You can most likely delete this, because compute skinning uses a different helicopter set
+        // You can most likely delete this, because compute skinning uses a different helicopter set
+        // You can most likely delete this, because compute skinning uses a different helicopter set
         //UpdateStorageBuffer(_descriptorSets.dynamic, 7, currentFrame.buffers.animatedTransforms, (*renderData.animatedTransforms).data(), sizeof(glm::mat4) * (*renderData.animatedTransforms).size());
 
         UpdateStorageBuffer(_descriptorSets.dynamic, 9, currentFrame.buffers.tlasRenderItems, renderData.shadowMapGeometryDrawInfo.renderItems.data(), sizeof(RenderItem3D) * renderData.shadowMapGeometryDrawInfo.renderItems.size());
@@ -1406,9 +1366,11 @@ namespace VulkanRenderer {
         // Skinning stuff
         // Calculate total amount of vertices to skin and allocate space
         int totalVertexCount = 0;
-        for (AnimatedGameObject* animatedGameObject : renderData.animatedGameObjectsToSkin) {
+        for (AnimatedGameObject* animatedGameObject : renderData.animatedGameObjectsToSkin
+            ) {
             SkinnedModel* skinnedModel = animatedGameObject->_skinnedModel;
-            for (int i = 0; i < skinnedModel->GetMeshCount(); i++) {
+            for (int i = 0; i < skinnedModel->GetMeshCount(); i++)
+            {
                 int meshindex = skinnedModel->GetMeshIndices()[i];
                 SkinnedMesh* mesh = AssetManager::GetSkinnedMeshByIndex(meshindex);
                 totalVertexCount += mesh->vertexCount;
@@ -1422,27 +1384,26 @@ namespace VulkanRenderer {
 
         ResetFence();
 
-        // Render passes
-
-       BeginRendering();
-       ComputeSkin(renderData);
-       GeometryPass(renderData);
-       //DrawBulletDecals(renderData);
-       RaytracingPass();
-       //GlassPass(renderData);
-       //LightingPass();
-       //EmissivePass(renderData);
-       //MuzzleFlashPass(renderData);
-       //DebugPassProbePass(renderData);
-       //PostProcessingPass(renderData);
-       //RenderUI(renderData.renderItems2DHiRes, _renderTargets.lighting, _pipelines.uiHiRes, _descriptorSets.uiHiRes, false);
-       //DownScaleGBuffer();
-       //DebugPass(renderData);
-       //RenderUI(renderData.renderItems2D, _renderTargets.present, _pipelines.ui, _descriptorSets.dynamic, false);
+        BeginRendering();
+        ComputeSkin(renderData);
+        GeometryPass(renderData);
+        //DrawBulletDecals(renderData);
+        RaytracingPass();
+        //GlassPass(renderData);
+        //LightingPass();
+        //EmissivePass(renderData);
+        //MuzzleFlashPass(renderData);
+        //DebugPassProbePass(renderData);
+        //PostProcessingPass(renderData);
+        //RenderUI(renderData.renderItems2DHiRes, _renderTargets.lighting, _pipelines.uiHiRes, _descriptorSets.uiHiRes, false);
+        //DownScaleGBuffer();
+        //DebugPass(renderData);
+        //RenderUI(renderData.renderItems2D, _renderTargets.present, _pipelines.ui, _descriptorSets.dynamic, false);
         EndRendering(_renderTargets.present, renderData);
     }
 
-    void DownScaleGBuffer() {
+    void DownScaleGBuffer() 
+    {
         VkCommandBuffer commandBuffer = VulkanBackEnd::GetCurrentFrame()._commandBuffer;
         BlitDstCoords blitDstCoords;
         blitDstCoords.dstX0 = 0;
@@ -1451,14 +1412,9 @@ namespace VulkanRenderer {
         blitDstCoords.dstY1 = _renderTargets.present.GetHeight();
         BlitRenderTarget(commandBuffer, _renderTargets.lighting, _renderTargets.present, VkFilter::VK_FILTER_LINEAR, blitDstCoords);
     }
-    /*
 
-     █  █ █▀▀ █▀▀ █▀▀█ 　 ▀█▀ █▀▀█ ▀▀█▀▀ █▀▀ █▀▀█ █▀▀ █▀▀█ █▀▀ █▀▀
-     █  █ ▀▀█ █▀▀ █▄▄▀ 　  █  █  █   █   █▀▀ █▄▄▀ █▀▀ █▄▄█ █   █▀▀
-     █▄▄█ ▀▀▀ ▀▀▀ ▀─▀▀ 　 ▀▀▀ ▀  ▀   ▀   ▀▀▀ ▀ ▀▀ ▀   ▀  ▀ ▀▀▀ ▀▀▀  */
-
-    void RenderUI(std::vector<RenderItem2D>& renderItems, Vulkan::RenderTarget& renderTarget, Pipeline pipeline, DescriptorSet descriptorSet, bool clearScreen) {
-
+    void RenderUI(std::vector<RenderItem2D>& renderItems, Vulkan::RenderTarget& renderTarget, Pipeline pipeline, DescriptorSet descriptorSet, bool clearScreen)
+    {
         VkCommandBuffer commandBuffer = VulkanBackEnd::GetCurrentFrame()._commandBuffer;
 
         renderTarget.insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
@@ -1499,14 +1455,8 @@ namespace VulkanRenderer {
         vkCmdEndRendering(commandBuffer);
     }
 
-    /*
-
-     █▀▀▄ █▀▀ █▀▀█ █  █ █▀▀▀ 　 █▀▀█ █▀▀█ █▀▀ █▀▀
-     █  █ █▀▀ █▀▀▄ █  █ █ ▀█ 　 █▄▄█ █▄▄█ ▀▀█ ▀▀█
-     █▄▄▀ ▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ 　 ▀    ▀  ▀ ▀▀▀ ▀▀▀  */
-
-    void DebugPass(RenderData& renderData) {
-
+    void DebugPass(RenderData& renderData) 
+    {
         VkCommandBuffer commandBuffer = VulkanBackEnd::GetCurrentFrame()._commandBuffer;
         VulkanDetachedMesh& linesMesh = renderData.debugLinesMesh->GetVKMesh();
         VulkanDetachedMesh& pointsMesh = renderData.debugPointsMesh->GetVKMesh();
@@ -1536,33 +1486,34 @@ namespace VulkanRenderer {
         SetViewportSize(commandBuffer, _renderTargets.present);
 
         // Debug lines
-        if (linesMesh.GetVertexCount()) {
+        if (linesMesh.GetVertexCount())
+        {
             BindPipeline(commandBuffer, _pipelines.debugLines);
             BindDescriptorSet(commandBuffer, _pipelines.debugLines, 0, _descriptorSets.dynamic);
             vkCmdBindVertexBuffers(commandBuffer, 0, 1, &linesMesh.vertexBuffer._buffer, &offset);
             vkCmdDraw(commandBuffer, linesMesh.GetVertexCount(), 1, 0, 0);
         }
         // Debug points
-        if (pointsMesh.GetVertexCount()) {
+        if (pointsMesh.GetVertexCount())
+        {
             BindPipeline(commandBuffer, _pipelines.debugPoints);
             BindDescriptorSet(commandBuffer, _pipelines.debugPoints, 0, _descriptorSets.dynamic);
             vkCmdBindVertexBuffers(commandBuffer, 0, 1, &pointsMesh.vertexBuffer._buffer, &offset);
             vkCmdDraw(commandBuffer, pointsMesh.GetVertexCount(), 1, 0, 0);
         }
         // Point cloud
-        if (renderData.renderMode == RenderMode::POINT_CLOUD) {
+        if (renderData.renderMode == RenderMode::POINT_CLOUD)
+        {
             BindPipeline(commandBuffer, _pipelines.debugPointCloud);
             BindDescriptorSet(commandBuffer, _pipelines.debugPointCloud, 0, _descriptorSets.dynamic);
             BindDescriptorSet(commandBuffer, _pipelines.debugPointCloud, 1, _descriptorSets.globalIllumination);
             vkCmdDraw(commandBuffer, GlobalIllumination::GetPointCloud().size(), 1, 0, 0);
         }
-
         vkCmdEndRendering(commandBuffer);
     }
 
-
-    void DebugPassProbePass(RenderData& renderData) {
-
+    void DebugPassProbePass(RenderData& renderData)
+    {
         static int cubeMeshIndex = AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName("Cube"))->GetMeshIndices()[0];
 
         VkCommandBuffer commandBuffer = VulkanBackEnd::GetCurrentFrame()._commandBuffer;
@@ -1605,21 +1556,19 @@ namespace VulkanRenderer {
 
         Mesh* mesh = AssetManager::GetMeshByIndex(cubeMeshIndex);
 
-        if (Renderer::ProbesVisible()) {
+        if (Renderer::ProbesVisible()) 
+        {
             LightVolume* lightVolume = GlobalIllumination::GetLightVolumeByIndex(0);
-            if (lightVolume) {
+            if (lightVolume)
+            {
                 vkCmdDrawIndexed(commandBuffer, mesh->indexCount, GlobalIllumination::GetPointCloud().size(), mesh->baseIndex, mesh->baseVertex, 0);
             }
         }
-
         vkCmdEndRendering(commandBuffer);
     }
 
-
-
-
-    void ComputeSkin(RenderData& renderData) {
-
+    void ComputeSkin(RenderData& renderData)
+    {
         // Skin
         VkDevice device = VulkanBackEnd::GetDevice();
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
@@ -1630,12 +1579,12 @@ namespace VulkanRenderer {
 
         int j = 0;
         int baseOutputVertex = 0;
-        for (AnimatedGameObject* animatedGameObject : renderData.animatedGameObjectsToSkin) {
-
+        for (AnimatedGameObject* animatedGameObject : renderData.animatedGameObjectsToSkin)
+        {
             SkinnedModel* skinnedModel = animatedGameObject->_skinnedModel;
 
-            for (int i = 0; i < skinnedModel->GetMeshCount(); i++) {
-
+            for (int i = 0; i < skinnedModel->GetMeshCount(); i++) 
+            {
                 int meshindex = skinnedModel->GetMeshIndices()[i];
                 SkinnedMesh* mesh = AssetManager::GetSkinnedMeshByIndex(meshindex);
 
@@ -1653,14 +1602,8 @@ namespace VulkanRenderer {
         }
     }
 
-    /*
-
-     █▀▀█ █▀▀ █▀▀█ █▀▄▀█ █▀▀ ▀▀█▀▀ █▀▀█ █  █ 　 █▀▀█ █▀▀█ █▀▀ █▀▀
-     █ ▄▄ █▀▀ █  █ █ ▀ █ █▀▀   █   █▄▄▀ ▀▀▀█ 　 █▄▄█ █▄▄█ ▀▀█ ▀▀█
-     █▄▄█ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀   ▀   ▀ ▀▀ ▀▀▀▀ 　 ▀    ▀  ▀ ▀▀▀ ▀▀▀  */
-
-    void GeometryPass(RenderData& renderData) {
-
+    void GeometryPass(RenderData& renderData)
+    {
         SplitscreenMode splitscreenMode = Game::GetSplitscreenMode();
         unsigned int renderTargetWidth = _renderTargets.gBufferBasecolor.GetWidth();
         unsigned int renderTargetHeight = _renderTargets.gBufferBasecolor.GetHeight();
@@ -1716,8 +1659,8 @@ namespace VulkanRenderer {
         int32_t frameIndex = VulkanBackEnd::GetFrameIndex();
         FrameData& frame = VulkanBackEnd::GetFrameByIndex(frameIndex);
 
-        for (int i = 0; i < renderData.playerCount; i++) {
-
+        for (int i = 0; i < renderData.playerCount; i++)
+        {
             SetViewport(commandBuffer, i, splitscreenMode, renderTargetWidth, renderTargetHeight);
 
             PushConstants pushConstants;
@@ -1732,7 +1675,6 @@ namespace VulkanRenderer {
 
         vkCmdEndRendering(commandBuffer);
 
-
         // Skinned mesh
         BindPipeline(commandBuffer, _pipelines.gBufferSkinned);
         BindDescriptorSet(commandBuffer, _pipelines.gBufferSkinned, 0, _descriptorSets.dynamic);
@@ -1740,9 +1682,11 @@ namespace VulkanRenderer {
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VulkanBackEnd::g_mainSkinnedVertexBuffer._buffer, &offset);
         vkCmdBindIndexBuffer(commandBuffer, VulkanBackEnd::_mainWeightedIndexBuffer._buffer, 0, VK_INDEX_TYPE_UINT32);
         int k = 0;
-        for (int i = 0; i < renderData.playerCount; i++) {
+        for (int i = 0; i < renderData.playerCount; i++) 
+        {
             SetViewport(commandBuffer, i, splitscreenMode, renderTargetWidth, renderTargetHeight);
-            for (SkinnedRenderItem& skinnedRenderItem : renderData.skinnedRenderItems[i]) {
+            for (SkinnedRenderItem& skinnedRenderItem : renderData.skinnedRenderItems[i])
+            {
                 SkinnedMesh* mesh = AssetManager::GetSkinnedMeshByIndex(skinnedRenderItem.originalMeshIndex);
                 SkinnedMeshPushConstants pushConstants;
                 pushConstants.playerIndex = i;
@@ -1753,18 +1697,13 @@ namespace VulkanRenderer {
             }
         }
         vkCmdEndRendering(commandBuffer);
-
     }
 
-
-    void EmissivePass(RenderData& renderData) {
-
-
+    void EmissivePass(RenderData& renderData)
+    {
         VkDevice device = VulkanBackEnd::GetDevice();
         FrameData& currentFrame = VulkanBackEnd::GetCurrentFrame();
         VkCommandBuffer commandBuffer = currentFrame._commandBuffer;
-
-
 
         BlitDstCoords blitDstCoords;
         blitDstCoords.dstX0 = 0;
@@ -1773,20 +1712,12 @@ namespace VulkanRenderer {
         blitDstCoords.dstY1 = g_blurRenderTargets.p1A[0].GetHeight();
         BlitRenderTarget(commandBuffer, _renderTargets.gBufferEmissive, g_blurRenderTargets.p1A[0], VkFilter::VK_FILTER_LINEAR, blitDstCoords);
 
-
-
-
-
-
-
-
-
         // think if you really need all these late
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) 
+        {
             g_blurRenderTargets.p1A[i].insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
             g_blurRenderTargets.p1B[i].insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
         }
-
 
         Vulkan::RenderTarget* renderTarget = &g_blurRenderTargets.p1B[0];
 
@@ -1834,18 +1765,7 @@ namespace VulkanRenderer {
 
         vkCmdEndRendering(commandBuffer);
 
-
-
-
-
-
-
-
-
-
         /*
-
-
         ViewportInfo gBufferViewportInfo = RendererUtil::CreateViewportInfo(i, Game::GetSplitscreenMode(), gBuffer.GetWidth(), gBuffer.GetHeight());
         ViewportInfo blurBufferViewportInfo;
         blurBufferViewportInfo.xOffset = 0;
@@ -1853,11 +1773,7 @@ namespace VulkanRenderer {
         blurBufferViewportInfo.width = (*blurBuffers)[0].GetWidth();
         blurBufferViewportInfo.height = (*blurBuffers)[0].GetHeight();
         BlitFrameBuffer(&gBuffer, &(*blurBuffers)[0], "EmissiveMask", "ColorA", gBufferViewportInfo, blurBufferViewportInfo, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-
         */
-
-
 
         // Composite
         _renderTargets.lighting.insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
@@ -1866,11 +1782,10 @@ namespace VulkanRenderer {
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, _pipelines.emissiveComposite.GetLayout(), 1, 1, &_descriptorSets.dynamic.handle, 0, nullptr);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, _pipelines.emissiveComposite.GetLayout(), 2, 1, &_descriptorSets.blurTargetsP1.handle, 0, nullptr);
         vkCmdDispatch(commandBuffer, _renderTargets.lighting.GetWidth() / 16, _renderTargets.lighting.GetHeight() / 4, 1);
-
     }
 
-    void GlassPass(RenderData& renderData) {
-
+    void GlassPass(RenderData& renderData)
+    {
         SplitscreenMode splitscreenMode = Game::GetSplitscreenMode();
         unsigned int renderTargetWidth = _renderTargets.glass.GetWidth();
         unsigned int renderTargetHeight = _renderTargets.glass.GetHeight();
@@ -1906,7 +1821,6 @@ namespace VulkanRenderer {
 
         vkCmdBeginRendering(commandBuffer, &renderingInfo);
 
-
         // Non skinned mesh
         VkDeviceSize offset = 0;
         BindPipeline(commandBuffer, _pipelines.glass);
@@ -1919,8 +1833,8 @@ namespace VulkanRenderer {
         int32_t frameIndex = VulkanBackEnd::GetFrameIndex();
         FrameData& frame = VulkanBackEnd::GetFrameByIndex(frameIndex);
 
-        for (int i = 0; i < renderData.playerCount; i++) {
-
+        for (int i = 0; i < renderData.playerCount; i++) 
+        {
             SetViewport(commandBuffer, i, splitscreenMode, renderTargetWidth, renderTargetHeight);
 
             PushConstants pushConstants;
@@ -1933,12 +1847,10 @@ namespace VulkanRenderer {
             vkCmdDrawIndexedIndirect(commandBuffer, indirectBuffer, 0, indirectDrawCount, sizeof(VkDrawIndexedIndirectCommand));
         }
         vkCmdEndRendering(commandBuffer);
-
     }
 
-
-    void MuzzleFlashPass(RenderData& renderData) {
-
+    void MuzzleFlashPass(RenderData& renderData) 
+    {
         SplitscreenMode splitscreenMode = Game::GetSplitscreenMode();
         unsigned int renderTargetWidth = _renderTargets.lighting.GetWidth();
         unsigned int renderTargetHeight = _renderTargets.lighting.GetHeight();
@@ -1985,8 +1897,8 @@ namespace VulkanRenderer {
         int32_t frameIndex = VulkanBackEnd::GetFrameIndex();
         FrameData& frame = VulkanBackEnd::GetFrameByIndex(frameIndex);
 
-        for (int i = 0; i < renderData.playerCount; i++) {
-
+        for (int i = 0; i < renderData.playerCount; i++)
+        {
             Mesh* mesh = AssetManager::GetQuadMesh();
 
             SetViewport(commandBuffer, i, splitscreenMode, renderTargetWidth, renderTargetHeight);
@@ -1996,23 +1908,20 @@ namespace VulkanRenderer {
             PushConstants pushConstants;
             pushConstants.playerIndex = i;
             pushConstants.emptp2 = textureIndex;
-          //  pushConstants.instanceOffset = renderData.geometryIndirectDrawInfo.instanceDataOffests[i];
+            //  pushConstants.instanceOffset = renderData.geometryIndirectDrawInfo.instanceDataOffests[i];
             vkCmdPushConstants(commandBuffer, _pipelines.flipbook._layout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &pushConstants);
-
 
             vkCmdDrawIndexed(commandBuffer, mesh->indexCount, 1, mesh->baseIndex, mesh->baseVertex, i);
 
-         //   VkBuffer indirectBuffer = frame.buffers.drawCommandBuffers[i].flipbook.buffer;
-          //  uint32_t indirectDrawCount = renderData.glassDrawInfo.commands.size();
-           // vkCmdDrawIndexedIndirect(commandBuffer, indirectBuffer, 0, indirectDrawCount, sizeof(VkDrawIndexedIndirectCommand));
+            //   VkBuffer indirectBuffer = frame.buffers.drawCommandBuffers[i].flipbook.buffer;
+            //  uint32_t indirectDrawCount = renderData.glassDrawInfo.commands.size();
+            // vkCmdDrawIndexedIndirect(commandBuffer, indirectBuffer, 0, indirectDrawCount, sizeof(VkDrawIndexedIndirectCommand));
         }
         vkCmdEndRendering(commandBuffer);
-
-
     }
 
-    void DrawBulletDecals(RenderData& renderData) {
-
+    void DrawBulletDecals(RenderData& renderData) 
+    {
         SplitscreenMode splitscreenMode = Game::GetSplitscreenMode();
         unsigned int renderTargetWidth = _renderTargets.gBufferBasecolor.GetWidth();
         unsigned int renderTargetHeight = _renderTargets.gBufferBasecolor.GetHeight();
@@ -2066,8 +1975,8 @@ namespace VulkanRenderer {
         int32_t frameIndex = VulkanBackEnd::GetFrameIndex();
         FrameData& frame = VulkanBackEnd::GetFrameByIndex(frameIndex);
 
-        for (int i = 0; i < renderData.playerCount; i++) {
-
+        for (int i = 0; i < renderData.playerCount; i++) 
+        {
             SetViewport(commandBuffer, i, splitscreenMode, renderTargetWidth, renderTargetHeight);
 
             PushConstants pushConstants;
@@ -2083,14 +1992,8 @@ namespace VulkanRenderer {
         vkCmdEndRendering(commandBuffer);
     }
 
-    /*
-
-    █    █ █▀▀▀ █  █ ▀▀█▀▀ █ █▀▀█ █▀▀▀ 　 █▀▀█ █▀▀█ █▀▀ █▀▀
-    █    █ █ ▀█ █▀▀█   █   █ █  █ █ ▀█ 　 █▄▄█ █▄▄█ ▀▀█ ▀▀█
-    █▄▄█ ▀ ▀▀▀▀ ▀  ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀    ▀  ▀ ▀▀▀ ▀▀▀  */
-
-    void LightingPass() {
-
+    void LightingPass() 
+    {
         VkCommandBuffer commandBuffer = VulkanBackEnd::GetCurrentFrame()._commandBuffer;
 
         _renderTargets.gBufferBasecolor.insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
@@ -2141,12 +2044,8 @@ namespace VulkanRenderer {
         vkCmdEndRendering(commandBuffer);
     }
 
-    /*
-    █▀▀█ █▀▀█ █  █ ▀▀█▀▀ █▀▀█ █▀▀█ █▀▀ █ █▀▀█ █▀▀▀    █▀▀█ █▀▀█ █▀▀ █▀▀
-    █▄▄▀ █▄▄█ ▀▀▀█   █   █▄▄▀ █▄▄█ █   █ █  █ █ ▀█    █▄▄█ █▄▄█ ▀▀█ ▀▀█
-    █  █ ▀  ▀ ▀▀▀▀   ▀   ▀ ▀▀ ▀  ▀ ▀▀▀ ▀ ▀  ▀ ▀▀▀▀    ▀    ▀  ▀ ▀▀▀ ▀▀▀ */
-
-    void RaytracingPass() {
+    void RaytracingPass() 
+    {
         Vulkan::RenderTarget& renderTarget = _renderTargets.raytracing;
         VkCommandBuffer commandBuffer = VulkanBackEnd::GetCurrentFrame()._commandBuffer;
 
@@ -2162,14 +2061,11 @@ namespace VulkanRenderer {
         _renderTargets.gbufferDepth.InsertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
         _renderTargets.raytracing.insertImageBarrier(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
 
-
-
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, _raytracer.pipeline);
         vkCmdTraceRaysKHR(commandBuffer, &_raytracer.raygenShaderSbtEntry, &_raytracer.missShaderSbtEntry, &_raytracer.hitShaderSbtEntry, &_raytracer.callableShaderSbtEntry, renderTarget.GetWidth(), renderTarget.GetHeight(), 1);
     }
 }
 
-void VulkanRenderer::PresentFinalImage() {
-
-
+void VulkanRenderer::PresentFinalImage()
+{
 }

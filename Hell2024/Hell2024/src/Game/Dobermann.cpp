@@ -1,8 +1,8 @@
 #include "Dobermann.hpp"
 #include "Scene.hpp"
-#include "../Input/Input.hpp"
-#include "../Game/Game.hpp"
-#include "../Timer.hpp"
+#include "Input/Input.hpp"
+#include "Game/Game.hpp"
+#include "Timer.hpp"
 
 void Dobermann::Init() 
 {

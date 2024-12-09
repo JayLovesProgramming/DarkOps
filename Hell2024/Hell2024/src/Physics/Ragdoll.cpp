@@ -11,7 +11,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "../Utils/Util.hpp"
+#include "Utils/Util.hpp"
 
 std::string FindParentJointName(std::string query)
 {

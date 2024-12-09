@@ -1,20 +1,22 @@
 #pragma once
+
 #include "HellCommon.hpp"
 #include <glad/glad.h>
 #include "vk_allocation.hpp"
 #include "../VK_BackEnd.h"
 
-struct VulkanVertexBuffer {
-
+struct VulkanVertexBuffer
+{
 public:
 
-    void AllocateSpace(uint32_t vertexCount) {
-
+    void AllocateSpace(uint32_t vertexCount)
+    {
         uint32_t bufferSize = vertexCount * sizeof(Vertex);
 
-        if (m_allocatedSize < bufferSize) {
-
-            if (m_allocatedBuffer._buffer != VK_NULL_HANDLE) {
+        if (m_allocatedSize < bufferSize)
+        {
+            if (m_allocatedBuffer._buffer != VK_NULL_HANDLE)
+            {
                 // This feels fucked
                 // This feels fucked
                 // This feels fucked
@@ -46,7 +48,8 @@ public:
         }
     }
 
-    VkBuffer GetBuffer() {
+    VkBuffer GetBuffer()
+    {
         return m_allocatedBuffer._buffer;
     }
 
