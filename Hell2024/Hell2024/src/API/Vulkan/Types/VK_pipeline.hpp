@@ -1,10 +1,11 @@
 #pragma once
+
 #include <glm/glm.hpp>
 #include <string>
-#include "../VK_common.h"
+#include "VK_common.h"
 
-struct Pipeline {
-
+struct Pipeline
+{
 	VkPipeline _handle;
 	VkPipelineLayout _layout = VK_NULL_HANDLE;
 	std::vector<VkDescriptorSetLayout> _descriptorSetLayouts;
@@ -23,13 +24,15 @@ struct Pipeline {
 	bool _depthWrite = false;
 	bool _depthTest = false;
 
-	void PushDescriptorSetLayout(VkDescriptorSetLayout layout) {
+	void PushDescriptorSetLayout(VkDescriptorSetLayout layout)
+	{
 		_descriptorSetLayouts.push_back(layout);
 	}
 
-	void CreatePipelineLayout(VkDevice device) {
-
-        if (_layout != VK_NULL_HANDLE) {
+	void CreatePipelineLayout(VkDevice device) 
+	{
+        if (_layout != VK_NULL_HANDLE) 
+		{
             vkDestroyPipelineLayout(device, _layout, nullptr);
         }
 
@@ -53,21 +56,24 @@ struct Pipeline {
  		VK_CHECK(vkCreatePipelineLayout(device, &createInfo, nullptr, &_layout));
 	}
 
-	void Cleanup(VkDevice device) {
+	void Cleanup(VkDevice device)
+	{
 		vkDestroyPipeline(device, _handle, nullptr);
 		vkDestroyPipelineLayout(device, _layout, nullptr);
 	}
 
-    void SetVertexDescription(VertexDescriptionType type) {
-
+    void SetVertexDescription(VertexDescriptionType type)
+	{
 	    // Main binding
 	    _vertexDescription.Reset();
 	    VkVertexInputBindingDescription mainBinding = {};
 	    mainBinding.binding = 0;
-        if (type != VertexDescriptionType::ALL_WEIGHTED) {
+        if (type != VertexDescriptionType::ALL_WEIGHTED)
+		{
             mainBinding.stride = sizeof(Vertex);
         }
-        else {
+        else
+		{
             mainBinding.stride = sizeof(WeightedVertex);
         }
 	    mainBinding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
@@ -115,29 +121,35 @@ struct Pipeline {
         weightAttribute.format = VK_FORMAT_R32G32B32A32_SFLOAT;
         weightAttribute.offset = offsetof(WeightedVertex, weight);
 
-		if (type == VertexDescriptionType::POSITION_NORMAL_TEXCOORD) {
+		if (type == VertexDescriptionType::POSITION_NORMAL_TEXCOORD) 
+		{
 			_vertexDescription.attributes.push_back(positionAttribute);
 			_vertexDescription.attributes.push_back(normalAttribute);
 			_vertexDescription.attributes.push_back(uvAttribute);
         }
-        else if (type == VertexDescriptionType::POSITION_NORMAL) {
+        else if (type == VertexDescriptionType::POSITION_NORMAL) 
+		{
             _vertexDescription.attributes.push_back(positionAttribute);
             _vertexDescription.attributes.push_back(normalAttribute);
         }
-        else if (type == VertexDescriptionType::POSITION_TEXCOORD) {
+        else if (type == VertexDescriptionType::POSITION_TEXCOORD)
+		{
             _vertexDescription.attributes.push_back(positionAttribute);
             _vertexDescription.attributes.push_back(uvAttribute);
         }
-        else if (type == VertexDescriptionType::POSITION) {
+        else if (type == VertexDescriptionType::POSITION)
+		{
             _vertexDescription.attributes.push_back(positionAttribute);
         }
-        else if (type == VertexDescriptionType::ALL) {
+        else if (type == VertexDescriptionType::ALL)
+		{
             _vertexDescription.attributes.push_back(positionAttribute);
             _vertexDescription.attributes.push_back(normalAttribute);
             _vertexDescription.attributes.push_back(uvAttribute);
             _vertexDescription.attributes.push_back(tangentAttribute);
         }
-        else if (type == VertexDescriptionType::ALL_WEIGHTED) {
+        else if (type == VertexDescriptionType::ALL_WEIGHTED)
+		{
             _vertexDescription.attributes.push_back(positionAttribute);
             _vertexDescription.attributes.push_back(normalAttribute);
             _vertexDescription.attributes.push_back(uvAttribute);
@@ -147,41 +159,49 @@ struct Pipeline {
         }
 	}
 
-	void SetTopology(VkPrimitiveTopology topology) {
+	void SetTopology(VkPrimitiveTopology topology) 
+	{
 		_topology = topology;
 	}
 
-	void SetCullModeFlags(VkCullModeFlags cullModeFlags) {
+	void SetCullModeFlags(VkCullModeFlags cullModeFlags)
+	{
 		_cullModeFlags = cullModeFlags;
 	}
 
-	void SetPolygonMode(VkPolygonMode polygonMode) {
+	void SetPolygonMode(VkPolygonMode polygonMode)
+	{
 		_polygonMode = polygonMode;
 	}
 
-	void SetColorBlending(bool enabled) {
+	void SetColorBlending(bool enabled)
+	{
 		_colorBlendEnable = enabled;
 	}
 
-	void SetDepthWrite(bool enabled) {
+	void SetDepthWrite(bool enabled)
+	{
 		_depthWrite = enabled;
 	}
 
-	void SetDepthTest(bool enabled) {
+	void SetDepthTest(bool enabled)
+	{
 		_depthTest = enabled;
 	}
 
-	void SetCompareOp(VkCompareOp op) {
+	void SetCompareOp(VkCompareOp op)
+	{
 		_compareOp = op;
 	}
 
-    void SetPushConstantSize(uint32_t bufferSize) {
+    void SetPushConstantSize(uint32_t bufferSize)
+	{
         m_pushConstantSize = bufferSize;
         m_pushConstantCount = 1;
     }
 
-    void Build(VkDevice device, VkShaderModule vertexShader, VkShaderModule fragmentShader, std::vector<VkFormat> colorAttachmentFormats) {
-
+    void Build(VkDevice device, VkShaderModule vertexShader, VkShaderModule fragmentShader, std::vector<VkFormat> colorAttachmentFormats)
+	{
         int colorAttachmentCount = colorAttachmentFormats.size();
 
 		VkPipelineVertexInputStateCreateInfo vertexInputCreateInfo = {};
@@ -264,7 +284,8 @@ struct Pipeline {
 		colorBlendingCreateInfo.logicOp = VK_LOGIC_OP_COPY;
 		colorBlendingCreateInfo.attachmentCount = colorAttachmentFormats.size();
 		std::vector<VkPipelineColorBlendAttachmentState> blendAttachmentStates;
-		for (int i = 0; i < colorAttachmentFormats.size(); i++) {
+		for (int i = 0; i < colorAttachmentFormats.size(); i++)
+		{
 			VkPipelineColorBlendAttachmentState attachmentState = {};
 			attachmentState.colorWriteMask = 0xF;
 			//attachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -305,7 +326,8 @@ struct Pipeline {
 
 		// New create info to define color, depth and stencil attachments at pipeline create time
 		std::vector<VkFormat> formats;
-		for (int i = 0; i < colorAttachmentFormats.size(); i++) {
+		for (int i = 0; i < colorAttachmentFormats.size(); i++)
+		{
 			formats.push_back(colorAttachmentFormats[i]);
 		}
 		VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo{};
@@ -317,12 +339,15 @@ struct Pipeline {
 		pipelineInfo.pNext = &pipelineRenderingCreateInfo;
 
 		VkPipeline newPipeline;
-		if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &newPipeline) != VK_SUCCESS) {
+		if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &newPipeline) != VK_SUCCESS)
+		{
 			std::cout << "failed to create pipeline\n";
 			_handle = VK_NULL_HANDLE;
 		}
-		else {
-			if (_handle != VK_NULL_HANDLE) {
+		else
+		{
+			if (_handle != VK_NULL_HANDLE) 
+			{
 				vkDestroyPipeline(device, _handle, nullptr);
 			}
 			_handle = newPipeline;

@@ -1,25 +1,65 @@
 #pragma once
+
 #include "RendererCommon.hpp"
-#include "../Core/Audio.hpp"
-#include "../Physics/RigidBody.hpp"
-#include "../Physics/RigidStatic.hpp"
-#include "../Physics/Physics.hpp"
-#include "../Renderer/Types/Model.hpp"
-#include "../Utils/Util.hpp"
+#include "Core/Audio.hpp"
+#include "Physics/RigidBody.hpp"
+#include "Physics/RigidStatic.hpp"
+#include "Physics/Physics.hpp"
+#include "Renderer/Types/Model.hpp"
+#include "Utils/Util.hpp"
 
-enum class OpenState { NONE, CLOSED, CLOSING, OPEN, OPENING };
-enum class OpenAxis { NONE, TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, ROTATION_POS_X, ROTATION_POS_Y, ROTATION_POS_Z, ROTATION_NEG_X, ROTATION_NEG_Y, ROTATION_NEG_Z };
-enum class InteractType { NONE, TEXT, QUESTION, PICKUP, CALLBACK_ONLY };
-enum class ModelMatrixMode { GAME_TRANSFORM, PHYSX_TRANSFORM };
+enum class OpenState 
+{ 
+	NONE, 
+	CLOSED, 
+	CLOSING, 
+	OPEN, 
+	OPENING 
+};
 
-enum class CollisionType { NONE, STATIC_ENVIROMENT, BOUNCEABLE, PICKUP, BULLET_CASING };
+enum class OpenAxis
+{ 
+	NONE, 
+	TRANSLATE_X,
+	TRANSLATE_Y, 
+	TRANSLATE_Z, 
+	ROTATION_POS_X, 
+	ROTATION_POS_Y,
+	ROTATION_POS_Z,
+	ROTATION_NEG_X,
+	ROTATION_NEG_Y,
+	ROTATION_NEG_Z 
+};
 
-struct GameObject {
+enum class InteractType
+{
+	NONE,
+	TEXT,
+	QUESTION,
+	PICKUP,
+	CALLBACK_ONLY 
+};
 
+enum class ModelMatrixMode 
+{ 
+	GAME_TRANSFORM,
+	PHYSX_TRANSFORM 
+};
+
+enum class CollisionType
+{ 
+	NONE, 
+	STATIC_ENVIROMENT, 
+	BOUNCEABLE,
+	PICKUP, 
+	BULLET_CASING
+};
+
+struct GameObject 
+{
 public:
     CollisionType m_collisionType = CollisionType::NONE;
 
-public:
     GameObject() = default;
     void SetCollisionType(CollisionType collisionType);
 
@@ -27,14 +67,6 @@ public:
 
     RigidBody m_collisionRigidBody;
     RigidStatic m_raycastRigidStatic;
-
-
-
-
-
-
-public:
-
 
     //bool blendEnabled = false;
 
@@ -71,9 +103,7 @@ private:
 		AudioEffectInfo onInteract;
 	} _audio;
 
-private:
 	glm::mat4 _modelMatrix;
-
 
 public:
 	glm::mat4 GetModelMatrix();

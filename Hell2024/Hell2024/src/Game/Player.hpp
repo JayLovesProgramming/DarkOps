@@ -49,7 +49,8 @@ struct PickUpText
 
 enum class ShellEjectionState 
 {
-    IDLE, AWAITING_SHELL_EJECTION
+    IDLE, 
+    AWAITING_SHELL_EJECTION
 };
 
 struct PlayerControls

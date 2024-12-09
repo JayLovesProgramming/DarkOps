@@ -8,26 +8,26 @@
 #include "Types/GL_ssbo.hpp"
 #include "Types/GL_CubeMap2.h"
 #include "Types/GL_frameBuffer.hpp"
-#include "../../BackEnd/BackEnd.hpp"
-#include "../../Core/AssetManager.hpp"
-#include "../../Game/Scene.hpp"
-#include "../../Game/Game.hpp"
-#include "../../Editor/CSG.hpp"
-#include "../../Editor/Editor.hpp"
-#include "../../Editor/Gizmo.hpp"
-#include "../../Renderer/GlobalIllumination.hpp"
-#include "../../Renderer/TextBlitter.hpp"
-#include "../../Renderer/RendererStorage.hpp"
-#include "../../Renderer/Renderer.hpp"
-#include "../../Renderer/RendererData.hpp"
-#include "../../Renderer/RendererUtil.hpp"
-#include "../../Renderer/Raytracing/Raytracing.hpp"
-#include "../../Renderer/SSAO.hpp"
+#include "BackEnd/BackEnd.hpp"
+#include "Core/AssetManager.hpp"
+#include "Game/Scene.hpp"
+#include "Game/Game.hpp"
+#include "Editor/CSG.hpp"
+#include "Editor/Editor.hpp"
+#include "Editor/Gizmo.hpp"
+#include "Renderer/GlobalIllumination.hpp"
+#include "Renderer/TextBlitter.hpp"
+#include "Renderer/RendererStorage.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/RendererData.hpp"
+#include "Renderer/RendererUtil.hpp"
+#include "Renderer/Raytracing/Raytracing.hpp"
+#include "Renderer/SSAO.hpp"
 #include "Timer.hpp"
 
 #include "RapidHotload.hpp"
 
-const static auto TILE_SIZE = 24;
+constexpr static auto TILE_SIZE = 24;
 
 struct LightVolumeData
 {

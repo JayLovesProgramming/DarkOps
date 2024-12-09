@@ -1,11 +1,13 @@
 #pragma once
+
 #include <vulkan/vulkan.h>
 #include "vk_mem_alloc.h"
-#include "../../../Utils/ErrorHandling/ErrorChecking.hpp"
+#include "Utils/ErrorHandling/ErrorChecking.hpp"
 
-namespace Vulkan {
-
-    struct DepthTarget {
+namespace Vulkan
+{
+    struct DepthTarget 
+    {
         VkImage _image = VK_NULL_HANDLE;
         VkImageView _view = VK_NULL_HANDLE;
         VmaAllocation _allocation = VK_NULL_HANDLE;
@@ -17,14 +19,18 @@ namespace Vulkan {
 
         DepthTarget() {};
         
-        DepthTarget(VkDevice device, VmaAllocator allocator, VkFormat format, uint32_t width, uint32_t height) {
-
+        DepthTarget(VkDevice device, VmaAllocator allocator, VkFormat format, uint32_t width, uint32_t height)
+        {
             //_currentLayout = VK_IMAGE_LAYOUT_UNDEFINED;;
             //_currentAccessMask = VK_ACCESS_MEMORY_READ_BIT;
             //_currentStageFlags = VK_PIPELINE_STAGE_TRANSFER_BIT;
 
             _format = format;
-            _extent = { width, height, 1 };
+            _extent = { 
+                width, 
+                height, 
+                1 
+            };
 
             VkImageCreateInfo info = { };
             info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -57,7 +63,8 @@ namespace Vulkan {
 
         }
 
-        void InsertImageBarrier(VkCommandBuffer cmdbuffer, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask) {
+        void InsertImageBarrier(VkCommandBuffer cmdbuffer, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask) 
+        {
             VkImageSubresourceRange range;
             range.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
             range.baseMipLevel = 0;
@@ -80,8 +87,10 @@ namespace Vulkan {
             _currentStageFlags = dstStageMask;
         }
 
-        void cleanup(VkDevice device, VmaAllocator allocator) {
-            if (_allocation == VK_NULL_HANDLE) {
+        void cleanup(VkDevice device, VmaAllocator allocator)
+        {
+            if (_allocation == VK_NULL_HANDLE) 
+            {
                 return;
             }
             vkDestroyImageView(device, _view, nullptr);

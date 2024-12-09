@@ -4,7 +4,13 @@
 #include <string>
 #include <unordered_map>
 
-enum class WeaponType { MELEE, PISTOL, SHOTGUN, AUTOMATIC };
+enum class WeaponType 
+{ 
+    MELEE, 
+    PISTOL, 
+    SHOTGUN, 
+    AUTOMATIC 
+};
 
 struct AnimationNames 
 {

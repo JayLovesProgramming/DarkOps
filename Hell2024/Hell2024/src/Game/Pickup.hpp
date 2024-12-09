@@ -4,7 +4,10 @@
 
 struct PickUp
 {
-    enum class Type { GLOCK_AMMO = 0 };
+    enum class Type 
+    { 
+        GLOCK_AMMO = 0 
+    };
 
     Type type;
     glm::vec3 position;

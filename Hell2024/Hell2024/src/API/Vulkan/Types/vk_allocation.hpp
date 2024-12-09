@@ -1,21 +1,24 @@
 #pragma once
+
 #include <vulkan/vulkan.h>
 #include "vk_mem_alloc.h"
-#include "../../../Utils/ErrorHandling/ErrorChecking.hpp"
+#include "Utils/ErrorHandling/ErrorChecking.hpp"
 
-struct AllocatedImage {
+struct AllocatedImage 
+{
     VkImage _image;
     VmaAllocation _allocation;
 };
 
-struct AllocatedBuffer {
+struct AllocatedBuffer
+{
     VkBuffer _buffer = VK_NULL_HANDLE;
     VmaAllocation _allocation;
     void* _mapped = nullptr;
 };
 
-inline AllocatedBuffer CreateBuffer(VmaAllocator allocator, size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memoryUsage, VkMemoryPropertyFlags requiredFlags) {
-
+inline AllocatedBuffer CreateBuffer(VmaAllocator allocator, size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memoryUsage, VkMemoryPropertyFlags requiredFlags) 
+{
     VkBufferCreateInfo bufferInfo = {};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.pNext = nullptr;

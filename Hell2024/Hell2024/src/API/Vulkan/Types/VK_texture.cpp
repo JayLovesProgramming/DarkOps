@@ -1,6 +1,8 @@
+#pragma once
+
 #include "VK_texture.h"
-#include "../../../API/Vulkan/VK_assetManager.h"
-#include "../../../Utils/Util.hpp"
+#include "API/Vulkan/VK_assetManager.h"
+#include "Utils/Util.hpp"
 
 int VulkanTexture::GetWidth()
 {

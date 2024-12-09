@@ -1,11 +1,12 @@
 #pragma once
-#include "../VK_common.h"
+
+#include "VK_common.h"
 #include <vector>
 #include <string>
 #include <iostream>
 
-struct ComputePipeline {
-
+struct ComputePipeline 
+{
 private:
     VkPipeline m_handle;
     VkPipelineLayout m_layout = VK_NULL_HANDLE;
@@ -15,8 +16,8 @@ private:
 
 public:
 
-    void Build(VkDevice device, VkShaderModule computeShaderModule) {
-
+    void Build(VkDevice device, VkShaderModule computeShaderModule) 
+    {
         VkPushConstantRange pushConstantRange;
         pushConstantRange.offset = 0;
         pushConstantRange.size = m_pushConstantSize;
@@ -29,7 +30,8 @@ public:
         pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
         pipelineLayoutInfo.pushConstantRangeCount = m_pushConstantCount;
 
-        if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) {
+        if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS)
+        {
             std::cout << "Failed to create compute pipeline layout!";
         }
 
@@ -44,26 +46,30 @@ public:
         pipelineInfo.layout = m_layout;
         pipelineInfo.stage = computeShaderStageInfo;
 
-        if (vkCreateComputePipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_handle) != VK_SUCCESS) {
+        if (vkCreateComputePipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_handle) != VK_SUCCESS)
+        {
             std::cout << "Failed to create compute pipeline!";
         }
     }
 
-    void PushDescriptorSetLayout(VkDescriptorSetLayout layout) {
+    void PushDescriptorSetLayout(VkDescriptorSetLayout layout)
+    {
         m_descriptorSetLayouts.push_back(layout);
     }
 
-    VkPipeline GetHandle() {
+    VkPipeline GetHandle() 
+    {
         return m_handle;
     }
 
-    VkPipelineLayout GetLayout() {
+    VkPipelineLayout GetLayout() 
+    {
         return m_layout;
     }
 
-    void SetPushConstantSize(uint32_t bufferSize) {
+    void SetPushConstantSize(uint32_t bufferSize) 
+    {
         m_pushConstantSize = bufferSize;
         m_pushConstantCount = 1;
     }
-
 };

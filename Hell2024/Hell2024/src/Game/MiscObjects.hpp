@@ -56,15 +56,20 @@ public:
                     {
                         cube->SetMeshMaterial("PresentD");
                     }
+
                     cube->SetMeshMaterialByMeshName("Bow", "Gold");
+
                     Transform transform;
                     transform.position = glm::vec3(2.0f, y * halfExtent * 2 + 0.2f, 3.5f);
+
                     PxShape* collisionShape = Physics::CreateBoxShape(halfExtent, halfExtent, halfExtent);
                     PxShape* raycastShape = Physics::CreateBoxShape(halfExtent, halfExtent, halfExtent);
+
                     PhysicsFilterData filterData;
                     filterData.raycastGroup = RAYCAST_DISABLED;
                     filterData.collisionGroup = CollisionGroup::GENERIC_BOUNCEABLE;
                     filterData.collidesWith = (CollisionGroup)(ENVIROMENT_OBSTACLE | GENERIC_BOUNCEABLE | RAGDOLL);
+
                     cube->SetKinematic(false);
                     cube->AddCollisionShape(collisionShape, filterData);
                     cube->SetRaycastShape(raycastShape);
