@@ -453,8 +453,8 @@ namespace Util
 		return ray_wor;
     }
 
-    inline PhysXRayResult CastPhysXRay(glm::vec3 rayOrigin, glm::vec3 rayDirection, float rayLength, PxU32 collisionFlags, bool cullBackFacing = false) {
-
+    inline PhysXRayResult CastPhysXRay(glm::vec3 rayOrigin, glm::vec3 rayDirection, float rayLength, PxU32 collisionFlags, bool cullBackFacing = false)
+    {
         PxScene* scene = Physics::GetScene();
 
         PxVec3 origin = PxVec3(rayOrigin.x, rayOrigin.y, rayOrigin.z);
@@ -462,14 +462,15 @@ namespace Util
         PxReal maxDistance = rayLength;
         PxRaycastBuffer hit;
         // [in] Define what parts of PxRaycastHit we're interested in
-     //   const PxHitFlags outputFlags = PxHitFlag::ePOSITION | PxHitFlag::eNORMAL | ~PxHitFlag::eMESH_BOTH_SIDES;
+        //   const PxHitFlags outputFlags = PxHitFlag::ePOSITION | PxHitFlag::eNORMAL | ~PxHitFlag::eMESH_BOTH_SIDES;
 
         PxHitFlags outputFlags = PxHitFlag::ePOSITION | PxHitFlag::eNORMAL | PxHitFlag::eMESH_BOTH_SIDES;
-        if (cullBackFacing) {
+        if (cullBackFacing) 
+        {
             outputFlags = PxHitFlag::ePOSITION | PxHitFlag::eNORMAL;
         }
 
-     // Only ray cast against objects with the GROUP_RAYCAST flag
+        // Only ray cast against objects with the GROUP_RAYCAST flag
         PxQueryFilterData filterData = PxQueryFilterData();
         filterData.data.word0 = collisionFlags;
 
@@ -486,19 +487,24 @@ namespace Util
         // Cast the ray
         bool status = scene->raycast(origin, unitDir, maxDistance, hit, outputFlags, filterData);
 
-        if (status) {
-            if (hit.block.actor->getName()) {
+        if (status) 
+        {
+            if (hit.block.actor->getName()) 
+            {
                 result.hitObjectName = hit.block.actor->getName();
             }
             else
+            {
                 result.hitObjectName = "HIT OBJECT HAS NO ACTOR NAME";
+            }
 
             result.hitPosition = glm::vec3(hit.block.position.x, hit.block.position.y, hit.block.position.z);
             result.surfaceNormal = glm::vec3(hit.block.normal.x, hit.block.normal.y, hit.block.normal.z);
             result.hitFound = true;
             result.hitActor = hit.block.actor;
 
-            if (hit.block.actor->userData) {
+            if (hit.block.actor->userData) 
+            {
                 PhysicsObjectData* physicsObjectData = (PhysicsObjectData*)hit.block.actor->userData;
                 result.objectType = physicsObjectData->type;
                 result.parent = physicsObjectData->parent;
@@ -506,7 +512,7 @@ namespace Util
             else {
                 result.objectType = ObjectType::UNDEFINED;
                 result.hitFound = false;
-                std::cout << "no user data found on ray hit\n";
+                //std::cout << "no user data found on ray hit\n";
             }
 
             /*EntityData* hitEntityData = (EntityData*)hit.block.actor->userData;
@@ -530,10 +536,12 @@ namespace Util
         return GlmMat4ToPxMat44(transform.to_mat4());
     }*/
 
-    inline void DrawFrontFacingPlane(int instanceCount) {
+    inline void DrawFrontFacingPlane(int instanceCount)
+    {
         static unsigned int frontFacingPlaneVAO = 0;
         float offset = 0.1f;
-        if (frontFacingPlaneVAO == 0) {
+        if (frontFacingPlaneVAO == 0) 
+        {
             Vertex vert0, vert1, vert2, vert3;
             vert0.position = glm::vec3(-0.5, 0.5, offset);
             vert1.position = glm::vec3(0.5, 0.5f, offset);
@@ -587,7 +595,8 @@ namespace Util
         glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, instanceCount);
     }
 
-    inline glm::mat4 PxMat44ToGlmMat4(physx::PxMat44 pxMatrix) {
+    inline glm::mat4 PxMat44ToGlmMat4(physx::PxMat44 pxMatrix) 
+    {
         glm::mat4 matrix;
         for (int x = 0; x < 4; x++)
             for (int y = 0; y < 4; y++)
@@ -595,7 +604,8 @@ namespace Util
         return matrix;
     }
 
-    inline physx::PxMat44 GlmMat4ToPxMat44(glm::mat4 glmMatrix) {
+    inline physx::PxMat44 GlmMat4ToPxMat44(glm::mat4 glmMatrix)
+    {
         physx::PxMat44 matrix;
         for (int x = 0; x < 4; x++)
             for (int y = 0; y < 4; y++)
@@ -603,7 +613,8 @@ namespace Util
         return matrix;
     }
 
-    inline glm::vec3 ClosestPointOnLine(glm::vec3 point, glm::vec3 start, glm::vec3 end) {
+    inline glm::vec3 ClosestPointOnLine(glm::vec3 point, glm::vec3 start, glm::vec3 end)
+    {
         glm::vec2 p(point.x, point.z);
         glm::vec2 v(start.x, start.z);
         glm::vec2 w(end.x, end.z);
@@ -620,11 +631,13 @@ namespace Util
         return glm::dot(C, C);
     }
 
-    inline glm::vec3 Translate(glm::mat4& translation, glm::vec3 position) {
+    inline glm::vec3 Translate(glm::mat4& translation, glm::vec3 position)
+    {
         return glm::vec3(translation * glm::vec4(position, 1.0));
     }
 
-    inline float RandomFloat(float min, float max) {
+    inline float RandomFloat(float min, float max) 
+    {
         return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
     }
 

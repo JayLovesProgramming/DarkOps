@@ -169,6 +169,8 @@ public:
     void HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime);
     void HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime);
     bool WeaponMagIsEmpty(WeaponState* weaponState);
+    void PlayFireSound(WeaponInfo* weaponInfo);
+    void PlayerRevovlerCockSound(WeaponInfo* weaponInfo);
 
     WeaponInfo* GetCurrentWeaponInfo();
     WeaponState* GetWeaponStateByName(std::string name);

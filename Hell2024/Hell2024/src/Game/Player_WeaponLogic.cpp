@@ -14,6 +14,34 @@ bool Player::WeaponMagIsEmpty(WeaponState* weaponState)
     return weaponState->ammoInMag <= 0;
 }
 
+void Player::PlayFireSound(WeaponInfo* weaponInfo)
+{
+    int rand = std::rand() % weaponInfo->audioFiles.fire.size();
+    assert(rand);
+    assert(weaponInfo->name);
+    //std::cout << weaponInfo->name << std::endl;
+    if (weaponInfo->name == "P90" || weaponInfo->name == "AKS74U")
+    {
+        Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 0.2f);
+    }
+    else if (weaponInfo->name == "Smith & Wesson")
+    {
+        Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 0.45f);
+    }
+    else
+    {
+        Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 1.0f);
+    }
+}
+
+void Player::PlayerRevovlerCockSound(WeaponInfo* weaponInfo)
+{
+    int rand = std::rand() % weaponInfo->audioFiles.fire.size();
+    assert(rand);
+    assert(weaponInfo->name);
+    Audio::PlayAudio(weaponInfo->audioFiles.revolverCocks[rand], 0.5f);
+}
+
 void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
 {
     // Melee
@@ -54,8 +82,7 @@ void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
                 _weaponAction = FIRE;
                 if (weaponInfo->audioFiles.fire.size())
                 {
-                    int rand = std::rand() % weaponInfo->audioFiles.fire.size();
-                    Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 1.0f);
+                    PlayFireSound(weaponInfo); // Melee I think
                 }
                 if (weaponInfo->animationNames.fire.size())
                 {
@@ -176,9 +203,9 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
                 }
                 if (!weaponState->hasSilencer)
                 {
-                    if (weaponInfo->audioFiles.fire.size()) {
-                        int rand = std::rand() % weaponInfo->audioFiles.fire.size();
-                        Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 1.0f);
+                    if (weaponInfo->audioFiles.fire.size()) 
+                    {
+                        PlayFireSound(weaponInfo);
                     }
                 }
                 else
@@ -241,8 +268,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
             m_revolverNeedsCocking &&
             viewWeapon->AnimationIsPastFrameNumber(weaponInfo->revolverCockFrameNumber))
         {
-            int rand = std::rand() % weaponInfo->audioFiles.revolverCocks.size();
-            Audio::PlayAudio(weaponInfo->audioFiles.revolverCocks[rand], 1.0f);
+            PlayerRevovlerCockSound(weaponInfo);
             m_revolverNeedsCocking = false;
         }
 
@@ -263,16 +289,19 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
             SpawnCasing(ammoInfo);
             weaponState->ammoInMag--;
 
-            if (!weaponState->hasSilencer) {
-                if (weaponInfo->audioFiles.fire.size()) {
-                    int rand = std::rand() % weaponInfo->audioFiles.fire.size();
-                    Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 1.0f);
+            if (!weaponState->hasSilencer)
+            {
+                if (weaponInfo->audioFiles.fire.size()) 
+                {
+                    PlayFireSound(weaponInfo);
                 }
             }
-            else {
+            else 
+            {
                 Audio::PlayAudio("Silenced.wav", 1.0f);
             }
-            if (weaponInfo->animationNames.fire.size()) {
+            if (weaponInfo->animationNames.fire.size()) 
+            {
                 int rand = std::rand() % weaponInfo->animationNames.fire.size();
                 viewWeapon->PlayAnimation(weaponInfo->animationNames.fire[rand], weaponInfo->animationSpeeds.fire);
             }
@@ -298,11 +327,13 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
                     }
 
                     //  viewWeapon->PlayAnimation(weaponInfo->animationNames.reloadempty, 1.0f);
+                    std::cout << "C" << std::endl;
                     Audio::PlayAudio(weaponInfo->audioFiles.reloadEmpty, 0.7f);
                     _weaponAction = RELOAD_FROM_EMPTY;
                 }
                 else {
                     viewWeapon->PlayAnimation(weaponInfo->animationNames.reload, weaponInfo->animationSpeeds.reload);
+                    std::cout << "D" << std::endl;
                     Audio::PlayAudio(weaponInfo->audioFiles.reload, 0.8f);
                     _weaponAction = RELOAD;
                 }

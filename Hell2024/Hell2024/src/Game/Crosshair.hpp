@@ -27,9 +27,12 @@ public:
 
     static void DrawCrosshair(hell::ivec2 viewportCenter, WeaponInfo* weaponInfo, std::vector<RenderItem2D>* renderItems, int m_crosshairCrossSize, hell::ivec2 presentSize)
     {
+        //if (weaponInfo->type == Weapo)
+
         hell::ivec2 crosshairPos = viewportCenter;
 
         Player player;
+
         if (player.GetCrosshairType() == CrosshairType::REGULAR)
         {
             renderItems->push_back(RendererUtil::CreateRenderItem2D("CrosshairCrossLeft", crosshairPos + hell::ivec2{ -int(m_crosshairCrossSize + Config::CROSSHAIR_GAP), 0 }, presentSize, Alignment::CENTERED));

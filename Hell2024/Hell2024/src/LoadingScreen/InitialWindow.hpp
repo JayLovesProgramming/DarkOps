@@ -42,7 +42,8 @@ constexpr static float gifWidth = gifSize;
 
 // Debug
 constexpr static auto debugInitialWindow = true;
-constexpr static auto loadingTime = debugInitialWindow ? 0.0005f : 0.005f; // Load slower to clearly see the loading process
+constexpr static bool quickLoad = true;
+constexpr static auto loadingTime = quickLoad ? 0.005f : 0.0005f; // Load slower to clearly see the loading process
 static auto loadingProgress = 0.0f;
 
 // LOAD
