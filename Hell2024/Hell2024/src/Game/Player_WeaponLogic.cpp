@@ -895,15 +895,15 @@ bool Player::CanReload()
     }*/
 }
 
-void Player::UpdateWeaponSway(float deltaTime) {
-
+void Player::UpdateWeaponSway(float deltaTime)
+{
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
     WeaponState* weaponState = GetCurrentWeaponState();
     AnimatedGameObject* viewWeaponModel = GetViewWeaponAnimatedGameObject();
     AnimatedGameObject* characterModel = GetCharacterAnimatedGameObject();
 
-    if (HasControl()) {
-
+    if (HasControl())
+    {
         WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
         AnimatedGameObject* viewWeapon = Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "viewWeapon");
 

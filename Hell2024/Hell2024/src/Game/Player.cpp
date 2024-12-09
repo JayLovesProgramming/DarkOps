@@ -418,28 +418,33 @@ void Player::RotateWeapons(bool nextWeapon)
         m_currentWeaponIndex--; // Give previous weapon
         Audio::PlayAudio("NextWeapon.wav", 0.5f);
     }
-
-    if (m_currentWeaponIndex == m_weaponStates.size())
+    if (m_currentWeaponIndex < 0) // Start of weapon cycle and you go back it will give you the end of the cycle
+    {
+        m_currentWeaponIndex = m_weaponStates.size() - 1;
+    }
+    else if (m_currentWeaponIndex == m_weaponStates.size()) // End at the weapon cycle and gone forward so give knife
     {
         m_currentWeaponIndex = 0;
     }
 
-    while (!m_weaponStates[m_currentWeaponIndex].has)
-    {
-        if (nextWeapon)
-        {
-            m_currentWeaponIndex++; // Give next weapon
-        }
-        else
-        {
-            m_currentWeaponIndex--; // Give previous weapon
-        }
+    //while (!m_weaponStates[m_currentWeaponIndex].has)
+    //{
+    //    if (nextWeapon)
+    //    {
+    //        m_currentWeaponIndex++; // Give next weapon
+    //    }
+    //    else
+    //    {
+    //        m_currentWeaponIndex--; // Give previous weapon
+    //    }
+    //    std::cout << "D" << m_currentWeaponIndex << std::endl;
 
-        if (m_currentWeaponIndex == m_weaponStates.size())
-        {
-            m_currentWeaponIndex = 0;
-        }
-    }
+    //    if (m_currentWeaponIndex == m_weaponStates.size())
+    //    {
+    //        m_currentWeaponIndex = 0;
+    //    }
+    //    std::cout << "E" << m_currentWeaponIndex << std::endl;
+    //}
 
     SwitchWeapon(m_weaponStates[m_currentWeaponIndex].name, DRAW_BEGIN);
 }
@@ -463,8 +468,6 @@ void Player::CheckForAndEvaluateNextWeaponPress()
 
 void Player::CheckForEnviromentalDamage(float deltaTime)
 {
-    // THIS HAS BEEN BROKEN EVER SINCE YOU MOVED TO CSG GEOMETRY FOR THE MAP!
-    // THIS HAS BEEN BROKEN EVER SINCE YOU MOVED TO CSG GEOMETRY FOR THE MAP!
     // THIS HAS BEEN BROKEN EVER SINCE YOU MOVED TO CSG GEOMETRY FOR THE MAP!
 
     _isOutside = false;
@@ -1999,72 +2002,91 @@ void Player::Kill()
     Audio::PlayAudio("Death0.wav", 1.0f);
 }
 
+bool Player::IsLookingAtOtherPlayer(glm::vec3 myPos, glm::vec3 theirPos, glm::vec3 cameraForward, float maxDistance, float minDotProduct)
+{
+    glm::vec3 toOtherPlayer = glm::normalize(theirPos - myPos);
+    float distanceToPlayer = glm::distance(myPos, theirPos);
+
+    // The forward vector is inverted in the original code, so we'll do the same here
+    glm::vec3 forward = cameraForward * glm::vec3(-1);
+
+    float dotProduct = glm::dot(forward, toOtherPlayer);
+
+    // Debug output (optional)
+    //std::cout << "Dot product: " << dotProduct << "\n";
+    //std::cout << "Distance: " << distanceToPlayer << "\n";
+
+    return (dotProduct > minDotProduct && distanceToPlayer < maxDistance);
+}
+
 void Player::CheckForMeleeHit()
 {
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
-    if (weaponInfo) 
+    if (!weaponInfo)
     {
-        for (int i = 0; i < Game::GetPlayerCount(); i++) 
+        return;
+    }
+
+    for (int i = 0; i < Game::GetPlayerCount(); i++) 
+    {
+        Player* otherPlayer = Game::GetPlayerByIndex(i);
+
+        // Skip self
+        if (otherPlayer == this)
+            continue;
+
+        if (otherPlayer->IsAlive())
         {
-            Player* otherPlayer = Game::GetPlayerByIndex(i);
+            bool knifeHit = false;
 
-            // skip self
-            if (otherPlayer == this)
-                continue;
+            glm::vec3 myPos = GetViewPos();
+            glm::vec3 theirPos = otherPlayer->GetViewPos();
+            glm::vec3 forward = GetCameraForward() * glm::vec3(-1);
 
-            if (!otherPlayer->_isDead)
+            glm::vec3 v = glm::normalize(myPos - theirPos);
+            float distToEnemy = glm::distance(myPos, theirPos);
+
+            bool canHitWithKnife = IsLookingAtOtherPlayer(GetViewPos(), otherPlayer->GetViewPos(), GetCameraForward());;
+            //std::cout << "Is looking at other player? :" << canHitWithKnife << "\n";
+            if (canHitWithKnife && distToEnemy < 0.85f)
             {
-                bool knifeHit = false;
+                knifeHit = true;
+            }
 
-                glm::vec3 myPos = GetViewPos();
-                glm::vec3 theirPos = otherPlayer->GetViewPos();
-                glm::vec3 forward = GetCameraForward() * glm::vec3(-1);
-
-                glm::vec3 v = glm::normalize(myPos - theirPos);
-                float distToEnemy = glm::distance(myPos, theirPos);
-
-                float dotProduct = glm::dot(forward, v);
-                std::cout << dotProduct << "\n";
-                if (dotProduct < -0.65 && distToEnemy < 1.0f)
+            if (knifeHit)
+            {
+                // Apply damage
+                if (otherPlayer->_health > 0)
                 {
-                    knifeHit = true;
-                }
+                    otherPlayer->_health -= weaponInfo->damage;// +rand() % 50;
 
-                if (knifeHit)
-                {
-                    // apply damage
-                    if (otherPlayer->_health > 0)
+                    otherPlayer->GiveDamageColor();
+
+                    // Can they be killed? In other words, if they are dead, we cannot possibly kill them again... Maybe implement a downed system here
+                    if (otherPlayer->_health <= 0 && otherPlayer->IsAlive())
                     {
-                        otherPlayer->_health -= weaponInfo->damage;// +rand() % 50;
-
-                        otherPlayer->GiveDamageColor();
-
-                        // Are they dead???
-                        if (otherPlayer->_health <= 0 && !otherPlayer->_isDead)
-                        {
-                            otherPlayer->_health = 0;
-                            std::string file = "Death0.wav";
-                            Audio::PlayAudio(file.c_str(), 1.0f);
-                            otherPlayer->Kill();
-                            std::cout << "KILL E" << std::endl;
-                            m_killCount++;
-                        }
+                        otherPlayer->_health = 0;
+                        std::string file = "Death0.wav";
+                        Audio::PlayAudio(file.c_str(), 1.0f);
+                        otherPlayer->Kill();
+                        // Instead of killing, enter a downed state
+                        m_killCount++;
                     }
-
-                    // Audio
-                    const std::vector<std::string> fleshImpactFilenames = {
-                        "FLY_Bullet_Impact_Flesh_1.wav",
-                        "FLY_Bullet_Impact_Flesh_2.wav",
-                        "FLY_Bullet_Impact_Flesh_3.wav",
-                        "FLY_Bullet_Impact_Flesh_4.wav",
-                        "FLY_Bullet_Impact_Flesh_5.wav",
-                        "FLY_Bullet_Impact_Flesh_6.wav",
-                        "FLY_Bullet_Impact_Flesh_7.wav",
-                        "FLY_Bullet_Impact_Flesh_8.wav",
-                    };
-                    int random = rand() % 8;
-                    Audio::PlayAudio(fleshImpactFilenames[random], 0.5f);
                 }
+
+                // Audio
+                const std::vector<std::string> fleshImpactFilenames = {
+                    "FLY_Bullet_Impact_Flesh_1.wav",
+                    "FLY_Bullet_Impact_Flesh_2.wav",
+                    "FLY_Bullet_Impact_Flesh_3.wav",
+                    "FLY_Bullet_Impact_Flesh_4.wav",
+                    "FLY_Bullet_Impact_Flesh_5.wav",
+                    "FLY_Bullet_Impact_Flesh_6.wav",
+                    "FLY_Bullet_Impact_Flesh_7.wav",
+                    "FLY_Bullet_Impact_Flesh_8.wav",
+                };
+                int random = rand() % 8;
+                Audio::PlayAudio(fleshImpactFilenames[random], 0.5f);
             }
         }
     }

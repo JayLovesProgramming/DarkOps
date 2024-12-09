@@ -156,6 +156,7 @@ public:
     void CheckForDeath();
     void CheckForDebugKeyPresses();
     void CheckForSuicide();
+    bool IsLookingAtOtherPlayer(glm::vec3 myPos, glm::vec3 theirPos, glm::vec3 cameraForward, float maxDistance = 0.65f, float minDotProduct = 0.8f);
 
     // State queries
     bool IsMoving();

@@ -1329,26 +1329,29 @@ namespace Editor
             //textLocation.y -= 40;
             g_backgroundLocation = textLocation - hell::ivec2(menuMargin.x, -menuMargin.y);
             hell::ivec2 viewportSize = hell::ivec2(PRESENT_WIDTH, PRESENT_HEIGHT);
+            const static hell::ivec2 roundCounterSize = { 1920, 1080 };
+            const static hell::ivec2 test = { 480, 270 };
             g_backgroundSize = TextBlitter::GetTextSizeInPixels(menuText, viewportSize, BitmapFontType::STANDARD) + hell::ivec2(menuMargin.x * 2, menuMargin.y * 2);
             g_backgroundSize.x = 200;
             hell::ivec2 headingLocation = hell::ivec2(g_backgroundLocation.x + g_backgroundSize.x / 2, textLocation.y);
 
-            RenderItem2D bg = RendererUtil::CreateRenderItem2D("MenuBG", g_backgroundLocation, viewportSize, Alignment::TOP_LEFT, menuColor, g_backgroundSize);
-            std::vector<RenderItem2D> textRenderItems = TextBlitter::CreateText(menuText, textLocation, viewportSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD);
-            std::vector<RenderItem2D> headingRenderItems = TextBlitter::CreateText(headingText, headingLocation, viewportSize, Alignment::CENTERED, BitmapFontType::STANDARD);
+            RenderItem2D bg = RendererUtil::CreateRenderItem2D("MenuBG", test, roundCounterSize, Alignment::TOP_RIGHT);
+            std::vector<RenderItem2D> textRenderItems = TextBlitter::CreateText(menuText, test, roundCounterSize, Alignment::TOP_RIGHT, BitmapFontType::STANDARD);
+            std::vector<RenderItem2D> headingRenderItems = TextBlitter::CreateText(headingText, test, roundCounterSize, Alignment::TOP_RIGHT, BitmapFontType::STANDARD);
 
             gMenuRenderItems.clear();
             gMenuRenderItems.push_back(bg);
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderHorizontal", g_backgroundLocation, viewportSize, Alignment::BOTTOM_LEFT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderHorizontal", { g_backgroundLocation.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_LEFT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderVertical", { g_backgroundLocation.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::BOTTOM_RIGHT, menuColor, hell::ivec2(3, g_backgroundSize.y)));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderHorizontal", test, roundCounterSize, Alignment::TOP_RIGHT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderHorizontal", test, roundCounterSize, Alignment::TOP_LEFT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderVertical", test, roundCounterSize, Alignment::TOP_LEFT, menuColor, hell::ivec2(3, g_backgroundSize.y)));
             gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderVertical", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::BOTTOM_LEFT, menuColor, hell::ivec2(3, g_backgroundSize.y)));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerTL", g_backgroundLocation, viewportSize, Alignment::BOTTOM_RIGHT, menuColor));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerTL", g_backgroundLocation, viewportSize, Alignment::TOP_RIGHT, menuColor));
             gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerTR", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y }, viewportSize, Alignment::BOTTOM_LEFT, menuColor));
             gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerBL", { g_backgroundLocation.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_RIGHT, menuColor));
             gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerBR", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_LEFT, menuColor));
             RendererUtil::AddRenderItems(gMenuRenderItems, textRenderItems);
             RendererUtil::AddRenderItems(gMenuRenderItems, headingRenderItems);
+            //std::cout << "Rendering menu debug UI" << std::endl;
         }
 
         // UI
