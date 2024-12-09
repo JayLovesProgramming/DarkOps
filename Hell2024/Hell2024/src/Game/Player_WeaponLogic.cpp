@@ -624,7 +624,8 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
     // Remove Smith bullets you don't have
     if (weaponInfo->name == "Smith & Wesson")
     {
-        /*if (_weaponAction == RELOAD_REVOLVER_BEGIN && viewWeapon->AnimationIsPastFrameNumber(30)) {
+        if (_weaponAction == RELOAD_REVOLVER_BEGIN && viewWeapon->AnimationIsPastFrameNumber(30)) 
+        {
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_0");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_1");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_2");
@@ -633,9 +634,10 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_5");
         }
 
-        if (_weaponAction == RELOAD_REVOLVER_LOOP) {
-
-            if (GetCurrentWeaponMagAmmo() == 1) {
+        if (_weaponAction == RELOAD_REVOLVER_LOOP)
+        {
+            if (GetCurrentWeaponMagAmmo() == 1)
+            {
                 viewWeapon->DisableDrawingForMeshByMeshName("Bullet_0");
                 viewWeapon->EnableDrawingForMeshByMeshName("Bullet_1");
                 viewWeapon->DisableDrawingForMeshByMeshName("Bullet_2");
@@ -644,17 +646,21 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
                 viewWeapon->DisableDrawingForMeshByMeshName("Bullet_5");
             }
 
-            if (m_revolverReloadIterations == 2) {
-                if (viewWeapon->AnimationIsPastFrameNumber(8)) {
+            if (m_revolverReloadIterations == 2) 
+            {
+                if (viewWeapon->AnimationIsPastFrameNumber(8))
+                {
                     //viewWeapon->EnableDrawingForMeshByMeshName("Bullet_0");
                 }
-                else {
+                else 
+                {
                     viewWeapon->EnableDrawingForMeshByMeshName("Bullet_0");
                 }
             }
-        }*/
-        /*
-        if (GetCurrentWeaponMagAmmo() == 2) {
+        }
+
+        if (GetCurrentWeaponMagAmmo() == 2)
+        {
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_0");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_1");
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_2");
@@ -662,7 +668,9 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_4");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_5");
         }
-        if (GetCurrentWeaponMagAmmo() == 3) {
+
+        if (GetCurrentWeaponMagAmmo() == 3)
+        {
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_0");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_1");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_2");
@@ -670,7 +678,9 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_4");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_5");
         }
-        if (GetCurrentWeaponMagAmmo() == 4) {
+
+        if (GetCurrentWeaponMagAmmo() == 4)
+        {
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_0");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_1");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_2");
@@ -678,7 +688,9 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_4");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_5");
         }
-        if (GetCurrentWeaponMagAmmo() == 5) {
+
+        if (GetCurrentWeaponMagAmmo() == 5) 
+        {
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_0");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_1");
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_2");
@@ -686,14 +698,16 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
             viewWeapon->DisableDrawingForMeshByMeshName("Bullet_4");
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_5");
         }
-        if (GetCurrentWeaponMagAmmo() == 6) {
+
+        if (GetCurrentWeaponMagAmmo() == 6)
+        {
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_0");
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_1");
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_2");
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_3");
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_4");
             viewWeapon->EnableDrawingForMeshByMeshName("Bullet_5");
-        }*/
+        }
     }
 
 
@@ -711,8 +725,6 @@ void Player::UpdateViewWeaponLogic(float deltaTime)
         m_crosshairCrossSize = CrosshairManager::CrosshairShrink(m_crosshairCrossSize, deltaTime);
     }
 }
-
-// Everything else
 
 bool Player::CanMelee()
 {
