@@ -1,6 +1,8 @@
 #include "WeaponManager.hpp"
+
 #include <vector>
 #include <algorithm>
+
 #include "Core/AssetManager.hpp"
 #include "Physics/Physics.hpp"
 
@@ -10,88 +12,22 @@ namespace WeaponManager
     std::vector<WeaponInfo> g_weapons;
     std::vector<WeaponAttachmentInfo> g_attachments;
 
-
-    static void AKS74U_INIT()
-    {
-        WeaponInfo& aks74u = g_weapons.emplace_back();
-        aks74u.name = "AKS74U";
-        aks74u.modelName = "AKS74U";
-        aks74u.type = WeaponType::AUTOMATIC;
-        aks74u.damage = 15;
-        aks74u.animationNames.idle = "AKS74U_Idle";
-        aks74u.animationNames.walk = "AKS74U_Walk";
-        aks74u.animationNames.draw = "AKS74U_Draw";
-        aks74u.animationNames.reload = "AKS74U_Reload";
-        aks74u.animationNames.reloadempty.push_back("AKS74U_ReloadEmpty");
-        aks74u.animationNames.fire.push_back("AKS74U_Fire0");
-        aks74u.animationNames.fire.push_back("AKS74U_Fire1");
-        aks74u.animationNames.fire.push_back("AKS74U_Fire2");
-        aks74u.animationNames.draw = "AKS74U_Draw";
-        aks74u.hiddenMeshAtStart.push_back("ArmsFemale");
-        aks74u.meshMaterials["ArmsMale"] = "Hands";
-        aks74u.meshMaterials["ArmsFemale"] = "FemaleArms";
-        aks74u.meshMaterials["AKS74UBarrel"] = "AKS74U_4";
-        aks74u.meshMaterials["AKS74UBolt"] = "AKS74U_1";
-        aks74u.meshMaterials["AKS74UHandGuard"] = "AKS74U_0";
-        aks74u.meshMaterials["AKS74UMag"] = "AKS74U_3";
-        aks74u.meshMaterials["AKS74UPistolGrip"] = "AKS74U_2";
-        aks74u.meshMaterials["AKS74UReceiver"] = "AKS74U_1";
-        aks74u.ammoType = "AKS74U";
-        aks74u.magSize = 30;
-        aks74u.muzzleFlashBoneName = "Weapon";
-        aks74u.muzzleFlashOffset = glm::vec3(0, 0.002, 0.02f);
-        aks74u.casingEjectionBoneName = "SlideCatch";
-        aks74u.casingEjectionOffset = glm::vec3(0, 0, 0);
-        aks74u.animationCancelPercentages.fire = 20.0f;
-        aks74u.animationCancelPercentages.reload = 80.0f;
-        aks74u.animationCancelPercentages.reloadFromEmpty = 95.0f;
-        aks74u.animationCancelPercentages.draw = 75.0f;
-        aks74u.animationCancelPercentages.adsFire = 22.0f;
-        aks74u.audioFiles.fire.push_back("AKS74U_Fire0.wav");
-        aks74u.audioFiles.fire.push_back("AKS74U_Fire1.wav");
-        aks74u.audioFiles.fire.push_back("AKS74U_Fire2.wav");
-        aks74u.audioFiles.fire.push_back("AKS74U_Fire3.wav");
-        aks74u.audioFiles.reload = "AKS74U_Reload.wav";
-        aks74u.audioFiles.reloadEmpty = "AKS74U_ReloadEmpty.wav";
-        aks74u.animationSpeeds.fire = 1.625f;
-        aks74u.muzzleFlashBoneName = "Muzzle";
-        aks74u.casingEjectionBoneName = "EjectionPort";
-        aks74u.muzzleFlashScale = 1.5f;
-        aks74u.casingEjectionForce = 3.5f;
-        aks74u.animationNames.adsIn = "AKS74U_ADS_In";
-        aks74u.animationNames.adsOut = "AKS74U_ADS_Out";
-        aks74u.animationNames.adsIdle = "AKS74U_ADS_Idle";
-        aks74u.animationNames.adsWalk = "AKS74U_ADS_Walk";
-        aks74u.reloadMagInFrameNumber = 23;
-        aks74u.reloadEmptyMagInFrameNumber = 21;
-        aks74u.pickupModelName = "AKS74U_Carlos";
-        aks74u.pickupConvexMeshModelName = "AKS74U_Carlos_ConvexMesh";
-        aks74u.pickUpMeshMaterials["FrontSight_low"] = "AKS74U_0";
-        aks74u.pickUpMeshMaterials["Receiver_low"] = "AKS74U_1";
-        aks74u.pickUpMeshMaterials["BoltCarrier_low"] = "AKS74U_1";
-        aks74u.pickUpMeshMaterials["SafetySwitch_low"] = "AKS74U_1";
-        aks74u.pickUpMeshMaterials["Pistol_low"] = "AKS74U_2";
-        aks74u.pickUpMeshMaterials["Trigger_low"] = "AKS74U_2";
-        aks74u.pickUpMeshMaterials["MagRelease_low"] = "AKS74U_2";
-        aks74u.pickUpMeshMaterials["Magazine_Housing_low"] = "AKS74U_3";
-        aks74u.pickUpMeshMaterials["BarrelTip_low"] = "AKS74U_4";
-    }
-
     static void KNIFE_INIT()
     {
         WeaponInfo& knife = g_weapons.emplace_back();
-        knife.name = "Knife";
-        knife.modelName = "Knife";
-        knife.type = WeaponType::MELEE;
-        knife.damage = 20;
-        knife.animationNames.idle = "Knife_Idle";
-        knife.animationNames.walk = "Knife_Walk";
-        knife.animationNames.draw = "Knife_Draw";
-        knife.animationNames.fire.push_back("Knife_Swing0");
-        knife.animationNames.fire.push_back("Knife_Swing1");
-        knife.animationNames.fire.push_back("Knife_Swing2");
-        knife.audioFiles.fire.push_back("Knife.wav");
-        knife.meshMaterials["Knife"] = "Knife";
+        knife.name = "Knife"; // Weapon Name
+        knife.modelName = "Knife"; // Weapon Model Name
+        knife.type = WeaponType::MELEE; // Weapon Type
+        knife.damage = 10; // Weapon Damage Value
+        knife.animationNames.idle = "Knife_Idle"; // Weapon Idle Animation
+        knife.animationNames.walk = "Knife_Walk"; // Weapon Walk Animation
+        knife.animationNames.draw = "Knife_Draw"; // Weapon Draw Animation
+
+        knife.animationNames.fire.push_back("Knife_Swing0"); // Knife Swing (0) Animation
+        knife.animationNames.fire.push_back("Knife_Swing1"); // Knife Swing (1) Animation
+        knife.animationNames.fire.push_back("Knife_Swing2"); // Knife Swing (2) Animation
+        knife.audioFiles.fire.push_back("Knife.wav"); // Knife Sound
+        knife.meshMaterials["Knife"] = "Knife"; // Knife Material (aka texture)
         knife.meshMaterials["ArmsMale"] = "Hands";
         knife.meshMaterials["ArmsFemale"] = "FemaleArms";
         knife.hiddenMeshAtStart.push_back("ArmsFemale");
@@ -116,6 +52,85 @@ namespace WeaponManager
         knife2.meshMaterials["ArmsFemale"] = "FemaleArms";
         knife2.hiddenMeshAtStart.push_back("ArmsFemale");
         knife2.isGold = true;
+    }
+
+    static void AKS74U_INIT()
+    {
+        WeaponInfo& aks74u = g_weapons.emplace_back();
+
+        aks74u.name = "AKS74U";
+        aks74u.modelName = "AKS74U";
+        aks74u.type = WeaponType::AUTOMATIC;
+        aks74u.damage = 15;
+
+        aks74u.animationNames.idle = "AKS74U_Idle";
+        aks74u.animationNames.walk = "AKS74U_Walk";
+        aks74u.animationNames.draw = "AKS74U_Draw";
+        aks74u.animationNames.reload = "AKS74U_Reload";
+        aks74u.animationNames.reloadempty.push_back("AKS74U_ReloadEmpty");
+
+        aks74u.animationNames.fire.push_back("AKS74U_Fire0");
+        aks74u.animationNames.fire.push_back("AKS74U_Fire1");
+        aks74u.animationNames.fire.push_back("AKS74U_Fire2");
+
+        aks74u.animationNames.draw = "AKS74U_Draw";
+        aks74u.hiddenMeshAtStart.push_back("ArmsFemale");
+
+        aks74u.meshMaterials["ArmsMale"] = "Hands";
+        aks74u.meshMaterials["ArmsFemale"] = "FemaleArms";
+        aks74u.meshMaterials["AKS74UBarrel"] = "AKS74U_4";
+        aks74u.meshMaterials["AKS74UBolt"] = "AKS74U_1";
+        aks74u.meshMaterials["AKS74UHandGuard"] = "AKS74U_0";
+        aks74u.meshMaterials["AKS74UMag"] = "AKS74U_3";
+        aks74u.meshMaterials["AKS74UPistolGrip"] = "AKS74U_2";
+        aks74u.meshMaterials["AKS74UReceiver"] = "AKS74U_1";
+
+        aks74u.ammoType = "AKS74U";
+        aks74u.magSize = 30;
+        aks74u.muzzleFlashBoneName = "Weapon";
+        aks74u.muzzleFlashOffset = glm::vec3(0, 0.002, 0.02f);
+        aks74u.casingEjectionBoneName = "SlideCatch";
+        aks74u.casingEjectionOffset = glm::vec3(0, 0, 0);
+        aks74u.animationCancelPercentages.fire = 20.0f;
+        aks74u.animationCancelPercentages.reload = 80.0f;
+        aks74u.animationCancelPercentages.reloadFromEmpty = 95.0f;
+        aks74u.animationCancelPercentages.draw = 75.0f;
+        aks74u.animationCancelPercentages.adsFire = 22.0f;
+
+        aks74u.audioFiles.fire.push_back("AKS74U_Fire0.wav");
+        aks74u.audioFiles.fire.push_back("AKS74U_Fire1.wav");
+        aks74u.audioFiles.fire.push_back("AKS74U_Fire2.wav");
+        aks74u.audioFiles.fire.push_back("AKS74U_Fire3.wav");
+
+        aks74u.audioFiles.reload = "AKS74U_Reload.wav";
+        aks74u.audioFiles.reloadEmpty = "AKS74U_ReloadEmpty.wav";
+
+        aks74u.animationSpeeds.fire = 1.625f;
+        aks74u.muzzleFlashBoneName = "Muzzle";
+        aks74u.casingEjectionBoneName = "EjectionPort";
+        aks74u.muzzleFlashScale = 1.5f;
+        aks74u.casingEjectionForce = 3.5f;
+
+        aks74u.animationNames.adsIn = "AKS74U_ADS_In";
+        aks74u.animationNames.adsOut = "AKS74U_ADS_Out";
+        aks74u.animationNames.adsIdle = "AKS74U_ADS_Idle";
+        aks74u.animationNames.adsWalk = "AKS74U_ADS_Walk";
+
+        aks74u.reloadMagInFrameNumber = 23;
+        aks74u.reloadEmptyMagInFrameNumber = 21;
+
+        aks74u.pickupModelName = "AKS74U_Carlos";
+        aks74u.pickupConvexMeshModelName = "AKS74U_Carlos_ConvexMesh";
+
+        aks74u.pickUpMeshMaterials["FrontSight_low"] = "AKS74U_0";
+        aks74u.pickUpMeshMaterials["Receiver_low"] = "AKS74U_1";
+        aks74u.pickUpMeshMaterials["BoltCarrier_low"] = "AKS74U_1";
+        aks74u.pickUpMeshMaterials["SafetySwitch_low"] = "AKS74U_1";
+        aks74u.pickUpMeshMaterials["Pistol_low"] = "AKS74U_2";
+        aks74u.pickUpMeshMaterials["Trigger_low"] = "AKS74U_2";
+        aks74u.pickUpMeshMaterials["MagRelease_low"] = "AKS74U_2";
+        aks74u.pickUpMeshMaterials["Magazine_Housing_low"] = "AKS74U_3";
+        aks74u.pickUpMeshMaterials["BarrelTip_low"] = "AKS74U_4";
     }
 
     static void SMITHANDWESSON_INIT()

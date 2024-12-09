@@ -16,13 +16,12 @@ public:
         if (mapToSpawn == "MAP_BONEYARD")
         {
             CreateGameObject();
-            GameObject* pictureFrame = GetGameObjectByIndex(GetGameObjectCount() - 1);
-            pictureFrame->SetPosition(1.1f, 1.9f, -0.85f);
-            pictureFrame->SetScale(0.01f);
-            //pictureFrame->SetRotationY(HELL_PI / 2);
-            pictureFrame->SetModel("mp_boneyard");
-            pictureFrame->SetMeshMaterial("LongFrame");
-            pictureFrame->SetName("Boneyard");
+            GameObject* mainMap = GetGameObjectByIndex(GetGameObjectCount() - 1);
+            mainMap->SetPosition(1.1f, 1.9f, -0.85f);
+            mainMap->SetScale(1.0f);
+            mainMap->SetModel("mp_boneyard");
+            mainMap->SetMeshMaterial("LongFrame");
+            mainMap->SetName("Boneyard");
         }
     }
 
