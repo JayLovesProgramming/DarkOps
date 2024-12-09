@@ -16,16 +16,17 @@ struct AudioHandle
 struct AudioEffectInfo 
 {
 	std::string filename = "";
-	float volume = 0.0f;
+    float volume = 0.0f;
 };
 
 namespace Audio 
 {
 	inline std::unordered_map<std::string, FMOD::Sound*> g_loadedAudio;
-	inline  int g_nextFreeChannel = 0;
-	inline  constexpr int AUDIO_CHANNEL_COUNT = 512;
-	inline  FMOD::System* g_system;
+	inline int g_nextFreeChannel = 0;
+	inline constexpr int AUDIO_CHANNEL_COUNT = 512;
+	inline FMOD::System* g_system;
     inline std::vector<AudioHandle> g_activeAudio;
+    inline float settingsVolume = 2.5f; // Default will eventually be 1.0f but for debugging let's not burst our ears
 
 	inline bool SucceededOrWarn(const std::string& message, FMOD_RESULT result)
     {
@@ -103,7 +104,7 @@ namespace Audio
 
 	inline AudioHandle PlayAudio(std::string filename, float volume, bool stopIfPlaying = false)
     {
-        // std::cout << "Playing Audio: " << filename << std::endl;
+         //std::cout << "Playing Audio: " << filename << std::endl;
 		// Load if needed
 		if (g_loadedAudio.find(filename) == g_loadedAudio.end())
         {
@@ -136,7 +137,10 @@ namespace Audio
         handle.filename = filename;
         handle.channel = freeChannel;
 		g_system->playSound(handle.sound, nullptr, false, &handle.channel);
-        handle.channel->setVolume(volume);
+        auto finalVolumeLevel = (volume / settingsVolume);
+        //std::cout << "Volume: " << volume << std::endl;
+        //std::cout << "finalVolumeLevel: " << finalVolumeLevel << std::endl;
+        handle.channel->setVolume(finalVolumeLevel);
 		return handle;
 	}
 
@@ -145,15 +149,11 @@ namespace Audio
 		AudioHandle handle;
 		handle.sound = g_loadedAudio[name];
 		g_system->playSound(handle.sound, nullptr, false, &handle.channel);
-		handle.channel->setVolume(volume);
+        auto finalVolumeLevel = (volume / settingsVolume);
+        handle.channel->setVolume(finalVolumeLevel);
 		handle.channel->setMode(FMOD_LOOP_NORMAL);
 		handle.sound->setMode(FMOD_LOOP_NORMAL);
         handle.sound->setLoopCount(-1);
-        std::cout << "Audio::LoopAudio() " << name << "\n";
-        std::cout << "Audio::LoopAudio() " << name << "\n";
-        std::cout << "Audio::LoopAudio() " << name << "\n";
-        std::cout << "Audio::LoopAudio() " << name << "\n";
-        std::cout << "Audio::LoopAudio() " << name << "\n";
         std::cout << "Audio::LoopAudio() " << name << "\n";
 		return handle;
 	}
@@ -178,7 +178,8 @@ namespace Audio
         handle.filename = filename;
         handle.channel = freeChannel;
         g_system->playSound(handle.sound, nullptr, false, &handle.channel);
-        handle.channel->setVolume(volume);
+        auto finalVolumeLevel = (volume / settingsVolume);
+        handle.channel->setVolume(finalVolumeLevel);
         handle.channel->setMode(FMOD_LOOP_NORMAL);
         handle.sound->setMode(FMOD_LOOP_NORMAL);
         handle.sound->setLoopCount(-1);
