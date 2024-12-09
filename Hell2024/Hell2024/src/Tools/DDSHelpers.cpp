@@ -23,7 +23,6 @@
 
 #pragma warning(disable:4996)   // Ignoring 'fopen': This function or variable may be unsafe
 
-
 #include "Compressonator.h"
 #include "DDSHelpers.hpp"
 #include <assert.h>
@@ -80,7 +79,8 @@ using namespace CMP;
 #define FOURCC_DX10  (MAKEFOURCC('D','X','1','0'))
 
 
-typedef struct {
+typedef struct
+{
     CMP_DWORD dwFourCC;
     CMP_FORMAT nFormat;
 } CMP_FourCC;
@@ -118,7 +118,8 @@ CMP_FourCC g_FourCCs[] = {
 };
 CMP_DWORD g_dwFourCCCount = sizeof(g_FourCCs) / sizeof(g_FourCCs[0]);
 
-CMP_FORMAT GetFormat(CMP_DWORD dwFourCC) {
+CMP_FORMAT GetFormat(CMP_DWORD dwFourCC) 
+{
     for(CMP_DWORD i = 0; i < g_dwFourCCCount; i++)
         if(g_FourCCs[i].dwFourCC == dwFourCC)
             return g_FourCCs[i].nFormat;
@@ -126,7 +127,8 @@ CMP_FORMAT GetFormat(CMP_DWORD dwFourCC) {
     return CMP_FORMAT_Unknown;
 }
 
-DWORD GetFourCC(CMP_FORMAT nFormat) {
+DWORD GetFourCC(CMP_FORMAT nFormat)
+{
     for(DWORD i = 0; i < g_dwFourCCCount; i++)
         if(g_FourCCs[i].nFormat == nFormat)
             return g_FourCCs[i].dwFourCC;
@@ -134,7 +136,8 @@ DWORD GetFourCC(CMP_FORMAT nFormat) {
     return 0;
 }
 
-bool IsDXT5SwizzledFormat(CMP_FORMAT nFormat) {
+bool IsDXT5SwizzledFormat(CMP_FORMAT nFormat)
+{
     if(nFormat == CMP_FORMAT_DXT5_xGBR || nFormat == CMP_FORMAT_DXT5_RxBG || nFormat == CMP_FORMAT_DXT5_RBxG ||
             nFormat == CMP_FORMAT_DXT5_xRBG || nFormat == CMP_FORMAT_DXT5_RGxB || nFormat == CMP_FORMAT_DXT5_xGxR ||
             nFormat == CMP_FORMAT_ATI2N_DXT5)
@@ -143,7 +146,8 @@ bool IsDXT5SwizzledFormat(CMP_FORMAT nFormat) {
         return false;
 }
 
-typedef struct {
+typedef struct
+{
     CMP_FORMAT nFormat;
     const char* pszFormatDesc;
 } CMP_FormatDesc;
@@ -195,20 +199,25 @@ CMP_FormatDesc g_DDSFormatDesc[] = {
 
 DWORD g_dwDDSFormatDescCount = sizeof(g_DDSFormatDesc) / sizeof(g_DDSFormatDesc[0]);
 
-static bool stringicmp( const char *left, const char *right ) {
-    while ( true ) {
+static bool stringicmp( const char *left, const char *right ) 
+{
+    while ( true )
+    {
         char leftc = *left;
         char rightc = *right;
 
-        if ( !leftc && !rightc ) {
+        if ( !leftc && !rightc )
+        {
             return true;
         }
 
-        if ( !leftc || !rightc ) {
+        if ( !leftc || !rightc ) 
+        {
             return false;
         }
 
-        if ( toupper( leftc ) != toupper( rightc ) ) {
+        if ( toupper( leftc ) != toupper( rightc ) )
+        {
             return false;
         }
 
@@ -219,7 +228,8 @@ static bool stringicmp( const char *left, const char *right ) {
     return false;
 }
 
-CMP_FORMAT ParseFormat(const char* pszFormat) {
+CMP_FORMAT ParseFormat(const char* pszFormat) 
+{
     if(pszFormat == NULL)
         return CMP_FORMAT_Unknown;
 
@@ -230,7 +240,8 @@ CMP_FORMAT ParseFormat(const char* pszFormat) {
     return CMP_FORMAT_Unknown;
 }
 
-const char* GetFormatDescription(CMP_FORMAT nFormat) {
+const char* GetFormatDescription(CMP_FORMAT nFormat)
+{
     for(DWORD i = 0; i < g_dwDDSFormatDescCount; i++)
         if(nFormat == g_DDSFormatDesc[i].nFormat)
             return g_DDSFormatDesc[i].pszFormatDesc;
@@ -242,18 +253,21 @@ const char* GetFormatDescription(CMP_FORMAT nFormat) {
 
 #pragma pack(4)
 
-typedef struct _DDCOLORKEY {
+typedef struct _DDCOLORKEY 
+{
     DWORD       dwColorSpaceLowValue;   // low boundary of color space that is to
     // be treated as Color Key, inclusive
     DWORD       dwColorSpaceHighValue;  // high boundary of color space that is
     // to be treated as Color Key, inclusive
 } DDCOLORKEY;
 
-typedef struct _DDPIXELFORMAT {
+typedef struct _DDPIXELFORMAT
+{
     DWORD       dwSize;                 // size of structure
     DWORD       dwFlags;                // pixel format flags
     DWORD       dwFourCC;               // (FOURCC code)
-    union {
+    union 
+    {
         DWORD   dwRGBBitCount;          // how many bits per pixel
         DWORD   dwYUVBitCount;          // how many bits per pixel
         DWORD   dwZBufferBitDepth;      // how many total bits/pixel in z buffer (including any stencil bits)
@@ -263,7 +277,8 @@ typedef struct _DDPIXELFORMAT {
         DWORD   dwPrivateFormatBitCount;// Bits per pixel of private driver formats. Only valid in texture
         // format list and if DDPF_D3DFORMAT is set
     };
-    union {
+    union 
+    {
         DWORD   dwRBitMask;             // mask for red bit
         DWORD   dwYBitMask;             // mask for Y bits
         DWORD   dwStencilBitDepth;      // how many stencil bits (note: dwZBufferBitDepth-dwStencilBitDepth is total Z-only bits)
@@ -271,24 +286,28 @@ typedef struct _DDPIXELFORMAT {
         DWORD   dwBumpDuBitMask;        // mask for bump map U delta bits
         DWORD   dwOperations;           // DDPF_D3DFORMAT Operations
     };
-    union {
+    union
+    {
         DWORD   dwGBitMask;             // mask for green bits
         DWORD   dwUBitMask;             // mask for U bits
         DWORD   dwZBitMask;             // mask for Z bits
         DWORD   dwBumpDvBitMask;        // mask for bump map V delta bits
-        struct {
+        struct
+        {
             WORD    wFlipMSTypes;       // Multisample methods supported via flip for this D3DFORMAT
             WORD    wBltMSTypes;        // Multisample methods supported via blt for this D3DFORMAT
         } MultiSampleCaps;
 
     };
-    union {
+    union 
+    {
         DWORD   dwBBitMask;             // mask for blue bits
         DWORD   dwVBitMask;             // mask for V bits
         DWORD   dwStencilBitMask;       // mask for stencil bits
         DWORD   dwBumpLuminanceBitMask; // mask for luminance in bump map
     };
-    union {
+    union
+    {
         DWORD   dwRGBAlphaBitMask;      // mask for alpha channel
         DWORD   dwYUVAlphaBitMask;      // mask for alpha channel
         DWORD   dwLuminanceAlphaBitMask;// mask for alpha channel
@@ -297,30 +316,36 @@ typedef struct _DDPIXELFORMAT {
     };
 } DDPIXELFORMAT;
 
-typedef struct _DDSCAPS2 {
+typedef struct _DDSCAPS2 
+{
     DWORD       dwCaps;         // capabilities of surface wanted
     DWORD       dwCaps2;
     DWORD       dwCaps3;
-    union {
+    union
+    {
         DWORD       dwCaps4;
         DWORD       dwVolumeDepth;
     };
 } DDSCAPS2;
 
-typedef struct _DDSURFACEDESC2_64 {
+typedef struct _DDSURFACEDESC2_64 
+{
     DWORD               dwSize;                 // size of the DDSURFACEDESC structure
     DWORD               dwFlags;                // determines what fields are valid
     DWORD               dwHeight;               // height of surface to be created
     DWORD               dwWidth;                // width of input surface
-    union {
+    union
+    {
         LONG            lPitch;                 // distance to start of next line (return value only)
         DWORD           dwLinearSize;           // Formless late-allocated optimized surface size
     };
-    union {
+    union 
+    {
         DWORD           dwBackBufferCount;      // number of back buffers requested
         DWORD           dwDepth;                // the depth if this is a volume texture
     };
-    union {
+    union 
+    {
         DWORD           dwMipMapCount;          // number of mip-map levels requestde
         // dwZBufferBitDepth removed, use ddpfPixelFormat one instead
         DWORD           dwRefreshRate;          // refresh rate (used when display mode is described)
@@ -329,14 +354,16 @@ typedef struct _DDSURFACEDESC2_64 {
     DWORD               dwAlphaBitDepth;        // depth of alpha buffer requested
     DWORD               dwReserved;             // reserved
     DWORD               lpSurface;              // pointer to the associated surface memory
-    union {
+    union
+    {
         DDCOLORKEY      ddckCKDestOverlay;      // color key for destination overlay use
         DWORD           dwEmptyFaceColor;       // Physical color for empty cubemap faces
     };
     DDCOLORKEY          ddckCKDestBlt;          // color key for destination blt use
     DDCOLORKEY          ddckCKSrcOverlay;       // color key for source overlay use
     DDCOLORKEY          ddckCKSrcBlt;           // color key for source blt use
-    union {
+    union 
+    {
         DDPIXELFORMAT   ddpfPixelFormat;        // pixel format description of the surface
         DWORD           dwFVF;                  // vertex format description of vertex buffers
     };
@@ -348,14 +375,16 @@ typedef struct _DDSURFACEDESC2_64 {
 
 static const DWORD DDS_HEADER = MAKEFOURCC('D', 'D', 'S', ' ');
 
-bool LoadDDSFile(const char* pszFile, CMP_Texture& texture) {
+bool LoadDDSFile(const char* pszFile, CMP_Texture& texture) 
+{
     FILE* pSourceFile = fopen(pszFile, ("rb"));
 
     if (!pSourceFile) return false;
 
     DWORD dwFileHeader;
     fread(&dwFileHeader, sizeof(DWORD), 1, pSourceFile);
-    if(dwFileHeader != DDS_HEADER) {
+    if(dwFileHeader != DDS_HEADER)
+    {
         printf("Source file is not a valid DDS.\n");
         fclose(pSourceFile);
         return false;
@@ -380,9 +409,8 @@ bool LoadDDSFile(const char* pszFile, CMP_Texture& texture) {
         {
             texture.format = CMP_FORMAT_RGBA_8888;
         } 
-        else 
-            // Visual Studio reports as 32bpp BGRA
-        if ((ddsd.ddpfPixelFormat.dwRBitMask        == 0x00ff0000) &&
+        // Visual Studio reports as 32bpp BGRA
+        else if ((ddsd.ddpfPixelFormat.dwRBitMask == 0x00ff0000) &&
             (ddsd.ddpfPixelFormat.dwGBitMask        == 0x0000ff00) &&
             (ddsd.ddpfPixelFormat.dwBBitMask        == 0x000000ff) &&
             (ddsd.ddpfPixelFormat.dwRGBAlphaBitMask == 0xff000000))
@@ -393,10 +421,12 @@ bool LoadDDSFile(const char* pszFile, CMP_Texture& texture) {
     else if(ddsd.ddpfPixelFormat.dwRGBBitCount==24)
     {
         // assumptions is made here should check all channel locations
-        if (ddsd.ddpfPixelFormat.dwRBitMask == 0xff) {
+        if (ddsd.ddpfPixelFormat.dwRBitMask == 0xff)
+        {
             texture.format = CMP_FORMAT_RGB_888;
         }
-        else {
+        else 
+        {
             texture.format = CMP_FORMAT_BGR_888;
         }
     }
@@ -404,7 +434,8 @@ bool LoadDDSFile(const char* pszFile, CMP_Texture& texture) {
         texture.format = GetFormat(ddsd.ddpfPixelFormat.dwPrivateFormatBitCount);
     else if(GetFormat(ddsd.ddpfPixelFormat.dwFourCC) != CMP_FORMAT_Unknown)
         texture.format = GetFormat(ddsd.ddpfPixelFormat.dwFourCC);
-    else {
+    else
+    {
         printf("Unsupported source format.\n");
         fclose(pSourceFile);
         return false;
@@ -420,7 +451,8 @@ bool LoadDDSFile(const char* pszFile, CMP_Texture& texture) {
     return true;
 }
 
-enum D3D10_RESOURCE_DIMENSION {
+enum D3D10_RESOURCE_DIMENSION
+{
     D3D10_RESOURCE_DIMENSION_UNKNOWN	= 0,
     D3D10_RESOURCE_DIMENSION_BUFFER	= 1,
     D3D10_RESOURCE_DIMENSION_TEXTURE1D	= 2,
@@ -428,7 +460,8 @@ enum D3D10_RESOURCE_DIMENSION {
     D3D10_RESOURCE_DIMENSION_TEXTURE3D	= 4
 };
 
-typedef struct {
+typedef struct
+{
     DWORD                           dxgiFormat;
     D3D10_RESOURCE_DIMENSION        resourceDimension;
     UINT                            miscFlag;                   // Used for D3D10_RESOURCE_MISC_FLAG
@@ -556,7 +589,8 @@ typedef struct {
 #define DDPF_BUMPLUMINANCE                      0x00040000l
 #define DDPF_BUMPDUDV                           0x00080000l
 
-typedef enum DXGI_FORMAT {
+typedef enum DXGI_FORMAT
+{
     DXGI_FORMAT_UNKNOWN	                    = 0,
     DXGI_FORMAT_R32G32B32A32_TYPELESS       = 1,
     DXGI_FORMAT_R32G32B32A32_FLOAT          = 2,
@@ -676,7 +710,8 @@ typedef enum DXGI_FORMAT {
     DXGI_FORMAT_FORCE_UINT                  = 0xffffffff
 } DXGI_FORMAT;
 
-typedef enum _D3DFORMAT {
+typedef enum _D3DFORMAT
+{
     D3DFMT_UNKNOWN              =  0,
 
     D3DFMT_R8G8B8               = 20,
@@ -758,63 +793,67 @@ typedef enum _D3DFORMAT {
 } D3DFORMAT;
 
 
-void SaveDDSFile(const char* pszFile, CMP_Texture& texture) {
+void SaveDDSFile(const char* pszFile, CMP_Texture& texture)
+{
     FILE* pFile = fopen(pszFile, ("wb"));
     if(!pFile)
         return;
 
     bool DDSet = false;
 
-    switch (texture.format) {
-    case CMP_FORMAT_BC1:
-    case CMP_FORMAT_BC2:
-    case CMP_FORMAT_BC3:
-    case CMP_FORMAT_BC4:
-    case CMP_FORMAT_BC5: {
-        fwrite(&DDS_HEADER, sizeof(DWORD), 1, pFile);
-        DDSD2 ddsd2;
-        memset(&ddsd2, 0, sizeof(DDSD2));
-        ddsd2.dwSize                   = sizeof(DDSD2);
-        ddsd2.dwWidth                  = texture.dwWidth;
-        ddsd2.dwHeight                 = texture.dwHeight;
-        ddsd2.dwMipMapCount            = 1;
-        ddsd2.dwFlags                  = DDSD_CAPS|DDSD_WIDTH|DDSD_HEIGHT|DDSD_PIXELFORMAT|DDSD_MIPMAPCOUNT;
-        ddsd2.dwFlags                 |= DDSD_LINEARSIZE;
-        ddsd2.dwLinearSize             = texture.dwDataSize;
-        ddsd2.ddpfPixelFormat.dwSize   = sizeof(DDPIXELFORMAT);
-        ddsd2.ddsCaps.dwCaps           = DDSCAPS_TEXTURE|DDSCAPS_COMPLEX|DDSCAPS_MIPMAP;
-        ddsd2.ddpfPixelFormat.dwFlags  = DDPF_FOURCC;
-        ddsd2.ddpfPixelFormat.dwFlags |= DDPF_ALPHAPIXELS;
-
-        switch (texture.format)
+    switch (texture.format) 
+    {
+        case CMP_FORMAT_BC1:
+        case CMP_FORMAT_BC2:
+        case CMP_FORMAT_BC3:
+        case CMP_FORMAT_BC4:
+        case CMP_FORMAT_BC5: 
         {
-            case CMP_FORMAT_BC1:
-                ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_DXT1;
-                break;
-            case CMP_FORMAT_BC2:
-                ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_DXT3;
-                break;
-            case CMP_FORMAT_BC3:
-                ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_DXT5;
-                break;
-            case CMP_FORMAT_BC4:
-                ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_ATI1N;
-                break;
-            case CMP_FORMAT_BC5:
-                ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_ATI2N_XY;
-              break;
+            fwrite(&DDS_HEADER, sizeof(DWORD), 1, pFile);
+            DDSD2 ddsd2;
+            memset(&ddsd2, 0, sizeof(DDSD2));
+            ddsd2.dwSize                   = sizeof(DDSD2);
+            ddsd2.dwWidth                  = texture.dwWidth;
+            ddsd2.dwHeight                 = texture.dwHeight;
+            ddsd2.dwMipMapCount            = 1;
+            ddsd2.dwFlags                  = DDSD_CAPS|DDSD_WIDTH|DDSD_HEIGHT|DDSD_PIXELFORMAT|DDSD_MIPMAPCOUNT;
+            ddsd2.dwFlags                 |= DDSD_LINEARSIZE;
+            ddsd2.dwLinearSize             = texture.dwDataSize;
+            ddsd2.ddpfPixelFormat.dwSize   = sizeof(DDPIXELFORMAT);
+            ddsd2.ddsCaps.dwCaps           = DDSCAPS_TEXTURE|DDSCAPS_COMPLEX|DDSCAPS_MIPMAP;
+            ddsd2.ddpfPixelFormat.dwFlags  = DDPF_FOURCC;
+            ddsd2.ddpfPixelFormat.dwFlags |= DDPF_ALPHAPIXELS;
+
+            switch (texture.format)
+            {
+                case CMP_FORMAT_BC1:
+                    ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_DXT1;
+                    break;
+                case CMP_FORMAT_BC2:
+                    ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_DXT3;
+                    break;
+                case CMP_FORMAT_BC3:
+                    ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_DXT5;
+                    break;
+                case CMP_FORMAT_BC4:
+                    ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_ATI1N;
+                    break;
+                case CMP_FORMAT_BC5:
+                    ddsd2.ddpfPixelFormat.dwFourCC = FOURCC_ATI2N_XY;
+                  break;
+            }
+
+            ddsd2.ddpfPixelFormat.dwPrivateFormatBitCount = 0;
+
+            // Write the data
+            fwrite(&ddsd2, sizeof(DDSD2), 1, pFile);
+            fwrite(texture.pData, texture.dwDataSize, 1, pFile);
         }
-
-        ddsd2.ddpfPixelFormat.dwPrivateFormatBitCount = 0;
-
-        // Write the data
-        fwrite(&ddsd2, sizeof(DDSD2), 1, pFile);
-        fwrite(texture.pData, texture.dwDataSize, 1, pFile);
-    }
-    break;
+        break;
     }
 
-    if (!DDSet) {
+    if (!DDSet)
+    {
         fwrite(&DDS_HEADER, sizeof(DWORD), 1, pFile);
 
         DDSD2 ddsd;
@@ -831,25 +870,30 @@ void SaveDDSFile(const char* pszFile, CMP_Texture& texture) {
 
         // Do we have a DX9 support FourCC format
         ddsd.ddpfPixelFormat.dwFourCC = GetFourCC(texture.format);
-        if(ddsd.ddpfPixelFormat.dwFourCC) {
+        if (ddsd.ddpfPixelFormat.dwFourCC)
+        {
             ddsd.dwLinearSize = texture.dwDataSize;
             ddsd.ddpfPixelFormat.dwFlags = DDPF_FOURCC;
 
             // Do we have DXT5 swizzle format
-            if(IsDXT5SwizzledFormat(texture.format)) {
+            if(IsDXT5SwizzledFormat(texture.format)) 
+            {
                 ddsd.ddpfPixelFormat.dwPrivateFormatBitCount = ddsd.ddpfPixelFormat.dwFourCC;
                 ddsd.ddpfPixelFormat.dwFourCC = FOURCC_DXT5;
             }
 
             fwrite(&ddsd, sizeof(DDSD2), 1, pFile);
             fwrite(texture.pData, texture.dwDataSize, 1, pFile);
-        } else {
+        } 
+        else
+        {
             // Check to save the data using DX10 file format (BC7 is used as an example of what is supported
             // and can be expanded to include other formats
 
             if ((texture.format == CMP_FORMAT_BC7)  ||
                     (texture.format == CMP_FORMAT_BC6H) ||
-                    (texture.format == CMP_FORMAT_BC6H_SF) ) {
+                    (texture.format == CMP_FORMAT_BC6H_SF) )
+            {
                 ddsd.ddpfPixelFormat.dwFlags  = DDPF_FOURCC;
                 ddsd.ddpfPixelFormat.dwFourCC = MAKEFOURCC('D', 'X', '1', '0');
                 ddsd.lPitch = texture.dwWidth * 4;
@@ -874,11 +918,13 @@ void SaveDDSFile(const char* pszFile, CMP_Texture& texture) {
 
                 fwrite(&HeaderDDS10, sizeof(HeaderDDS10), 1, pFile);
                 fwrite(texture.pData, texture.dwDataSize, 1, pFile);
-            } else {
+            } else 
+            {
                 //-------------------------------------
                 // We can use DX9 file format to save
                 //-------------------------------------
-                switch (texture.format) {
+                switch (texture.format)
+                {
                 case CMP_FORMAT_RGBA_8888:
                     ddsd.ddpfPixelFormat.dwRBitMask         = 0xff000000;
                     ddsd.ddpfPixelFormat.dwGBitMask         = 0x00ff0000;

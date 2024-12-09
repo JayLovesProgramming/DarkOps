@@ -8,6 +8,7 @@ namespace OpenGLRenderer
 {
     inline static bool drawBlueAroundModels = false;
     constexpr inline static float minPickUpDistance = 1.5f;
+
     void Init_OpenGL();
     void RenderLoadingScreen(std::vector<RenderItem2D>& renderItems);
     void RenderFrame(RenderData& renderData);

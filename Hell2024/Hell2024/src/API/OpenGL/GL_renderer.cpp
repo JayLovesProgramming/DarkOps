@@ -1,4 +1,5 @@
 ﻿#include "GL_renderer.hpp"
+
 #include "GL_backEnd.hpp"
 #include "Types/GL_gBuffer.h"
 #include "HellCommon.hpp"
@@ -24,7 +25,6 @@
 #include "Renderer/Raytracing/Raytracing.hpp"
 #include "Renderer/SSAO.hpp"
 #include "Timer.hpp"
-
 #include "RapidHotload.hpp"
 
 constexpr static auto TILE_SIZE = 24;
