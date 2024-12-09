@@ -1,10 +1,12 @@
 #include "ImageTools.hpp"
+
 #include <stdio.h>
 #include <memory.h>
 #include <iostream>
-#include "DDSHelpers.hpp"
 #include <filesystem>
 #include <mutex>
+
+#include "DDSHelpers.hpp"
 
 namespace ImageTools 
 {

@@ -327,14 +327,16 @@ void Door::SetRotation(float rotation)
 
 // TODO
 /*
-std::vector<Vertex> Door::GetDoorAABBVertices() {
+std::vector<Vertex> Door::GetDoorAABBVertices()
+{
     glm::vec3 color = YELLOW;
     return Util::GetAABBVertices(m_doorRenderItemAABB, color);
 }*/
 
 /*
 
-std::vector<Vertex> Door::GetFrameAABBVertices() {
+std::vector<Vertex> Door::GetFrameAABBVertices()
+{
     glm::vec3 color = YELLOW;
     return Util::GetAABBVertices(m_frameAABB, color);
 }*/

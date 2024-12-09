@@ -2,7 +2,12 @@
 
 #include <string>
 
-enum class CompressionType { DXT3, BC5, UNDEFINED };
+enum class CompressionType 
+{
+    DXT3,
+    BC5,
+    UNDEFINED
+};
 
 namespace ImageTools 
 {

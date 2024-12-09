@@ -30,13 +30,13 @@ struct AnimatedNode
 
 class Animation
 {
-public: // methods
+public:
     Animation() = default;
     Animation(std::string fulllPath);
     ~Animation();
     float GetTicksPerSecond();
 
-public: // fields
+public:
     bool m_awaitingLoadingFromDisk = true;
     bool m_loadedFromDisk = false;
     std::string m_fullPath = "";

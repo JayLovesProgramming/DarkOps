@@ -6,7 +6,9 @@
 struct Door 
 {
     Door() = default;
+
     Door(glm::vec3 position, float rotation, bool openOnStart = false);
+
     void Interact();
     void Update(float deltaTime);
     void CleanUp();

@@ -14,5 +14,5 @@ Animation::~Animation()
 
 float Animation::GetTicksPerSecond()
 {
-    return m_ticksPerSecond != 0 ? m_ticksPerSecond : 25.0f;;
+    return m_ticksPerSecond != 0 ? m_ticksPerSecond : 25.0f;
 }
