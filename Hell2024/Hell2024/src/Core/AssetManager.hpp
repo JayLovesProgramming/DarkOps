@@ -20,6 +20,7 @@ namespace AssetManager
     void FindAssetPaths();
     void LoadNextItem();
     void LoadSkinnedModels();
+    void LoadObjectModels();
     void AddItemToLoadLog(std::string item);
     bool LoadingComplete();
     std::vector<std::string>& GetLoadLog();

@@ -420,7 +420,7 @@ void Scene::LoadDefaultScene()
         stairCase3.m_stepCount = 18;
     }*/
 
-    LoadMapData("mappp.txt");
+    //LoadMapData("mappp.txt");
     for (Light& light : g_lights)
     {
         light.m_shadowMapIsDirty = true;
@@ -1413,8 +1413,8 @@ std::vector<RenderItem3D> GetTreeRenderItems()
 
         //Timer timer("PLANT SAMPLINGS");
 
-        int iterationMax = 800;
-        int desiredTreeCount = 800;
+        int iterationMax = 0;
+        int desiredTreeCount = 0;
 
         HeightMap& heightMap = AssetManager::g_heightMap;
         TreeMap& treeMap = AssetManager::g_treeMap;

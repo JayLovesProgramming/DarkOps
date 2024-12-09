@@ -1,6 +1,5 @@
 ﻿#define TINYOBJLOADER_IMPLEMENTATION
 
-
 #include "AssetManager.hpp"
 
 #include "API/OpenGL/GL_BackEnd.hpp"
@@ -35,12 +34,12 @@ struct CMPTextureData
     std::string m_textureName;
     std::string m_sourceFilePath;
     std::string m_compressedFilePath;
-    std::string m_suffix;    
+    std::string m_suffix;
     LoadingState m_loadingState = LoadingState::AWAITING_LOADING_FROM_DISK;
     BakingState m_bakingState = BakingState::AWAITING_BAKE;
 };
 
-namespace AssetManager 
+namespace AssetManager
 {
     struct CompletedLoadingTasks
     {
@@ -138,14 +137,30 @@ void AssetManager::LoadSkinnedModels()
     }
 }
 
-void AssetManager::FindAssetPaths() 
+void AssetManager::LoadObjectModels()
+{
+    for (const auto& entry : std::filesystem::recursive_directory_iterator("res/models/OBJ/"))
+    {
+        if (!entry.is_regular_file()) continue; // Skip directories, symlinks, etc.
+
+        FileInfo info = Util::GetFileInfo(entry);
+
+        if (info.filetype == "obj")
+        {
+            std::string convertedPath = ReplaceBackwardSlashesToForward(info.fullpath); // This avoids any loading issues. If the string contains backward slashes, it does NOT load
+            g_models.emplace_back(convertedPath);
+        }
+    }
+}
+
+void AssetManager::FindAssetPaths()
 {
     // Cubemap Textures
     auto skyboxTexturePaths = std::filesystem::directory_iterator("res/textures/skybox/");
-    for (const auto& entry : skyboxTexturePaths) 
+    for (const auto& entry : skyboxTexturePaths)
     {
         FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") 
+        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga")
         {
             if (info.filename.substr(info.filename.length() - 5) == "Right")
             {
@@ -167,16 +182,7 @@ void AssetManager::FindAssetPaths()
     }
 
     // Models
-    auto modelPaths = std::filesystem::directory_iterator("res/models/OBJ/");
-    for (const auto& entry : modelPaths)
-    {
-        FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "obj")
-        {
-            g_models.emplace_back(info.fullpath);
-        }
-    };
-
+    LoadObjectModels();
     // Skinned Models
     LoadSkinnedModels();
 
@@ -207,15 +213,15 @@ void AssetManager::FindAssetPaths()
             CMPTextureData* cmpTextureData = &g_cmpTextureData[i];
             futures.push_back(std::async(std::launch::async, [cmpTextureData]()
                 {
-                if (!Util::FileExists(cmpTextureData->m_compressedFilePath))
-                {
-                    TextureData textureData = LoadTextureData(cmpTextureData->m_sourceFilePath);
-                    ImageTools::CompresssDXT3(cmpTextureData->m_compressedFilePath.c_str(), static_cast<unsigned char*>(textureData.m_data), textureData.m_width, textureData.m_height, textureData.m_numChannels);
-                    stbi_image_free(textureData.m_data);
-                }
-            }));
+                    if (!Util::FileExists(cmpTextureData->m_compressedFilePath))
+                    {
+                        TextureData textureData = LoadTextureData(cmpTextureData->m_sourceFilePath);
+                        ImageTools::CompresssDXT3(cmpTextureData->m_compressedFilePath.c_str(), static_cast<unsigned char*>(textureData.m_data), textureData.m_width, textureData.m_height, textureData.m_numChannels);
+                        stbi_image_free(textureData.m_data);
+                    }
+                }));
         }
-        for (auto& future : futures) 
+        for (auto& future : futures)
         {
             future.get();
         }
@@ -239,10 +245,10 @@ void AssetManager::FindAssetPaths()
     }
 
     auto uiTexturePaths = std::filesystem::directory_iterator("res/textures/ui/");
-    for (const auto& entry : uiTexturePaths) 
+    for (const auto& entry : uiTexturePaths)
     {
         FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") 
+        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga")
         {
             g_textures.emplace_back(Texture(info.fullpath, false));
         }
@@ -259,10 +265,10 @@ void AssetManager::FindAssetPaths()
     }
 
     auto crosshairPaths = std::filesystem::directory_iterator("res/textures/crosshairs/");
-    for (const auto& entry : crosshairPaths) 
+    for (const auto& entry : crosshairPaths)
     {
         FileInfo info = Util::GetFileInfo(entry);
-        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga") 
+        if (info.filetype == "png" || info.filetype == "jpg" || info.filetype == "tga")
         {
             g_textures.emplace_back(Texture(info.fullpath, false));
         }
@@ -282,12 +288,12 @@ void AssetManager::FindAssetPaths()
     }
 }
 
-void AssetManager::AddItemToLoadLog(std::string item) 
+void AssetManager::AddItemToLoadLog(std::string item)
 {
     g_loadLog.push_back(item);
 }
 
-std::vector<std::string>& AssetManager::GetLoadLog() 
+std::vector<std::string>& AssetManager::GetLoadLog()
 {
     return g_loadLog;
 }
@@ -297,7 +303,7 @@ bool AssetManager::LoadingComplete()
     return g_completedLoadingTasks.g_all;
 }
 
-void AssetManager::LoadNextItem() 
+void AssetManager::LoadNextItem()
 {
     // Hardcoded Models
     if (!g_completedLoadingTasks.g_hardcodedModels)
@@ -332,9 +338,9 @@ void AssetManager::LoadNextItem()
     }
 
     // Animations
-    for (Animation& animation: g_animations) 
+    for (Animation& animation : g_animations)
     {
-        if (animation.m_awaitingLoadingFromDisk) 
+        if (animation.m_awaitingLoadingFromDisk)
         {
             animation.m_awaitingLoadingFromDisk = false;
             AddItemToLoadLog(ExtractModelName(animation.m_fullPath));
@@ -350,7 +356,7 @@ void AssetManager::LoadNextItem()
     // }
     // 
     // Skinned Models
-    for (SkinnedModel& skinnedModel : g_skinnedModels) 
+    for (SkinnedModel& skinnedModel : g_skinnedModels)
     {
         if (skinnedModel.m_awaitingLoadingFromDisk)
         {
@@ -361,14 +367,14 @@ void AssetManager::LoadNextItem()
         }
     }
 
-   // for (SkinnedModel& skinnedModel : g_skinnedModels) {
-   //     if (!skinnedModel.m_loadedFromDisk) {
-   //         return;
-   //     }
-   // }
+    // for (SkinnedModel& skinnedModel : g_skinnedModels) {
+    //     if (!skinnedModel.m_loadedFromDisk) {
+    //         return;
+    //     }
+    // }
 
-    // Models
-    for (Model& model : g_models) 
+     // Models
+    for (Model& model : g_models)
     {
         if (model.m_awaitingLoadingFromDisk)
         {
@@ -379,17 +385,17 @@ void AssetManager::LoadNextItem()
         }
     }
 
-   //for (Model& model : g_models) {
-   //    if (!model.m_loadedFromDisk) {
-   //        return;
-   //    }
-   //}
-   // 
-    // Textures
+    //for (Model& model : g_models) {
+    //    if (!model.m_loadedFromDisk) {
+    //        return;
+    //    }
+    //}
+    // 
+     // Textures
     for (Texture& texture : g_textures)
     {
         // Skip this texture if OpenGL marked it as compressed
-        if (BackEnd::GetAPI() == API::OPENGL && texture.m_compressed) 
+        if (BackEnd::GetAPI() == API::OPENGL && texture.m_compressed)
         {
             continue;
         }
@@ -413,7 +419,7 @@ void AssetManager::LoadNextItem()
     // This may not be necessary, but probably is 
     bool allFuturesCompleted = std::all_of(_futures.begin(), _futures.end(), [](std::future<void>& f) {
         return f.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
-    });
+        });
 
     if (allFuturesCompleted)
     {
@@ -425,16 +431,16 @@ void AssetManager::LoadNextItem()
     }
 
     // Bake CMPTextures
-    if (!g_completedLoadingTasks.g_cmpTexturesBaked) 
+    if (!g_completedLoadingTasks.g_cmpTexturesBaked)
     {
-        for (CMPTextureData& cmpTextureData: g_cmpTextureData)
+        for (CMPTextureData& cmpTextureData : g_cmpTextureData)
         {
             Texture* texture = GetTextureByName(cmpTextureData.m_textureName);
             if (texture)
             {
                 texture->BakeCMPData(&cmpTextureData.m_cmpTexture);
             }
-            else 
+            else
             {
                 std::cout << cmpTextureData.m_textureName << " not found \n";
             }
@@ -457,7 +463,7 @@ void AssetManager::LoadNextItem()
     }
 
     // Bake cubemap textures
-    if (!g_completedLoadingTasks.g_cubemapTexturesBaked) 
+    if (!g_completedLoadingTasks.g_cubemapTexturesBaked)
     {
         for (CubemapTexture& cubemapTexture : g_cubemapTextures)
         {
@@ -470,7 +476,7 @@ void AssetManager::LoadNextItem()
         g_completedLoadingTasks.g_cubemapTexturesBaked = true;
         return;
     }
-    
+
     // Build index maps
     for (int i = 0; i < g_textures.size(); i++)
     {
@@ -484,7 +490,7 @@ void AssetManager::LoadNextItem()
     {
         g_meshIndexMap[g_meshes[i].name] = i;
     }
-    for (int i = 0; i < g_skinnedModels.size(); i++) 
+    for (int i = 0; i < g_skinnedModels.size(); i++)
     {
         g_skinnedModelIndexMap[g_skinnedModels[i]._filename] = i;
     }
@@ -540,7 +546,7 @@ void AssetManager::LoadNextItem()
     AddItemToLoadLog("Loading Complete");
     g_completedLoadingTasks.g_all = true;
 
-    for (auto& text : g_loadLog) 
+    for (auto& text : g_loadLog)
     {
         //std::cout << text << "\n";
     }
@@ -575,11 +581,11 @@ void AssetManager::LoadFont()
         }
     }
 
-    if (BackEnd::GetAPI() == API::OPENGL) 
+    if (BackEnd::GetAPI() == API::OPENGL)
     {
         OpenGLRenderer::BindBindlessTextures();
     }
-    else if (BackEnd::GetAPI() == API::VULKAN) 
+    else if (BackEnd::GetAPI() == API::VULKAN)
     {
         VulkanRenderer::UpdateSamplerDescriptorSet();
     }
@@ -592,7 +598,7 @@ void AssetManager::LoadFont()
 
 void AssetManager::UploadVertexData()
 {
-    if (BackEnd::GetAPI() == API::OPENGL) 
+    if (BackEnd::GetAPI() == API::OPENGL)
     {
         OpenGLBackEnd::UploadVertexData(g_vertices, g_indices);
     }
@@ -604,7 +610,7 @@ void AssetManager::UploadVertexData()
 
 void AssetManager::UploadWeightedVertexData()
 {
-    if (BackEnd::GetAPI() == API::OPENGL) 
+    if (BackEnd::GetAPI() == API::OPENGL)
     {
         OpenGLBackEnd::UploadWeightedVertexData(g_weightedVertices, g_weightedIndices);
     }
@@ -614,7 +620,7 @@ void AssetManager::UploadWeightedVertexData()
     }
 }
 
-void AssetManager::CreateMeshBLAS() 
+void AssetManager::CreateMeshBLAS()
 {
     // TO DO: add code to delete any pre-existing BLAS
     for (Mesh& mesh : g_meshes)
@@ -623,7 +629,7 @@ void AssetManager::CreateMeshBLAS()
     }
 }
 
-void AssetManager::LoadModel(Model* model) 
+void AssetManager::LoadModel(Model* model)
 {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
@@ -688,7 +694,7 @@ void AssetManager::LoadModel(Model* model)
         }
 
         // Tangents
-        for (int i = 0; i < indices.size(); i += 3) 
+        for (int i = 0; i < indices.size(); i += 3)
         {
             Vertex* vert0 = &vertices[indices[i]];
             Vertex* vert1 = &vertices[indices[i + 1]];
@@ -763,7 +769,7 @@ void AssetManager::CreateHardcodedModels()
         Model& model = g_models.emplace_back();
         model.SetName(name);
         model.AddMeshIndex(AssetManager::CreateMesh("Fullscreen", vertices, indices, aabbMin, aabbMax));
-        
+
         _quadMeshIndex = model.GetMeshIndices()[0];
         model.m_awaitingLoadingFromDisk = false;
         model.m_loadedFromDisk = true;
@@ -854,7 +860,7 @@ void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
 
     // Load Bones
     glm::mat4 globalInverseTransform = glm::inverse(Util::aiMatrix4x4ToGlm(scene->mRootNode->mTransformation));
-    for (int i = 0; i < scene->mNumMeshes; i++) 
+    for (int i = 0; i < scene->mNumMeshes; i++)
     {
         const aiMesh* assimpMesh = scene->mMeshes[i];
         for (unsigned int j = 0; j < assimpMesh->mNumBones; j++)
@@ -889,7 +895,7 @@ void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
         std::vector<uint32_t> indices;
 
         // Get Vertices
-        for (unsigned int j = 0; j < vertexCount; j++) 
+        for (unsigned int j = 0; j < vertexCount; j++)
         {
             WeightedVertex vertex;
             vertex.position = { assimpMesh->mVertices[j].x, assimpMesh->mVertices[j].y, assimpMesh->mVertices[j].z };
@@ -905,7 +911,7 @@ void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
             aabbMax.z = std::max(aabbMax.z, vertex.position.z);
         }
         // Get Indices
-        for (unsigned int j = 0; j < assimpMesh->mNumFaces; j++) 
+        for (unsigned int j = 0; j < assimpMesh->mNumFaces; j++)
         {
             const aiFace& Face = assimpMesh->mFaces[j];
             indices.push_back(Face.mIndices[0]);
@@ -914,7 +920,7 @@ void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
         }
 
         // Get Vertex Weights and Bone IDs
-        for (unsigned int i = 0; i < assimpMesh->mNumBones; i++) 
+        for (unsigned int i = 0; i < assimpMesh->mNumBones; i++)
         {
             for (unsigned int j = 0; j < assimpMesh->mBones[i]->mNumWeights; j++)
             {
@@ -934,12 +940,12 @@ void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
                     vertex.boneID.y = boneIndex;
                     vertex.weight.y = weight;
                 }
-                else if (vertex.weight.z == 0) 
+                else if (vertex.weight.z == 0)
                 {
                     vertex.boneID.z = boneIndex;
                     vertex.weight.z = weight;
                 }
-                else if (vertex.weight.w == 0) 
+                else if (vertex.weight.w == 0)
                 {
                     vertex.boneID.w = boneIndex;
                     vertex.weight.w = weight;
@@ -953,13 +959,13 @@ void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
         {
             WeightedVertex& vertex = vertices[j];
             std::vector<float> validWeights;
-            for (int i = 0; i < 4; ++i) 
+            for (int i = 0; i < 4; ++i)
             {
                 if (vertex.weight[i] < threshold)
                 {
                     vertex.weight[i] = 0.0f;
                 }
-                else 
+                else
                 {
                     validWeights.push_back(vertex.weight[i]);
                 }
@@ -967,7 +973,7 @@ void AssetManager::LoadSkinnedModel(SkinnedModel* skinnedModel)
 
             float sum = std::accumulate(validWeights.begin(), validWeights.end(), 0.0f);
             int validIndex = 0;
-            for (int i = 0; i < 4; ++i) 
+            for (int i = 0; i < 4; ++i)
             {
                 if (vertex.weight[i] > 0.0f) {
                     vertex.weight[i] = validWeights[validIndex] / sum;
@@ -1006,7 +1012,7 @@ void AssetManager::GrabSkeleton(SkinnedModel& skinnedModel, const aiNode* pNode,
     }
 }
 
-int AssetManager::CreateSkinnedMesh(std::string name, std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices, uint32_t baseVertexLocal, glm::vec3 aabbMin, glm::vec3 aabbMax) 
+int AssetManager::CreateSkinnedMesh(std::string name, std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices, uint32_t baseVertexLocal, glm::vec3 aabbMin, glm::vec3 aabbMax)
 {
     SkinnedMesh& mesh = g_skinnedMeshes.emplace_back();
     mesh.baseVertexGlobal = _nextWeightedVertexInsert;
@@ -1030,13 +1036,13 @@ int AssetManager::CreateSkinnedMesh(std::string name, std::vector<WeightedVertex
     return g_skinnedMeshes.size() - 1;
 }
 
-void AssetManager::BuildMaterials() 
+void AssetManager::BuildMaterials()
 {
     //std::cout << "g_textureIndexMap.size(): " << g_textureIndexMap.size() << "\n";
 
     std::lock_guard<std::mutex> lock(_texturesMutex);
 
-    for (int i = 0; i < AssetManager::GetTextureCount(); i++) 
+    for (int i = 0; i < AssetManager::GetTextureCount(); i++)
     {
         Texture& texture = *AssetManager::GetTextureByIndex(i);
 
@@ -1049,22 +1055,22 @@ void AssetManager::BuildMaterials()
             int normalIndex = AssetManager::GetTextureIndexByName(material._name + "_NRM", true);
             int rmaIndex = AssetManager::GetTextureIndexByName(material._name + "_RMA", true);
 
-           // std::cout << "Trying to build material: " << material._name << "\n";
+            // std::cout << "Trying to build material: " << material._name << "\n";
 
-           // int basecolorIndex = AssetManager::GetTextureIndexByName("NumGrid_ALB", true);
-           // int normalIndex = AssetManager::GetTextureIndexByName("Empty_NRMRMA", true);
-           // int rmaIndex = AssetManager::GetTextureIndexByName("Empty_NRMRMA", true);
+            // int basecolorIndex = AssetManager::GetTextureIndexByName("NumGrid_ALB", true);
+            // int normalIndex = AssetManager::GetTextureIndexByName("Empty_NRMRMA", true);
+            // int rmaIndex = AssetManager::GetTextureIndexByName("Empty_NRMRMA", true);
 
             if (basecolorIndex != -1)
             {
                 material._basecolor = basecolorIndex;
             }
-            else 
+            else
             {
                 material._basecolor = AssetManager::GetTextureIndexByName("Empty_NRMRMA");
             }
 
-            if (normalIndex != -1) 
+            if (normalIndex != -1)
             {
                 material._normal = normalIndex;
             }
@@ -1076,7 +1082,7 @@ void AssetManager::BuildMaterials()
             if (rmaIndex != -1) {
                 material._rma = rmaIndex;
             }
-            else 
+            else
             {
                 material._rma = AssetManager::GetTextureIndexByName("Empty_NRMRMA");
             }
@@ -1084,7 +1090,7 @@ void AssetManager::BuildMaterials()
     }
 
     // Create GPU version
-    for (Material& material : g_materials) 
+    for (Material& material : g_materials)
     {
         GPUMaterial& gpuMaterial = g_gpuMaterials.emplace_back();
         gpuMaterial.basecolor = material._basecolor;
@@ -1103,7 +1109,7 @@ void AssetManager::LoadTexture(Texture* texture)
 // Todo
 // Access
 
-std::vector<Vertex>& AssetManager::GetVertices() 
+std::vector<Vertex>& AssetManager::GetVertices()
 {
     return g_vertices;
 }
@@ -1118,15 +1124,15 @@ std::vector<WeightedVertex>& AssetManager::GetWeightedVertices()
     return g_weightedVertices;
 }
 
-std::vector<uint32_t>& AssetManager::GetWeightedIndices() 
+std::vector<uint32_t>& AssetManager::GetWeightedIndices()
 {
     return g_weightedIndices;
 }
 
-Model* AssetManager::GetModelByName(const std::string& name) 
+Model* AssetManager::GetModelByName(const std::string& name)
 {
     auto it = g_modelIndexMap.find(name);
-    if (it != g_modelIndexMap.end()) 
+    if (it != g_modelIndexMap.end())
     {
         int index = it->second;
         return &g_models[index];
@@ -1134,9 +1140,9 @@ Model* AssetManager::GetModelByName(const std::string& name)
     return nullptr;
 }
 
-Model* AssetManager::GetModelByIndex(int index) 
+Model* AssetManager::GetModelByIndex(int index)
 {
-    if (index >= 0 && index < g_models.size()) 
+    if (index >= 0 && index < g_models.size())
     {
         return &g_models[index];
     }
@@ -1147,7 +1153,7 @@ Model* AssetManager::GetModelByIndex(int index)
 int AssetManager::GetModelIndexByName(const std::string& name)
 {
     auto it = g_modelIndexMap.find(name);
-    if (it != g_modelIndexMap.end()) 
+    if (it != g_modelIndexMap.end())
     {
         return it->second;
     }
@@ -1175,7 +1181,7 @@ unsigned int AssetManager::GetQuadMeshIndex()
     return _quadMeshIndex;
 }
 
-unsigned int AssetManager::GetHalfSizeQuadMeshIndex() 
+unsigned int AssetManager::GetHalfSizeQuadMeshIndex()
 {
     return _halfSizeQuadMeshIndex;
 }
@@ -1185,7 +1191,7 @@ unsigned int AssetManager::GetQuadMeshIndexSplitscreenTop()
     return _quadMeshIndexSplitscreenTop;
 }
 
-unsigned int AssetManager::GetQuadMeshIndexSplitscreenBottom() 
+unsigned int AssetManager::GetQuadMeshIndexSplitscreenBottom()
 {
     return _quadMeshIndexSplitscreenBottom;
 }
@@ -1195,7 +1201,7 @@ unsigned int AssetManager::GetQuadMeshIndexQuadscreenTopLeft()
     return _quadMeshIndexQuadscreenTopLeft;
 }
 
-unsigned int AssetManager::GetQuadMeshIndexQuadscreenTopRight() 
+unsigned int AssetManager::GetQuadMeshIndexQuadscreenTopRight()
 {
     return _quadMeshIndexQuadscreenTopRight;
 }
@@ -1215,14 +1221,14 @@ unsigned int AssetManager::GetUpFacingPlaneMeshIndex()
     return _upFacingPlaneMeshIndex;
 }
 
-Mesh* AssetManager::GetQuadMesh() 
+Mesh* AssetManager::GetQuadMesh()
 {
     return &g_meshes[_quadMeshIndex];
 }
 
-Mesh* AssetManager::GetMeshByIndex(int index) 
+Mesh* AssetManager::GetMeshByIndex(int index)
 {
-    if (index >= 0 && index < g_meshes.size()) 
+    if (index >= 0 && index < g_meshes.size())
     {
         return &g_meshes[index];
     }
@@ -1231,10 +1237,10 @@ Mesh* AssetManager::GetMeshByIndex(int index)
     return nullptr;
 }
 
-int AssetManager::GetMeshIndexByName(const std::string& name) 
+int AssetManager::GetMeshIndexByName(const std::string& name)
 {
     auto it = g_meshIndexMap.find(name);
-    if (it != g_meshIndexMap.end()) 
+    if (it != g_meshIndexMap.end())
     {
         return it->second;
     }
@@ -1243,10 +1249,10 @@ int AssetManager::GetMeshIndexByName(const std::string& name)
     return -1;
 }
 
-SkinnedModel* AssetManager::GetSkinnedModelByName(const std::string& name) 
+SkinnedModel* AssetManager::GetSkinnedModelByName(const std::string& name)
 {
     auto it = g_skinnedModelIndexMap.find(name);
-    if (it != g_skinnedModelIndexMap.end()) 
+    if (it != g_skinnedModelIndexMap.end())
     {
         int index = it->second;
         return &g_skinnedModels[index];
@@ -1256,9 +1262,9 @@ SkinnedModel* AssetManager::GetSkinnedModelByName(const std::string& name)
     return nullptr;
 }
 
-SkinnedMesh* AssetManager::GetSkinnedMeshByIndex(int index) 
+SkinnedMesh* AssetManager::GetSkinnedMeshByIndex(int index)
 {
-    if (index >= 0 && index < g_skinnedMeshes.size()) 
+    if (index >= 0 && index < g_skinnedMeshes.size())
     {
         return &g_skinnedMeshes[index];
     }
@@ -1282,7 +1288,7 @@ int AssetManager::GetSkinnedMeshIndexByName(const std::string& name)
 Animation* AssetManager::GetAnimationByName(const std::string& name)
 {
     auto it = g_animationIndexMap.find(name);
-    if (it != g_modelIndexMap.end()) 
+    if (it != g_modelIndexMap.end())
     {
         int index = it->second;
         return &g_animations[index];
@@ -1297,7 +1303,7 @@ std::vector<GPUMaterial>& AssetManager::GetGPUMaterials()
     return g_gpuMaterials;
 }
 
-Material* AssetManager::GetMaterialByIndex(int index) 
+Material* AssetManager::GetMaterialByIndex(int index)
 {
     if (index >= 0 && index < g_materials.size())
     {
@@ -1308,10 +1314,10 @@ Material* AssetManager::GetMaterialByIndex(int index)
     return nullptr;
 }
 
-int AssetManager::GetMaterialIndex(const std::string& name) 
+int AssetManager::GetMaterialIndex(const std::string& name)
 {
     auto it = g_materialIndexMap.find(name);
-    if (it != g_materialIndexMap.end()) 
+    if (it != g_materialIndexMap.end())
     {
         return it->second;
     }
@@ -1331,13 +1337,13 @@ int AssetManager::GetGoldBaseColorTextureIndex()
     return goldBaseColorIndex;
 }
 
-int AssetManager::GetGoldRMATextureIndex() 
+int AssetManager::GetGoldRMATextureIndex()
 {
     static int goldBaseColorIndex = AssetManager::GetTextureIndexByName("Gold_RMA");
     return goldBaseColorIndex;
 }
 
-int AssetManager::GetMaterialCount() 
+int AssetManager::GetMaterialCount()
 {
     return g_materials.size();
 }
@@ -1359,7 +1365,7 @@ int AssetManager::GetTextureIndexByName(const std::string& name, bool ignoreWarn
     for (const auto& pair : g_textureIndexMap) {
         std::cout << pair.first << ": " << pair.second << '\n';
     }*/
-    if (!ignoreWarning) 
+    if (!ignoreWarning)
     {
         std::cout << "AssetManager::GetTextureIndexByName() failed because '" << name << "' does not exist\n";
 
@@ -1369,7 +1375,7 @@ int AssetManager::GetTextureIndexByName(const std::string& name, bool ignoreWarn
 
 Texture* AssetManager::GetTextureByIndex(const int index)
 {
-    if (index >= 0 && index < g_textures.size()) 
+    if (index >= 0 && index < g_textures.size())
     {
         return &g_textures[index];
     }
@@ -1390,7 +1396,7 @@ Texture* AssetManager::GetTextureByName(const std::string& name)
     return nullptr;
 }
 
-bool AssetManager::TextureExists(const std::string& filename) 
+bool AssetManager::TextureExists(const std::string& filename)
 {
     for (Texture& texture : g_textures) // Iterate over all the textures
     {
@@ -1399,11 +1405,11 @@ bool AssetManager::TextureExists(const std::string& filename)
             return true;
         }
     }
-        
+
     return false;
 }
 
-std::vector<Texture>& AssetManager::GetTextures() 
+std::vector<Texture>& AssetManager::GetTextures()
 {
     return g_textures;
 }
@@ -1412,7 +1418,7 @@ hell::ivec2 AssetManager::GetTextureSizeByName(const char* textureName)
 {
     static std::unordered_map<const char*, int> textureIndices;
 
-    if (textureIndices.find(textureName) == textureIndices.end()) 
+    if (textureIndices.find(textureName) == textureIndices.end())
     {
         textureIndices[textureName] = AssetManager::GetTextureIndexByName(textureName);
     }
@@ -1426,7 +1432,7 @@ hell::ivec2 AssetManager::GetTextureSizeByName(const char* textureName)
     return hell::ivec2(0, 0);
 }
 
-CubemapTexture* AssetManager::GetCubemapTextureByIndex(const int index) 
+CubemapTexture* AssetManager::GetCubemapTextureByIndex(const int index)
 {
     if (index >= 0 && index < g_cubemapTextures.size())
     {
@@ -1437,11 +1443,11 @@ CubemapTexture* AssetManager::GetCubemapTextureByIndex(const int index)
     return nullptr;
 }
 
-int AssetManager::GetCubemapTextureIndexByName(const std::string& name) 
+int AssetManager::GetCubemapTextureIndexByName(const std::string& name)
 {
-    for (int i = 0; i < g_cubemapTextures.size(); i++) 
+    for (int i = 0; i < g_cubemapTextures.size(); i++)
     {
-        if (g_cubemapTextures[i].GetName() == name) 
+        if (g_cubemapTextures[i].GetName() == name)
         {
             return i;
         }
@@ -1453,7 +1459,7 @@ int AssetManager::GetCubemapTextureIndexByName(const std::string& name)
 
 void AssetManager::DebugTest()
 {
-    for (const auto& pair : g_materialIndexMap) 
+    for (const auto& pair : g_materialIndexMap)
     {
         std::cout << "Material Name: " << pair.first << ", Index: " << pair.second << std::endl;
     }
