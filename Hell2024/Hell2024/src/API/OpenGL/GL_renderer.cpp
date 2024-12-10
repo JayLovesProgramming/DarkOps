@@ -1,4 +1,4 @@
-﻿#include "GL_renderer.hpp"
+﻿#include "GL_Renderer.hpp"
 
 #include "GL_BackEnd.hpp"
 #include "Types/GL_gBuffer.h"

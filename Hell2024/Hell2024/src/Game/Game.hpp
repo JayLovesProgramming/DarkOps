@@ -4,8 +4,19 @@
 
 namespace Game
 {
-    enum class GameMode { GAME, EDITOR_TOP_DOWN, EDITOR_3D };
-    enum class MultiplayerMode { NONE, LOCAL, ONLINE };
+    enum class GameMode 
+    { 
+        GAME, 
+        EDITOR_TOP_DOWN,
+        EDITOR_3D 
+    };
+
+    enum class MultiplayerMode
+    { 
+        NONE, 
+        LOCAL, 
+        ONLINE 
+    };
 
     struct GameSettings
     {
@@ -27,7 +38,9 @@ namespace Game
 
     const int GetPlayerCount();
     const int GetPlayerIndexFromPlayerPointer(Player* player);
+
     Player* GetPlayerByIndex(unsigned int index);
+
     const GameMode& GetGameMode();
     const MultiplayerMode& GetMultiplayerMode();
     const SplitscreenMode& GetSplitscreenMode();

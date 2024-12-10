@@ -37,9 +37,6 @@ static bool finishedLoading = false;
 static int windowX;
 static int windowY;
 
-constexpr static float gifSize = 0.0f;
-constexpr static float gifWidth = gifSize;
-
 // Debug
 constexpr static auto debugInitialWindow = true;
 constexpr static bool quickLoad = true;
@@ -326,8 +323,8 @@ void InitLoadingScreen()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		DrawInitialWindowBackground(backgroundImage, loadingProgress);
-		static float aspectRatio = static_cast<float>(gifData.width) / gifData.height;
-		static float gifHeight = gifSize / aspectRatio;
+		//static float aspectRatio = static_cast<float>(gifData.width) / gifData.height;
+		//static float gifHeight = gifSize / aspectRatio;
 		
 		//std::cout << gifWidth << ", " << gifHeight << std::endl;
 		//float textColor[] = { 1.0f, 1.0f, 1.0f }; // White color

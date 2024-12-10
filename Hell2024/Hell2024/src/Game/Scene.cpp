@@ -149,12 +149,12 @@ void Scene::SaveMapData(const std::string& fileName)
     }
     data["Lights"] = jsonLights;
 
-    // Print it
+    // Print It
     int indent = 4;
     std::string text = data.dump(indent);
     std::cout << text << "\n\n";
 
-    // Save to file
+    // Save To File
     std::ofstream out("res/maps/mappp.txt");
     out << text;
     out.close();
@@ -162,7 +162,7 @@ void Scene::SaveMapData(const std::string& fileName)
 
 void Scene::LoadMapData(const std::string& fileName)
 {
-    // Load file
+    // Load File
     std::string fullPath = "res/maps/" + fileName;
     std::cout << "[LOADED] Map: '" << fullPath << "'\n";
 
@@ -3461,6 +3461,7 @@ void Scene::CreateMeshData()
         // Front
         glm::vec3 pos0 = glm::vec3(0, 0, 0);
         glm::vec3 pos1 = glm::vec3(0.0, 0, doorWidth);
+
         // Back
         glm::vec3 pos2 = glm::vec3(doorDepth, 0, 0);
         glm::vec3 pos3 = glm::vec3(doorDepth, 0, doorWidth);
@@ -3604,21 +3605,6 @@ std::vector<Door>& Scene::GetDoors()
     return g_doors;
 }
 
-/*
-void Scene::SetDoorPosition(uint32_t doorIndex, glm::vec3 position) {
-    Door* door = GetDoorByIndex(doorIndex);
-    if (door) {
-        door->SetPosition(position);
-    }
-}
-
-void Scene::SetWindowPosition(uint32_t windowIndex, glm::vec3 position) {
-    Window* window = GetWindowByIndex(windowIndex);
-    if (window) {
-        window->SetPosition(position);
-    }
-}*/
-
 void Scene::CreateDoor(DoorCreateInfo createInfo) 
 {
     Door& door = g_doors.emplace_back();
@@ -3635,3 +3621,25 @@ void Scene::CreateWindow(WindowCreateInfo createInfo)
     window.SetRotationY(createInfo.rotation);
     window.CreatePhysicsObjects();
 }
+
+// COMMENTED OUT STUFF (May be useful)
+
+/*
+void Scene::SetDoorPosition(uint32_t doorIndex, glm::vec3 position)
+{
+    Door* door = GetDoorByIndex(doorIndex);
+    if (door)
+    {
+        door->SetPosition(position);
+    }
+}
+
+void Scene::SetWindowPosition(uint32_t windowIndex, glm::vec3 position)
+{
+    Window* window = GetWindowByIndex(windowIndex);
+    if (window)
+    {
+        window->SetPosition(position);
+    }
+}
+*/
