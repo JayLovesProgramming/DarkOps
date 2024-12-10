@@ -1,5 +1,0 @@
-# Make the knife do damage to walls, doors etc
-# Make the knife do damage to the dogs and other people
-
-# Fix the bug with the ADS getting stuck
-# Fix the bug with shooting getting stuck
