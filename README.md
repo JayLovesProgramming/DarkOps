@@ -81,3 +81,4 @@ Indirect light is working. It's all done with ray-triangle intersection tests at
 I started a new project today, to explore using voxels to calculate and render indirect diffuse light at realtime speeds. So far direct lighting only. Will finish light propogation on the cpu, then move it all to compute if it looks any good. Rendered in OpenGL. Will likely eventually port to Vulkan and let them evaluate the raycasts for me, don't really see myself writing something faster, gonna have a crack in GL compute first tho.
 
 ![Image](https://www.principiaprogrammatica.com/dump/Voxel.jpg)
+"# DarkOps2024" 
