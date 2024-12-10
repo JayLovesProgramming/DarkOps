@@ -25,6 +25,78 @@ public:
         }
     }
 
+    inline static void SpawnJuggernog()
+    {
+        Transform shapeOffset;
+        shapeOffset.position.y = 0.0f;
+        shapeOffset.position.z = 0.0f;
+
+        PxShape* JuggernogPhysics = Physics::CreateBoxShape(0.75f, 0.75f, 0.75f, shapeOffset);
+        
+        PhysicsFilterData JuggernogPhysicsData;
+        JuggernogPhysicsData.raycastGroup = RAYCAST_DISABLED;
+        JuggernogPhysicsData.collisionGroup = CollisionGroup::ENVIROMENT_OBSTACLE;
+        JuggernogPhysicsData.collidesWith = (CollisionGroup)(GENERIC_BOUNCEABLE | BULLET_CASING | PLAYER | RAGDOLL);
+
+        CreateGameObject();
+        GameObject* PERK_JUGGERNOG = GetGameObjectByIndex(GetGameObjectCount() - 1);
+        
+        PERK_JUGGERNOG->SetPosition(-0.1f, -0.2f, 3.8f);
+        PERK_JUGGERNOG->SetModel("Juggernog");
+        PERK_JUGGERNOG->SetName("PERK_JUGGERNOG");
+        PERK_JUGGERNOG->SetMeshMaterial("Juggernog");
+        PERK_JUGGERNOG->SetScale(0.021f);
+        PERK_JUGGERNOG->SetKinematic(true);
+
+        //PERK_JUGGERNOG->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("Sofa_Cushionless"));
+        PERK_JUGGERNOG->AddCollisionShape(JuggernogPhysics, JuggernogPhysicsData);
+
+        //PERK_JUGGERNOG->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaBack_ConvexMesh"));
+        //PERK_JUGGERNOG->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaLeftArm_ConvexMesh"));
+        //PERK_JUGGERNOG->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaRightArm_ConvexMesh"));
+
+        PERK_JUGGERNOG->SetModelMatrixMode(ModelMatrixMode::GAME_TRANSFORM);
+        PERK_JUGGERNOG->SetCollisionType(CollisionType::STATIC_ENVIROMENT);
+        //PERK_JUGGERNOG->
+        //PERK_JUGGERNOG->SetMeshMaterialByMeshName("Balls", "Gold");
+    }
+
+    inline static void SpawnSpeedCola()
+    {
+        Transform shapeOffset;
+        shapeOffset.position.y = 0.0f;
+        shapeOffset.position.z = 0.0f;
+
+        PxShape* SpeedColaPhysics = Physics::CreateBoxShape(0.75f, 0.75f, 0.75f, shapeOffset);
+
+        PhysicsFilterData SpeedColaPhysicsData;
+        SpeedColaPhysicsData.raycastGroup = RAYCAST_DISABLED;
+        SpeedColaPhysicsData.collisionGroup = CollisionGroup::ENVIROMENT_OBSTACLE;
+        SpeedColaPhysicsData.collidesWith = (CollisionGroup)(GENERIC_BOUNCEABLE | BULLET_CASING | PLAYER | RAGDOLL);
+
+        CreateGameObject();
+        GameObject* PERK_SPEEDCOLA = GetGameObjectByIndex(GetGameObjectCount() - 1);
+
+        PERK_SPEEDCOLA->SetPosition(-0.1f, -0.8f, 7.8f);
+        PERK_SPEEDCOLA->SetModel("Speedcola");
+        PERK_SPEEDCOLA->SetName("PERK_SPEEDCOLA");
+        PERK_SPEEDCOLA->SetMeshMaterial("Speedcola");
+        PERK_SPEEDCOLA->SetScale(1.3f);
+        PERK_SPEEDCOLA->SetKinematic(true);
+
+        //PERK_SPEEDCOLA->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("Sofa_Cushionless"));
+        PERK_SPEEDCOLA->AddCollisionShape(SpeedColaPhysics, SpeedColaPhysicsData);
+
+        //PERK_SPEEDCOLA->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaBack_ConvexMesh"));
+        //PERK_SPEEDCOLA->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaLeftArm_ConvexMesh"));
+        //PERK_SPEEDCOLA->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaRightArm_ConvexMesh"));
+
+        PERK_SPEEDCOLA->SetModelMatrixMode(ModelMatrixMode::GAME_TRANSFORM);
+        PERK_SPEEDCOLA->SetCollisionType(CollisionType::STATIC_ENVIROMENT);
+        //PERK_SPEEDCOLA->
+        //PERK_SPEEDCOLA->SetMeshMaterialByMeshName("Balls", "Gold");
+    }
+
     inline static void SpawnChristmasTree()
 	{
         CreateGameObject();

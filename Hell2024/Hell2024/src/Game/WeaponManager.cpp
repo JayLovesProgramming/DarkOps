@@ -294,6 +294,67 @@ namespace WeaponManager
         goldeneGlock.pickUpMeshMaterials["Glock"] = "Gold";
     }
 
+    static void TEST_RUST_MAP_INIT()
+    {
+        WeaponInfo& MAP_RUST = g_weapons.emplace_back();
+        MAP_RUST.name = "MAP_RUST";
+        MAP_RUST.modelName = "mp_rust";
+        MAP_RUST.type = WeaponType::PISTOL;
+        MAP_RUST.damage = 16;
+        MAP_RUST.meshMaterials["ArmsMale"] = "Hands";
+        MAP_RUST.meshMaterials["ArmsFemale"] = "FemaleArms";
+        //goldeneGlock.meshMaterials["Glock"] = "Glock";
+        //goldeneGlock.meshMaterials["Glock_silencer"] = "Glock";
+        //goldeneGlock.meshMaterials["RedDotSight"] = "Glock";
+        //goldeneGlock.meshMaterials["RedDotSightGlass"] = "RedDotSight";
+        //goldeneGlock.hiddenMeshAtStart.push_back("ArmsFemale");
+        //goldeneGlock.hiddenMeshAtStart.push_back("Glock_silencer");
+        //goldeneGlock.muzzleFlashBoneName = "Barrel";
+        //goldeneGlock.muzzleFlashOffset = glm::vec3(0, 0.002, 0.005f);
+        //goldeneGlock.casingEjectionBoneName = "Barrel";
+        //goldeneGlock.casingEjectionOffset = glm::vec3(-0.098, -0.033, 0.238);
+        //goldeneGlock.animationNames.idle = "Glock_Idle";
+        //goldeneGlock.animationNames.walk = "Glock_Walk";
+        //goldeneGlock.animationNames.draw = "Glock_Draw";
+        //goldeneGlock.animationNames.reload = "Glock_Reload";
+        //goldeneGlock.animationNames.reloadempty.push_back("Glock_ReloadEmpty");
+        //goldeneGlock.animationNames.fire.push_back("Glock_Fire0");
+        //goldeneGlock.animationNames.fire.push_back("Glock_Fire1");
+        //goldeneGlock.animationNames.fire.push_back("Glock_Fire2");
+        //goldeneGlock.animationNames.draw = "Glock_Draw";
+        //goldeneGlock.ammoType = "Glock";
+        //goldeneGlock.magSize = 100;
+        //goldeneGlock.animationCancelPercentages.fire = 20.0f;
+        //goldeneGlock.animationCancelPercentages.reload = 80.0f;
+        //goldeneGlock.animationCancelPercentages.reloadFromEmpty = 95.0f;
+        //goldeneGlock.animationCancelPercentages.draw = 75.0f;
+        //goldeneGlock.animationCancelPercentages.adsFire = 10.0f;
+        //goldeneGlock.audioFiles.fire.push_back("Glock_Fire0.wav");
+        //goldeneGlock.audioFiles.fire.push_back("Glock_Fire1.wav");
+        //goldeneGlock.audioFiles.fire.push_back("Glock_Fire2.wav");
+        //goldeneGlock.audioFiles.fire.push_back("Glock_Fire3.wav");
+        ////goldeneGlock.audioFiles.fire.push_back("Silenced.wav");
+        //goldeneGlock.audioFiles.reload = "Glock_Reload.wav";
+        //goldeneGlock.audioFiles.reloadEmpty = "Glock_ReloadEmpty.wav";
+        //goldeneGlock.animationSpeeds.fire = 1.625f;
+        //goldeneGlock.auomaticOverride = true;
+        //goldeneGlock.isGold = true;
+        //goldeneGlock.pistolSlideBoneName = "Slide";
+        //goldeneGlock.pistolSlideOffset = 5;
+        //goldeneGlock.animationNames.adsIn = "Glock_ADS_In";
+        //goldeneGlock.animationNames.adsOut = "Glock_ADS_Out";
+        //goldeneGlock.animationNames.adsIdle = "Glock_ADS_Idle";
+        //goldeneGlock.animationNames.adsWalk = "Glock_ADS_Walk";
+        //goldeneGlock.animationNames.adsFire.push_back("Glock_ADS_Fire0");
+        //goldeneGlock.animationNames.adsFire.push_back("Glock_ADS_Fire1");
+        //goldeneGlock.animationNames.adsFire.push_back("Glock_ADS_Fire2");
+        //goldeneGlock.reloadMagInFrameNumber = 20;
+        //goldeneGlock.reloadEmptyMagInFrameNumber = 20;
+        //goldeneGlock.pickupModelName = "Glock_Isolated";
+        //goldeneGlock.pickupConvexMeshModelName = "Glock_Isolated_ConvexMesh";
+        //goldeneGlock.pickUpMeshMaterials["Glock"] = "Gold";
+    }
+
     static void GLOCK_INIT()
     {
         WeaponInfo& glock = g_weapons.emplace_back();

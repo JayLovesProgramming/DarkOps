@@ -12,10 +12,13 @@ public:
     inline static void CreateSofa()
 	{
         float cushionHeight = 0.555f;
+
         Transform shapeOffset;
         shapeOffset.position.y = cushionHeight * 0.5f;
         shapeOffset.position.z = 0.5f;
+
         PxShape* sofaShapeBigCube = Physics::CreateBoxShape(1, cushionHeight * 0.5f, 0.4f, shapeOffset);
+        
         PhysicsFilterData sofaFilterData;
         sofaFilterData.raycastGroup = RAYCAST_DISABLED;
         sofaFilterData.collisionGroup = CollisionGroup::ENVIROMENT_OBSTACLE;

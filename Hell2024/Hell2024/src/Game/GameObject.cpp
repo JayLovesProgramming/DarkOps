@@ -505,12 +505,15 @@ void GameObject::SetOpenState(OpenState openState, float speed, float min, float
 	_maxOpenAmount = max;
 }
 
-void GameObject::SetModel(const std::string& name){
+void GameObject::SetModel(const std::string& name)
+{
     model = AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName(name.c_str()));
-    if (model) {
+    if (model) 
+    {
         _meshMaterialIndices.resize(model->GetMeshCount());
     }
-    else {
+    else 
+    {
         std::cout << "Failed to set model '" << name << "', it does not exist.\n";
     }
 }
@@ -538,26 +541,31 @@ void GameObject::SetMeshMaterialByMeshName(std::string meshName, const char* mat
     }
 }
 
-
-void GameObject::SetMeshMaterial(const char* name, int meshIndex) {
+void GameObject::SetMeshMaterial(const char* name, int meshIndex)
+{
 	// Range checks
-	if (!_meshMaterialIndices.size()) {
+	if (!_meshMaterialIndices.size())
+    {
 		std::cout << "Failed to set mesh material, GameObject has _meshMaterials with size " << _meshMaterialIndices.size() << "\n";
 		return;
 	}
-	else if (meshIndex != -1 && meshIndex > _meshMaterialIndices.size()) {
+	else if (meshIndex != -1 && meshIndex > _meshMaterialIndices.size())
+    {
 		std::cout << "Failed to set mesh material with mesh Index " << meshIndex << ", GameObject has _meshMaterials with size " << _meshMaterialIndices.size() << "\n";
 		return;
 	}
 	// Get the material index via the material name
 	int materialIndex = AssetManager::GetMaterialIndex(name);
 	// Set material for single mesh
-	if (meshIndex != -1) {
+	if (meshIndex != -1) 
+    {
 		_meshMaterialIndices[meshIndex] = materialIndex;
 	}
 	// Set material for all mesh
-	if (meshIndex == -1) {
-		for (int i = 0; i < _meshMaterialIndices.size(); i++) {
+	if (meshIndex == -1)
+    {
+		for (int i = 0; i < _meshMaterialIndices.size(); i++) 
+        {
 			_meshMaterialIndices[i] = materialIndex;
 		}
 	}

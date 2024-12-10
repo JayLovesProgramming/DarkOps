@@ -291,6 +291,7 @@ void AssetManager::FindAssetPaths()
 void AssetManager::AddItemToLoadLog(std::string item)
 {
     g_loadLog.push_back(item);
+    std::cout << item << std::endl;
 }
 
 std::vector<std::string>& AssetManager::GetLoadLog()
@@ -379,7 +380,7 @@ void AssetManager::LoadNextItem()
         if (model.m_awaitingLoadingFromDisk)
         {
             model.m_awaitingLoadingFromDisk = false;
-            //AddItemToLoadLog(model.m_fullPath);
+            AddItemToLoadLog(model.m_fullPath);
             _futures.push_back(std::async(std::launch::async, LoadModel, &model));
             return;
         }
@@ -405,7 +406,7 @@ void AssetManager::LoadNextItem()
         {
             texture.SetLoadingState(LoadingState::LOADING_FROM_DISK);
             _futures.push_back(std::async(std::launch::async, LoadTexture, &texture));
-            //AddItemToLoadLog(texture.m_fullPath);
+            AddItemToLoadLog(texture.m_fullPath);
             return;
         }
     }

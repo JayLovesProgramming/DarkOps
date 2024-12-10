@@ -27,7 +27,8 @@ uniform int fogAABBCount;
 
 const float PI = 3.14159265359;
 
-struct CameraData {
+struct CameraData
+{
     mat4 projection;
     mat4 projectionInverse;
     mat4 view;
@@ -46,14 +47,16 @@ struct CameraData {
     float finalImageColorB;
 };
 
-struct PlayerData {
+struct PlayerData
+{
     int flashlightOn;
     int padding0;
     int padding1;
     int padding2;
 };
 
-struct Light {
+struct Light
+{
     float posX;
     float posY;
     float posZ;
@@ -68,12 +71,14 @@ struct Light {
     float padding1;
 };
 
-struct TileData {
+struct TileData
+{
     uint lightCount;
     uint lightIndices[127];
 };
 
-struct AABB {
+struct AABB
+{
 	float centerX;
 	float centerY;
 	float centerZ;
@@ -88,22 +93,25 @@ struct AABB {
 	float paddingZ;
 };
 
-layout(std430, binding = 2) readonly buffer Lights {
+layout(std430, binding = 2) readonly buffer Lights
+{
     Light lights[];
 };
 
-layout(std430, binding = 16) readonly buffer CameraDataArray {
+layout(std430, binding = 16) readonly buffer CameraDataArray
+{
     CameraData cameraDataArray[];
 };
 
-layout(std430, binding = 20) buffer Buffer2 {
+layout(std430, binding = 20) buffer Buffer2 
+{
     TileData tileData[];
 };
 
-layout(std430, binding = 21) buffer PlayerDataBuffer {
+layout(std430, binding = 21) buffer PlayerDataBuffer
+{
     PlayerData playerData[];
 };
-
 
 vec3 gridSamplingDisk[20] = vec3[](
    vec3(1, 1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1, 1,  1),
@@ -113,7 +121,8 @@ vec3 gridSamplingDisk[20] = vec3[](
    vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
 );
 
-float ShadowCalculation(int lightIndex, vec3 lightPos, float lightRadius, vec3 fragPos, vec3 viewPos, vec3 Normal) {
+float ShadowCalculation(int lightIndex, vec3 lightPos, float lightRadius, vec3 fragPos, vec3 viewPos, vec3 Normal)
+{
     vec3 fragToLight = fragPos - lightPos;
     float currentDepth = length(fragToLight);
     float far_plane = lightRadius; // far plane was hardcoded to 20, you can pass it as an argument if needed
@@ -124,12 +133,14 @@ float ShadowCalculation(int lightIndex, vec3 lightPos, float lightRadius, vec3 f
     float viewDistance = length(viewPos - fragPos);
     float diskRadius = (1.0 + (viewDistance / far_plane)) / 200.0;
     // Sample the cubemap array for shadows
-    for (int i = 0; i < samples; ++i) {
+    for (int i = 0; i < samples; ++i)
+	{
         // Sample the cubemap array with the light index and the current sampling offset
         float closestDepth = texture(shadowMapArray, vec4(fragToLight + gridSamplingDisk[i] * diskRadius, lightIndex)).r;
         closestDepth *= far_plane;  // Undo mapping [0;1]        
         // Apply bias and check if the fragment is in shadow
-        if (currentDepth - bias > closestDepth) {
+        if (currentDepth - bias > closestDepth)
+		{
             shadow += 1.0;
         }
     }
@@ -139,13 +150,9 @@ float ShadowCalculation(int lightIndex, vec3 lightPos, float lightRadius, vec3 f
     return 1.0 - shadow;
 }
 
-
-/////////////////////////
-//                     //
 //   Direct Lighting   //
-
-
-float D_GGX(float NoH, float roughness) {
+float D_GGX(float NoH, float roughness)
+{
   float alpha = roughness * roughness;
   float alpha2 = alpha * alpha;
   float NoH2 = NoH * NoH;
@@ -153,7 +160,8 @@ float D_GGX(float NoH, float roughness) {
   return alpha2 / (PI * b * b);
 }
 
-float G1_GGX_Schlick(float NdotV, float roughness) {
+float G1_GGX_Schlick(float NdotV, float roughness)
+{
   //float r = roughness; // original
   float r = 0.5 + 0.5 * roughness; // Disney remapping
   float k = (r * r) / 2.0;
@@ -161,17 +169,20 @@ float G1_GGX_Schlick(float NdotV, float roughness) {
   return NdotV / denom;
 }
 
-float G_Smith(float NoV, float NoL, float roughness) {
+float G_Smith(float NoV, float NoL, float roughness)
+{
   float g1_l = G1_GGX_Schlick(NoL, roughness);
   float g1_v = G1_GGX_Schlick(NoV, roughness);
   return g1_l * g1_v;
 }
 
-vec3 fresnelSchlick(float cosTheta, vec3 F0) {
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-vec3 microfacetBRDF(in vec3 L, in vec3 V, in vec3 N, in vec3 baseColor, in float metallicness, in float fresnelReflect, in float roughness, in vec3 WorldPos) {
+vec3 microfacetBRDF(in vec3 L, in vec3 V, in vec3 N, in vec3 baseColor, in float metallicness, in float fresnelReflect, in float roughness, in vec3 WorldPos) 
+{
   vec3 H = normalize(V + L); // half vector
   // all required dot products
   float NoV = clamp(dot(N, V), 0.0, 1.0);
@@ -200,7 +211,8 @@ vec3 microfacetBRDF(in vec3 L, in vec3 V, in vec3 N, in vec3 baseColor, in float
   return result;
 }
 
-vec3 GetDirectLighting(vec3 lightPos, vec3 lightColor, float radius, float strength, vec3 Normal, vec3 WorldPos, vec3 baseColor, float roughness, float metallic, vec3 viewPos) {
+vec3 GetDirectLighting(vec3 lightPos, vec3 lightColor, float radius, float strength, vec3 Normal, vec3 WorldPos, vec3 baseColor, float roughness, float metallic, vec3 viewPos)
+{
 	float fresnelReflect = 1.0; // 0.5 is what they used for box, 1.0 for demon
 	vec3 viewDir = normalize(viewPos - WorldPos);
 	float lightRadiance = strength * 1;// * 1.25;
@@ -213,7 +225,8 @@ vec3 GetDirectLighting(vec3 lightPos, vec3 lightColor, float radius, float stren
 	return brdf * irradiance * clamp(lightColor, 0, 1);
 }
 
-vec3 GetOutdoorDirectLighting(vec3 WorldPos, vec3 Normal, vec3 baseColor, float roughness, float metallic, vec3 viewPos, vec3 lightDir, vec3 lightColor, float lightStrength) {
+vec3 GetOutdoorDirectLighting(vec3 WorldPos, vec3 Normal, vec3 baseColor, float roughness, float metallic, vec3 viewPos, vec3 lightDir, vec3 lightColor, float lightStrength)
+{
 	float fresnelReflect = 1.0; // 0.5 is what they used for box, 1.0 for demon
 	vec3 viewDir = normalize(viewPos - WorldPos);
 	float irradiance = max(dot(lightDir, Normal), 0.0);
@@ -222,35 +235,23 @@ vec3 GetOutdoorDirectLighting(vec3 WorldPos, vec3 Normal, vec3 baseColor, float 
 	return brdf * irradiance * clamp(lightColor, 0, 1);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-//////////////////////
-//                  //
 //   Tone mapping   //
-
-vec3 filmic(vec3 x) {
+vec3 filmic(vec3 x)
+{
   vec3 X = max(vec3(0.0), x - 0.004);
   vec3 result = (X * (6.2 * X + 0.5)) / (X * (6.2 * X + 1.7) + 0.06);
   return pow(result, vec3(2.2));
 }
 
-float filmic(float x) {
+float filmic(float x)
+{
   float X = max(0.0, x - 0.004);
   float result = (X * (6.2 * X + 0.5)) / (X * (6.2 * X + 1.7) + 0.06);
   return pow(result, 2.2);
 }
 
-vec3 Tonemap_ACES(const vec3 x) { // Narkowicz 2015, "ACES Filmic Tone Mapping Curve"
+vec3 Tonemap_ACES(const vec3 x)
+{ // Narkowicz 2015, "ACES Filmic Tone Mapping Curve"
     const float a = 2.51;
     const float b = 0.03;
     const float c = 2.43;
@@ -259,41 +260,29 @@ vec3 Tonemap_ACES(const vec3 x) { // Narkowicz 2015, "ACES Filmic Tone Mapping C
     return (x * (a * x + b)) / (x * (c * x + d) + e);
 }
 
-//////////////
-//          //
 //   Noise  //
 
 /*
-vec3 filmPixel(vec2 uv) {
+vec3 filmPixel(vec2 uv)
+{
     mat2x3 uvs = mat2x3(uv.xxx, uv.yyy) + mat2x3(vec3(0, 0.1, 0.2), vec3(0, 0.3, 0.4));
     return fract(sin(uvs * vec2(12.9898, 78.233) * time) * 43758.5453);
 }*/
 
-float rand(vec2 co){
+float rand(vec2 co)
+{
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-
-vec3 filmPixel(vec2 uv) {
+vec3 filmPixel(vec2 uv)
+{
     mat2x3 uvs = mat2x3(uv.xxx, uv.yyy) + mat2x3(vec3(0, 0.1, 0.2), vec3(0, 0.3, 0.4));
     return fract(sin(uvs * vec2(12.9898, 78.233) * time) * 43758.5453);
 }
 
-
-
-
-
-
-
-
-
-
-///////////////////////////
-//                       //
 //   Indirect Lighting   //
-
-vec3 GetProbe3(vec3 fragWorldPos, ivec3 offset, out float weight, vec3 Normal) {
-
+vec3 GetProbe3(vec3 fragWorldPos, ivec3 offset, out float weight, vec3 Normal)
+{
 	/*
 	float probeWorldX = (x * probeSpacing) + lightVolumePosition.x;
 	float probeWorldY = (y * probeSpacing) + lightVolumePosition.y;
@@ -470,7 +459,8 @@ vec3 GetSpotLighting(vec3 fragPos, vec3 normal, vec3 viewPos, vec3 spotLightDire
     vec3 result = (ambientLight + intensity * (diffuseLight + specularLight)) * attenuation;
 
 	
-	if (distance > 0.1) {
+	if (distance > 0.1)
+	{
 	distance = distance * distance * distance;
 	cutoff = cos(radians(10.5));
     outerCutoff = cos(radians(25.5));
@@ -486,10 +476,8 @@ vec3 GetSpotLighting(vec3 fragPos, vec3 normal, vec3 viewPos, vec3 spotLightDire
 }
 
 
-
-
-void main() {
-
+void main()
+{
 	const int tileSize = TILE_SIZE;	
 	vec2 viewportSize = vec2(viewportWidth, viewportHeight);
 	ivec2 pixelCoords = ivec2(gl_GlobalInvocationID.xy);
@@ -529,14 +517,16 @@ void main() {
 	
 	// Direct lighting
 	vec3 directLighting = vec3(0);
-	for (int i = 0; i < lightCount; i++) {
+	for (int i = 0; i < lightCount; i++)
+	{
 		uint lightIndex = tileData[tileIndex].lightIndices[i];
 		vec3 lightColor = vec3(lights[lightIndex].colorR, lights[lightIndex].colorG, lights[lightIndex].colorB);
 		vec3 lightPosition = vec3(lights[lightIndex].posX, lights[lightIndex].posY, lights[lightIndex].posZ);
 		float lightRadius = lights[lightIndex].radius;								
 		float strength = lights[lightIndex].strength;								
 		float shadow = 1;
-		if (lights[lightIndex].shadowMapIndex != -1) {
+		if (lights[lightIndex].shadowMapIndex != -1) 
+		{
 			shadow = ShadowCalculation(lights[lightIndex].shadowMapIndex, lightPosition, lightRadius, worldSpacePosition.xyz, viewPos, normal);
 		}	
 		directLighting += GetDirectLighting(lightPosition, lightColor, lightRadius, strength, normal, worldSpacePosition.xyz, baseColor, roughness, metallic, viewPos) * shadow;
@@ -556,22 +546,16 @@ void main() {
 	adjustedIndirectLighting = max(adjustedIndirectLighting, vec3(0));
 	adjustedIndirectLighting *= baseColor2.rgb * 1.0;
 	vec3 finalIndirectLighting = adjustedIndirectLighting * 0.15;
-
-	
-
 	
 	vec3 finalLighting = directLighting;
 	finalLighting += finalIndirectLighting;
 
 	//finalLighting = indirectLighting;
-
 	
 	//finalLighting = worldSpacePosition.xyz;
 
 	//finalLighting = mix(finalLighting + outsideLighting, finalLighting, insideOutsideScaleFactor);
 
-
-	
 	// Spotlights
 	for (int i = 0; i < 2; i++) 
 	{
@@ -597,7 +581,8 @@ void main() {
 		spotLighting *= spotLightingFactor;
 	
 
-		if (playerData[i].flashlightOn == 1) {
+		if (playerData[i].flashlightOn == 1) 
+		{
 			finalLighting += spotLighting;
 		}
 		
@@ -645,18 +630,18 @@ void main() {
 	float noiseFactor = 0.035;
 
 	// Some more YOLO tone mapping
-	finalLighting = mix(finalLighting, Tonemap_ACES(finalLighting), 0.75);
+	finalLighting = mix(finalLighting, Tonemap_ACES(finalLighting), 1.75);
 
 	// Add the noise
-	finalLighting = finalLighting + (x * -noiseFactor) + (noiseFactor / 2);
+	// finalLighting = finalLighting + (x * -noiseFactor) + (noiseFactor / 2);
 
 	// Contrast
-	float contrast = 1.15;
+	float contrast = 1.00;
 	vec3 finalColor = finalLighting;
 	finalLighting = finalLighting * contrast;
 
 	// Brightness
-	finalLighting -= vec3(0.020);
+	finalLighting += vec3(0.090);
 		
 	imageStore(lightingTexture, pixelCoords, vec4(finalLighting, 1));
 	//imageStore(lightingTexture, pixelCoords, vec4(normal, 1));
