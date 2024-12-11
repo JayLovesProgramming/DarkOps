@@ -29,7 +29,7 @@
 #include "Pathfinding/Pathfinding2.hpp"
 
 // RENDERER
-#include "Renderer/ImGui/GUI_UI.h"
+#include "Renderer/ImGui/GUI_UI.hpp"
 
 namespace BackEnd 
 {
@@ -101,9 +101,6 @@ namespace BackEnd
 
         InitWindowHints();
 
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
-
         // Resolution and window size
         _monitor = glfwGetPrimaryMonitor();
         _mode = glfwGetVideoMode(_monitor);
@@ -118,10 +115,14 @@ namespace BackEnd
         _fullscreenWidth = _mode->width; 
         _fullscreenHeight = _mode->height;
 
-        _windowedWidth = _mode->width;
-        _windowedHeight = _mode->height;
+        _windowedWidth = _mode->width * 0.9;
+        _windowedHeight = _mode->height * 0.9;
 
         CreateGLFWWindow(WindowedMode::WINDOWED);
+        int windowPosX = (_fullscreenWidth - _windowedWidth) / 2;
+        int windowPosY = (_fullscreenHeight - _windowedHeight) / 2;
+        glfwSetWindowPos(_window, windowPosX, windowPosY);
+
         if (_window == NULL) 
         {
             std::cout << "Failed to create GLFW window/n";
@@ -235,13 +236,14 @@ namespace BackEnd
             _currentWindowWidth = _windowedWidth;
             _currentWindowHeight = _windowedHeight;
             _window = glfwCreateWindow(_windowedWidth, _windowedHeight, (BackEnd::_windowName + " (OpenGL)").c_str(), NULL, NULL);
-            glfwSetWindowPos(_window, 0, 0);
+            //glfwSetWindowPos(_window, (_currentWindowWidth / 2), (_currentWindowHeight / 2));
         }
         else if (windowedMode == WindowedMode::FULLSCREEN)
         {
             _currentWindowWidth = _fullscreenWidth;
             _currentWindowHeight = _fullscreenHeight;
             _window = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight, (BackEnd::_windowName + " (OpenGL)").c_str(), _monitor, NULL);
+            //glfwSetWindowPos(_window, (_fullscreenWidth / 2), (_fullscreenHeight / 2));
         }
         _windowedMode = windowedMode;
 

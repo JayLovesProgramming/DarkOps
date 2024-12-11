@@ -2773,6 +2773,9 @@ void OpenGLRenderer::UpdatePointCloud()
 
 void OpenGLRenderer::Triangle2DPass() 
 {
+    return;
+
+    // Not in use?
 
     std::vector<glm::vec2> pixelCoords = {
      /* glm::vec2(100.0f, 100.0f),

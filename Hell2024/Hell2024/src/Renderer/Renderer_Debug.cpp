@@ -661,8 +661,8 @@ FacingDirection DetermineFacingDirection(const glm::vec3& forwardVector, const g
 }
 
 // Text
-std::string& Renderer::GetDebugText() {
-
+std::string& Renderer::GetDebugText() 
+{
     /*
     text += "Splitscreen mode: " + Util::SplitscreenModeToString(Game::GetSplitscreenMode()) + "\n";
     text += "Render mode: " + Util::RenderModeToString(_renderMode) + "\n";
@@ -701,10 +701,12 @@ std::string& Renderer::GetDebugText() {
     g_debugText = "Jay Development Build 0.1 \n";
     g_debugText += Util::RenderModeToString(Renderer::GetRenderMode()) + "\n";
 
-    if (Renderer::GetDebugLineRenderMode() != SHOW_NO_LINES) {
+    if (Renderer::GetDebugLineRenderMode() != SHOW_NO_LINES)
+    {
         g_debugText += "Line mode: " + Util::DebugLineRenderModeToString(Renderer::GetDebugLineRenderMode()) + "\n";
     }
-    if (Editor::IsOpen()) {
+    if (Editor::IsOpen()) 
+    {
         g_debugText = Editor::GetDebugText();
     }
 
@@ -717,9 +719,11 @@ std::string& Renderer::GetDebugText() {
 
     std::vector<glm::vec3> vertices;
 
-    for (auto& csgObject : CSG::GetCSGObjects()) {
+    for (auto& csgObject : CSG::GetCSGObjects()) 
+    {
         std::span<CSGVertex> span = csgObject.GetVerticesSpan();
-        for (auto& vertex : span) {
+        for (auto& vertex : span)
+        {
             vertices.push_back(vertex.position);
         }
     }

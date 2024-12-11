@@ -1,24 +1,11 @@
 #pragma once
 // FIX: Change something and we can only rebuild
 
-
 #include "HellCommon.hpp"
 #include "Core/AssetManager.hpp"
 
 #include "stb_image.h"
 #include "BackEnd/BackEnd.hpp"
-#include "LoadingScreen/TextRenderer.h"
-
-enum class WindowPositions 
-{
-	TOP_LEFT,
-	TOP_RIGHT,
-	BOTTOM_LEFT,
-	BOTTOM_RIGHT,
-	CENTERED,
-	BOTTOM_CENTERED,
-	TOP_CENTERED
-};
 
 // GIF
 struct GifData
@@ -33,8 +20,6 @@ struct GifData
 
 constexpr static auto loadingScreenWidth = 1024;
 constexpr static auto loadingScreenHeight = 576;
-constexpr static WindowPositions windowPosition = WindowPositions::CENTERED;
-
 static bool finishedLoading = false;
 static int windowX;
 static int windowY;
@@ -196,64 +181,7 @@ void DrawGifFrame(const GifData& gifData, int frameIndex, float x, float y, floa
 	glDeleteTextures(1, &textureID);
 }
 
-void SetWindowPosition(GLFWwindow* loadingWindow)
-{
-	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
 
-	if (!videoMode)
-	{
-		std::cout << "Initial window: Failed to find video mode" << "\n";
-		return;
-	}
-
-	int screenWidth = videoMode->width;
-	int screenHeight = videoMode->height;
-
-	switch (windowPosition)
-	{
-	case WindowPositions::CENTERED:
-		windowX = (screenWidth - loadingScreenWidth) / 2;
-		windowY = (screenHeight - loadingScreenHeight) / 2;
-		break;
-
-	case WindowPositions::TOP_LEFT:
-		windowX = 0;
-		windowY = 0;
-		break;
-
-	case WindowPositions::TOP_RIGHT:
-		windowX = screenWidth - loadingScreenWidth;
-		windowY = 0;
-		break;
-
-	case WindowPositions::BOTTOM_LEFT:
-		windowX = 0;
-		windowY = screenHeight - loadingScreenHeight;
-		break;
-
-	case WindowPositions::BOTTOM_RIGHT:
-		windowX = screenWidth - loadingScreenWidth;
-		windowY = screenHeight - loadingScreenHeight;
-		break;
-
-	case WindowPositions::BOTTOM_CENTERED:
-		windowX = (screenWidth - loadingScreenWidth) / 2;
-		windowY = screenHeight - loadingScreenHeight;
-		break;
-
-	case WindowPositions::TOP_CENTERED:
-		windowX = (screenWidth - loadingScreenWidth) / 2;
-		windowY = 0;
-		break;
-
-	default:
-		std::cout << "Unknown window position" << "\n";
-		return;
-	}
-
-	glfwSetWindowPos(loadingWindow, windowX, windowY);
-}
 
 void InitLoadingScreen()
 {
@@ -275,7 +203,14 @@ void InitLoadingScreen()
 		return;
 	}
 
-	SetWindowPosition(loadingWindow);
+	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
+	assert(videoMode);
+	int screenWidth = videoMode->width;
+	int screenHeight = videoMode->height;
+	windowX = (screenWidth - loadingScreenWidth) / 2;
+	windowY = (screenHeight - loadingScreenHeight) / 2;
+	glfwSetWindowPos(loadingWindow, windowX, windowY);
 
 	GLFWimage _windowIcon = BackEnd::LoadWindowIcon("res/icons/darkopsicon.png");
 	if (_windowIcon.pixels)
@@ -313,8 +248,6 @@ void InitLoadingScreen()
 	int currentFrame = 0;
 	double lastFrameTime = glfwGetTime();
 
-	// Load text stuff
-	TextRenderer_INITIAL textRenderer("res/fonts/DroidSans.ttf");
 
 	while (!glfwWindowShouldClose(loadingWindow) && !finishedLoading)
 	{
@@ -328,8 +261,6 @@ void InitLoadingScreen()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		DrawInitialWindowBackground(backgroundImage, loadingProgress);
-		// float textColor[] = { 1.0f, 1.0f, 1.0f }; // White color
-		// textRenderer.RenderText("Loading...", 0.6f, -0.9f, 0.5f, textColor); // wip
 
 		// Update GIF frame
 		double currentTime = glfwGetTime();

@@ -1434,6 +1434,7 @@ namespace Util
         return AABB(aabbMin, aabbMax);
     }*/
 
+
     inline void CreateSolidSphereVerticsAndIndices(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, float radius, int segments) {
         segments = std::max(segments, 4);
         float theta_step = glm::two_pi<float>() / segments;

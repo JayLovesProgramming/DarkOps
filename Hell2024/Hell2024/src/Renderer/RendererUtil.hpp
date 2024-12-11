@@ -268,8 +268,8 @@ namespace RendererUtil
         if (alignment == Alignment::BOTTOM_LEFT) 
         {
             // DONE
-            location.x = width;
-            location.y = height;
+            //location.x = width;
+            //location.y = height;
         }
         else if (alignment == Alignment::BOTTOM_RIGHT)
         {

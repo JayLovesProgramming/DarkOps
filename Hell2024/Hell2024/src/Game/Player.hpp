@@ -95,7 +95,6 @@ struct AmmoState
 class Player 
 {
 private:
-    int32_t m_playerIndex = -1;
     int32_t m_viewWeaponAnimatedGameObjectIndex = -1;
     int32_t m_characterModelAnimatedGameObjectIndex = -1;
     std::vector<PickUpText> m_pickUpTexts;
@@ -123,6 +122,7 @@ private:
     bool m_firedThisFrame = false;
 
 public:
+    int32_t m_playerIndex = -1;
     float m_crosshairCrossSize = 0;
     glm::mat4 m_weaponSwayMatrix = glm::mat4(1);
     bool m_pickUpInteractable = false;

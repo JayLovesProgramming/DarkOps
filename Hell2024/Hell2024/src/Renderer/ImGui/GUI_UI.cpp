@@ -1,5 +1,8 @@
-#include "GUI_UI.h"
+#include "GUI_UI.hpp"
 
+#include "BackEnd/BackEnd.hpp"
+#include "Renderer/RendererUtil.hpp"
+#include "Renderer/TextBlitter.hpp"
 
 void IMGUI::ImGui_Init(GLFWwindow* window)
 {
@@ -37,7 +40,7 @@ void IMGUI::ImGui_ToggleDebugConsole()
 		{
 			std::cout << "Hide cursor" << std::endl;
 			Input::HideCursor();
-			Input::DisableCursor();
+			//Input::DisableCursor();
 
 			//for (int i = 0; i < Game::GetPlayerCount(); i++)
 			//{
@@ -89,23 +92,106 @@ void IMGUI::ImGui_DrawDemoWindow()
 	}
 }
 
+void IMGUI::ImGui_DrawFPS(std::vector<RenderItem2D>* renderItems, hell::ivec2 debugTextLocation, hell::ivec2 presentSize)
+{
+	static auto lastTime = std::chrono::high_resolution_clock::now();
+	static int frameCount = 0;
+	static float fps = 0.0f;
+
+	// Increment frame count
+	frameCount++;
+
+	// Calculate the time difference
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	auto elapsedTime = std::chrono::duration<float>(currentTime - lastTime).count();
+
+	// Update FPS every second
+	if (elapsedTime >= 1.0f)
+	{
+		fps = frameCount / elapsedTime;
+		frameCount = 0;
+		lastTime = currentTime;
+	}
+
+	if (OVERLAYS_SHOW_FPS)
+	{
+		// Format the FPS text
+		std::string fpsText = "FPS: " + std::to_string(static_cast<int>(fps));
+
+		// Render the FPS text
+		RendererUtil::AddRenderItems(
+			*renderItems,
+			TextBlitter::CreateText(
+				fpsText,
+				debugTextLocation,
+				presentSize,
+				Alignment::BOTTOM_LEFT,
+				BitmapFontType::STANDARD
+			)
+		);
+	}
+}
+
 void IMGUI::ImGui_DrawMainBar()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
+		if (ImGui::BeginMenu("Overlays"))
+		{
+			ImGui::Checkbox("Show FPS", &OVERLAYS_SHOW_FPS);
+			ImGui::Checkbox("Show Frame Time", &OVERLAYS_SHOW_FRAME_TIME);
+			ImGui::Checkbox("Show Memory Usage", &OVERLAYS_SHOW_MEMORY_USAGE);
+			ImGui::Checkbox("Show Bounding Boxes", &OVERLAYS_SHOW_BOUNDING_BOXES);
+			ImGui::Checkbox("Show Collision Debug", &OVERLAYS_SHOW_COLLISION_DEBUG);
+			ImGui::Checkbox("Wireframe Mode", &OVERLAYS_WIREFRAME_MODE);
+			ImGui::Checkbox("Show Minimap", &OVERLAYS_SHOW_MINIMAP);
+			ImGui::EndMenu();
+		}
+
+		/*int leftX = RendererUtil::GetViewportLeftX(1, Game::GetSplitscreenMode(), gBufferSize.x, gBufferSize.y);
+		int rightX = RendererUtil::GetViewportRightX(1, Game::GetSplitscreenMode(), gBufferSize.x, gBufferSize.y);
+		int bottomY = RendererUtil::GetViewportBottomY(1, Game::GetSplitscreenMode(), gBufferSize.x, gBufferSize.y);*/
+
+	/*	hell::ivec2 ammoSlashTextLocation = { 0,0 };
+		if (Game::GetSplitscreenMode() == SplitscreenMode::NONE)
+		{
+			ammoSlashTextLocation.x = rightX - (gBufferSize.x * 0.125f);
+			ammoSlashTextLocation.y = bottomY + (gBufferSize.x * 0.1f);
+		}
+		if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER)
+		{
+			ammoSlashTextLocation.x = rightX - (gBufferSize.x * 0.125f);
+			ammoSlashTextLocation.y = bottomY + (gBufferSize.x * 0.065f);
+		}
+		if (Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER)
+		{
+			ammoSlashTextLocation.x = rightX - (gBufferSize.x * 0.08f);
+			ammoSlashTextLocation.y = bottomY + (gBufferSize.x * 0.065f);
+		}*/
+
+
+		std::vector<RenderItem2D> renderItems;
+
+		const static hell::ivec2 roundCounterSize = { 1920, 1080 };
+		const static hell::ivec2 testter = {480, 270};
+
+		//hell::ivec2 ammoTotalTextLocation = { ammoSlashTextLocation.x + int(TextBlitter::GetCharacterSize("/", BitmapFontType::AMMO_NUMBERS).x * 1.6f * ammoTextScale), ammoSlashTextLocation.y };
+
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Open"))
 			{
-				commandHistory.push_back("File > Open Selected");
+				ImGui_AddToConsoleLog("File > Open Selected");
 			}
 			if (ImGui::MenuItem("Save"))
 			{
-				commandHistory.push_back("File > Save Selected");
+				ImGui_AddToConsoleLog("File > Save Selected");
 			}
 			if (ImGui::MenuItem("Exit"))
 			{
-				commandHistory.push_back("File > Exit Selected");
+				ImGui_AddToConsoleLog("Exiting...");
+				// Make a are you sure prompt pop up.
+				BackEnd::ForceCloseWindow();
 			}
 			ImGui::EndMenu();
 		}
@@ -114,11 +200,11 @@ void IMGUI::ImGui_DrawMainBar()
 		{
 			if (ImGui::MenuItem("Undo"))
 			{
-				commandHistory.push_back("File > Undo Selected");
+				ImGui_AddToConsoleLog("File > Undo Selected");
 			}
 			if (ImGui::MenuItem("Redo"))
 			{
-				commandHistory.push_back("File > Redo Selected");
+				ImGui_AddToConsoleLog("File > Redo Selected");
 			}
 			ImGui::EndMenu();
 		}
@@ -127,7 +213,7 @@ void IMGUI::ImGui_DrawMainBar()
 		{
 			if (ImGui::MenuItem("About"))
 			{
-				commandHistory.push_back("Help > About Selected");
+				ImGui_AddToConsoleLog("Help > About Selected");
 			}
 			ImGui::EndMenu();
 		}
@@ -142,14 +228,10 @@ void IMGUI::ImGui_DrawMainCommandBox()
 
 	ImGui_DrawMainBar();
 
-	ImGui::SetNextWindowPos(ImVec2(10, 0), ImGuiCond_Always);
+	ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
 	ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
 
-	//ImVec2 windowSize = ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y - ImGui::GetMenuBarHeight());
-	//ImGui::SetNextWindowSize(windowSize);
-	//ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - windowSize.y));
-
-	ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar);
+	ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
 	if (ImGui::BeginChild("CommandHistory", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true))
 	{
@@ -169,10 +251,15 @@ void IMGUI::ImGui_DrawMainCommandBox()
 	ImGui::PushItemWidth(-1);
 	if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer)))
 	{
-		if (strlen(inputBuffer) > 0)
+		if (Input::KeyPressed(HELL_KEY_ENTER))
 		{
-			//commandHistory.push_back(inputBuffer);
-			//memset(inputBuffer, 0, sizeof(inputBuffer));  // Clear the input buffer
+			std::cout << "Enter pressed" << std::endl;
+			if (strlen(inputBuffer) > 0)
+			{
+				//commandHistory.push_back(inputBuffer);
+				ImGui_ExecuteCommand(inputBuffer);
+				memset(inputBuffer, 0, sizeof(inputBuffer));  // Clear the input buffer
+			}
 		}
 	}
 	ImGui::PopItemWidth();
@@ -200,4 +287,36 @@ void IMGUI::ImGui_Destroy()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	std::cout << "[CLEANUP] ImGui" << "\n";
+}
+
+bool IMGUI::ImGui_IsAnyWindowOpen()
+{
+	return ImGui_ShowDrawConsole;
+}
+
+void IMGUI::ImGui_AddToConsoleLog(std::string param)
+{
+	commandHistory.push_back(param);
+}
+
+void IMGUI::ImGui_ClearAllConsoleLogs()
+{
+	commandHistory.clear();
+}
+
+void IMGUI::ImGui_ExecuteCommand(const char* command)
+{
+	// Handle specific commands or general processing
+	if (strcmp(command, "clear") == 0)
+	{
+		ImGui_ClearAllConsoleLogs();
+	}
+	else if (strcmp(command, "help") == 0)
+	{
+		ImGui_AddToConsoleLog("Available commands:\n- clear: Clears command history\n- help: Displays available commands");
+	}
+	else
+	{
+		ImGui_AddToConsoleLog(command);
+	}
 }

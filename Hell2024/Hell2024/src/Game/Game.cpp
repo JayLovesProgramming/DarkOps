@@ -428,6 +428,20 @@ namespace Game
 
     void EvaluateDebugKeyPresses() 
     {
+        if (!Editor::IsOpen())
+        {
+            CheckInputAndSetPlayerControls();
+        }
+
+        for (int i = 0; i < Game::GetPlayerCount(); i++)
+        {
+            Player* player = Game::GetPlayerByIndex(i);
+            if (!player->HasControl())
+            {
+                return;
+            }
+        }
+
         if (Input::KeyPressed(HELL_KEY_B))
         {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
@@ -443,16 +457,13 @@ namespace Game
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Renderer::NextRenderMode();
         }
-        if (Input::KeyPressed(GLFW_KEY_Y))
+        if (Input::KeyPressed(HELL_KEY_Y))
         {
             Audio::PlayAudio(AUDIO_SELECT, 1.00f);
             Renderer::ToggleProbes();
         }
 
-        if (!Editor::IsOpen()) 
-        {
-            CheckInputAndSetPlayerControls();
-        }
+
 
         if (Input::KeyPressed(HELL_KEY_J)) 
         {

@@ -8,6 +8,7 @@
 #include "Round.hpp"
 #include "Crosshair.hpp"
 #include "Inventory.hpp"
+#include "Renderer/ImGui/GUI_UI.hpp"
 
 std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
 {
@@ -52,6 +53,8 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
         //text += "Accuracy Modifier: " + std::to_string(m_accuracyModifer) + "\n";
         RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(text, debugTextLocation, presentSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD));
     }
+
+    IMGUI::ImGui_DrawFPS(&renderItems, debugTextLocation, presentSize);
 
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
 

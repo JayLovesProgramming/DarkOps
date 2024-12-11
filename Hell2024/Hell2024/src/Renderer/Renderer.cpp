@@ -413,8 +413,8 @@ static std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
     int desiredTotalLines = 40;
     float linesPerPresentHeight = (float)PRESENT_HEIGHT / (float)TextBlitter::GetLineHeight(BitmapFontType::STANDARD);
     float scaleRatio = (float)desiredTotalLines / (float)linesPerPresentHeight;
-    float loadingScreenWidth = PRESENT_WIDTH;
-    float loadingScreenHeight = PRESENT_HEIGHT;
+    int loadingScreenWidth = (BackEnd::GetFullScreenWidth() / 2);
+    int loadingScreenHeight = (BackEnd::GetFullScreenHeight() / 2);
 
     std::string text = "";
     int maxLinesDisplayed = 40;
@@ -429,6 +429,8 @@ static std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
     hell::ivec2 viewportSize = hell::ivec2(loadingScreenWidth, loadingScreenHeight);
     return TextBlitter::CreateText(text, location, viewportSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD);
 }
+
+// Render a loading image instead of text...
 
 std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playerCount) 
 {

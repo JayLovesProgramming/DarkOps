@@ -27,11 +27,10 @@ public:
 
 	static void DrawRounds(std::vector<RenderItem2D> *renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
     {
-        //std::cout << viewportCenter.x << ", " << viewportCenter.y << "\n";
         unsigned int currentRound = RoundManager::currentRound;
+        //std::cout << viewportCenter.x << ", " << viewportCenter.y << "\n";
         //std::cout << "Drawing round: " << currentRound << "\n";
         //std::cout << presentSize.x << ", " << presentSize.y << "\n";
-
 
         if (currentRound)
         {
