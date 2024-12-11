@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 
+#include "BackEnd/BackEnd.hpp"
+
 struct AudioHandle 
 {
 	FMOD::Sound* sound = nullptr;
@@ -104,7 +106,7 @@ namespace Audio
 
 	inline AudioHandle PlayAudio(std::string filename, float volume, bool stopIfPlaying = false)
     {
-         //std::cout << "Playing Audio: " << filename << "\n";
+        //std::cout << "Playing Audio: " << filename << "\n";
 		// Load if needed
 		if (g_loadedAudio.find(filename) == g_loadedAudio.end())
         {
@@ -133,6 +135,11 @@ namespace Audio
 
         //AudioHandle& handle = g_activeAudio.emplace_back();
         AudioHandle handle;
+        if (!BackEnd::WindowHasFocus())
+        {
+            return handle;
+        }
+
         handle.sound = g_loadedAudio[filename];
         handle.filename = filename;
         handle.channel = freeChannel;

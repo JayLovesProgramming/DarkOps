@@ -121,6 +121,7 @@ namespace BackEnd
         CreateGLFWWindow(WindowedMode::WINDOWED);
         int windowPosX = (_fullscreenWidth - _windowedWidth) / 2;
         int windowPosY = (_fullscreenHeight - _windowedHeight) / 2;
+
         glfwSetWindowPos(_window, windowPosX, windowPosY);
 
         if (_window == NULL) 
@@ -156,7 +157,6 @@ namespace BackEnd
         }
 
         // ImGui init
-        
         IMGUI::ImGui_Init(_window);
 
         // Init sub-systems
@@ -167,12 +167,13 @@ namespace BackEnd
         CSG::Init();
         Pathfinding2::Init();
         WeaponManager::Init();
-        glfwShowWindow(BackEnd::GetWindowPointer());
+        glfwHideWindow(_window);
+
+        std::cout << "BACKEND INIT" << std::endl;
     }
 
     void BeginFrame() 
     {
-
         glfwPollEvents();
     }
 
