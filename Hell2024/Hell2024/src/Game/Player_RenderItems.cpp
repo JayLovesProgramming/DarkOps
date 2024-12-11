@@ -12,8 +12,6 @@
 
 std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
 {
-    std::vector<RenderItem2D> renderItems;
-
     hell::ivec2 debugTextLocation;
     debugTextLocation.x = RendererUtil::GetViewportLeftX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     debugTextLocation.y = RendererUtil::GetViewportTopY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);

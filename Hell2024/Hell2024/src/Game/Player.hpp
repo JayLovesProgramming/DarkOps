@@ -379,6 +379,7 @@ public:
     CrosshairType GetCrosshairType();
 
     bool RespawnAllowed();
+    std::vector<RenderItem2D> renderItems;
 
 private:
     glm::vec3 _displacement;

@@ -3,6 +3,7 @@
 #include "BackEnd/BackEnd.hpp"
 #include "Renderer/RendererUtil.hpp"
 #include "Renderer/TextBlitter.hpp"
+#include "Game/Round.hpp"
 
 void IMGUI::ImGui_Init(GLFWwindow* window)
 {
@@ -254,7 +255,7 @@ void IMGUI::ImGui_DrawMainCommandBox()
 		if (strlen(inputBuffer) > 0)
 		{
 			ImGui_ExecuteCommand(inputBuffer);
-			memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
+			//memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
 		}
 	}
 	ImGui::PopItemWidth();
@@ -309,6 +310,21 @@ void IMGUI::ImGui_ExecuteCommand(const char* command)
 	else if (strcmp(command, "help") == 0)
 	{
 		ImGui_AddToConsoleLog("Available commands:\n- clear: Clears command history\n- help: Displays available commands");
+	}
+	else if (strcmp(command, "increaseround") == 0)
+	{
+		RoundManager::IncreaseRound();
+		ImGui_AddToConsoleLog("Zombies: Increased round");
+	}
+	else if (strcmp(command, "decreaseround") == 0)
+	{
+		RoundManager::DecreaseRound();
+		ImGui_AddToConsoleLog("Zombies: Decreased round");
+	}
+	else if (strcmp(command, "round") == 0)
+	{
+		RoundManager::SetCurrentRound(5);
+		ImGui_AddToConsoleLog("Zombies: Set Current Round: 5");
 	}
 	else
 	{
