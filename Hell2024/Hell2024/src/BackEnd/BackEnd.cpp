@@ -157,7 +157,7 @@ namespace BackEnd
 
         // ImGui init
         
-        InitTheFuckingImGui(_window);
+        ImGui_Init(_window);
 
         // Init sub-systems
         Input::Init();
@@ -178,7 +178,8 @@ namespace BackEnd
 
     void EndFrame()
     {
-        DrawTheFuckingImGuiWindow();
+        ImGui_MainLoop();
+
         // OpenGL
         if (GetAPI() == API::OPENGL) 
         {
@@ -199,7 +200,7 @@ namespace BackEnd
 
     void CleanUp() 
     {
-        cleanupImGui();
+        ImGui_Destroy();
 
         if (GetWindowMode() == WindowedMode::FULLSCREEN)
         {
