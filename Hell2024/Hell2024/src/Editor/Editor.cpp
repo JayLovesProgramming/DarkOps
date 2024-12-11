@@ -19,13 +19,19 @@
 constexpr static auto MENU_SELECT_AUDIO = "SELECT.wav";
 constexpr static auto MENU_SELECT_VOLUME  = 1.0f;
 
-namespace Editor {
+namespace Editor 
+{
+    enum class InteractionType 
+    { 
+        HOVERED, 
+        SELECTED 
+    };
 
-    enum class InteractionType { HOVERED, SELECTED };
-
-    struct MenuItem {
+    struct MenuItem 
+    {
         std::string name;
-        enum class Type {
+        enum class Type 
+        {
             VALUE_INT,
             VALUE_FLOAT,
             VALUE_STRING,
@@ -50,20 +56,21 @@ namespace Editor {
         int percision = 2;
     };
 
-    // Editor constants
+    // Editor Constants
     constexpr double g_orbitRadius = 2.5f;
     constexpr double g_orbiteSpeed = 0.003f;
     constexpr double g_zoomSpeed = 0.5f;
     constexpr double g_panSpeed = 0.004f;
 
-    struct ClipBoard {
+    struct ClipBoard 
+    {
         int materialIndex = -1;
         float textureScale = 0;
         float textureOffsetX = 0;
         float textureOffsetY = 0;
     } g_clipBoard;
 
-    // Editor globals
+    // Editor Globals
     glm::mat4 g_editorViewMatrix;
     glm::dvec3 g_viewTarget;
     glm::dvec3 g_camPos;
@@ -89,13 +96,15 @@ namespace Editor {
     hell::ivec2 g_backgroundSize = hell::ivec2(0, 0);
     hell::ivec2 g_dragOffset = hell::ivec2(0, 0);
 
-    MenuType GetCurrentMenuType() {
+    MenuType GetCurrentMenuType()
+    {
         return g_currentMenuType;
     }
 
-    void SetCurrentMenuType(MenuType type) {
+    void SetCurrentMenuType(MenuType type) 
+    {
         g_currentMenuType = type;
-        std::cout << "Set current menu type to " << Util::MenuTypeToString(type) << "\n";
+        std::cout << "Set Current Menu Type To " << Util::MenuTypeToString(type) << "\n";
     }
 
     // Forward declarations
