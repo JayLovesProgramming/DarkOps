@@ -456,9 +456,11 @@ std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playe
 
     }
 
-    //if (Editor::IsOpen()) {
-    //    RendererUtil::AddRenderItems(renderItems, Editor::GetMenuRenderItems());
-    //}
+    // Render the fucking debug menu UI and stuff dummy 
+    if (Editor::IsOpen())
+    {
+        RendererUtil::AddRenderItems(renderItems, Editor::GetMenuRenderItems());
+    } 
 
     return renderItems;
 }

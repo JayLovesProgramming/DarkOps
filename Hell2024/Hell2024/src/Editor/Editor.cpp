@@ -1,4 +1,5 @@
 ﻿#include "Editor.hpp"
+
 #include "CSG.hpp"
 #include "Gizmo.hpp"
 #include "BackEnd/BackEnd.hpp"
@@ -16,10 +17,10 @@
 #include "Utils/Util.hpp"
 
 constexpr static auto MENU_SELECT_AUDIO = "SELECT.wav";
-constexpr static auto MENU_SELECT_VOLUME = 1.0f;
+constexpr static auto MENU_SELECT_VOLUME  = 1.0f;
 
-namespace Editor
-{
+namespace Editor {
+
     enum class InteractionType { HOVERED, SELECTED };
 
     struct MenuItem {
@@ -124,6 +125,21 @@ namespace Editor
             CSGPlane& csgPlane = Scene::g_csgAdditiveWallPlanes[g_selectedObjectIndex];
             for (int i = 0; i < 4; i++) {
                 glm::vec3 worldPos = csgPlane.m_veritces[i];
+                glm::ivec2 screenPos = Util::CalculateScreenSpaceCoordinates(worldPos, mvp, PRESENT_WIDTH, PRESENT_HEIGHT, true);
+                if (mouseX < screenPos.x + threshold &&
+                    mouseX > screenPos.x - threshold &&
+                    mouseY < screenPos.y + threshold &&
+                    mouseY > screenPos.y - threshold) {
+                    g_hoveredVertexIndex = i;
+                    g_hoveredVertexPosition = worldPos;
+                }
+            }
+        }
+        if (Editor::GetSelectedObjectType() == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
+            CSGObject& csgObject = CSG::GetCSGObjects()[Editor::GetSelectedObjectIndex()];
+            CSGPlane* csgPlane = Scene::GetCeilingPlaneByIndex(csgObject.m_parentIndex);
+            for (int i = 0; i < 4; i++) {
+                glm::vec3 worldPos = csgPlane->m_veritces[i];
                 glm::ivec2 screenPos = Util::CalculateScreenSpaceCoordinates(worldPos, mvp, PRESENT_WIDTH, PRESENT_HEIGHT, true);
                 if (mouseX < screenPos.x + threshold &&
                     mouseX > screenPos.x - threshold &&
@@ -268,7 +284,8 @@ namespace Editor
             }
         }
         else if (g_selectedObjectType == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
-            CSGPlane* csgPlane = Scene::GetCeilingPlaneByIndex(g_selectedObjectIndex);
+            CSGObject& csgObject = CSG::GetCSGObjects()[g_selectedObjectIndex];
+            CSGPlane* csgPlane = Scene::GetCeilingPlaneByIndex(csgObject.m_parentIndex);
             if (csgPlane) {
                 g_selectedVertexPosition = csgPlane->m_veritces[g_selectedVertexIndex];
             }
@@ -336,7 +353,17 @@ namespace Editor
             glm::vec3 oldPos = gizmoTransform.position;
             glm::vec3 newPos = updatedGizmoPosition;
 
-            CSGPlane* csgPlane = Scene::GetWallPlaneByIndex(g_selectedObjectIndex);
+
+
+            CSGPlane* csgPlane = nullptr;
+            if (Editor::GetSelectedObjectType() == ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE) {
+                CSGObject& csgObject = CSG::GetCSGObjects()[Editor::GetSelectedObjectIndex()];
+                csgPlane = Scene::GetWallPlaneByIndex(csgObject.m_parentIndex);
+            }
+            if (Editor::GetSelectedObjectType() == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
+                CSGObject& csgObject = CSG::GetCSGObjects()[Editor::GetSelectedObjectIndex()];
+                csgPlane = Scene::GetCeilingPlaneByIndex(csgObject.m_parentIndex);
+            }
             if (csgPlane) {
 
                 // Snapping
@@ -530,13 +557,21 @@ namespace Editor
                 int i = 0;
                 for (CSGObject& csgObject : CSG::GetCSGObjects()) {
                     if (&csgObject == hitResult.parent) {
-                        g_hoveredObjectIndex = i;// csgObject.m_parentIndex;
+                        g_hoveredObjectIndex = i;// csgObject.m_parentIndex;   // CHECK HERE!!!!!
                         break;
                     }
                     i++;
                 }
             }
-            // CSG subtractive
+            // else if (hitResult.objectType == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
+            //     for (CSGObject& csgObject : CSG::GetCSGObjects()) {
+            //         if (&csgObject == hitResult.parent) {
+            //             g_hoveredObjectIndex = csgObject.m_parentIndex;   // CHECK HERE!!!!!
+            //             break;
+            //         }
+            //     }
+            // }
+              // CSG subtractive
             else if (hitResult.objectType == ObjectType::CSG_OBJECT_SUBTRACTIVE) {
                 for (int i = 0; i < Scene::g_csgSubtractiveCubes.size(); i++) {
                     CSGCube& cubeVolume = Scene::g_csgSubtractiveCubes[i];
@@ -980,6 +1015,16 @@ namespace Editor
                     g_menuItems.push_back({ "Tex Offset Y", MenuItem::Type::VALUE_FLOAT, &csgPlane->textureOffsetY, 0.1f, 1 });
                 }
             }
+            else if (g_selectedObjectType == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
+                CSGObject& csgObject = CSG::GetCSGObjects()[g_selectedObjectIndex];
+                CSGPlane* csgPlane = Scene::GetCeilingPlaneByIndex(csgObject.m_parentIndex);
+                if (csgPlane) {
+                    g_menuItems.push_back({ "Material", MenuItem::Type::VALUE_INT, &csgPlane->materialIndex, 1, 1 });
+                    g_menuItems.push_back({ "Tex Scale", MenuItem::Type::VALUE_FLOAT, &csgPlane->textureScale, 0.1f, 1 });
+                    g_menuItems.push_back({ "Tex Offset X", MenuItem::Type::VALUE_FLOAT, &csgPlane->textureOffsetX, 0.1f, 1 });
+                    g_menuItems.push_back({ "Tex Offset Y", MenuItem::Type::VALUE_FLOAT, &csgPlane->textureOffsetY, 0.1f, 1 });
+                }
+            }
             else if (g_selectedObjectType == ObjectType::LIGHT && g_selectedObjectIndex != -1) {
                 Light& light = Scene::g_lights[g_selectedObjectIndex];
                 g_menuItems.push_back({ "Pos X", MenuItem::Type::VALUE_FLOAT, &light.position.x, 0.1f, 2 });
@@ -1098,9 +1143,6 @@ namespace Editor
                 RebuildEverything();
             }
             else if (type == MenuItem::Type::INSERT_WALL_PLANE) {
-                Transform transform;
-                transform.position = spawnPos;
-                transform.scale = glm::vec3(1.0f);
                 CSGPlane& plane = Scene::g_csgAdditiveWallPlanes.emplace_back();
                 plane.m_veritces[TL] = spawnPos;
                 plane.m_veritces[TR] = spawnPos;
@@ -1122,6 +1164,31 @@ namespace Editor
                 RebuildEverything();
                 Scene::RecreateCeilingTrims();
                 Scene::RecreateFloorTrims();
+            }
+            else if (type == MenuItem::Type::INSERT_CEILING_PLANE) {
+                CSGPlane& plane = Scene::g_csgAdditiveCeilingPlanes.emplace_back();
+                plane.m_veritces[TL] = spawnPos;
+                plane.m_veritces[TR] = spawnPos;
+                plane.m_veritces[BL] = spawnPos;
+                plane.m_veritces[BR] = spawnPos;
+                plane.m_veritces[TL].x -= 0.5f;
+                plane.m_veritces[TR].x += 0.5f;
+                plane.m_veritces[BL].x -= 0.5f;
+                plane.m_veritces[BR].x += 0.5f;
+                plane.m_veritces[TL].y += 0.65f;
+                plane.m_veritces[BL].y += 0.65f;
+                plane.m_veritces[TR].y += 0.65f;
+                plane.m_veritces[BR].y += 0.65f;
+                plane.m_veritces[TL].z += 0.5f;
+                plane.m_veritces[TR].z += 0.5f;
+                plane.m_veritces[BL].z -= 0.5f;
+                plane.m_veritces[BR].z -= 0.5f;
+                plane.textureScale = 1.0f;
+                plane.materialIndex = AssetManager::GetMaterialIndex("GlockAmmoBox");
+                g_selectedObjectIndex = Scene::g_csgAdditiveCeilingPlanes.size() - 1;
+                g_selectedObjectType = ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE;
+                SetCurrentMenuType(MenuType::SELECTED_OBJECT);
+                RebuildEverything();
             }
             else if (type == MenuItem::Type::INSERT_CSG_SUBTRACTIVE) {
                 Transform transform;
@@ -1247,13 +1314,13 @@ namespace Editor
                     headingText += "-- ADDITIVE CSG " + std::to_string(g_selectedObjectIndex) + " -- ";
                 }
                 else if (g_selectedObjectType == ObjectType::CSG_OBJECT_ADDITIVE_CEILING_PLANE) {
-                    headingText += "--- CEILING PLANE ---";
+                    headingText += "-- CEILING PLANE " + std::to_string(g_selectedObjectIndex) + " -- ";
                 }
                 else if (g_selectedObjectType == ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE) {
                     headingText += "---- WALL CSG " + std::to_string(g_selectedObjectIndex) + " ---- ";
                 }
                 else if (g_selectedObjectType == ObjectType::CSG_OBJECT_ADDITIVE_FLOOR_PLANE) {
-                    headingText += "--- FLOOR PLANE ---";
+                    headingText += "-- FLOOR PLANE " + std::to_string(g_selectedObjectIndex) + " -- ";
                 }
                 else if (g_selectedObjectType == ObjectType::CSG_OBJECT_SUBTRACTIVE) {
                     headingText += "-- SUBTRACTIVE CSG --";
@@ -1329,29 +1396,26 @@ namespace Editor
             //textLocation.y -= 40;
             g_backgroundLocation = textLocation - hell::ivec2(menuMargin.x, -menuMargin.y);
             hell::ivec2 viewportSize = hell::ivec2(PRESENT_WIDTH, PRESENT_HEIGHT);
-            const static hell::ivec2 roundCounterSize = { 1920, 1080 };
-            const static hell::ivec2 test = { 480, 270 };
             g_backgroundSize = TextBlitter::GetTextSizeInPixels(menuText, viewportSize, BitmapFontType::STANDARD) + hell::ivec2(menuMargin.x * 2, menuMargin.y * 2);
             g_backgroundSize.x = 200;
             hell::ivec2 headingLocation = hell::ivec2(g_backgroundLocation.x + g_backgroundSize.x / 2, textLocation.y);
 
-            RenderItem2D bg = RendererUtil::CreateRenderItem2D("round1", test, roundCounterSize, Alignment::TOP_RIGHT);
-            std::vector<RenderItem2D> textRenderItems = TextBlitter::CreateText(menuText, test, roundCounterSize, Alignment::TOP_RIGHT, BitmapFontType::STANDARD);
-            std::vector<RenderItem2D> headingRenderItems = TextBlitter::CreateText(headingText, test, roundCounterSize, Alignment::TOP_RIGHT, BitmapFontType::STANDARD);
+            RenderItem2D bg = RendererUtil::CreateRenderItem2D("MenuBG", g_backgroundLocation, viewportSize, Alignment::TOP_LEFT, menuColor, g_backgroundSize);
+            std::vector<RenderItem2D> textRenderItems = TextBlitter::CreateText(menuText, textLocation, viewportSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD);
+            std::vector<RenderItem2D> headingRenderItems = TextBlitter::CreateText(headingText, headingLocation, viewportSize, Alignment::CENTERED, BitmapFontType::STANDARD);
 
             gMenuRenderItems.clear();
             gMenuRenderItems.push_back(bg);
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("round1", test, roundCounterSize, Alignment::TOP_RIGHT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("round1", test, roundCounterSize, Alignment::TOP_LEFT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderVertical", test, roundCounterSize, Alignment::TOP_LEFT, menuColor, hell::ivec2(3, g_backgroundSize.y)));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderHorizontal", g_backgroundLocation, viewportSize, Alignment::BOTTOM_LEFT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderHorizontal", { g_backgroundLocation.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_LEFT, menuColor, hell::ivec2(g_backgroundSize.x, 3)));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderVertical", { g_backgroundLocation.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::BOTTOM_RIGHT, menuColor, hell::ivec2(3, g_backgroundSize.y)));
             gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderVertical", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::BOTTOM_LEFT, menuColor, hell::ivec2(3, g_backgroundSize.y)));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerTL", g_backgroundLocation, viewportSize, Alignment::TOP_RIGHT, menuColor));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("round1", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y }, viewportSize, Alignment::BOTTOM_LEFT, menuColor));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("round1", { g_backgroundLocation.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_RIGHT, menuColor));
-            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("round1", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_LEFT, menuColor));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerTL", g_backgroundLocation, viewportSize, Alignment::BOTTOM_RIGHT, menuColor));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerTR", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y }, viewportSize, Alignment::BOTTOM_LEFT, menuColor));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerBL", { g_backgroundLocation.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_RIGHT, menuColor));
+            gMenuRenderItems.push_back(RendererUtil::CreateRenderItem2D("MenuBorderCornerBR", { g_backgroundLocation.x + g_backgroundSize.x, g_backgroundLocation.y - g_backgroundSize.y }, viewportSize, Alignment::TOP_LEFT, menuColor));
             RendererUtil::AddRenderItems(gMenuRenderItems, textRenderItems);
             RendererUtil::AddRenderItems(gMenuRenderItems, headingRenderItems);
-            //std::cout << "Rendering menu debug UI" << std::endl;
         }
 
         // UI
