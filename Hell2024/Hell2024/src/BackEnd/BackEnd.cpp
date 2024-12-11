@@ -156,7 +156,8 @@ namespace BackEnd
         }
 
         // ImGui init
-        //HellImGui::Init(_window);
+        
+        InitTheFuckingImGui(_window);
 
         // Init sub-systems
         Input::Init();
@@ -171,11 +172,13 @@ namespace BackEnd
 
     void BeginFrame() 
     {
+
         glfwPollEvents();
     }
 
     void EndFrame()
     {
+        DrawTheFuckingImGuiWindow();
         // OpenGL
         if (GetAPI() == API::OPENGL) 
         {
@@ -196,7 +199,7 @@ namespace BackEnd
 
     void CleanUp() 
     {
-        //HellImGui::cleanupImGui();
+        cleanupImGui();
 
         if (GetWindowMode() == WindowedMode::FULLSCREEN)
         {
