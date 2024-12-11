@@ -291,7 +291,7 @@ void AssetManager::FindAssetPaths()
 void AssetManager::AddItemToLoadLog(std::string item)
 {
     g_loadLog.push_back(item);
-    std::cout << item << std::endl;
+    std::cout << item << "\n";
 }
 
 std::vector<std::string>& AssetManager::GetLoadLog()
@@ -1462,6 +1462,6 @@ void AssetManager::DebugTest()
 {
     for (const auto& pair : g_materialIndexMap)
     {
-        std::cout << "Material Name: " << pair.first << ", Index: " << pair.second << std::endl;
+        std::cout << "Material Name: " << pair.first << ", Index: " << pair.second << "\n";
     }
 }

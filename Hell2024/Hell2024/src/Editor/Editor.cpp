@@ -107,7 +107,7 @@ namespace Editor
         std::cout << "Set Current Menu Type To " << Util::MenuTypeToString(type) << "\n";
     }
 
-    // Forward declarations
+    // Forward Declarations
     glm::dvec3 Rot3D(glm::dvec3 v, glm::dvec2 rot);
     void UpdateRenderItems(std::vector<RenderItem3D>& renderItems, InteractionType interactionType, int index);
     void RebuildEverything();
@@ -1459,11 +1459,13 @@ namespace Editor
                 glm::vec3 color = WHITE;
 
 
-                if (!Input::KeyDown(HELL_KEY_LEFT_CONTROL_GLFW) && !Input::KeyDown(HELL_KEY_LEFT_ALT) && !MenuHasHover() && !Gizmo::HasHover()) {
+                if (!Input::KeyDown(HELL_KEY_LEFT_CONTROL_GLFW) && !Input::KeyDown(HELL_KEY_LEFT_ALT) && !MenuHasHover() && !Gizmo::HasHover())
+                {
                     int mouseX = Input::GetViewportMappedMouseX(PRESENT_WIDTH);
                     int mouseY = PRESENT_HEIGHT - Input::GetViewportMappedMouseY(PRESENT_HEIGHT);
                     float adjustedBackgroundY = PRESENT_HEIGHT - g_backgroundLocation.y;
-                    if (mouseX > leftX && mouseX < rightX && mouseY > topY && mouseY < bottomY) {
+                    if (mouseX > leftX && mouseX < rightX && mouseY > topY && mouseY < bottomY) 
+                    {
                         color = RED;
                     }
                 }
@@ -1473,9 +1475,14 @@ namespace Editor
         }
     }
 
-    void UpdateDebugText() {
-
+    void UpdateDebugText() 
+    {
         g_debugText = "";
+        if (MenuHasHover())
+        {
+            g_debugText += "Menu HAS HOVER!!!!!!!!!\n";
+        }
+
         /*
         g_debugText += "MouseX: " + std::to_string(Input::GetMouseX()) + "\n";
         g_debugText += "MouseY: " + std::to_string(Input::GetMouseY()) + "\n";
@@ -1491,11 +1498,6 @@ namespace Editor
          g_debugText += "g_insertMenuOpen: " + std::to_string(g_insertMenuOpen) + "\n";
          g_debugText += "g_selectedObjectType: " + Util::PhysicsObjectTypeToString(g_selectedObjectType) + "\n";
          */
-
-        if (MenuHasHover()) {
-            g_debugText += "Menu HAS HOVER!!!!!!!!!\n";
-        }
-
 
         /*  if (ObjectIsHoverered()) {
                g_debugText += "Hovered: " + Util::PhysicsObjectTypeToString(g_hoveredObjectType) + "\n";

@@ -49,7 +49,7 @@ public:
         }
         else
         {
-            std::cout << "Crosshair type: " << player.GetCrosshairType() << std::endl;
+            std::cout << "Crosshair type: " << player.GetCrosshairType() << "\n";
         }
         // if (GetCrosshairType() == CrosshairType::REGULAR) {
         //     renderItems.push_back(RendererUtil::CreateRenderItem2D("CrosshairDot", crosshairPos, presentSize, Alignment::CENTERED));

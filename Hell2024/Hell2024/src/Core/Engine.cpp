@@ -12,7 +12,7 @@ void Engine::Run()
     //BuildWarningLogger logger;
     //logger.monitorBuild("E:\\Hell2024\\Hell2024\\Hell2024.sln");
 
-    std::cout << "Loading screen starting" << std::endl;
+    std::cout << "Loading screen starting" << "\n";
 
     InitLoadingScreen();
 
@@ -21,7 +21,7 @@ void Engine::Run()
 
     }
 
-    std::cout << "Loading screen finished" << std::endl;
+    std::cout << "Loading screen finished" << "\n";
 
     BackEnd::Init(API::OPENGL);
 

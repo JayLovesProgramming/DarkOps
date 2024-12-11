@@ -13,7 +13,7 @@
 //
 //    if (!data) 
 //    {
-//        std::cerr << "Failed to load texture: " << std::endl;
+//        std::cerr << "Failed to load texture: " << "\n";
 //        return 0;
 //    }
 //

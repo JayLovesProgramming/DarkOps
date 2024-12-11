@@ -30,10 +30,10 @@ void Player::UpdatePlayer1(float deltaTime)
 {
     // 0 = Orion
     // 1 = CrustyAssCracker
-    //std::cout << m_playerIndex << std::endl;
-    //std::cout << _playerName << std::endl;
-    //std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << std::endl;
-    //std::cout << "1: " << Game::GetPlayerByIndex(1)->_playerName << std::endl;
+    //std::cout << m_playerIndex << "\n";
+    //std::cout << _playerName << "\n";
+    //std::cout << "0: " << Game::GetPlayerByIndex(0)->_playerName << "\n";
+    //std::cout << "1: " << Game::GetPlayerByIndex(1)->_playerName << "\n";
 
     if (g_awaitingRespawn)
     {
@@ -59,7 +59,7 @@ void Player::UpdatePlayer1(float deltaTime)
         m_isOutside = false;
     }
 
-    //std::cout << "Outside: " << m_isOutside << std::endl;
+    //std::cout << "Outside: " << m_isOutside << "\n";
 
     UpdateRagdoll(); // updates pointers to rigids
 
@@ -437,13 +437,13 @@ void Player::RotateWeapons(bool nextWeapon)
     //    {
     //        m_currentWeaponIndex--; // Give previous weapon
     //    }
-    //    std::cout << "D" << m_currentWeaponIndex << std::endl;
+    //    std::cout << "D" << m_currentWeaponIndex << "\n";
 
     //    if (m_currentWeaponIndex == m_weaponStates.size())
     //    {
     //        m_currentWeaponIndex = 0;
     //    }
-    //    std::cout << "E" << m_currentWeaponIndex << std::endl;
+    //    std::cout << "E" << m_currentWeaponIndex << "\n";
     //}
 
     SwitchWeapon(m_weaponStates[m_currentWeaponIndex].name, DRAW_BEGIN);
@@ -501,7 +501,7 @@ void Player::CheckForDeath()
 {
     if (!_isDead && _health <= 0)
     {
-        std::cout << "KILL A" << std::endl;
+        std::cout << "KILL A" << "\n";
         Kill();
     }
 }

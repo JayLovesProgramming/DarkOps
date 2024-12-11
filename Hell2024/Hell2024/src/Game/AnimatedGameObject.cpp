@@ -573,7 +573,7 @@ const glm::mat4 AnimatedGameObject::GetModelMatrix()
 
 bool AnimatedGameObject::IsAnimationComplete() const 
 {
-    //std::cout << "Animation is complete" << _animationIsComplete << std::endl;
+    //std::cout << "Animation is complete" << _animationIsComplete << "\n";
     return _animationIsComplete;
 }
 

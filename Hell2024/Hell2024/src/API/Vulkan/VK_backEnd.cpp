@@ -187,7 +187,7 @@ void VulkanBackEnd::SetGLFWSurface()
 
 void VulkanBackEnd::CreateVulkanInstance() 
 {
-    std::cout << "Created Vulkan Instance" << std::endl;
+    std::cout << "Created Vulkan Instance" << "\n";
     vkb::InstanceBuilder builder;
     builder.set_app_name((BackEnd::_windowName + " (Vulkan)").c_str());
     builder.request_validation_layers(_enableValidationLayers);

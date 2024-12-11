@@ -1051,7 +1051,7 @@ void Renderer::RenderLoadingScreen()
         }
     }
 
-    //std::cout << "Present Final Image" << std::endl;
+    //std::cout << "Present Final Image" << "\n";
     //PresentFinalImage();
 }
 

@@ -10,7 +10,7 @@ void Player::CheckForSuicide()
             Kill();
             m_suicideCount++;
             m_killCount--;
-            std::cout << "KILL D" << std::endl;
+            std::cout << "KILL D" << "\n";
         }
     }
 }

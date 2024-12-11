@@ -1327,10 +1327,10 @@ AnimatedGameObject* Scene::GetAnimatedGameObjectByIndex(int32_t index, std::stri
         type != "viewWeaponModel" && 
         type != "viewWeapon")
     {
-        // std::cout << type << std::endl;
+        // std::cout << type << "\n";
     }
-    //std::cout << "GetAnimatedGameObjectByIndex - Index Size = " << index << std::endl;
-    //std::cout << "GetAnimatedGameObjectByIndex - Animated Game Objects Size = " << g_animatedGameObjects.size() << std::endl;
+    //std::cout << "GetAnimatedGameObjectByIndex - Index Size = " << index << "\n";
+    //std::cout << "GetAnimatedGameObjectByIndex - Animated Game Objects Size = " << g_animatedGameObjects.size() << "\n";
     assert(index >= 0 && index < g_animatedGameObjects.size());
     return &g_animatedGameObjects[index];
 }
@@ -1774,7 +1774,7 @@ std::vector<RenderItem3D> Scene::CreateDecalRenderItems() // 2
             renderItem.rmaTextureIndex = material->_rma;
             renderItem.normalMapTextureIndex = material->_normal;
             renderItem.meshIndex = AssetManager::GetQuadMeshIndex();
-            //std::cout << bulletHolePlasterMaterialIndex << std::endl;
+            //std::cout << bulletHolePlasterMaterialIndex << "\n";
         }
     }
 
@@ -2111,7 +2111,7 @@ void Scene::ProcessBullets()
                             if (parentPlayerHit->_health == 0)
                             {
                                 parentPlayerHit->Kill();
-                                std::cout << "KILL B" << std::endl;
+                                std::cout << "KILL B" << "\n";
 
                                 if (parentPlayerHit != Game::GetPlayerByIndex(0)) 
                                 {
@@ -2220,7 +2220,7 @@ void Scene::ProcessBullets()
                     }
                     if (doIt) 
                     {
-                        //std::cout << "Created bullet decal" << std::endl;
+                        //std::cout << "Created bullet decal" << "\n";
                         // Bullet decal
                         PxRigidBody* parent = actor;
                         glm::mat4 parentMatrix = Util::PxMat44ToGlmMat4(actor->getGlobalPose());

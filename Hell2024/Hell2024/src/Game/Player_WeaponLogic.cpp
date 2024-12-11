@@ -19,7 +19,7 @@ void Player::PlayFireSound(WeaponInfo* weaponInfo)
     int rand = std::rand() % weaponInfo->audioFiles.fire.size();
     assert(rand);
     assert(weaponInfo->name);
-    //std::cout << weaponInfo->name << std::endl;
+    //std::cout << weaponInfo->name << "\n";
     if (weaponInfo->name == "P90" || weaponInfo->name == "AKS74U")
     {
         Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 0.2f);
@@ -67,7 +67,7 @@ void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
         if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete())
         {
             _weaponAction = IDLE;
-            std::cout << "Anim complete" << std::endl;
+            std::cout << "Anim complete" << "\n";
         }
         // Fire
         if (PressedFire() && CanFire())
@@ -319,13 +319,13 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
                     }
 
                     //  viewWeapon->PlayAnimation(weaponInfo->animationNames.reloadempty, 1.0f);
-                    std::cout << "C" << std::endl;
+                    std::cout << "C" << "\n";
                     Audio::PlayAudio(weaponInfo->audioFiles.reloadEmpty, 0.7f);
                     _weaponAction = RELOAD_FROM_EMPTY;
                 }
                 else {
                     viewWeapon->PlayAnimation(weaponInfo->animationNames.reload, weaponInfo->animationSpeeds.reload);
-                    std::cout << "D" << std::endl;
+                    std::cout << "D" << "\n";
                     Audio::PlayAudio(weaponInfo->audioFiles.reload, 0.8f);
                     _weaponAction = RELOAD;
                 }
@@ -403,7 +403,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
 void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime)
 {
     if (weaponInfo->type == WeaponType::SHOTGUN) {
-        //std::cout << "Current weapon is: SHOTGUN" << std::endl;
+        //std::cout << "Current weapon is: SHOTGUN" << "\n";
 
         // Empty
         if (CanFire() && PressedFire() && WeaponMagIsEmpty(weaponState))
@@ -490,7 +490,7 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
 
         // Reload
         if (PressedReload() && CanReload() && (_weaponAction != RELOAD_SHOTGUN_SINGLE_SHELL)) {
-            std::cout << "Reloading shotgun" << std::endl;
+            std::cout << "Reloading shotgun" << "\n";
             viewWeapon->PlayAnimation(weaponInfo->animationNames.shotgunReloadStart, weaponInfo->animationSpeeds.shotgunReloadStart);
             _weaponAction = RELOAD_SHOTGUN_BEGIN;
         }
@@ -505,13 +505,13 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
 
             // Single shell
             if (singleShell) {
-                std::cout << "Single shell reloading" << std::endl;
+                std::cout << "Single shell reloading" << "\n";
                 viewWeapon->PlayAnimation(weaponInfo->animationNames.shotgunReloadOneShell, weaponInfo->animationSpeeds.shotgunReloadOneShell);
                 _weaponAction = RELOAD_SHOTGUN_SINGLE_SHELL;
             }
             // Double shell
             else {
-                std::cout << "Double shell reloading" << std::endl;
+                std::cout << "Double shell reloading" << "\n";
                 viewWeapon->PlayAnimation(weaponInfo->animationNames.shotgunReloadTwoShells, weaponInfo->animationSpeeds.shotgunReloadTwoShells);
                 _weaponAction = RELOAD_SHOTGUN_DOUBLE_SHELL;
             }
@@ -521,14 +521,14 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
         }
         // END RELOAD THING
         if (_weaponAction == RELOAD_SHOTGUN_SINGLE_SHELL && viewWeapon->IsAnimationComplete() && GetCurrentWeaponMagAmmo() == SHOTGUN_AMMO_SIZE) {
-            std::cout << "Single shell reload finished" << std::endl;
+            std::cout << "Single shell reload finished" << "\n";
             viewWeapon->PlayAnimation(weaponInfo->animationNames.shotgunReloadEnd, weaponInfo->animationSpeeds.shotgunReloadEnd);
             _weaponAction = RELOAD_SHOTGUN_END;
         }
 
 
         if (_weaponAction == RELOAD_SHOTGUN_DOUBLE_SHELL && viewWeapon->IsAnimationComplete() && GetCurrentWeaponMagAmmo() == SHOTGUN_AMMO_SIZE) {
-            std::cout << "Double shell reload finished" << std::endl;
+            std::cout << "Double shell reload finished" << "\n";
             viewWeapon->PlayAnimation(weaponInfo->animationNames.shotgunReloadEnd, weaponInfo->animationSpeeds.shotgunReloadEnd);
             _weaponAction = RELOAD_SHOTGUN_END;
         }
@@ -865,7 +865,7 @@ bool Player::CanReload()
         return false;
     }
 
-    std::cout << viewWeaponModel->AnimationIsPastPercentage(50.0f) << std::endl;
+    std::cout << viewWeaponModel->AnimationIsPastPercentage(50.0f) << "\n";
    
 
     if (weaponState->ammoInMag < weaponInfo->magSize) 
@@ -1194,7 +1194,7 @@ void Player::CheckForMeleeHits()
         if (distanceToOtherPlayer < 2)
         {
             otherPlayer->Kill();
-            std::cout << "KILL C" << std::endl;
+            std::cout << "KILL C" << "\n";
             IncrementKillCount();
 
             glm::vec3 direction = glm::normalize(otherPlayer->GetViewPos() - this->GetViewPos());

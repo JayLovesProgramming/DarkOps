@@ -75,7 +75,7 @@ namespace BackEnd
 
         if (!icon.pixels)
         {
-            std::cerr << "Failed to load window icon: " << iconPath << std::endl;
+            std::cerr << "Failed to load window icon: " << iconPath << "\n";
             icon.width = 0;
             icon.height = 0;
             icon.pixels = nullptr;

@@ -26,7 +26,7 @@ void ShadowMapArray::Init(unsigned int numberOfCubemaps)
     glReadBuffer(GL_NONE);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
-        std::cerr << "Framebuffer not complete!" << std::endl;
+        std::cerr << "Framebuffer not complete!" << "\n";
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

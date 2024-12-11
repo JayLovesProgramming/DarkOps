@@ -104,7 +104,7 @@ namespace Audio
 
 	inline AudioHandle PlayAudio(std::string filename, float volume, bool stopIfPlaying = false)
     {
-         //std::cout << "Playing Audio: " << filename << std::endl;
+         //std::cout << "Playing Audio: " << filename << "\n";
 		// Load if needed
 		if (g_loadedAudio.find(filename) == g_loadedAudio.end())
         {
@@ -138,8 +138,8 @@ namespace Audio
         handle.channel = freeChannel;
 		g_system->playSound(handle.sound, nullptr, false, &handle.channel);
         auto finalVolumeLevel = (volume / settingsVolume);
-        //std::cout << "Volume: " << volume << std::endl;
-        //std::cout << "finalVolumeLevel: " << finalVolumeLevel << std::endl;
+        //std::cout << "Volume: " << volume << "\n";
+        //std::cout << "finalVolumeLevel: " << finalVolumeLevel << "\n";
         handle.channel->setVolume(finalVolumeLevel);
 		return handle;
 	}

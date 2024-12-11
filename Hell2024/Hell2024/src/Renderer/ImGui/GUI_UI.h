@@ -32,7 +32,7 @@
 //		//ImGui_ImplGlfw_InitForOpenGL(window, true);
 //		//ImGui_ImplOpenGL3_Init("#version 330");
 //
-//		std::cout << "[INIT] ImGui" << std::endl;
+//		std::cout << "[INIT] ImGui" << "\n";
 //	}
 //
 //	static inline void drawImGui()
@@ -53,7 +53,7 @@
 //
 //		// Swap buffers and poll events
 //		//glfwSwapBuffers(window)
-//		std::cout << "[DRAWING] ImGui" << std::endl;
+//		std::cout << "[DRAWING] ImGui" << "\n";
 //	}
 //
 //	static inline void cleanupImGui()
@@ -61,7 +61,7 @@
 //		ImGui_ImplOpenGL3_Shutdown();
 //		ImGui_ImplGlfw_Shutdown();
 //		ImGui::DestroyContext();
-//		std::cout << "[CLEANUP] ImGui" << std::endl;
+//		std::cout << "[CLEANUP] ImGui" << "\n";
 //	}
 //};
 //

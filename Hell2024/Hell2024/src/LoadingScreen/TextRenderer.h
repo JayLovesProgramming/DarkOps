@@ -22,7 +22,7 @@ public:
         errno_t err = fopen_s(&fontFile, fontPath.c_str(), "rb");
         if (err != 0 || !fontFile)
         {
-            std::cerr << "Failed to open font file: " << fontPath << std::endl;
+            std::cerr << "Failed to open font file: " << fontPath << "\n";
             return;
         }
 

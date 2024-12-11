@@ -183,7 +183,7 @@ bool VulkanAssetManager::ConvertImage(const std::string inputPath, const std::st
     int texWidth, texHeight, texChannels;
     stbi_uc* pixels = stbi_load(inputPath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     if (!pixels) {
-        std::cout << "Failed to load texture file " << inputPath << std::endl;
+        std::cout << "Failed to load texture file " << inputPath << "\n";
         return false;
     }
     int texture_size = texWidth * texHeight * 4;
@@ -429,7 +429,7 @@ bool VulkanAssetManager::LoadImageFromFile(VkDevice device, VmaAllocator allocat
         stbi_uc* pixels = stbi_load(file, &outTexture.width, &outTexture.height, &outTexture.channelCount, STBI_rgb_alpha);
 
         if (!pixels) {
-            std::cout << "Failed to load texture file " << file << std::endl;
+            std::cout << "Failed to load texture file " << file << "\n";
             return false;
         }
 

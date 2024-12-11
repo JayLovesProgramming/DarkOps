@@ -276,13 +276,14 @@ namespace RendererUtil
             // TODO: Properly calculate bottom right
             location.x = viewportSize.x - (width);
             location.y = viewportSize.y - (height);
-            //std::cout << location.x << ", " << location.y << std::endl;
+            //std::cout << location.x << ", " << location.y << "\n";
         }
 
         // Top
         else if (alignment == Alignment::TOP_LEFT)
         {
             // TODO: Properly calculate top left
+            location.y -= texHeight;
         }
         else if (alignment == Alignment::TOP_RIGHT)
         {

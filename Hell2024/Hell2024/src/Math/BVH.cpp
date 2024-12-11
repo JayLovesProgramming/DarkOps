@@ -129,12 +129,12 @@ namespace BVH
                 << "Intersection found\n"
                 << "  primitive: " << prim_id << "\n"
                 << "  distance: " << bvhRay.tmax << "\n"
-                << "  barycentric coords.: " << u << ", " << v << std::endl;
+                << "  barycentric coords.: " << u << ", " << v << "\n";
             return 0;
         }
         else
         {
-            std::cout << "No intersection found" << std::endl;
+            std::cout << "No intersection found" << "\n";
             return 1;
         }
     }

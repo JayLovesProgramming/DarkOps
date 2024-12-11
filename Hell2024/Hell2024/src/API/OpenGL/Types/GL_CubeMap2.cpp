@@ -69,7 +69,7 @@ void CubeMap2::CheckStatus()
         std::cout << "CUBEMAP FRAMEBUFFER: unsupported\n";
     auto glstatus = glGetError();
     if (glstatus != GL_NO_ERROR) {
-        std::cout << "Error in GL call: " << glstatus << std::endl;
+        std::cout << "Error in GL call: " << glstatus << "\n";
     }
 }
 

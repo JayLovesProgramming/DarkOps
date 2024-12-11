@@ -56,7 +56,7 @@ GifData LoadGif(const char* filePath)
 	err = fopen_s(&file, filePath, "rb");
 	if (err != 0 || !file)
 	{
-		std::cerr << "Failed to open GIF file: " << filePath << std::endl;
+		std::cerr << "Failed to open GIF file: " << filePath << "\n";
 		return gifData;
 	}
 
@@ -84,7 +84,7 @@ GifData LoadGif(const char* filePath)
 	}
 	else 
 	{
-		std::cerr << "Failed to load GIF: " << filePath << std::endl;
+		std::cerr << "Failed to load GIF: " << filePath << "\n";
 	}
 
 	delete[] buffer;
@@ -98,7 +98,7 @@ GLuint LoadInitialWindowBackground(const char* filePath)
 	unsigned char* data = stbi_load(filePath, &width, &height, &nrChannels, 0);
 	if (!data)
 	{
-		std::cerr << "Failed to load texture: " << filePath << std::endl;
+		std::cerr << "Failed to load texture: " << filePath << "\n";
 		return 0;
 	}
 
@@ -155,7 +155,7 @@ void DrawGifFrame(const GifData& gifData, int frameIndex, float x, float y, floa
 {
 	if (frameIndex >= gifData.frames)
 	{
-		std::cerr << "Invalid frame index" << std::endl;
+		std::cerr << "Invalid frame index" << "\n";
 		return;
 	}
 
@@ -201,7 +201,7 @@ void SetWindowPosition(GLFWwindow* loadingWindow)
 
 	if (!videoMode)
 	{
-		std::cout << "Initial window: Failed to find video mode" << std::endl;
+		std::cout << "Initial window: Failed to find video mode" << "\n";
 		return;
 	}
 
@@ -246,7 +246,7 @@ void SetWindowPosition(GLFWwindow* loadingWindow)
 		break;
 
 	default:
-		std::cout << "Unknown window position" << std::endl;
+		std::cout << "Unknown window position" << "\n";
 		return;
 	}
 
@@ -257,7 +257,7 @@ void InitLoadingScreen()
 {
 	if (!glfwInit())
 	{
-		std::cerr << "Failed to init GLFW (loading screen)" << std::endl;
+		std::cerr << "Failed to init GLFW (loading screen)" << "\n";
 		return;
 	}
 
@@ -268,7 +268,7 @@ void InitLoadingScreen()
 	GLFWwindow* loadingWindow = glfwCreateWindow(loadingScreenWidth, loadingScreenHeight, (BackEnd::_windowName + " (OpenGL)").c_str(), NULL, NULL);
 	if (!loadingWindow)
 	{
-		std::cerr << "Failed to create GLFW window" << std::endl;
+		std::cerr << "Failed to create GLFW window" << "\n";
 		glfwTerminate();
 		return;
 	}
@@ -287,7 +287,7 @@ void InitLoadingScreen()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cerr << "Failed to initialize GLAD" << std::endl;
+		std::cerr << "Failed to initialize GLAD" << "\n";
 		return;
 	}
 
@@ -296,7 +296,7 @@ void InitLoadingScreen()
 	GLuint backgroundImage = LoadInitialWindowBackground("res/icons/test.png");
 	if (!backgroundImage)
 	{
-		std::cerr << "Failed to load background texture" << std::endl;
+		std::cerr << "Failed to load background texture" << "\n";
 		return;
 	}
 
@@ -304,7 +304,7 @@ void InitLoadingScreen()
 	GifData gifData = LoadGif(("res/icons/loading_throbber_" + std::to_string(loadingThrobberType) + ".gif").c_str());
     if (!gifData.data)
     {
-        std::cerr << "Failed to load GIF" << std::endl;
+        std::cerr << "Failed to load GIF" << "\n";
         return;
     }
 
@@ -339,9 +339,9 @@ void InitLoadingScreen()
 
 		if (debugInitialWindow)
 		{
-			//std::cout << "Loading progress: " << loadingProgress << std::endl;
-			//std::cout << gifData.width << ", " << gifData.height << std::endl;
-			std::cout << currentFrame << std::endl;
+			//std::cout << "Loading progress: " << loadingProgress << "\n";
+			//std::cout << gifData.width << ", " << gifData.height << "\n";
+			std::cout << currentFrame << "\n";
 		}
 
 		DrawGifFrame(gifData, currentFrame, 0.85, -0.95, 0.1 * gifScale, 0.17 * gifScale);
@@ -360,6 +360,6 @@ void InitLoadingScreen()
 
 	if (debugInitialWindow)
 	{
-		std::cout << "Terminated loading screen" << std::endl;
+		std::cout << "Terminated loading screen" << "\n";
 	}
 }

@@ -398,18 +398,18 @@ int calcLayerBufferSize(const int gridWidth, const int gridHeight)
    // for (int i = 0; i < mesh->getMaxTiles(); ++i) {
    //     const dtMeshTile* tile = mesh->getTile(i);
    //     if (!tile || !tile->header) {
-   //         std::cout << "Tile " << i << " is invalid or has no header." << std::endl;
+   //         std::cout << "Tile " << i << " is invalid or has no header." << "\n";
    //         continue;
    //     }
-   //     std::cout << "Tile " << i << " is valid with " << tile->header->polyCount << " polygons." << std::endl;
+   //     std::cout << "Tile " << i << " is valid with " << tile->header->polyCount << " polygons." << "\n";
    //
    //
    //     for (int j = 0; j < tile->header->polyCount; ++j) {
    //         const dtPoly* poly = &tile->polys[j];
-   //         std::cout << "Poly " << j << " has " << poly->vertCount << " vertices." << std::endl;
+   //         std::cout << "Poly " << j << " has " << poly->vertCount << " vertices." << "\n";
    //         for (int k = 0; k < poly->vertCount; ++k) {
    //             const float* v = &tile->verts[poly->verts[k] * 3];
-   //             std::cout << "Vertex " << k << ": (" << v[0] << ", " << v[1] << ", " << v[2] << ")" << std::endl;
+   //             std::cout << "Vertex " << k << ": (" << v[0] << ", " << v[1] << ", " << v[2] << ")" << "\n";
    //         }
    //     }
    // }
@@ -417,10 +417,10 @@ int calcLayerBufferSize(const int gridWidth, const int gridHeight)
    // for (int i = 0; i < GetTileCache()->getTileCount(); ++i) {
    //     const dtCompressedTile* tile = GetTileCache()->getTile(i);
    //     if (tile && tile->header) {
-   //         std::cout << "TileCache Tile " << i << " is valid." << std::endl;
+   //         std::cout << "TileCache Tile " << i << " is valid." << "\n";
    //     }
    //     else {
-   //         std::cout << "TileCache Tile " << i << " is invalid." << std::endl;
+   //         std::cout << "TileCache Tile " << i << " is invalid." << "\n";
    //     }
    // }
     

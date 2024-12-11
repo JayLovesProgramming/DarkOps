@@ -104,7 +104,7 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     float scale = 1.5f;
     RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(question, ivec2(80, 80), presentSize, Alignment::BOTTOM_LEFT, BitmapFontType::STANDARD, glm::vec2(scale)));
     */
-    //std::cout << m_crosshairCrossSize << std::endl;
+    //std::cout << m_crosshairCrossSize << "\n";
 
     return renderItems;
 }

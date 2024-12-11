@@ -230,7 +230,7 @@ namespace Game
             shape->setFlag(PxShapeFlag::eVISUALIZATION, false);
         }
 
-        std::cout << "[INFO] Created " << g_players.size() << " Players" << std::endl;
+        std::cout << "[INFO] Created " << g_players.size() << " Players" << "\n";
     }
 
     std::string Game::GetPlayerNameByIndex(int index)

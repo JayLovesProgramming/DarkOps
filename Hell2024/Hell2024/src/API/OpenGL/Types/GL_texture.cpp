@@ -71,7 +71,7 @@ CompressedTextureData LoadCompressedDDSFromDisk(const char* filepath)
 
     if (texture.empty())
     {
-        std::cerr << "Failed to load compressed DDS texture: " << filepath << std::endl;
+        std::cerr << "Failed to load compressed DDS texture: " << filepath << "\n";
         return textureData;
     }
 

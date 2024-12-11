@@ -145,7 +145,7 @@ static void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, 
 {
     if (id == 131169 || id == 131185 || id == 131218 || id == 131204)
     {
-        //std::cout << "Non-significant error code: " << id << std::endl;
+        //std::cout << "Non-significant error code: " << id << "\n";
         return; // ignore these non-significant error codes
     }
 
@@ -372,7 +372,7 @@ void OpenGLBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    //std::cout << "[LOADED] Vertex Data" << std::endl;
+    //std::cout << "[LOADED] Vertex Data" << "\n";
 }
 
 void OpenGLBackEnd::UploadConstructiveSolidGeometry(std::vector<CSGVertex>& vertices, std::vector<uint32_t>& indices)
@@ -422,7 +422,7 @@ void OpenGLBackEnd::UploadConstructiveSolidGeometry(std::vector<CSGVertex>& vert
 
 void OpenGLBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertices, std::vector<uint32_t>& indices)
 {
-    std::cout << "UPLOADED UploadWeightedVertexData" << std::endl;
+    std::cout << "UPLOADED UploadWeightedVertexData" << "\n";
     assert(!indices.empty());
     assert(!vertices.empty());
     assert(_weightedVertexDataVAO != 0);
