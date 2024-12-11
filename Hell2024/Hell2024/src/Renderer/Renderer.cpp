@@ -25,12 +25,14 @@
 #include "Renderer/TextBlitter.hpp"
 #include "Renderer/RendererUtil.hpp"
 #include "Renderer/Raytracing/Raytracing.hpp"
+#include "Renderer/ImGui/GUI_UI.hpp"
 
 #include "Effects/MuzzleFlash.hpp"
 
 #include "Utils/Util.hpp"
 
 #include "Math/Frustum.hpp"
+
 
 IndirectDrawInfo CreateIndirectDrawInfo(std::vector<RenderItem3D>& potentialRenderItems, int playerCount);
 MultiDrawIndirectDrawInfo CreateMultiDrawIndirectDrawInfo(std::vector<RenderItem3D>& renderItems);
@@ -68,7 +70,7 @@ void Renderer::RenderFrame()
     UpdateDebugTrianglesMesh();
     Editor::UpdateRenderItems();
 
-    if (Input::KeyPressed(HELL_KEY_C) && !Editor::IsOpen()) 
+    if (Input::KeyPressed(HELL_KEY_C) && !Editor::IsOpen() && !IMGUI::ImGui_IsAnyWindowOpen()) 
     {
         Game::NextSplitScreenMode();
         Renderer::RecreateBlurBuffers();

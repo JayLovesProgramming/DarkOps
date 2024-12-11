@@ -65,6 +65,9 @@ namespace Game
 
         // std::cout << "Game::Create() succeeded\n";
         // Edgecase bug - we crash after game has created
+
+        glfwShowWindow(BackEnd::GetWindowPointer());
+        BackEnd::ToggleFullscreen();
     }
 
     bool IsLoaded() 

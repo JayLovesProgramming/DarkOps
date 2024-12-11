@@ -249,17 +249,12 @@ void IMGUI::ImGui_DrawMainCommandBox()
 	// Input box at the bottom of the window
 	static char inputBuffer[256] = "";
 	ImGui::PushItemWidth(-1);
-	if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer)))
+	if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
 	{
-		if (Input::KeyPressed(HELL_KEY_ENTER))
+		if (strlen(inputBuffer) > 0)
 		{
-			std::cout << "Enter pressed" << std::endl;
-			if (strlen(inputBuffer) > 0)
-			{
-				//commandHistory.push_back(inputBuffer);
-				ImGui_ExecuteCommand(inputBuffer);
-				memset(inputBuffer, 0, sizeof(inputBuffer));  // Clear the input buffer
-			}
+			ImGui_ExecuteCommand(inputBuffer);
+			memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
 		}
 	}
 	ImGui::PopItemWidth();
