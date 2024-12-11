@@ -321,7 +321,7 @@ void AssetManager::LoadNextItem()
         {
             cmpTextureData.m_loadingState = LoadingState::LOADING_FROM_DISK;
             _futures.push_back(std::async(std::launch::async, LoadCMPTextureData, &cmpTextureData));
-            AddItemToLoadLog(ExtractModelName(cmpTextureData.m_compressedFilePath));
+            AddItemToLoadLog(ExtractModelName(cmpTextureData.m_textureName));
             return;
         }
     }
@@ -332,7 +332,7 @@ void AssetManager::LoadNextItem()
         if (cubemapTexture.m_awaitingLoadingFromDisk)
         {
             cubemapTexture.m_awaitingLoadingFromDisk = false;
-            AddItemToLoadLog(ExtractModelName(cubemapTexture.m_fullPath));
+            AddItemToLoadLog(ExtractModelName(cubemapTexture.GetName()));
             _futures.push_back(std::async(std::launch::async, LoadCubemapTexture, &cubemapTexture));
             return;
         }
@@ -344,7 +344,7 @@ void AssetManager::LoadNextItem()
         if (animation.m_awaitingLoadingFromDisk)
         {
             animation.m_awaitingLoadingFromDisk = false;
-            AddItemToLoadLog(ExtractModelName(animation.m_fullPath));
+            AddItemToLoadLog(ExtractModelName(animation._filename));
             _futures.push_back(std::async(std::launch::async, LoadAnimation, &animation));
             return;
         }
@@ -362,7 +362,7 @@ void AssetManager::LoadNextItem()
         if (skinnedModel.m_awaitingLoadingFromDisk)
         {
             skinnedModel.m_awaitingLoadingFromDisk = false;
-            AddItemToLoadLog(ExtractModelName(skinnedModel.m_fullPath));
+            AddItemToLoadLog(ExtractModelName(skinnedModel._filename));
             _futures.push_back(std::async(std::launch::async, LoadSkinnedModel, &skinnedModel));
             return;
         }
@@ -380,7 +380,7 @@ void AssetManager::LoadNextItem()
         if (model.m_awaitingLoadingFromDisk)
         {
             model.m_awaitingLoadingFromDisk = false;
-            AddItemToLoadLog(model.m_fullPath);
+            AddItemToLoadLog(model.GetName());
             _futures.push_back(std::async(std::launch::async, LoadModel, &model));
             return;
         }
@@ -392,7 +392,7 @@ void AssetManager::LoadNextItem()
     //    }
     //}
     // 
-     // Textures
+    // Textures
     for (Texture& texture : g_textures)
     {
         // Skip this texture if OpenGL marked it as compressed
@@ -406,7 +406,7 @@ void AssetManager::LoadNextItem()
         {
             texture.SetLoadingState(LoadingState::LOADING_FROM_DISK);
             _futures.push_back(std::async(std::launch::async, LoadTexture, &texture));
-            AddItemToLoadLog(texture.m_fullPath);
+            AddItemToLoadLog(texture.GetFilename());
             return;
         }
     }
