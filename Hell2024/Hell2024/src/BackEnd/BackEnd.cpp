@@ -31,7 +31,6 @@
 // RENDERER
 #include "Renderer/ImGui/GUI_UI.h"
 
-
 namespace BackEnd 
 {
     API _api = API::UNDEFINED;
@@ -157,7 +156,7 @@ namespace BackEnd
 
         // ImGui init
         
-        ImGui_Init(_window);
+        IMGUI::ImGui_Init(_window);
 
         // Init sub-systems
         Input::Init();
@@ -178,7 +177,7 @@ namespace BackEnd
 
     void EndFrame()
     {
-        ImGui_MainLoop();
+        IMGUI::ImGui_MainLoop();
 
         // OpenGL
         if (GetAPI() == API::OPENGL) 
@@ -200,7 +199,7 @@ namespace BackEnd
 
     void CleanUp() 
     {
-        ImGui_Destroy();
+        IMGUI::ImGui_Destroy();
 
         if (GetWindowMode() == WindowedMode::FULLSCREEN)
         {

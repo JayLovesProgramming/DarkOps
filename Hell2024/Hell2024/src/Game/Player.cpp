@@ -15,6 +15,7 @@
 #include "Timer.hpp"
 #include "RapidHotload.hpp"
 #include "Loadout.hpp"
+#include "Renderer/ImGui/GUI_UI.h"
 
 Player::Player(int playerIndex)
 {
@@ -823,7 +824,8 @@ void Player::CheckForDebugKeyPresses()
 
 bool Player::HasControl()
 {
-    return !m_ignoreControl && BackEnd::WindowHasFocus(); // Let's avoid having control when we are tabbed out coding and stuff...
+    std::cout << IMGUI::ImGui_ShowDrawConsole << std::endl;
+    return !m_ignoreControl && BackEnd::WindowHasFocus() && !IMGUI::ImGui_ShowDrawConsole; // Let's avoid having control when we are tabbed out coding and stuff...
 }
 
 AnimatedGameObject* Player::GetCharacterAnimatedGameObject()

@@ -1,4 +1,6 @@
 #pragma once
+// FIX: Change something and we can only rebuild
+
 
 #include "HellCommon.hpp"
 #include "Core/AssetManager.hpp"
@@ -43,7 +45,7 @@ static float gifScale = 1.2;
 // Debug
 constexpr static auto debugInitialWindow = false;
 constexpr static bool quickLoad = true;
-constexpr static auto loadingTime = quickLoad ? 0.005f : 0.0005f; // Load slower to clearly see the loading process
+constexpr static auto loadingTime = quickLoad ? 0.02f : 0.0005f; // Load slower to clearly see the loading process
 static auto loadingProgress = 0.0f;
 
 // LOAD
