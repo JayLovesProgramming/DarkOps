@@ -159,11 +159,11 @@ public:
     bool IsLookingAtOtherPlayer(glm::vec3 myPos, glm::vec3 theirPos, glm::vec3 cameraForward, float maxDistance = 0.65f, float minDotProduct = 0.8f);
 
     // State queries
-    bool IsMoving();
-    bool IsCrouching();
-    bool IsDead();
-    bool IsAlive();
-    bool HasControl();
+    bool IsMoving() const;
+    bool IsCrouching() const;
+    bool IsDead() const;
+    bool IsAlive() const;
+    bool HasControl() const;
 
     // Weapon shit
     void UpdateViewWeaponLogic(float deltaTime);
@@ -204,46 +204,48 @@ public:
     std::vector<RenderItem3D>& GetAttachmentGlassRenderItems();
 
     // Input
-    int32_t GetKeyboardIndex();
-    int32_t GetMouseIndex();
+    int32_t GetKeyboardIndex() const;
     void SetKeyboardIndex(int32_t index);
+
+    int32_t GetMouseIndex() const;
     void SetMouseIndex(int32_t index);
+
     void RotateWeapons(bool nextWeapon);
-    bool PressingWalkForward();
-    bool PressingWalkBackward();
-    bool PressingWalkLeft();
-    bool PressingWalkRight();
-    bool PressingCrouch();
-    bool PressedWalkForward();
-    bool PressedWalkBackward();
-    bool PressedWalkLeft();
-    bool PressedWalkRight();
-    bool PressedInteract();
-    bool PressedReload();
-    bool PressedFire();
-    bool PressingFire();
-    bool PresingJump();
-    bool PressedCrouch();
-    bool PressedNextWeapon();
-    bool PressedPreviousWeapon();
-    bool PressingADS();
-    bool PressedADS();
-    bool PressedEscape();
-    bool PressedMelee();
-    bool PressedFlashlight();
+    bool PressingWalkForward() const;
+    bool PressingWalkBackward() const;
+    bool PressingWalkLeft() const;
+    bool PressingWalkRight() const;
+    bool PressingCrouch() const;
+    bool PressedWalkForward() const;
+    bool PressedWalkBackward() const;
+    bool PressedWalkLeft() const;
+    bool PressedWalkRight() const;
+    bool PressedInteract() const;
+    bool PressedReload() const;
+    bool PressedFire() const;
+    bool PressingFire() const;
+    bool PresingJump() const;
+    bool PressedCrouch() const;
+    bool PressedNextWeapon() const;
+    bool PressedPreviousWeapon() const;
+    bool PressingADS() const;
+    bool PressedADS() const;
+    bool PressedEscape() const;
+    bool PressedMelee() const;
+    bool PressedFlashlight() const;
 
     // Misc gameplay shit
     int32_t GetKillCount() const;
     void IncrementKillCount();
 
     // Misc getters
-    int32_t GetViewWeaponAnimatedGameObjectIndex();
-    int32_t GetCharacterModelAnimatedGameObjectIndex();
+    int32_t GetViewWeaponAnimatedGameObjectIndex() const;
+    int32_t GetCharacterModelAnimatedGameObjectIndex() const;
     //int32_t GetPlayerIndex();
     glm::vec3 GetMuzzleFlashPosition();
     glm::vec3 GetPistolCasingSpawnPostion();
-    AnimatedGameObject* GetCharacterAnimatedGameObject();
-    AnimatedGameObject* GetViewWeaponAnimatedGameObject();
+    AnimatedGameObject* GetCharacterAnimatedGameObject() const;
+    AnimatedGameObject* GetViewWeaponAnimatedGameObject() const;
 
     std::vector<WeaponState> m_weaponStates;
     std::vector<AmmoState> m_ammoStates;
@@ -287,28 +289,28 @@ public:
 
 	void SetRotation(glm::vec3 rotation);
 	//void SetWeapon(Weapon weapon);
-	glm::mat4 GetViewMatrix();
-	glm::mat4 GetInverseViewMatrix();
-	glm::vec3 GetViewPos();
-	glm::vec3 GetViewRotation();
-	glm::vec3 GetFeetPosition();
-	glm::vec3 GetCameraRight();
-	glm::vec3 GetCameraForward();
-	glm::vec3 GetCameraUp();
+	glm::mat4 GetViewMatrix() const;
+	glm::mat4 GetInverseViewMatrix() const;
+	glm::vec3 GetViewPos() const;
+	glm::vec3 GetViewRotation() const;
+	glm::vec3 GetFeetPosition() const;
+	glm::vec3 GetCameraRight() const;
+	glm::vec3 GetCameraForward() const;
+	glm::vec3 GetCameraUp() const;
     //int GetCurrentWeaponIndex();
 
     //void UpdateViewWeaponLogicAndAnimations(float deltaTime);
 	void SpawnMuzzleFlash();
     void SpawnCasing(AmmoInfo* ammoInfo);
-	float GetMuzzleFlashTime();
-	float GetMuzzleFlashRotation();
-	float GetRadius();
+	float GetMuzzleFlashTime() const;
+	float GetMuzzleFlashRotation() const;
+	float GetRadius() const;
 	void CreateCharacterController(glm::vec3 position);
 	//void WipeYVelocityToZeroIfHeadHitCeiling();
-	PxShape* GetCharacterControllerShape();
-	PxRigidDynamic* GetCharacterControllerActor();
+	PxShape* GetCharacterControllerShape() const;
+	PxRigidDynamic* GetCharacterControllerActor() const;
 	void CreateItemPickupOverlapShape();
-	PxShape* GetItemPickupOverlapShape();
+	PxShape* GetItemPickupOverlapShape() const;
 
 	void AddPickUpText(std::string text, int count);
     //void PickUpAKS74U();
@@ -324,8 +326,8 @@ public:
 	//ShadowMap _shadowMap;
 	float _muzzleFlashCounter = 0;
 
-	bool MuzzleFlashIsRequired();
-	glm::mat4 GetWeaponSwayMatrix();
+	bool MuzzleFlashIsRequired() const;
+	glm::mat4 GetWeaponSwayMatrix() const;
     WeaponAction& GetWeaponAction();
 
     //glm::vec3 GetGlockBarrelPosition();
@@ -334,11 +336,11 @@ public:
 
     //void PickUpShotgun();
 
-    glm::mat4 GetProjectionMatrix();
-    float GetZoom();
+    glm::mat4 GetProjectionMatrix() const;
+    float GetZoom() const;
 
     bool CanEnterADS();
-    bool InADS();
+    bool InADS() const;
 
 	//std::string _pickUpText = "";
 	//float _pickUpTextTimer = 0;
@@ -350,13 +352,13 @@ public:
     glm::vec3 finalImageColorTint = glm::vec3(0);
 
     // Dev keys
-    bool PressedFullscreen();
-    bool PressedOne();
-    bool PressedTwo();
-    bool PressedThree();
-    bool PressedFour();
+    bool PressedFullscreen() const;
+    bool PressedOne() const;
+    bool PressedTwo() const;
+    bool PressedThree() const;
+    bool PressedFour() const;
 
-    glm::vec3 GetCameraRotation();
+    glm::vec3 GetCameraRotation() const;
 
     void HideKnifeMesh();
     void HideGlockMesh();
@@ -378,7 +380,7 @@ public:
     std::vector<RenderItem2D> GetHudRenderItemsHiRes(hell::ivec2 gBufferSize);
     CrosshairType GetCrosshairType();
 
-    bool RespawnAllowed();
+    bool RespawnAllowed() const;
     std::vector<RenderItem2D> renderItems;
 
 private:

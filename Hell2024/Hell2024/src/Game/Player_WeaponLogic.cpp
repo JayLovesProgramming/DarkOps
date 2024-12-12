@@ -842,15 +842,18 @@ bool Player::CanFire()
 }
 
 
-bool Player::InADS() {
-    if (_weaponAction == ADS_IN ||
+bool Player::InADS() const
+{
+ /*   if (_weaponAction == ADS_IN ||
         _weaponAction == ADS_OUT ||
         _weaponAction == ADS_IDLE ||
         _weaponAction == ADS_FIRE)
         return true;
-    else {
+    else 
+    {
         return false;
-    }
+    }*/
+    return (_weaponAction == ADS_IN || _weaponAction == ADS_OUT || _weaponAction == ADS_IDLE || _weaponAction == ADS_FIRE);
 }
 
 

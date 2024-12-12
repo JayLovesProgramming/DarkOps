@@ -8,6 +8,7 @@
 #include "Input/InputMulti.hpp"
 #include "Renderer/GlobalIllumination.hpp"
 #include "Renderer/Renderer.hpp"
+#include "Renderer/ImGui/GUI_UI.hpp"
 #include "Pathfinding/Pathfinding2.hpp"
 #include "RapidHotload.hpp"
 
@@ -94,7 +95,7 @@ namespace Game
         g_time += deltaTime;
 
         // Constructive Solid Geometry (CSG)
-        if (Input::KeyPressed(GLFW_KEY_O)) 
+        if (Input::KeyPressed(HELL_KEY_O) && !IMGUI::ImGui_IsAnyWindowOpen()) 
         {
             Physics::ClearCollisionLists();
             Scene::LoadDefaultScene();
@@ -346,7 +347,7 @@ namespace Game
         _splitscreenMode = mode;
     }
 
-    void PrintPlayerControlIndices()
+    static void PrintPlayerControlIndices()
     {
         std::cout << "\n";
         for (int i = 0; i < g_players.size(); i++)

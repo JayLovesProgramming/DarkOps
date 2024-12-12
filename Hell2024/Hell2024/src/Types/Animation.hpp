@@ -35,7 +35,7 @@ public:
     Animation(std::string fulllPath);
     ~Animation();
 
-    float GetTicksPerSecond();
+    float GetTicksPerSecond() const;
 
     bool m_awaitingLoadingFromDisk = true;
     bool m_loadedFromDisk = false;

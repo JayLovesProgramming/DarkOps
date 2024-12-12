@@ -822,28 +822,28 @@ void Player::CheckForDebugKeyPresses()
     }
 }
 
-bool Player::HasControl()
+bool Player::HasControl() const
 {
     //std::cout << IMGUI::ImGui_IsAnyWindowOpen() << std::endl;
     return !m_ignoreControl && BackEnd::WindowHasFocus() && !IMGUI::ImGui_IsAnyWindowOpen(); // Let's avoid having control when we are tabbed out coding and stuff...
 }
 
-AnimatedGameObject* Player::GetCharacterAnimatedGameObject()
+AnimatedGameObject* Player::GetCharacterAnimatedGameObject() const
 {
     return Scene::GetAnimatedGameObjectByIndex(m_characterModelAnimatedGameObjectIndex, "GetCharacterAnimatedGameObject");
 }
 
-AnimatedGameObject* Player::GetViewWeaponAnimatedGameObject()
+AnimatedGameObject* Player::GetViewWeaponAnimatedGameObject() const
 {
     return Scene::GetAnimatedGameObjectByIndex(m_viewWeaponAnimatedGameObjectIndex, "GetViewWeaponAnimatedGameObject");
 }
 
-int32_t Player::GetViewWeaponAnimatedGameObjectIndex()
+int32_t Player::GetViewWeaponAnimatedGameObjectIndex() const
 {
     return m_viewWeaponAnimatedGameObjectIndex;
 }
 
-int32_t Player::GetCharacterModelAnimatedGameObjectIndex()
+int32_t Player::GetCharacterModelAnimatedGameObjectIndex() const
 {
     return m_characterModelAnimatedGameObjectIndex;
 }
@@ -905,12 +905,12 @@ static PxSweepCallback* CreateSweepBuffer()
 	return new PxSweepBuffer;
 }
 
-bool Player::MuzzleFlashIsRequired()
+bool Player::MuzzleFlashIsRequired() const
 {
 	return (_muzzleFlashCounter > 0);
 }
 
-glm::mat4 Player::GetWeaponSwayMatrix()
+glm::mat4 Player::GetWeaponSwayMatrix() const
 {
 	return m_weaponSwayMatrix;
 }
@@ -1139,7 +1139,7 @@ WeaponState* Player::GetCurrentWeaponState()
     }
 }
 
-bool Player::IsCrouching()
+bool Player::IsCrouching() const
 {
     return m_crouching;
 }
@@ -1155,7 +1155,7 @@ void Player::ForceSetViewMatrix(glm::mat4 viewMatrix)
     _viewPos = _inverseViewMatrix[3];
 }
 
-glm::mat4 Player::GetViewMatrix() 
+glm::mat4 Player::GetViewMatrix() const
 {
     return  _viewMatrix;
     // OLD BROKEN BELOW
@@ -1163,43 +1163,43 @@ glm::mat4 Player::GetViewMatrix()
     //  return  glm::mat4(glm::mat3(viewWeaponGameObject->_cameraMatrix)) * _viewMatrix;
 }
 
-glm::mat4 Player::GetInverseViewMatrix()
+glm::mat4 Player::GetInverseViewMatrix() const
 {
 	return _inverseViewMatrix;
 }
 
-glm::vec3 Player::GetViewPos()
+glm::vec3 Player::GetViewPos() const
 {
 	return _viewPos;
 }
 
-glm::vec3 Player::GetViewRotation()
+glm::vec3 Player::GetViewRotation() const
 {
 	return _rotation;
 }
 
 
-glm::vec3 Player::GetFeetPosition()
+glm::vec3 Player::GetFeetPosition() const
 {
 	return _position;
 }
 
-glm::vec3 Player::GetCameraRight()
+glm::vec3 Player::GetCameraRight() const
 {
 	return _right;
 }
 
-glm::vec3 Player::GetCameraForward()
+glm::vec3 Player::GetCameraForward() const
 {
 	return _forward;
 }
 
-glm::vec3 Player::GetCameraUp()
+glm::vec3 Player::GetCameraUp() const
 {
 	return _up;
 }
 
-bool Player::IsMoving() 
+bool Player::IsMoving() const
 {
 	return m_moving;
 }
@@ -1481,12 +1481,12 @@ static void DropAKS7UMag()
 	std::cout << "dropped ak mag\n";
 }
 
-float Player::GetMuzzleFlashTime()
+float Player::GetMuzzleFlashTime() const
 {
     return _muzzleFlashTimer;
 }
 
-float Player::GetMuzzleFlashRotation()
+float Player::GetMuzzleFlashRotation() const
 {
 	return _muzzleFlashRotation;
 }
@@ -1496,19 +1496,19 @@ void Player::SetRotation(glm::vec3 rotation)
 	_rotation = rotation;
 }
 
-float Player::GetRadius() 
+float Player::GetRadius() const
 {
 	return m_capsuleRadius;
 }
 
-PxShape* Player::GetCharacterControllerShape() 
+PxShape* Player::GetCharacterControllerShape() const
 {
 	PxShape* shape;
 	_characterController->getActor()->getShapes(&shape, 1);
 	return shape;
 }
 
-PxRigidDynamic* Player::GetCharacterControllerActor()
+PxRigidDynamic* Player::GetCharacterControllerActor() const
 {
 	return _characterController->getActor();
 }
@@ -1543,7 +1543,7 @@ void Player::CreateItemPickupOverlapShape()
     _meleeHitCheckOverlapShape = Physics::GetPhysics()->createShape(PxCapsuleGeometry(radius, halfHeight), *Physics::GetDefaultMaterial(), true);
 }
 
-PxShape* Player::GetItemPickupOverlapShape()
+PxShape* Player::GetItemPickupOverlapShape() const
 {
 	return _itemPickupOverlapShape;
 }
@@ -1573,12 +1573,12 @@ void Player::CreateCharacterController(glm::vec3 position)
 	shape->setQueryFilterData(filterData);
 }
 
-float Player::GetZoom()
+float Player::GetZoom() const
 {
     return _zoom;
 }
 
-glm::mat4 Player::GetProjectionMatrix()
+glm::mat4 Player::GetProjectionMatrix() const
 {
     float width = (float)BackEnd::GetWindowedWidth();
     float height = (float)BackEnd::GetWindowedHeight();
@@ -1608,7 +1608,7 @@ glm::mat4 Player::GetProjectionMatrix()
     return RapidHotload::computeTileProjectionMatrix(fovY, aspectRatio, nearPlane, farPlane, screenWidth, screenHeight, tileX, tileY, tileWidth, tileHeight);*/
 }
 
-bool Player::PressingWalkForward() 
+bool Player::PressingWalkForward() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1621,7 +1621,7 @@ bool Player::PressingWalkForward()
     }
 }
 
-bool Player::PressingWalkBackward()
+bool Player::PressingWalkBackward() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1634,7 +1634,7 @@ bool Player::PressingWalkBackward()
     }
 }
 
-bool Player::PressingWalkLeft() 
+bool Player::PressingWalkLeft() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1647,7 +1647,7 @@ bool Player::PressingWalkLeft()
     }
 }
 
-bool Player::PressingWalkRight()
+bool Player::PressingWalkRight() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1660,7 +1660,7 @@ bool Player::PressingWalkRight()
     }
 }
 
-bool Player::PressingCrouch() 
+bool Player::PressingCrouch() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1673,7 +1673,7 @@ bool Player::PressingCrouch()
     }
 }
 
-bool Player::PressedWalkForward()
+bool Player::PressedWalkForward() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1686,7 +1686,7 @@ bool Player::PressedWalkForward()
     }
 }
 
-bool Player::PressedWalkBackward()
+bool Player::PressedWalkBackward() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1699,7 +1699,7 @@ bool Player::PressedWalkBackward()
     }
 }
 
-bool Player::PressedWalkLeft() 
+bool Player::PressedWalkLeft() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1712,7 +1712,7 @@ bool Player::PressedWalkLeft()
     }
 }
 
-bool Player::PressedWalkRight()
+bool Player::PressedWalkRight() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1725,7 +1725,7 @@ bool Player::PressedWalkRight()
     }
 }
 
-bool Player::PressedInteract()
+bool Player::PressedInteract() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1738,7 +1738,7 @@ bool Player::PressedInteract()
     }
 }
 
-bool Player::PressedReload()
+bool Player::PressedReload() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1751,7 +1751,7 @@ bool Player::PressedReload()
     }
 }
 
-bool Player::PressedFire()
+bool Player::PressedFire() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1764,7 +1764,7 @@ bool Player::PressedFire()
     }
 }
 
-bool Player::PressedFlashlight()
+bool Player::PressedFlashlight() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1777,7 +1777,7 @@ bool Player::PressedFlashlight()
     }
 }
 
-bool Player::PressingFire()
+bool Player::PressingFire() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1790,7 +1790,7 @@ bool Player::PressingFire()
     }
 }
 
-bool Player::PresingJump() 
+bool Player::PresingJump() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1803,7 +1803,7 @@ bool Player::PresingJump()
     }
 }
 
-bool Player::PressedCrouch()
+bool Player::PressedCrouch() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1816,7 +1816,7 @@ bool Player::PressedCrouch()
     }
 }
 
-bool Player::PressedNextWeapon()
+bool Player::PressedNextWeapon() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1831,7 +1831,7 @@ bool Player::PressedNextWeapon()
     return false;
 }
 
-bool Player::PressedPreviousWeapon()
+bool Player::PressedPreviousWeapon() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1859,7 +1859,7 @@ bool Player::PressedPreviousWeapon()
 //    }
 //}
 
-bool Player::PressingADS()
+bool Player::PressingADS() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1872,7 +1872,7 @@ bool Player::PressingADS()
     }
 }
 
-bool Player::PressedADS()
+bool Player::PressedADS() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1885,7 +1885,7 @@ bool Player::PressedADS()
     }
 }
 
-bool Player::PressedMelee() 
+bool Player::PressedMelee() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1898,7 +1898,7 @@ bool Player::PressedMelee()
     }
 }
 
-bool Player::PressedEscape() 
+bool Player::PressedEscape() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1910,7 +1910,7 @@ bool Player::PressedEscape()
         return false;
     }
 }
-bool Player::PressedFullscreen() 
+bool Player::PressedFullscreen() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1923,7 +1923,7 @@ bool Player::PressedFullscreen()
     }
 }
 
-bool Player::PressedOne()
+bool Player::PressedOne() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1936,7 +1936,7 @@ bool Player::PressedOne()
     }
 }
 
-bool Player::PressedTwo()
+bool Player::PressedTwo() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
@@ -1949,7 +1949,7 @@ bool Player::PressedTwo()
     }
 }
 
-bool Player::PressedThree()
+bool Player::PressedThree() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1961,7 +1961,7 @@ bool Player::PressedThree()
         return false;
     }
 }
-bool Player::PressedFour()
+bool Player::PressedFour() const
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE) 
     {
@@ -1974,7 +1974,7 @@ bool Player::PressedFour()
     }
 }
 
-glm::vec3 Player::GetCameraRotation() 
+glm::vec3 Player::GetCameraRotation() const
 {
     return _rotation;
 }
@@ -2098,16 +2098,17 @@ void Player::CheckForMeleeHit()
     }
 }
 
-bool Player::IsDead()
+bool Player::IsDead() const
 {
     return _isDead;
 }
-bool Player::IsAlive()
+
+bool Player::IsAlive() const
 {
     return !_isDead;
 }
 
-bool Player::RespawnAllowed() 
+bool Player::RespawnAllowed() const
 {
     return _isDead && _timeSinceDeath > 3.25f;
 }
@@ -2149,12 +2150,12 @@ void Player::GiveDamageColor()
     _damageColorTimer = 0.0f;
 }
 
-int32_t Player::GetKeyboardIndex()
+int32_t Player::GetKeyboardIndex() const
 {
     return m_keyboardIndex;
 }
 
-int32_t Player::GetMouseIndex()
+int32_t Player::GetMouseIndex() const
 {
     return m_mouseIndex;
 }

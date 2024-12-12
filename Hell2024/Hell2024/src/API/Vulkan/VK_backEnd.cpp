@@ -304,10 +304,12 @@ void VulkanBackEnd::SelectPhysicalDevice()
 
     auto instanceVersion = VK_API_VERSION_1_0;
     auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
-    if (vkEnumerateInstanceVersion)
-    {
-        vkEnumerateInstanceVersion(&instanceVersion);
-    }
+    //if (vkEnumerateInstanceVersion)
+    //{
+    //    vkEnumerateInstanceVersion(&instanceVersion);
+    //} Old but probably works, version below needs testing
+
+    assert(vkEnumerateInstanceVersion(&instanceVersion));
 
     uint32_t major = VK_VERSION_MAJOR(instanceVersion);
     uint32_t minor = VK_VERSION_MINOR(instanceVersion);
@@ -374,7 +376,7 @@ void VulkanBackEnd::CreateSwapchain()
     _currentWindowExtent.width = BackEnd::GetCurrentWindowWidth();
     _currentWindowExtent.height = BackEnd::GetCurrentWindowHeight();
 
-    VkSurfaceFormatKHR format;
+    VkSurfaceFormatKHR format = {};
     format.colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
     format.format = VkFormat::VK_FORMAT_R8G8B8A8_UNORM;
 
@@ -810,7 +812,7 @@ bool VulkanBackEnd::StillLoading()
 
 void VulkanBackEnd::PrepareSwapchainForPresent(VkCommandBuffer commandBuffer, uint32_t swapchainImageIndex) 
 {
-    VkImageSubresourceRange range;
+    VkImageSubresourceRange range = {};
     range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     range.baseMipLevel = 0;
     range.levelCount = 1;
@@ -845,7 +847,7 @@ void VulkanBackEnd::RecreateDynamicSwapchain()
     CreateSwapchain();
 }
 
-uint32_t alignedSize(uint32_t value, uint32_t alignment)
+static uint32_t alignedSize(uint32_t value, uint32_t alignment)
 {
     return (value + alignment - 1) & ~(alignment - 1);
 }
@@ -896,7 +898,7 @@ void VulkanBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<
         VK_CHECK(vmaCreateBuffer(_allocator, &vertexBufferInfo, &vmaallocInfo, &_mainVertexBuffer._buffer, &_mainVertexBuffer._allocation, nullptr));
         AddDebugName(_mainVertexBuffer._buffer, "Main Vertex Buffer");
         ImmediateSubmit([=](VkCommandBuffer cmd) {
-            VkBufferCopy copy;
+            VkBufferCopy copy = {};
             copy.dstOffset = 0;
             copy.srcOffset = 0;
             copy.size = bufferSize;
@@ -938,7 +940,7 @@ void VulkanBackEnd::UploadVertexData(std::vector<Vertex>& vertices, std::vector<
         VK_CHECK(vmaCreateBuffer(_allocator, &bufferInfo, &vmaallocInfo, &_mainIndexBuffer._buffer, &_mainIndexBuffer._allocation, nullptr));
         AddDebugName(_mainIndexBuffer._buffer, "Main Index Buffer");
         ImmediateSubmit([=](VkCommandBuffer cmd) {
-            VkBufferCopy copy;
+            VkBufferCopy copy = {};
             copy.dstOffset = 0;
             copy.srcOffset = 0;
             copy.size = bufferSize;
@@ -992,7 +994,7 @@ void VulkanBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertic
         VK_CHECK(vmaCreateBuffer(_allocator, &vertexBufferInfo, &vmaallocInfo, &_mainWeightedVertexBuffer._buffer, &_mainWeightedVertexBuffer._allocation, nullptr));
         AddDebugName(_mainWeightedVertexBuffer._buffer, "Main Weighted Vertex Buffer");
         ImmediateSubmit([=](VkCommandBuffer cmd) {
-            VkBufferCopy copy;
+            VkBufferCopy copy = {};
             copy.dstOffset = 0;
             copy.srcOffset = 0;
             copy.size = bufferSize;
@@ -1034,7 +1036,7 @@ void VulkanBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertic
         VK_CHECK(vmaCreateBuffer(_allocator, &bufferInfo, &vmaallocInfo, &_mainWeightedIndexBuffer._buffer, &_mainWeightedIndexBuffer._allocation, nullptr));
         AddDebugName(_mainWeightedIndexBuffer._buffer, "Main Weighted Index Buffer");
         ImmediateSubmit([=](VkCommandBuffer cmd) {
-            VkBufferCopy copy;
+            VkBufferCopy copy = {};
             copy.dstOffset = 0;
             copy.srcOffset = 0;
             copy.size = bufferSize;
@@ -1081,10 +1083,10 @@ void VulkanBackEnd::InitRayTracing()
     std::cout << "init raytracing\n";
 }
 
-VkTransformMatrixKHR GlmMat4ToVkTransformMatrix(glm::mat4 matrix) 
+static VkTransformMatrixKHR GlmMat4ToVkTransformMatrix(glm::mat4 matrix) 
 {
     matrix = glm::transpose(matrix);
-    VkTransformMatrixKHR vkTransformMatrix;
+    VkTransformMatrixKHR vkTransformMatrix = {};
     for (int x = 0; x < 4; x++)
     {
         for (int y = 0; y < 4; y++)
@@ -1156,7 +1158,7 @@ void VulkanBackEnd::CreateTopLevelAccelerationStructure(std::vector<VkAccelerati
     AddDebugName(_rtInstancesBuffer._buffer, "_rtInstancesBuffer");
 
     ImmediateSubmit([=](VkCommandBuffer cmd) {
-        VkBufferCopy copy;
+        VkBufferCopy copy = {};
         copy.dstOffset = 0;
         copy.srcOffset = 0;
         copy.size = bufferSize;
@@ -1281,7 +1283,7 @@ void VulkanBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointC
     vmaUnmapMemory(_allocator, stagingBuffer._allocation);
 
     ImmediateSubmit([=](VkCommandBuffer cmd) {
-        VkBufferCopy copy;
+        VkBufferCopy copy = {};
         copy.dstOffset = 0;
         copy.srcOffset = 0;
         copy.size = bufferSize;

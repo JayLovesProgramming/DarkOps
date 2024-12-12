@@ -12,7 +12,7 @@ Animation::~Animation()
 {
 }
 
-float Animation::GetTicksPerSecond()
+float Animation::GetTicksPerSecond() const
 {
     return m_ticksPerSecond != 0 ? m_ticksPerSecond : 25.0f;
 }

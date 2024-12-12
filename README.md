@@ -7,9 +7,12 @@ This codebase began as a CPU raycaster to explore the viability of a voxel based
 
 
 ### Controls
-WSAD: movement<br>
-Left Mouse: fire<br>
-Space bar:  jump<br>
+W: Walk Forward<br>
+A: Walk Left<br>
+S: Walk Backward<br>
+D: Walk Right<br>
+Left Mouse: Fire/Attack<br>
+Space Bar:  Jump<br>
 Q: cycle weapons<br>
 E: interact<br>
 R: reload<br>

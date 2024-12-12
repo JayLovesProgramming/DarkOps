@@ -45,7 +45,7 @@ struct Transform
     glm::vec3 rotation = glm::vec3(0);
     glm::vec3 scale = glm::vec3(1);
 
-    glm::mat4 to_mat4()
+    glm::mat4 to_mat4() const
     {
         glm::mat4 m = glm::translate(glm::mat4(1), position);
         m *= glm::mat4_cast(glm::quat(rotation));
@@ -53,13 +53,13 @@ struct Transform
         return m;
     };
 
-    glm::vec3 to_forward_vector()
+    glm::vec3 to_forward_vector() const
     {
         glm::quat q = glm::quat(rotation);
         return glm::normalize(q * glm::vec3(0.0f, 0.0f, 1.0f));
     }
 
-    glm::vec3 to_right_vector() 
+    glm::vec3 to_right_vector()  const
     {
         glm::quat q = glm::quat(rotation);
         return glm::normalize(q * glm::vec3(1.0f, 0.0f, 0.0f));
@@ -101,7 +101,7 @@ struct Line
         p2.color = color;
     }
 
-    glm::vec3 GetCenter() 
+    glm::vec3 GetCenter() const
     {
         return (p1.pos + p2.pos) * 0.5f;
     }
@@ -165,14 +165,14 @@ struct PhysicsObjectData
 
 struct PhysXRayResult 
 {
-    std::string hitObjectName;
-    glm::vec3 hitPosition;
-    glm::vec3 surfaceNormal;
-    glm::vec3 rayDirection;
-    bool hitFound;
+    std::string hitObjectName = "";
+    glm::vec3 hitPosition = {};
+    glm::vec3 surfaceNormal = {};
+    glm::vec3 rayDirection = {};
+    bool hitFound = false;
     void* hitActor = {};
-    void* parent;
-    ObjectType objectType;
+    void* parent = {};
+    ObjectType objectType = {};
 };
 
 struct OverlapResult 
@@ -222,23 +222,23 @@ struct AABB
         CalculateCenter();
     }
 
-    float Area() 
+    float Area() const
     {
         glm::vec3 e = boundsMax - boundsMin; // box extent
         return e.x * e.y + e.y * e.z + e.z * e.x;
     }
 
-    const glm::vec3 GetCenter()
+    const glm::vec3 GetCenter() const
     {
         return center;
     }
 
-    const glm::vec3 GetBoundsMin()
+    const glm::vec3 GetBoundsMin() const
     {
         return boundsMin;
     }
 
-    const glm::vec3 GetBoundsMax()
+    const glm::vec3 GetBoundsMax() const
     {
         return boundsMax;
     }
@@ -279,7 +279,8 @@ struct BVHNode
 {
     glm::vec3 aabbMin; int leftFirst = -1;
     glm::vec3 aabbMax; int instanceCount = -1;
-    bool IsLeaf() { 
+    bool IsLeaf() const
+    { 
         return instanceCount > 0;
     }
 };

@@ -162,10 +162,10 @@ struct SkinnedRenderItem
 {
     glm::mat4 modelMatrix = glm::mat4(1);
     glm::mat4 inverseModelMatrix = glm::mat4(1);
-    int originalMeshIndex;
-    int materialIndex;
-    int baseVertex;
-    int isGold;
+    int originalMeshIndex = 0;
+    int materialIndex = 0;
+    int baseVertex = 0 ;
+    int isGold = 0; // Why is it an int?
 };
 
 struct CameraData 

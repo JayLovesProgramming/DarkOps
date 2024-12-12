@@ -37,9 +37,9 @@ namespace gli
 			target_type Target,
 			format_type Format,
 			extent_type const& Extent,
-			size_type Layers,
-			size_type Faces,
-			size_type Levels,
+			size_type Layers = {},
+			size_type Faces =  0 ,
+			size_type Levels = {},
 			swizzles_type const& Swizzles = swizzles_type(SWIZZLE_RED, SWIZZLE_GREEN, SWIZZLE_BLUE, SWIZZLE_ALPHA));
 
 		/// Create a texture object by sharing an existing texture storage_type from another texture instance.
@@ -283,12 +283,12 @@ namespace gli
 				return ((Layer * this->Faces) + Face) * this->Levels + Level;
 			}
 
-			size_type Faces;
-			size_type Levels;
+			size_type Faces = {};
+			size_type Levels = {};
 			std::vector<data_type*> BaseAddresses;
-			std::array<extent_type, 16> ImageExtent;
-			std::array<size_type, 16> ImageMemorySize;
-			size_type GlobalMemorySize;
+			std::array<extent_type, 16> ImageExtent = {};
+			std::array<size_type, 16> ImageMemorySize = {};
+			size_type GlobalMemorySize = {};
 		} Cache;
 	};
 }//namespace gli
