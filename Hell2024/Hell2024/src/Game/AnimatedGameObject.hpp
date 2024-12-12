@@ -41,7 +41,7 @@ private:
     bool m_isGold = false;
 
 public:
-    bool IsGold();
+    bool IsGold() const;
     void MakeGold();
     void MakeNotGold();
 

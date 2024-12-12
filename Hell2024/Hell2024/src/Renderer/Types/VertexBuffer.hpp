@@ -8,5 +8,5 @@ struct VertexBuffer
     void AllocateSpace(int vertexCount);
 
     OpenGLVertexBuffer glVertexBuffer;
-    VulkanVertexBuffer vkVertexBuffer;
+    VulkanVertexBuffer vkVertexBuffer = {};
 };

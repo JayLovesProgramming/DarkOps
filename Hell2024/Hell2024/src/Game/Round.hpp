@@ -5,8 +5,6 @@ class RoundManager
 public:
 	inline static unsigned int currentRound = 2;
 
-    inline static unsigned int storedRound = 0;
-
     inline static bool areAllDogsKilled = false;
     inline static bool areAllZombiesKilled = false;
     inline static int zombiesThisRound = 5;
@@ -38,7 +36,7 @@ public:
         //renderItems->clear();
         std::string roundText = "round" + std::to_string(RoundManager::currentRound);
 
-        renderItems->push_back(RendererUtil::CreateRenderItem2D(roundText.c_str(), viewportCenter, roundCounterSize, Alignment::TOP_RIGHT));
+        renderItems->push_back(RendererUtil::CreateRenderItem2D(roundText.c_str(), viewportCenter, roundCounterSize, Alignment::TOP_RIGHT, WHITE, {75, 125}));
 
         //std::cout << "Drawing round: " << roundText.c_str() << "\n";
     }

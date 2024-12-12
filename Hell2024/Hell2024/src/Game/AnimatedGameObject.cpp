@@ -1,9 +1,13 @@
 #include "AnimatedGameObject.hpp"
+
 #include "Core/AssetManager.hpp"
 #include "Core/Audio.hpp"
 #include "Core/Floorplan.hpp"
+
 #include "Input/Input.hpp"
+
 #include "Renderer/RendererStorage.hpp"
+
 #include "Utils/Util.hpp"
 
 const size_t AnimatedGameObject::GetAnimatedTransformCount() 
@@ -15,12 +19,13 @@ void AnimatedGameObject::MakeGold()
 {
     m_isGold = true;
 }
+
 void AnimatedGameObject::MakeNotGold()
 {
     m_isGold = false;
 }
 
-bool AnimatedGameObject::IsGold()
+bool AnimatedGameObject::IsGold() const
 {
     return m_isGold;
 }

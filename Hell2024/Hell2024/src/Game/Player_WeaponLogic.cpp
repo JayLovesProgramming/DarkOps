@@ -1049,7 +1049,7 @@ void Player::SwitchWeapon(std::string name, WeaponAction weaponAction)
         // Set animation
         if (weaponAction == SPAWNING)
         {
-            viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.spawn, 1.0f);
+            viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.spawn, 0.6f); // Slowed down a lil to hotfix the anim
         }
         if (weaponAction == DRAW_BEGIN) 
         {

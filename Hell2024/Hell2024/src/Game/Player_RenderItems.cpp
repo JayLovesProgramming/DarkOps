@@ -6,6 +6,7 @@
 #include "Renderer/TextBlitter.hpp"
 #include "Renderer/Renderer.hpp"
 #include "Round.hpp"
+#include "Renderer/Minimap.hpp"
 #include "Crosshair.hpp"
 #include "Inventory.hpp"
 #include "Renderer/ImGui/GUI_UI.hpp"
@@ -67,6 +68,7 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     {
         CrosshairManager::DrawCrosshair(viewportCenter, weaponInfo, &renderItems, m_crosshairCrossSize, presentSize);
         RoundManager::DrawRounds(&renderItems, viewportCenter, presentSize);
+        Minimap::DrawBackground(&renderItems, viewportCenter,  presentSize);
         //InventoryManager::DrawInventory(&renderItems, presentSize);
         //RoundManager::UpdateRoundAnimation(Game::deltaTime);
 

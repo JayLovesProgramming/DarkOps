@@ -42,6 +42,7 @@ enum Alignment
     TOP_LEFT,
     TOP_RIGHT,
     BOTTOM_LEFT,
+    MINIMAP_CUSTOM_TEST,
     BOTTOM_RIGHT
 };
 

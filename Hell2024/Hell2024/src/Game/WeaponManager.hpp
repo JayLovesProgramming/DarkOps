@@ -83,7 +83,7 @@ struct WeaponInfo
     const char* casingType = UNDEFINED_STRING;
     glm::vec3 muzzleFlashOffset = glm::vec3(0);
     glm::vec3 casingEjectionOffset = glm::vec3(0);
-    WeaponType type;
+    WeaponType type = {};
     std::unordered_map<const char*, const char*> meshMaterials;
     std::unordered_map<const char*, const char*> pickUpMeshMaterials;
     std::unordered_map<unsigned int, const char*> meshMaterialsByIndex;

@@ -238,7 +238,7 @@ void Scene::LoadMapData(const std::string& fileName)
     // Load Lights
     for (const auto& jsonObject : data["Lights"])
     {
-        LightCreateInfo createInfo;
+        LightCreateInfo createInfo = {};
         createInfo.position = { jsonObject["position"]["x"], jsonObject["position"]["y"], jsonObject["position"]["z"] };
         createInfo.color = { jsonObject["color"]["x"], jsonObject["color"]["y"], jsonObject["color"]["z"] };
         createInfo.strength = jsonObject["strength"];
@@ -453,7 +453,8 @@ void Scene::LoadDefaultScene()
             float r = Util::RandomFloat(0.0f, 1.0f);
             float g = Util::RandomFloat(0.0f, 1.0f);
             float b = Util::RandomFloat(0.0f, 1.0f);
-            LightCreateInfo createInfo;
+
+            LightCreateInfo createInfo = {};
             createInfo.position = { x, y, z };
             createInfo.color = { r, g, b };
             createInfo.strength = 1;
@@ -518,7 +519,7 @@ void Scene::LoadDefaultScene()
     {
         g_dobermann.clear();
 
-        DobermannCreateInfo createInfo;
+        DobermannCreateInfo createInfo = {};
         createInfo.position = glm::vec3(-1.7f, 0.0f, -1.2f);
         createInfo.rotation = 0.7f;
         createInfo.initalState = DobermannState::LAY;
@@ -705,7 +706,7 @@ void Scene::LoadDefaultScene()
     Pathfinding2::CalculateNavMesh();
 }
 
-AABB AABBFromVertices(std::span<Vertex> vertices, std::span<uint32_t> indices, glm::mat4 worldTransform)
+static AABB AABBFromVertices(std::span<Vertex> vertices, std::span<uint32_t> indices, glm::mat4 worldTransform)
 {
     AABB aabb;
     aabb.boundsMin = glm::vec3(1e30f);
@@ -1379,7 +1380,7 @@ void Scene::Init()
 //    return glm::fract(sin(glm::vec2(dot(p, glm::vec2(127.1, 311.7)), dot(p, glm::vec2(269.5, 183.3)))) * 43758.5453);
 //}
 
-std::vector<RenderItem3D> GetTreeRenderItems()
+static std::vector<RenderItem3D> GetTreeRenderItems()
 {
     // Cache a bunch of shit
     static Model* model = AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName("Tree_0"));
