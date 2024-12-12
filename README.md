@@ -1,8 +1,9 @@
-# HELL ENGINE: rewrite one billion++
+# HELL ENGINE
 
 <!-- December 27 2023 -->
-This codebase began as a CPU raycaster to explore the viability of a voxel based idea I had for global illumination. The voxel idea didn't work out in the end, the voxel grid caused lighting artefacts, but rewriting it to use a pointcloud did and here we are. This is now the new Hell Engine, the engine I'm writing to house a splitscreen roguelike/deathmatch survival horror game.
-
+This codebase began as a CPU raycaster to explore the viability of a voxel based idea I had for global illumination. 
+The voxel idea didn't work out in the end, the voxel grid caused lighting artefacts, but rewriting it to use a pointcloud did and here we are. 
+This is now the new Hell Engine, the engine I'm writing to house a splitscreen roguelike/deathmatch survival horror game.
 ![Image](https://www.principiaprogrammatica.com/dump/githubthumb2.jpg)
 
 
@@ -33,7 +34,7 @@ Y: Show Probes<br>
 `: Toggle Debug Text<br>
 TAB: Toggle Editor<br>
 
-### Editor controls
+### Editor Controls
 F1: File Menu<br>
 F2: Insert Menu<br>
 Alt + Click: Rotate Camera<br>
@@ -41,7 +42,7 @@ Ctrl + Click: Pan Camera<br>
 Mouse Wheel: Zoom Camera<br>
 <br>
 
-**WARNING: Editor is very much still a WIP, stay tuned...**
+**WARNING: Editor is very much still a WIP!**
 
 ### Download
 
@@ -54,35 +55,73 @@ git clone https://github.com/livinamuk/Hell2024.git
 
 ### Usage
 
-Run in Release. PhysX runs like shit in Debug.
+Run in Release - PhysX runs like shit in Debug if you manage to get it even running...
 
 <br>
 
----
+## Features
 
+### Client
+- **Dear ImGUI (Not ImGUI)**: **✅ Implemented but need more features adding**  
+  Integrated for immediate UI functionality, enabling rapid development and debugging.
+  
+- **Renderer**: **🔄 In Progress**  
+  Building a flexible and efficient rendering pipeline to support various graphics APIs.
+  
+- **Sync Movement with V-Sync/FPS**: **🔄 In Progress**  
+  Implementing synchronization techniques to ensure smooth movement and reduce screen tearing.
+  
+- **Input Handling**: **🔄 In Progress**  
+  Creating a flexible input system to manage keyboard, mouse, and game controller inputs.
 
-#### December 27 2023
+- **Audio**: **❌ Not Started**  
+  Integrating audio systems for immersive sound design and dynamic audio effects.
 
-![Image](https://www.principiaprogrammatica.com/dump/ChristmasShot.png)
+- **ECS (Entity Component System)**: **❌ Not Started**  
+  Planning to implement a robust ECS architecture for modular and efficient game object management.
 
-#### November 14 2023
-Huge improvements since the entries below. I scrapped the voxel thing entirely because it was causing lighting artefacts for geometry that didn't fit nicely into the voxel grid, most importantly swinging doors. It now calculates direct lighting for an approximated point cloud of the scene which is in turn used to propogate light through a 3D grid to simulate bounced light, both these passes are performed with raytracing in custom compute shaders. I've got skeletal animation too now and we're running realtime baby.
+- **Networking Client**: **❌ Not Started**  
+  Developing a networking layer for online multiplayer capabilities.
 
-![Image](https://www.principiaprogrammatica.com/dump/SHITT2.jpg)
+- **Animation System**: **❌ Not Started**  
+  Developing a system to handle character animations, blending, and transitions.
 
-#### September 12 2023
-Things are looking promising. I really need to move to Vulkan so I can do visiblity checks for each pixel against any probe that may contribute indirect light to it. Gonna see how far I can push this in GL first though. All direct and indirect light is still calculated on the CPU, would be nice to move to compute but there's really no point if I'm moving to VK soon. I'll work on voxelizing regular mesh next I think.
+- **Physics Engine**: **❌ Not Started**  
+  Implementing a physics engine for realistic collision detection and response.
 
-![Image](https://www.principiaprogrammatica.com/dump/vxgi2.jpg)
+- **Scripting Support**: **❌ Not Started**  
+  Integrating scripting capabilities to allow for customizable game logic and behaviors (eg. Lua, C#, Javascript).
 
-#### September 10 2023
-Indirect light is working. It's all done with ray-triangle intersection tests at this point, need to look into faster methods for geometry visiblity checks and light propogation.
+### Server
+- **Server Component System**: **❌ Not Started**  
+  Creating a scalable server-side architecture for managing game state and player interactions.
 
-![Image](https://www.principiaprogrammatica.com/dump/vxgi.png)
+- **Networking Backend Server**: **❌ Not Started**  
+  Setting up a reliable networking backend to handle client connections and game data.
 
-#### September 4 2023
+- **Database Integration**: **❌ Not Started**  
+  Implementing a database system to manage persistent game data, user accounts, and statistics.
 
-I started a new project today, to explore using voxels to calculate and render indirect diffuse light at realtime speeds. So far direct lighting only. Will finish light propogation on the cpu, then move it all to compute if it looks any good. Rendered in OpenGL. Will likely eventually port to Vulkan and let them evaluate the raycasts for me, don't really see myself writing something faster, gonna have a crack in GL compute first tho.
+- **Game State Management**: **❌ Not Started**  
+  Developing a system for managing game states, including game sessions and player progress.
 
-![Image](https://www.principiaprogrammatica.com/dump/Voxel.jpg)
-"# DarkOps2024" 
+### Shared
+- **Utils**: **🔄 In Progress**  
+  Developing a collection of utility functions and classes to simplify common tasks.
+
+- **Modular Architecture**: **🔄 In Progress**  
+  Structuring the engine to support modular development, allowing for easy integration of plugins and extensions.
+
+- **Asset System**: **❌ Not Started**  
+  Implementing a comprehensive asset management system for efficient loading and handling of game resources.
+
+- **Localization**: **❌ Not Started**  
+  Planning to add support for multiple languages and regional settings for broader accessibility.
+
+## Contribution
+This project is currently a one-person endeavor, but I welcome contributions and collaboration! If you're interested in learning more about game engine development or would like to contribute to this game engine, please reach out to me via Discord: **@jw_uk**. Together, we can build a powerful game engine and share knowledge within the community.
+
+## Roadmap
+- Expand documentation for contributors, including setup instructions and coding guidelines.
+- Establish a community forum or Discord channel for discussions, feedback, and sharing resources.
+- Prioritize the implementation of the ECS and networking components to enable multiplayer support.
