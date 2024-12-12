@@ -1505,7 +1505,6 @@ namespace Util
         return glm::vec2(std::cos(theta), std::sin(theta)) * r;
     }
 
-
     inline TriangleIntersectionResult IntersectLineTriangle(const glm::vec3& orig, const glm::vec3& dir, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2) {
         TriangleIntersectionResult result;
         const float EPSILON = 1e-6f;
@@ -1537,6 +1536,30 @@ namespace Util
         else {            
             return result;// This means that there is a line intersection, but not a ray intersection. 
         }
+    }
+
+    inline int GetFPS()
+    {
+        static auto lastTime = std::chrono::high_resolution_clock::now();
+        static int frameCount = 0;
+        static float fps = 0.0f;
+
+        // Increment frame count
+        frameCount++;
+
+        // Calculate the time difference
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto elapsedTime = std::chrono::duration<float>(currentTime - lastTime).count();
+
+        // Update FPS every second
+        if (elapsedTime >= 1.0f)
+        {
+            fps = frameCount / elapsedTime;
+            frameCount = 0;
+            lastTime = currentTime;
+        }
+        
+        return fps;
     }
 }
 

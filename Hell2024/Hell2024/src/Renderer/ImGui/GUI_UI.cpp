@@ -86,43 +86,24 @@ void IMGUI::ImGui_DrawDemoWindow()
 
 void IMGUI::ImGui_DrawFPS(std::vector<RenderItem2D>* renderItems, hell::ivec2 debugTextLocation, hell::ivec2 presentSize)
 {
-	static auto lastTime = std::chrono::high_resolution_clock::now();
-	static int frameCount = 0;
-	static float fps = 0.0f;
-
-	// Increment frame count
-	frameCount++;
-
-	// Calculate the time difference
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	auto elapsedTime = std::chrono::duration<float>(currentTime - lastTime).count();
-
-	// Update FPS every second
-	if (elapsedTime >= 1.0f)
-	{
-		fps = frameCount / elapsedTime;
-		frameCount = 0;
-		lastTime = currentTime;
-	}
+	int fps = Util::GetFPS();
 
 	if (OVERLAYS_SHOW_FPS)
 	{
 		// Format the FPS text
 		std::string fpsText = "FPS: " + std::to_string(static_cast<int>(fps));
 
-		// Render the FPS text
-		RendererUtil::AddRenderItems(
-			*renderItems,
-			TextBlitter::CreateText(
-				fpsText,
-				debugTextLocation,
-				presentSize,
-				Alignment::BOTTOM_LEFT,
-				BitmapFontType::STANDARD
-			)
-		);
+		// Set the ImGui overlay position (e.g., top-left corner)
+		ImGui::SetNextWindowPos(ImVec2(debugTextLocation.x, debugTextLocation.y), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(100, 50), ImGuiCond_Always);
+
+		// Render the FPS overlay
+		ImGui::Begin("FPS Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+		ImGui::TextUnformatted(fpsText.c_str());
+		ImGui::End();
 	}
 }
+
 
 void IMGUI::ImGui_DrawMainBar()
 {

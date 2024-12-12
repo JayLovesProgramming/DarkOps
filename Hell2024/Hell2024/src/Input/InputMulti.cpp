@@ -1,12 +1,21 @@
 #include "InputMulti.hpp"
+
 #include "BackEnd/BackEnd.hpp"
 #include <iostream>
+#include "Input/Input.hpp"
 
 #define NOMINMAX
+
 #include <Windows.h>
+
 #ifdef _MSC_VER
-#undef GetObject
+    #undef GetObject
 #endif
+
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#define GLFW_NATIVE_INCLUDE_NONE
+#include <GLFW/glfw3native.h>
 
 std::vector<MouseState> _mouseStates;
 std::vector<KeyboardState> _keyboardStates;
@@ -17,7 +26,7 @@ const USHORT HID_USAGE_GENERIC_KEYBOARD = 0x06;
 std::vector<HANDLE> mouseHandles;
 std::vector<HANDLE> keyboardHandles;
 
-int GetHandleIndex(std::vector<HANDLE>* handleVector, HANDLE handle)
+static int GetHandleIndex(std::vector<HANDLE>* handleVector, HANDLE handle)
 {
     for (int i = 0; i < handleVector->size(); i++)
     {
@@ -30,7 +39,7 @@ int GetHandleIndex(std::vector<HANDLE>* handleVector, HANDLE handle)
     return (int)handleVector->size() - 1;
 }
 
-LRESULT CALLBACK targetWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
+static LRESULT CALLBACK targetWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
     if (uMsg == WM_INPUT)
     {
@@ -89,13 +98,16 @@ LRESULT CALLBACK targetWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-bool RegisterDeviceOfType(USHORT type, HWND eventWindow)
+
+
+static bool RegisterDeviceOfType(USHORT type, HWND eventWindow)
 {
     RAWINPUTDEVICE rid = {};
     rid.usUsagePage = 0x01;
     rid.usUsage = type;
     rid.dwFlags = RIDEV_INPUTSINK;
     rid.hwndTarget = eventWindow;
+
     return RegisterRawInputDevices(&rid, 1, sizeof(rid));
 }
 
@@ -106,6 +118,7 @@ void InputMulti::Init()
     windowClass.lpfnWndProc = targetWindowProc;
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = TEXT("InputWindow");
+
     if (!RegisterClass(&windowClass))
     {
         std::cout << "Failed to register window class\n";
@@ -131,10 +144,29 @@ void InputMulti::Init()
     }
 }
 
-#define GLFW_EXPOSE_NATIVE_WIN32
-#define GLFW_EXPOSE_NATIVE_WGL
-#define GLFW_NATIVE_INCLUDE_NONE
-#include <GLFW/glfw3native.h>
+
+
+void InputMulti::HandleMouseWheel()
+{
+    for (MouseState& state : _mouseStates)
+    {
+        state._mouseWheelUp = false;
+        state._mouseWheelDown = false;
+
+        state.wheelDelta = Input::GetMouseWheelValue();
+
+        if (state.wheelDelta < 0)
+        {
+            state._mouseWheelDown = true;
+        }
+        else if (state.wheelDelta > 0)
+        {
+            state._mouseWheelUp = true;
+        }
+
+        Input::ResetScrollWheelYOffset();
+    }
+}
 
 void InputMulti::Update()
 {
@@ -160,7 +192,10 @@ void InputMulti::Update()
         else
             state.rightMousePressed = false;
         state.rightMouseDownLastFrame = state.rightMouseDown;
+
+        //std::cout << 
     }
+    HandleMouseWheel();
 
     for (KeyboardState& state : _keyboardStates) 
     {
@@ -295,3 +330,18 @@ bool InputMulti::KeyPressed(int keyboardIndex, int mouseIndex, unsigned int keyc
         return false;
 }
 
+bool InputMulti::MouseWheelUp(int mouseIndex)
+{
+    if (mouseIndex < 0 || mouseIndex >= 4)
+        return false;
+
+    return _mouseStates[mouseIndex].wheelDelta > 0;
+}
+
+bool InputMulti::MouseWheelDown(int mouseIndex)
+{
+    if (mouseIndex < 0 || mouseIndex >= 4)
+        return false;
+
+    return _mouseStates[mouseIndex].wheelDelta < 0;
+}

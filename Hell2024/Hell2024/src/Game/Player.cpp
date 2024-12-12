@@ -1820,26 +1820,30 @@ bool Player::PressedNextWeapon()
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
-        return Input::MouseWheelUp();
+        //return Input::MouseWheelUp();
+        return InputMulti::MouseWheelUp(m_mouseIndex);
     }
     else
     {
         //return InputMulti::ButtonPressed(_controllerIndex, _controls.NEXT_WEAPON);
         return false;
     }
+    return false;
 }
 
 bool Player::PressedPreviousWeapon()
 {
     if (_inputType == InputType::KEYBOARD_AND_MOUSE)
     {
-        return Input::MouseWheelDown();
+        //return Input::MouseWheelDown();
+        return InputMulti::MouseWheelDown(m_mouseIndex);
     }
     else
     {
         //return InputMulti::ButtonPressed(_controllerIndex, _controls.NEXT_WEAPON);
         return false;
     }
+    return false;
 }
 
 //bool Player::PressedPreviousWeapon()
