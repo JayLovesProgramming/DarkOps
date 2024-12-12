@@ -2113,7 +2113,7 @@ bool Player::RespawnAllowed() const
     return _isDead && _timeSinceDeath > 3.25f;
 }
 
-CrosshairType Player::GetCrosshairType()
+CrosshairType Player::GetCrosshairType() const
 {
     // None
     if (IsDead()) 

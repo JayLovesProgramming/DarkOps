@@ -155,7 +155,7 @@ namespace Util
     {
         glm::vec4 clipCoords = mvpMatrix * glm::vec4(worldPos, 1.0f);
         glm::vec3 ndcCoords = glm::vec3(clipCoords) / clipCoords.w;
-        glm::ivec2 screenCoords;
+        glm::ivec2 screenCoords = {};
         screenCoords.x = (ndcCoords.x + 1.0f) * 0.5f * screenWidth;
         if (flipY) 
         {
@@ -597,7 +597,7 @@ namespace Util
 
     inline glm::mat4 PxMat44ToGlmMat4(physx::PxMat44 pxMatrix) 
     {
-        glm::mat4 matrix;
+        glm::mat4 matrix = {};
         for (int x = 0; x < 4; x++)
             for (int y = 0; y < 4; y++)
                 matrix[x][y] = pxMatrix[x][y];
@@ -1070,12 +1070,14 @@ namespace Util
         return rz * ry * rx;
     }
 
-    inline glm::mat4 Mat4InitTranslationTransform(float x, float y, float z) {
+    inline glm::mat4 Mat4InitTranslationTransform(float x, float y, float z) 
+    {
         return  glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
     }
 
+
     inline glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4& from) {
-        glm::mat4 to;
+        glm::mat4 to = {};
         //the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
         to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
         to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
@@ -1084,8 +1086,9 @@ namespace Util
         return to;
     }
 
-    inline glm::mat4 aiMatrix3x3ToGlm(const aiMatrix3x3& from) {
-        glm::mat4 to;
+    inline glm::mat4 aiMatrix3x3ToGlm(const aiMatrix3x3& from)
+    {
+        glm::mat4 to = {};
         to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = 0.0;
         to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = 0.0;
         to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = 0.0;
@@ -1093,7 +1096,8 @@ namespace Util
         return to;
     }
 
-    inline bool StrCmp(const char* queryA, const char* queryB) {
+    inline bool StrCmp(const char* queryA, const char* queryB)
+    {
         if (strcmp(queryA, queryB) == 0)
             return true;
         else
@@ -1213,7 +1217,7 @@ namespace Util
     }
 
     inline glm::mat4 Mat4FromJSONArray(rapidjson::GenericArray<false, rapidjson::Value> const arr) {
-        glm::mat4 m;
+        glm::mat4 m = {};
         m[0][0] = arr[0].GetFloat();
         m[0][1] = arr[1].GetFloat();
         m[0][2] = arr[2].GetFloat();
@@ -1471,8 +1475,9 @@ namespace Util
         }
     }
 
-    inline glm::vec3 GetEulerAnglesFromForwardVector(const glm::vec3& forward) {
-        glm::vec3 eulerAngles;
+    inline glm::vec3 GetEulerAnglesFromForwardVector(const glm::vec3& forward) 
+    {
+        glm::vec3 eulerAngles = {};
         // Calculate the yaw (rotation around the y-axis)
         eulerAngles.y = glm::atan(forward.x, forward.z);
         // Calculate the pitch (rotation around the x-axis)

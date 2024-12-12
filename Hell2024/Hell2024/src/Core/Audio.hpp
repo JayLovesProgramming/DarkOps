@@ -65,7 +65,7 @@ namespace Audio
         for (int i = 0; i < g_activeAudio.size(); i++) 
         {
             AudioHandle& handle = g_activeAudio[i];
-            FMOD::Sound* currentSound;
+            FMOD::Sound* currentSound = {};
             unsigned int position;
             unsigned int length;
             handle.channel->getPosition(&position, FMOD_TIMEUNIT_MS);
@@ -130,7 +130,6 @@ namespace Audio
         // Plaay
         //FMOD::Channel* freeChannel = nullptr;
         //FMOD_RESULT result = g_system->getChannel(-1, &freeChannel);
-
         //system->playSound(FMOD_CHANNEL_FREE, Sound, false, &Channel);
 
         //AudioHandle& handle = g_activeAudio.emplace_back();

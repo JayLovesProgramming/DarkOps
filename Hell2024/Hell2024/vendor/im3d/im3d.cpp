@@ -2268,19 +2268,19 @@ Context::TextList* Context::getCurrentTextList()
 	return m_textData[m_layerIndex];
 }
 
-float Context::pixelsToWorldSize(const Vec3& _position, float _pixels)
+float Context::pixelsToWorldSize(const Vec3& _position, float _pixels) const
 {
 	float d = m_appData.m_projOrtho ? 1.0f : Length(_position - m_appData.m_viewOrigin);
 	return m_appData.m_projScaleY * d * (_pixels / m_appData.m_viewportSize.y);
 }
 
-float Context::worldSizeToPixels(const Vec3& _position, float _size)
+float Context::worldSizeToPixels(const Vec3& _position, float _size) const
 {
 	float d = m_appData.m_projOrtho ? 1.0f : Length(_position - m_appData.m_viewOrigin);
 	return (_size * m_appData.m_viewportSize.y) / d / m_appData.m_projScaleY;
 }
 
-int Context::estimateLevelOfDetail(const Vec3& _position, float _worldSize, int _min, int _max)
+int Context::estimateLevelOfDetail(const Vec3& _position, float _worldSize, int _min, int _max) const
 {
 	if (m_appData.m_projOrtho)
 	{

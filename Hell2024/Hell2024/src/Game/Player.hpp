@@ -378,7 +378,7 @@ public:
     void ForceSetViewMatrix(glm::mat4 viewMatrix);
     std::vector<RenderItem2D> GetHudRenderItems(hell::ivec2 presentSize);
     std::vector<RenderItem2D> GetHudRenderItemsHiRes(hell::ivec2 gBufferSize);
-    CrosshairType GetCrosshairType();
+    CrosshairType GetCrosshairType() const;
 
     bool RespawnAllowed() const;
     std::vector<RenderItem2D> renderItems;

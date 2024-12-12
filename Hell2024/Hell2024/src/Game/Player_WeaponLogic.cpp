@@ -1049,11 +1049,11 @@ void Player::SwitchWeapon(std::string name, WeaponAction weaponAction)
         // Set animation
         if (weaponAction == SPAWNING)
         {
-            viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.spawn, 0.5f);
+            viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.spawn, 1.0f);
         }
         if (weaponAction == DRAW_BEGIN) 
         {
-            viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.draw, 0.2f);
+            viewWeaponAnimatedGameObject->PlayAnimation(weaponInfo->animationNames.draw, 1.0f);
         }
         // Set materials
         for (auto& it : weaponInfo->meshMaterials) 

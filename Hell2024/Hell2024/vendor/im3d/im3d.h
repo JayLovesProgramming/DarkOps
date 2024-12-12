@@ -679,11 +679,11 @@ struct IM3D_API Context
 	void                gizmoAxisScale_Draw(Id _id, const Vec3& _origin, const Vec3& _axis, float _worldHeight, float _worldSize, Color _color);
 
 	// Convert pixels -> world space size based on distance between _position and view origin.
-	float               pixelsToWorldSize(const Vec3& _position, float _pixels);
+	float               pixelsToWorldSize(const Vec3& _position, float _pixels) const;
 	// Convert world space size -> pixels based on distance between _position and view origin.
-	float               worldSizeToPixels(const Vec3& _position, float _pixels);
+	float               worldSizeToPixels(const Vec3& _position, float _pixels) const;
 	// Blend between _min and _max based on distance betwen _position and view origin.
-	int                 estimateLevelOfDetail(const Vec3& _position, float _worldSize, int _min = 4, int _max = 256);
+	int                 estimateLevelOfDetail(const Vec3& _position, float _worldSize, int _min = 4, int _max = 256) const;
 
 	// Make _id hot if _depth < m_hotDepth && _intersects.
 	bool                makeHot(Id _id, float _depth, bool _intersects);
