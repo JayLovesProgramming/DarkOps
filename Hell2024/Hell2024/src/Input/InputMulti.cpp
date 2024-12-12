@@ -39,7 +39,7 @@ static int GetHandleIndex(std::vector<HANDLE>* handleVector, HANDLE handle)
     return (int)handleVector->size() - 1;
 }
 
-static LRESULT CALLBACK targetWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
+static LRESULT CALLBACK TargetWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (uMsg == WM_INPUT)
     {
@@ -98,8 +98,6 @@ static LRESULT CALLBACK targetWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-
-
 static bool RegisterDeviceOfType(USHORT type, HWND eventWindow)
 {
     RAWINPUTDEVICE rid = {};
@@ -115,7 +113,7 @@ void InputMulti::Init()
 {
     HINSTANCE hInstance = GetModuleHandle(NULL);
     WNDCLASS windowClass = {};
-    windowClass.lpfnWndProc = targetWindowProc;
+    windowClass.lpfnWndProc = TargetWindowProc;
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = TEXT("InputWindow");
 
@@ -132,7 +130,10 @@ void InputMulti::Init()
         return;
     }
     else
+    {
         std::cout << "[INIT] Dual Keyboard\n";
+    }
+
     RegisterDeviceOfType(HID_USAGE_GENERIC_MOUSE, eventWindow);
     RegisterDeviceOfType(HID_USAGE_GENERIC_KEYBOARD, eventWindow);
 
@@ -143,8 +144,6 @@ void InputMulti::Init()
         _keyboardStates.push_back(KeyboardState());
     }
 }
-
-
 
 void InputMulti::HandleMouseWheel()
 {
@@ -170,8 +169,9 @@ void InputMulti::HandleMouseWheel()
 
 void InputMulti::Update()
 {
-    MSG msg;
+    MSG msg = { 0 };
     //	while (GetMessage(&msg, NULL, 0, 0))
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
