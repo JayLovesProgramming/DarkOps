@@ -17,10 +17,13 @@ struct Dobermann
 {
     glm::vec3 m_initialPosition = glm::vec3(0);
     glm::vec3 m_currentPosition = glm::vec3(0);
+
     float m_initialRotation = 0;
     float m_currentRotation = 0;
-    DobermannState m_initalState;
-    DobermannState m_currentState;
+
+    DobermannState m_initalState = {};
+    DobermannState m_currentState = {};
+
     int m_animatedGameObjectIndex = -1;
     float m_footstepAudioTimer = 0;
     float m_health = DOG_MAX_HEALTH;

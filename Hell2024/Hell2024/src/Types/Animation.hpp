@@ -14,7 +14,7 @@ struct SQT
     glm::vec3 positon = glm::vec3(0, 0, 0);
     float scale = 1.0f;
     float timeStamp = -1;
-    const char* jointName;
+    const char* jointName = "";
 };
 
 struct AnimatedNode
@@ -34,16 +34,16 @@ public:
     Animation() = default;
     Animation(std::string fulllPath);
     ~Animation();
+
     float GetTicksPerSecond();
 
-public:
     bool m_awaitingLoadingFromDisk = true;
     bool m_loadedFromDisk = false;
     std::string m_fullPath = "";
 
-    float m_duration;
-    float m_ticksPerSecond;
-    float m_finalTimeStamp;
+    float m_duration = 0;
+    float m_ticksPerSecond = 0;
+    float m_finalTimeStamp = 0;
     std::string _filename;
 
     std::vector<AnimatedNode> m_animatedNodes;

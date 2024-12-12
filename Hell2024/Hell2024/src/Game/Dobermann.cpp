@@ -285,7 +285,7 @@ void Dobermann::UpdateMovement(float deltaTime)
             PxF32 minDist = 0.001f;
             float fixedDeltaTime = (1.0f / 60.0f);
             float len = glm::length(enemyForward);
-            glm::vec3 displacement;
+            glm::vec3 displacement = { 0, 0, 0 };
 
             if (len != 0.0) 
             {

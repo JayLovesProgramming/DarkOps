@@ -2166,7 +2166,7 @@ void LightVolumePrePass(RenderData& renderData)
             glBindVertexArray(OpenGLBackEnd::GetCSGVAO());
             shader.SetMat4("model", glm::mat4(1));
 
-            Frustum frustum[6];
+            Frustum frustum[6] = {};
             for (int j = 0; j < 6; j++)
             {
                 frustum[j].Update(light.m_projectionTransforms[j]);
