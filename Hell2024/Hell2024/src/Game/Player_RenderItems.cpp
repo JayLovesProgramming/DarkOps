@@ -12,6 +12,8 @@
 
 std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
 {
+    renderItems.clear();
+
     hell::ivec2 debugTextLocation;
     debugTextLocation.x = RendererUtil::GetViewportLeftX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     debugTextLocation.y = RendererUtil::GetViewportTopY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
@@ -47,7 +49,7 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
         std::string text;
         text += "Health: " + std::to_string(_health) + "\n";
         text += "Kills: " + std::to_string(m_killCount) + "\n";
-        //text += "Crosshair size: " + std::to_string(m_crosshairCrossSize) + "\n";
+        text += "Crosshair size: " + std::to_string(m_crosshairCrossSize) + "\n";
         //text += "Accuracy Modifier: " + std::to_string(m_accuracyModifer) + "\n";
         RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(text, debugTextLocation, presentSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD));
     }

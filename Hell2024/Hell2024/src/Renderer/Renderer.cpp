@@ -440,6 +440,7 @@ std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playe
 
     for (int i = 0; i < playerCount; i++) 
     {
+
         // Debug Text
         if (Game::DebugTextIsEnabled())
         {
@@ -451,13 +452,8 @@ std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playe
         }
 
         // Player HUD
-        if (i == 1)
-        {
-
-        }
         std::vector<RenderItem2D> playerHUD = Game::GetPlayerByIndex(i)->GetHudRenderItems(presentSize);
         RendererUtil::AddRenderItems(renderItems, playerHUD);
-
     }
 
     // Render the fucking debug menu UI and stuff dummy 

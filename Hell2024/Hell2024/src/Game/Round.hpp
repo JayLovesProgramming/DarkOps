@@ -36,17 +36,10 @@ public:
     static void DrawRounds(std::vector<RenderItem2D>* renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
     {
         //renderItems->clear();
-
         std::string roundText = "round" + std::to_string(RoundManager::currentRound);
-        RenderItem2D roundRenderItem = RendererUtil::CreateRenderItem2D(
-            roundText.c_str(),
-            viewportCenter,
-            roundCounterSize,
-            Alignment::TOP_RIGHT
-        );
 
-        renderItems->push_back(roundRenderItem);
+        renderItems->push_back(RendererUtil::CreateRenderItem2D(roundText.c_str(), viewportCenter, roundCounterSize, Alignment::TOP_RIGHT));
 
-        std::cout << "Drawing round: " << roundText.c_str() << "\n";
+        //std::cout << "Drawing round: " << roundText.c_str() << "\n";
     }
 };

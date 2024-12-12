@@ -41,19 +41,10 @@ void IMGUI::ImGui_ToggleDebugConsole()
 		{
 			std::cout << "Hide cursor" << std::endl;
 			Input::HideCursor();
-			//Input::DisableCursor();
+			Input::DisableCursor();
 
-			//for (int i = 0; i < Game::GetPlayerCount(); i++)
-			//{
-			//	Player* player = Game::GetPlayerByIndex(i);
+			Game::GiveControlToPlayer1();
 
-			//	if (Game::IsLoaded() && player->IsAlive());
-			//	{
-			//		//Game::GiveControlToPlayer1();
-			//		std::cout << "ALIVE BABY" << std::endl;
-			//		break;
-			//	}
-			//}
 		}
 	}
 }

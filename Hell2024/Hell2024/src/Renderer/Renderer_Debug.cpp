@@ -713,6 +713,7 @@ std::string& Renderer::GetDebugText()
     g_debugText += "Dog deaths: " + std::to_string(Game::g_dogDeaths) + "\n";
     g_debugText += "Dog kills: " + std::to_string(Game::g_playerDeaths) + "\n"; 
     g_debugText += "Cam pos: " + Util::Vec3ToString(Game::GetPlayerByIndex(0)->GetViewPos()) + "\n";
+
     g_debugText += "\n";
 
     glm::vec3 rayTarget = Scene::g_lights[0].position;
