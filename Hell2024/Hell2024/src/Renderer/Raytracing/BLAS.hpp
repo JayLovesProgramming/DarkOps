@@ -108,13 +108,14 @@ struct BLAS
             }
 
             // Populate the bins
-            Bin bin[BVH_BINS];
+            Bin bin[BVH_BINS] = {};
             float scale = BVH_BINS / (boundsMax - boundsMin);
 
             for (int i = 0; i < node.instanceCount; i++)
             {
                 Triangle& triangle = triangles[triIndices[node.leftFirst + i]];
-                int binIdx = std::min(BVH_BINS - 1, (int)((triangle.centoid[a] - boundsMin) * scale));
+                //int binIdx = std::min(BVH_BINS - 1, (int)((triangle.centoid[a] - boundsMin) * scale));
+                int binIdx = std::clamp((int)((triangle.centoid[a] - boundsMin) * scale), 0, BVH_BINS - 1);
 
                 if (binIdx >= BVH_BINS || binIdx < 0)
                 {

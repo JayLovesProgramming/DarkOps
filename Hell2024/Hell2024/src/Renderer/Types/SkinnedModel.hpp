@@ -120,7 +120,7 @@ public:
     std::map<std::string, unsigned int> m_BoneMapping;
     unsigned int m_NumBones;
     std::vector<BoneInfo> m_BoneInfo;
-    glm::mat4 m_GlobalInverseTransform;
+    glm::mat4 m_GlobalInverseTransform = {};
     uint32_t m_vertexCount = 0;
 
     void AddMeshIndex(uint32_t index)

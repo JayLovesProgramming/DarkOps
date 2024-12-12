@@ -791,9 +791,9 @@ void AnimatedGameObject::UpdateBoneTransformsFromRagdoll()
 
         struct JointWorldMatrix
         {
-            std::string name;
-            glm::mat4 worldMatrix;
-            glm::mat4 localMatrix;
+            std::string name = "";
+            glm::mat4 worldMatrix = {};
+            glm::mat4 localMatrix = {};
         };
         std::vector<JointWorldMatrix> jointWorldMatrices;
         jointWorldMatrices.resize(_skinnedModel->m_joints.size());

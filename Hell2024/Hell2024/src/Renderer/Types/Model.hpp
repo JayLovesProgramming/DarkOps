@@ -9,11 +9,11 @@ struct Model
 private:
     std::string m_name = "undefined";
     std::vector<uint32_t> m_meshIndices;
-    BoundingBox m_boundingBox;
+    BoundingBox m_boundingBox = {};
 
 public:
-    glm::vec3 m_aabbMin;
-    glm::vec3 m_aabbMax;
+    glm::vec3 m_aabbMin = {};
+    glm::vec3 m_aabbMax = {};
     bool m_awaitingLoadingFromDisk = true;
     bool m_loadedFromDisk = false;
     std::string m_fullPath = "";

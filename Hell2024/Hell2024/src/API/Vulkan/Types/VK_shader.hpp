@@ -70,25 +70,31 @@ std::vector<uint32_t> VulkanShaderUtil::CompileFile(const std::string& source_na
     return { module.cbegin(), module.cend() };
 }
 
-bool VulkanShaderUtil::LoadShader(VkDevice device, std::string filePath, VkShaderStageFlagBits flag, VkShaderModule* outShaderModule) {
-
-    shaderc_shader_kind kind;
-    if (flag == VK_SHADER_STAGE_VERTEX_BIT) {
+bool VulkanShaderUtil::LoadShader(VkDevice device, std::string filePath, VkShaderStageFlagBits flag, VkShaderModule* outShaderModule) 
+{
+    shaderc_shader_kind kind = {};
+    if (flag == VK_SHADER_STAGE_VERTEX_BIT)
+    {
         kind = shaderc_vertex_shader;
     }
-    if (flag == VK_SHADER_STAGE_FRAGMENT_BIT) {
+    if (flag == VK_SHADER_STAGE_FRAGMENT_BIT)
+    {
         kind = shaderc_fragment_shader;
     }
-    if (flag == VK_SHADER_STAGE_RAYGEN_BIT_KHR) {
+    if (flag == VK_SHADER_STAGE_RAYGEN_BIT_KHR)
+    {
         kind = shaderc_raygen_shader;
     }
-    if (flag == VK_SHADER_STAGE_MISS_BIT_KHR) {
+    if (flag == VK_SHADER_STAGE_MISS_BIT_KHR)
+    {
         kind = shaderc_miss_shader;
     }
-    if (flag == VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR) {
+    if (flag == VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR)
+    {
         kind = shaderc_closesthit_shader;
     }
-    if (flag == VK_SHADER_STAGE_COMPUTE_BIT) {
+    if (flag == VK_SHADER_STAGE_COMPUTE_BIT)
+    {
         kind = shaderc_compute_shader;
     }
 
@@ -114,10 +120,11 @@ bool VulkanShaderUtil::LoadShader(VkDevice device, std::string filePath, VkShade
         return false;
     }
     // Delete old version of shader, this is the case if hotloading
-    if (outShaderModule != nullptr) {
+    if (outShaderModule != nullptr)
+    {
         vkDestroyShaderModule(device, *outShaderModule, nullptr);
+        *outShaderModule = shaderModule;
     }
-    *outShaderModule = shaderModule;
     VkDebugUtilsObjectNameInfoEXT nameInfo = {};
     nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
     nameInfo.objectType = VK_OBJECT_TYPE_SHADER_MODULE;

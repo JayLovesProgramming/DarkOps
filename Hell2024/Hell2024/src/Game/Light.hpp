@@ -30,10 +30,10 @@ struct Light
     bool m_shadowMapIsDirty = false;
     bool extraDirty = false;
 
-    Frustum m_frustum[6];
-    glm::mat4 m_projectionTransforms[6];
-    glm::mat4 m_viewMatrix[6];
-    glm::mat4 m_projectionMatrix;
+    Frustum m_frustum[6] = {};
+    glm::mat4 m_projectionTransforms[6] = {};
+    glm::mat4 m_viewMatrix[6] = {};
+    glm::mat4 m_projectionMatrix = {};
     bool m_aaabbVolumeIsDirty = true;
     bool m_pointCloudIndicesNeedRecalculating = true;
     bool m_shadowCasting = false;

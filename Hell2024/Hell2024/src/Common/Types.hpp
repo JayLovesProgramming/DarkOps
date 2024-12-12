@@ -170,7 +170,7 @@ struct PhysXRayResult
     glm::vec3 surfaceNormal;
     glm::vec3 rayDirection;
     bool hitFound;
-    void* hitActor;
+    void* hitActor = {};
     void* parent;
     ObjectType objectType;
 };

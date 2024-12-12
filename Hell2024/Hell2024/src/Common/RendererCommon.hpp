@@ -81,10 +81,10 @@ struct GPULight
 struct RenderItem2D
 {
     glm::mat4 modelMatrix = glm::mat4(1);
-    float colorTintR;
-    float colorTintG;
-    float colorTintB;
-    int textureIndex;
+    float colorTintR = 0.0f;
+    float colorTintG = 0.0f;
+    float colorTintB = 0.0f;
+    int textureIndex = 0;
 };
 
 struct RenderItem3D 

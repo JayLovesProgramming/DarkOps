@@ -112,7 +112,7 @@ private:
     int m_keyboardIndex = -1;
     float m_capsuleRadius = 0.1f;
     bool m_isOutside = false;
-    ShellEjectionState m_shellEjectionState;
+    ShellEjectionState m_shellEjectionState = {};
     PxShape* m_interactSphere = NULL;
     glm::mat4 m_casingSpawnMatrix = glm::mat4(1);
     glm::mat4 m_muzzleFlashMatrix = glm::mat4(1);
@@ -239,7 +239,7 @@ public:
     // Misc getters
     int32_t GetViewWeaponAnimatedGameObjectIndex();
     int32_t GetCharacterModelAnimatedGameObjectIndex();
-    int32_t GetPlayerIndex();
+    //int32_t GetPlayerIndex();
     glm::vec3 GetMuzzleFlashPosition();
     glm::vec3 GetPistolCasingSpawnPostion();
     AnimatedGameObject* GetCharacterAnimatedGameObject();
@@ -253,7 +253,7 @@ public:
     void CreateViewModel();
 
 public:
-    Frustum m_frustum;
+    Frustum m_frustum = {};
 
     InputType _inputType = KEYBOARD_AND_MOUSE;
     PlayerControls _controls;
@@ -297,7 +297,7 @@ public:
 	glm::vec3 GetCameraUp();
     //int GetCurrentWeaponIndex();
 
-    void UpdateViewWeaponLogicAndAnimations(float deltaTime);
+    //void UpdateViewWeaponLogicAndAnimations(float deltaTime);
 	void SpawnMuzzleFlash();
     void SpawnCasing(AmmoInfo* ammoInfo);
 	float GetMuzzleFlashTime();
@@ -319,7 +319,7 @@ public:
 	//void DropAKS7UMag();
     void CheckForMeleeHit();
 
-    void SetGlockAnimatedModelSettings();
+    //void SetGlockAnimatedModelSettings();
 
 	//ShadowMap _shadowMap;
 	float _muzzleFlashCounter = 0;
@@ -328,11 +328,11 @@ public:
 	glm::mat4 GetWeaponSwayMatrix();
     WeaponAction& GetWeaponAction();
 
-    glm::vec3 GetGlockBarrelPosition();
+    //glm::vec3 GetGlockBarrelPosition();
 
 	bool _isGrounded = true;
 
-    void PickUpShotgun();
+    //void PickUpShotgun();
 
     glm::mat4 GetProjectionMatrix();
     float GetZoom();
