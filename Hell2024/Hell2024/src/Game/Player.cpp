@@ -900,7 +900,7 @@ void Player::SetWeapon(Weapon weapon) {
 	}
 }*/
 
-PxSweepCallback* CreateSweepBuffer()
+static PxSweepCallback* CreateSweepBuffer()
 {
 	return new PxSweepBuffer;
 }
@@ -1426,7 +1426,7 @@ void Player::SpawnBullet(float variance, Weapon type)
 	Scene::_bullets.push_back(bullet);
 }
 
-void DropAKS7UMag()
+static void DropAKS7UMag()
 {
     return;
     /*
@@ -2169,7 +2169,7 @@ void Player::SetMouseIndex(int32_t index)
     m_mouseIndex = index;
 }
 
-int32_t Player::GetKillCount()
+int32_t Player::GetKillCount() const
 {
     return m_killCount;
 }

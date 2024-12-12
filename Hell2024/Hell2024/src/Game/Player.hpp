@@ -233,7 +233,7 @@ public:
     bool PressedFlashlight();
 
     // Misc gameplay shit
-    int32_t GetKillCount();
+    int32_t GetKillCount() const;
     void IncrementKillCount();
 
     // Misc getters
