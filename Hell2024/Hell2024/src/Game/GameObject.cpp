@@ -6,30 +6,36 @@
 #include "BackEnd/BackEnd.hpp"
 #include "Core/AssetManager.hpp"
 
-PxFilterData GetPxFilterDataFromCollisionType(CollisionType collisionType) {
+PxFilterData GetPxFilterDataFromCollisionType(CollisionType collisionType)
+{
 
     PxFilterData filterData;
-    if (collisionType == CollisionType::NONE) {
+    if (collisionType == CollisionType::NONE)
+    {
         filterData.word0 = 0;
         filterData.word1 = 0;
         filterData.word2 = 0;
     }
-    else if (collisionType == CollisionType::PICKUP) {
+    else if (collisionType == CollisionType::PICKUP)
+    {
         filterData.word0 = 0;
         filterData.word1 = (PxU32)(CollisionGroup)(GENERIC_BOUNCEABLE);
         filterData.word2 = (PxU32)(CollisionGroup)(GENERIC_BOUNCEABLE | ENVIROMENT_OBSTACLE);
     }
-    else if (collisionType == CollisionType::STATIC_ENVIROMENT) {
+    else if (collisionType == CollisionType::STATIC_ENVIROMENT)
+    {
         filterData.word0 = 0;
         filterData.word1 = (PxU32)(CollisionGroup)(ENVIROMENT_OBSTACLE);
         filterData.word2 = (PxU32)(CollisionGroup)(GENERIC_BOUNCEABLE | BULLET_CASING | PLAYER | RAGDOLL);
     }
-    else if (collisionType == CollisionType::BOUNCEABLE) {
+    else if (collisionType == CollisionType::BOUNCEABLE)
+    {
         filterData.word0 = 0;
         filterData.word1 = (PxU32)(CollisionGroup)(GENERIC_BOUNCEABLE);
         filterData.word2 = (PxU32)(CollisionGroup)(GENERIC_BOUNCEABLE | ENVIROMENT_OBSTACLE | RAGDOLL);
     }
-    else if (collisionType == CollisionType::BULLET_CASING) {
+    else if (collisionType == CollisionType::BULLET_CASING)
+    {
         filterData.word0 = 0;
         filterData.word1 = (PxU32)(CollisionGroup)(BULLET_CASING);
         filterData.word2 = (PxU32)(CollisionGroup)(ENVIROMENT_OBSTACLE);
@@ -37,68 +43,84 @@ PxFilterData GetPxFilterDataFromCollisionType(CollisionType collisionType) {
     return filterData;
 }
 
-void GameObject::DisableShadows() {
+void GameObject::DisableShadows() 
+{
     m_castShadows = false;
 }
 
-void GameObject::SetCollisionType(CollisionType collisionType) {
+void GameObject::SetCollisionType(CollisionType collisionType)
+{
     PxFilterData filterData = GetPxFilterDataFromCollisionType(collisionType);
-    for (PxShape*& collisionShape : m_collisionRigidBody.GetCollisionShapes()) {
+    for (PxShape*& collisionShape : m_collisionRigidBody.GetCollisionShapes())
+    {
         collisionShape->setQueryFilterData(filterData);       // ray casts
         collisionShape->setSimulationFilterData(filterData);  // collisions
     }
     m_collisionType = collisionType;
 }
 
-void GameObject::SetOpenAxis(OpenAxis openAxis) {
+void GameObject::SetOpenAxis(OpenAxis openAxis)
+{
 	_openAxis = openAxis;
 }
 
-void GameObject::SetPosition(float x, float y, float z) {
+void GameObject::SetPosition(float x, float y, float z)
+{
 	_transform.position = glm::vec3(x, y, z);
 }
 
-void GameObject::SetPosition(glm::vec3 position) {
+void GameObject::SetPosition(glm::vec3 position)
+{
     _transform.position = position;
 }
 
-void GameObject::SetRotation(glm::vec3 rotation) {
+void GameObject::SetRotation(glm::vec3 rotation)
+{
     _transform.rotation = rotation;
 }
 
-void GameObject::SetPositionX(float position) {
+void GameObject::SetPositionX(float position) 
+{
 	_transform.position.x = position;
 }
 
-void GameObject::SetPositionY(float position) {
+void GameObject::SetPositionY(float position)
+{
 	_transform.position.y = position;
 }
 
-void GameObject::SetPositionZ(float position) {
+void GameObject::SetPositionZ(float position)
+{
 	_transform.position.z = position;
 }
 
-void GameObject::SetRotationX(float rotation) {
+void GameObject::SetRotationX(float rotation) 
+{
 	_transform.rotation.x = rotation;
 }
 
-void GameObject::SetRotationY(float rotation) {
+void GameObject::SetRotationY(float rotation) 
+{
 	_transform.rotation.y = rotation;
 }
 
-void GameObject::SetRotationZ(float rotation) {
+void GameObject::SetRotationZ(float rotation) 
+{
 	_transform.rotation.z = rotation;
 }
 
-float GameObject::GetRotationX() {
+float GameObject::GetRotationX() const
+{
 	return _transform.rotation.x;
 }
 
-float GameObject::GetRotationY() {
+float GameObject::GetRotationY() const
+{
 	return _transform.rotation.y;
 }
 
-float GameObject::GetRotationZ() {
+float GameObject::GetRotationZ() const
+{
 	return _transform.rotation.z;
 }
 
@@ -115,22 +137,27 @@ void GameObject::SetScale(glm::vec3 scale) {
     // std::vector<PxShape*> _collisionShapes;
 }
 
-void GameObject::SetScale(float scale) {
+void GameObject::SetScale(float scale) 
+{
 	_transform.scale = glm::vec3(scale);
 }
-void GameObject::SetScaleX(float scale) {
+void GameObject::SetScaleX(float scale) 
+{
 	_transform.scale.x = scale;
 }
 
-glm::mat4 GameObject::GetModelMatrix() {
+glm::mat4 GameObject::GetModelMatrix() const
+{
 	return _modelMatrix;
 }
 
-std::string GameObject::GetName() {
+std::string GameObject::GetName() const
+{
 	return _name;
 }
 
-void GameObject::SetName(std::string name) {
+void GameObject::SetName(std::string name) 
+{
 	_name = name;
 }
 
@@ -138,24 +165,19 @@ void GameObject::SetName(std::string name) {
 	_interactTextOLD = text;
 }*/
 
-void GameObject::SetParentName(std::string name) {
+void GameObject::SetParentName(std::string name)
+{
 	_parentName = name;
 }
 
-std::string GameObject::GetParentName() {
+std::string GameObject::GetParentName() const
+{
 	return _parentName;
 }
 
-bool GameObject::IsInteractable() {
-
+bool GameObject::IsInteractable() const
+{
     // bullshit from the past
-    // bullshit from the past
-    // bullshit from the past
-    // bullshit from the past
-    // bullshit from the past
-    // bullshit from the past
-    // bullshit from the past
-
 
 	if (_openState == OpenState::CLOSED ||
 		_openState == OpenState::OPEN ||
@@ -423,78 +445,92 @@ void GameObject::UpdateEditorPhysicsObject() {
 	}*/
 }
 
-glm::vec3 GameObject::GetWorldPosition() {
+glm::vec3 GameObject::GetWorldPosition() const
+{
 	return Util::GetTranslationFromMatrix(GetGameWorldMatrix());
 }
 
-glm::quat GameObject::GetWorldRotation() {
-
+glm::quat GameObject::GetWorldRotation() const
+{
 	glm::quat result = glm::quat(0, 0, 0, 1);
-	if (_parentName != "undefined") {
+	if (_parentName != "undefined")
+    {
 		GameObject* parent = Scene::GetGameObjectByName(_parentName);
-		if (parent) {
+		if (parent)
+        {
 			result = parent->GetWorldRotation() * glm::quat(_transform.rotation) * glm::quat(_openTransform.rotation);
 		}
 	}
-	else {
+	else 
+    {
 		result = glm::quat(_transform.rotation);
 	}
 	return result;
 }
 
-glm::mat4 GameObject::GetGameWorldMatrix() {
-
+glm::mat4 GameObject::GetGameWorldMatrix() const
+{
     glm::mat4 result = glm::mat4(1);
-	if (_parentName != "undefined") {
+	if (_parentName != "undefined") 
+    {
 		GameObject* parent = Scene::GetGameObjectByName(_parentName);
-		if (parent) {
+		if (parent)
+        {
 			result = parent->GetGameWorldMatrix() * _transform.to_mat4() * _openTransform.to_mat4();
 		}
 	}
-	else {
+	else 
+    {
 		result = _transform.to_mat4() * _openTransform.to_mat4();
 	}
 	return result;
 }
 
-void GameObject::AddForceToCollisionObject(glm::vec3 direction, float strength) {
-
-	if (!m_collisionRigidBody.Exists()) {
+void GameObject::AddForceToCollisionObject(glm::vec3 direction, float strength)
+{
+	if (!m_collisionRigidBody.Exists())
+    {
 		return;
 	}
 	auto flags = m_collisionRigidBody.pxRigidBody->getRigidBodyFlags();
-	if (flags & PxRigidBodyFlag::eKINEMATIC) {
+	if (flags & PxRigidBodyFlag::eKINEMATIC) 
+    {
 		return;
 	}
 	PxVec3 force = PxVec3(direction.x, direction.y, direction.z) * strength;
     m_collisionRigidBody.pxRigidBody->addForce(force);
 }
 
-void GameObject::UpdateRigidBodyMassAndInertia(float density) {
-	if (m_collisionRigidBody.pxRigidBody) {
+void GameObject::UpdateRigidBodyMassAndInertia(float density) 
+{
+	if (m_collisionRigidBody.pxRigidBody) 
+    {
 		PxRigidBodyExt::updateMassAndInertia(*m_collisionRigidBody.pxRigidBody, density);
 	}
 }
 
-
-void GameObject::MakeGold() {
+void GameObject::MakeGold()
+{
     m_isGold = true;
 }
 
-
-void GameObject::SetAudioOnOpen(const char* filename, float volume) {
+void GameObject::SetAudioOnOpen(const char* filename, float volume)
+{
 	_audio.onOpen = { filename, volume };
 }
 
-glm::vec3 GameObject::GetWorldSpaceOABBCenter() {
+glm::vec3 GameObject::GetWorldSpaceOABBCenter() const
+{
 	return GetWorldPosition() + _boundingBox.offsetFromModelOrigin;
 }
 
-void GameObject::SetAudioOnClose(const char* filename, float volume) {
+void GameObject::SetAudioOnClose(const char* filename, float volume)
+{
 	_audio.onClose = { filename, volume };
 }
 
-void GameObject::SetAudioOnInteract(const char* filename, float volume) {
+void GameObject::SetAudioOnInteract(const char* filename, float volume)
+{
 	_audio.onInteract = { filename, volume };
 }
 
@@ -586,26 +622,26 @@ void GameObject::SetCollectedState(bool value)
 	//_collected = value;
 }
 
-BoundingBox GameObject::GetBoundingBox() 
+BoundingBox GameObject::GetBoundingBox() const
 {
 	return _boundingBox;
 }
 
-bool GameObject::IsCollected() 
+bool GameObject::IsCollected() const
 {
 	return _collected;
 }
 
-PickUpType GameObject::GetPickUpType()
+PickUpType GameObject::GetPickUpType() const
 {
 	return _pickupType;
 }
 
-const InteractType& GameObject::GetInteractType() 
-{
-    return InteractType::NONE;
-	//return _interactType;
-}
+//const InteractType& GameObject::GetInteractType() 
+//{
+//    return InteractType::NONE;
+//	//return _interactType;
+//}
 
 OpenState& GameObject::GetOpenState() 
 {
@@ -836,26 +872,30 @@ void GameObject::PickUp() {
     }
 }
 
-void GameObject::PutRigidBodyToSleep() {
+void GameObject::PutRigidBodyToSleep() 
+{
     m_collisionRigidBody.PutToSleep();
 }
 
-void GameObject::SetPickUpType(PickUpType pickupType) {
+void GameObject::SetPickUpType(PickUpType pickupType) 
+{
 	_pickupType = pickupType;
 }
 
-bool GameObject::IsCollectable() {
+bool GameObject::IsCollectable() const
+{
 	return (_pickupType != PickUpType::NONE);
 }
 
-void GameObject::DisableRaycasting() {
+void GameObject::DisableRaycasting()
+{
     auto filterData = m_raycastRigidStatic.pxShape->getQueryFilterData();
     filterData.word0 = RAYCAST_DISABLED;
     m_raycastRigidStatic.pxShape->setQueryFilterData(filterData);
 }
 
-void GameObject::EnableRaycasting() {
-
+void GameObject::EnableRaycasting()
+{
     if (!m_raycastRigidStatic.pxShape) {
         std::cout << "there is no raycast shape for game object with name: " << _name << "\n";
         return;

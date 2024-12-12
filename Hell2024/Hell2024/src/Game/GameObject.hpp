@@ -106,14 +106,14 @@ private:
 	glm::mat4 _modelMatrix;
 
 public:
-	glm::mat4 GetModelMatrix();
-	std::string GetName();
+	glm::mat4 GetModelMatrix() const;
+	std::string GetName() const;
 
-	glm::vec3 GetWorldPosition();
-	glm::quat GetWorldRotation();
+	glm::vec3 GetWorldPosition() const;
+	glm::quat GetWorldRotation() const;
 	void UpdateEditorPhysicsObject();
 
-	glm::vec3 GetWorldSpaceOABBCenter();
+	glm::vec3 GetWorldSpaceOABBCenter() const;
     void SetKinematic(bool value);
     void DisableRaycasting();
     void EnableRaycasting();
@@ -140,31 +140,35 @@ public:
 	void SetRotationX(float rotation);
 	void SetRotationY(float rotation);
 	void SetRotationZ(float rotation);
-	float GetRotationX();
-	float GetRotationY();
-	float GetRotationZ();
+
+	float GetRotationX() const;
+	float GetRotationY() const;
+	float GetRotationZ() const;
+
 	void SetScale(glm::vec3 scale);
 	void SetScale(float scale);
 	void SetScaleX(float scale);
 	void SetName(std::string name);
+
 	void SetParentName(std::string name);
-	std::string GetParentName();
-	bool IsInteractable();
+	std::string GetParentName() const;
+
+	bool IsInteractable() const;
 	void Interact();
 	void Update(float deltaTime);
 	void SetModel(const std::string& name);
 	void SetMeshMaterial(const char* name, int meshIndex = -1);
 	void SetCollectedState(bool value);
-	BoundingBox GetBoundingBox();
-	const InteractType& GetInteractType();
+	BoundingBox GetBoundingBox() const;
+	//const InteractType& GetInteractType();
 	OpenState& GetOpenState();
 	void SetTransform(Transform& transform);
 	void SetMeshMaterialByMeshName(std::string meshName, const char* materialName);
 	void PickUp();
 	void SetPickUpType(PickUpType pickupType);
-	bool IsCollectable();
-	bool IsCollected();
-	PickUpType GetPickUpType();
+	bool IsCollectable() const;
+	bool IsCollected() const;
+	PickUpType GetPickUpType() const;
 	//void CreateEditorPhysicsObject();
 
     int m_convexModelIndex = -1;
@@ -182,7 +186,7 @@ public:
 
 	void SetModelMatrixMode(ModelMatrixMode modelMatrixMode);
 	void SetPhysicsTransform(glm::mat4 worldMatrix);
-	glm::mat4 GetGameWorldMatrix(); // aka not the physx matrix
+	glm::mat4 GetGameWorldMatrix() const; // aka not the physx matrix
 	void AddForceToCollisionObject(glm::vec3 direction, float strength);
 
     void CleanUp();

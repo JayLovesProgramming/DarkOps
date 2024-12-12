@@ -13,34 +13,35 @@ S: Walk Backward<br>
 D: Walk Right<br>
 Left Mouse: Fire/Attack<br>
 Space Bar:  Jump<br>
-Q: cycle weapons<br>
-E: interact<br>
-R: reload<br>
-Left ctrl: crouch<br>
-F: Shotgun melee
-G: fullscreen<br>
-J: Respawn dead players
-K: Respawn all players
-Z: previous render mode<br>
-X: next render mode<br>
-B: cycle debug lines<br>
-O: reload map<br>
-V: Toggle splitscreen mode<br>
-Y: show probes<br>
-1/2/3/4: switch player<br>
--: Lower camera<br>
-+: Raise camera<br>
-~: Toggle debug text<br>
-TAB: Toggle editor<br>
+Mouse Wheel: Cycle Weapons<br>
+E: Interact<br>
+R: Reload<br>
+Left Ctrl: Crouch<br>
+F: Shotgun Melee
+G: Toggle Fullscreen<br>
+J: Respawn Dead Players
+K: Respawn All Players
+Z: Previous Render Mode<br>
+X: Next Render Mode<br>
+B: Cycle Debug Lines<br>
+O: Reload Map<br>
+V: Toggle Splitscreen Mode<br>
+Y: Show Probes<br>
+1-4: Switch Player Input<br>
+-: Lower Camera<br>
++: Raise Camera<br>
+`: Toggle Debug Text<br>
+TAB: Toggle Editor<br>
 
 ### Editor controls
-F1: File menu<br>
-F2: Insert menu<br>
-Alt + click: rotate camera<br>
-Ctrl + click: pan camera<br>
-Mousewheel: zoom camera<br>
+F1: File Menu<br>
+F2: Insert Menu<br>
+Alt + Click: Rotate Camera<br>
+Ctrl + Click: Pan Camera<br>
+Mouse Wheel: Zoom Camera<br>
 <br>
-**WARNING: editor menus very buggy still**
+
+**WARNING: Editor is very much still a WIP, stay tuned...**
 
 ### Download
 

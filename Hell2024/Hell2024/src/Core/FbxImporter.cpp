@@ -18,8 +18,14 @@ void FbxImporter::LoadAnimation(Animation* animation)
         std::cout << "Could not load: " << animation->m_fullPath << "\n";
     }
 
-	m_pAnimationScene = new aiScene(*tempAnimScene);
-	assert(m_pAnimationScene);
+	if (tempAnimScene)
+	{
+		m_pAnimationScene = new aiScene(*tempAnimScene);
+	}
+	else
+	{
+		m_pAnimationScene = nullptr;
+	}
 
     if (m_pAnimationScene) 
 	{
