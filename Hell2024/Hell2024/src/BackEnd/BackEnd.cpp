@@ -43,9 +43,6 @@ namespace BackEnd
 
     const GLFWvidmode* _mode;
 
-    int width = 1920;
-    int height = 1080;
-
     bool _forceCloseWindow = false;
     bool _windowHasFocus = true;
 
@@ -61,6 +58,9 @@ namespace BackEnd
     int _presentTargetWidth = 0;
     int _presentTargetHeight = 0;
 
+    int _windowPositionY = 0;
+    int _windowPositionX = 0;
+
     std::string _windowName = "Dark Ops : Zombies";
 
     void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -68,7 +68,7 @@ namespace BackEnd
 
     GLFWimage LoadWindowIcon(const std::string& iconPath)
     {
-        GLFWimage icon;
+        GLFWimage icon = {};
         int channels;
         icon.pixels = stbi_load(iconPath.c_str(), &icon.width, &icon.height, &channels, 4);
 
@@ -119,10 +119,6 @@ namespace BackEnd
         _windowedHeight = _mode->height * 0.9;
 
         CreateGLFWWindow(WindowedMode::WINDOWED);
-        int windowPosX = (_fullscreenWidth - _windowedWidth) / 2;
-        int windowPosY = (_fullscreenHeight - _windowedHeight) / 2;
-
-        glfwSetWindowPos(_window, windowPosX, windowPosY);
 
         if (_window == NULL) 
         {
@@ -157,7 +153,7 @@ namespace BackEnd
         }
 
         // ImGui init
-        IMGUI::ImGui_Init(_window);
+        IMGUI::Init(_window);
 
         // Init sub-systems
         Input::Init();
@@ -179,7 +175,7 @@ namespace BackEnd
 
     void EndFrame()
     {
-        IMGUI::ImGui_MainLoop();
+        IMGUI::MainLoop();
 
         // OpenGL
         if (GetAPI() == API::OPENGL) 
@@ -201,7 +197,7 @@ namespace BackEnd
 
     void CleanUp() 
     {
-        IMGUI::ImGui_Destroy();
+        IMGUI::Destroy();
 
         if (GetWindowMode() == WindowedMode::FULLSCREEN)
         {
@@ -248,6 +244,11 @@ namespace BackEnd
         }
         _windowedMode = windowedMode;
 
+        _windowPositionX = (_fullscreenWidth - _windowedWidth) / 2;
+        _windowPositionY = (_fullscreenHeight - _windowedHeight) / 2;
+
+        glfwSetWindowPos(_window, _windowPositionX, _windowPositionY);
+
         GLFWimage _windowIcon = LoadWindowIcon("res/icons/darkopsicon.png");
 
         if (_windowIcon.pixels)
@@ -265,7 +266,6 @@ namespace BackEnd
             _currentWindowWidth = _windowedWidth;
             _currentWindowHeight = _windowedHeight;
             glfwSetWindowMonitor(_window, nullptr, 0, 0, _windowedWidth, _windowedHeight, _mode->refreshRate);
-            glfwSetWindowPos(_window, 0, 0);
         }
         else if (windowedMode == WindowedMode::FULLSCREEN) 
         {
@@ -274,6 +274,8 @@ namespace BackEnd
             glfwSetWindowMonitor(_window, _monitor, 0, 0, _fullscreenWidth, _fullscreenHeight, _mode->refreshRate);
         }
         _windowedMode = windowedMode;
+
+        glfwSetWindowPos(_window, _windowPositionX, _windowPositionY);
     }
 
     void ToggleFullscreen() 

@@ -276,7 +276,7 @@ namespace RendererUtil
             float minimapMargin = 10.0f;
             location.x = (1920 - texWidth) - minimapMargin;
             location.y = (0) + minimapMargin;
-            std::cout << location.x << ", " << location.y << "\n";
+            //std::cout << location.x << ", " << location.y << "\n";
         }
         else if (alignment == Alignment::BOTTOM_RIGHT)
         {

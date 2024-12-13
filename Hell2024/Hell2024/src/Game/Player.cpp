@@ -824,8 +824,8 @@ void Player::CheckForDebugKeyPresses()
 
 bool Player::HasControl() const
 {
-    //std::cout << IMGUI::ImGui_IsAnyWindowOpen() << std::endl;
-    return !m_ignoreControl && BackEnd::WindowHasFocus() && !IMGUI::ImGui_IsAnyWindowOpen(); // Let's avoid having control when we are tabbed out coding and stuff...
+    //std::cout << IMGUI::IsAnyWindowOpen() << std::endl;
+    return !m_ignoreControl && BackEnd::WindowHasFocus() && !IMGUI::IsAnyWindowOpen(); // Let's avoid having control when we are tabbed out coding and stuff...
 }
 
 AnimatedGameObject* Player::GetCharacterAnimatedGameObject() const

@@ -5,9 +5,9 @@
 #include "Renderer/TextBlitter.hpp"
 #include "Game/Round.hpp"
 
-void IMGUI::ImGui_Init(GLFWwindow* window)
+void IMGUI::Init(GLFWwindow* window)
 {
-	ImGui_ShowDrawConsole = false;
+	F8_TOGGLED = false;
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -19,20 +19,20 @@ void IMGUI::ImGui_Init(GLFWwindow* window)
 	std::cout << "[INIT] ImGui" << "\n";
 }
 
-void IMGUI::ImGui_StartFrame()
+void IMGUI::StartFrame()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 }
 
-void IMGUI::ImGui_ToggleDebugConsole()
+void IMGUI::ToggleDebugConsole()
 {
 	if (Input::KeyPressed(HELL_KEY_F8))
 	{
-		ImGui_ShowDrawConsole = !ImGui_ShowDrawConsole;
+		F8_TOGGLED = !F8_TOGGLED;
 
-		if (ImGui_ShowDrawConsole)
+		if (F8_TOGGLED)
 		{
 			std::cout << "Show cursor" << std::endl;
 			Input::ShowCursor();
@@ -49,70 +49,73 @@ void IMGUI::ImGui_ToggleDebugConsole()
 	}
 }
 
-void IMGUI::ImGui_RenderFrame()
+void IMGUI::RenderFrame()
 {
 	// Gotta do updates inside the ImGui frame
-	ImGui_ToggleDebugConsole();
+	ToggleDebugConsole();
 
-	if (ImGui_ShowDrawConsole)
-	{
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	}
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-	//std::cout << "Rendering" << ImGui_ShowDrawConsole << std::endl;
+	//std::cout << "Rendering" << F8_TOGGLED << std::endl;
 }
 
-void IMGUI::ImGui_DrawDemoWindow()
+void IMGUI::DrawDemoWindow()
 {
-	ImGui_StartFrame();
-
 	// Draw ImGui UI
-	if (!ImGui_DEMO)
+	if (ImGui_DEMO)
 	{
-		return;
-	}
-
-	ImGui::ShowDemoWindow(&ImGui_DEMO);
-
-	// Render 
-	ImGui_RenderFrame();
-
-	if (ImGui_DEBUG)
-	{
-		std::cout << "[DRAWING] ImGui" << "\n";
+		ImGui::ShowDemoWindow(&ImGui_DEMO);
+		if (ImGui_DEBUG)
+		{
+			std::cout << "[DRAWING] ImGui" << "\n";
+		}
 	}
 }
 
-void IMGUI::ImGui_DrawFPS(std::vector<RenderItem2D>* renderItems, hell::ivec2 debugTextLocation, hell::ivec2 presentSize)
+void IMGUI::DrawAllOverlays()
 {
-	int fps = Util::GetFPS();
+	DrawFPS();
+	DrawDeltaTime();
+}
 
+void IMGUI::DrawFPS()
+{
 	if (OVERLAYS_SHOW_FPS)
 	{
+		int fps = Util::GetFPS();
 		// Format the FPS text
 		std::string fpsText = "FPS: " + std::to_string(static_cast<int>(fps));
-
-		// Set the ImGui overlay position (e.g., top-left corner)
-		ImGui::SetNextWindowPos(ImVec2(debugTextLocation.x, debugTextLocation.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(100, 50), ImGuiCond_Always);
-
-		// Render the FPS overlay
 		ImGui::Begin("FPS Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 		ImGui::TextUnformatted(fpsText.c_str());
 		ImGui::End();
+		//std::cout << "Drawing FPS" << std::endl;wd
 	}
 }
 
+void IMGUI::DrawDeltaTime()
+{
+	if (OVERLAYS_SHOW_DELTA_TIME)
+	{
+		double deltaTime = Game::GetDeltaTime();
+		std::cout << "DELTA TIME 2: " << deltaTime << std::endl;
+		// Format the FPS text
+		std::string deltaTimeText = "Delta Time: " + std::to_string(static_cast<double>(deltaTime));
+		ImGui::Begin("Delta Time Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+		ImGui::TextUnformatted(deltaTimeText.c_str());
+		ImGui::End();
+		//std::cout << "Drawing FPS" << std::endl;wd
+	}
+}
 
-void IMGUI::ImGui_DrawMainBar()
+void IMGUI::DrawMainBar()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("Overlays"))
 		{
 			ImGui::Checkbox("Show FPS", &OVERLAYS_SHOW_FPS);
-			ImGui::Checkbox("Show Frame Time", &OVERLAYS_SHOW_FRAME_TIME);
+			ImGui::Checkbox("Show Frame Time", &OVERLAYS_SHOW_DELTA_TIME);
 			ImGui::Checkbox("Show Memory Usage", &OVERLAYS_SHOW_MEMORY_USAGE);
 			ImGui::Checkbox("Show Bounding Boxes", &OVERLAYS_SHOW_BOUNDING_BOXES);
 			ImGui::Checkbox("Show Collision Debug", &OVERLAYS_SHOW_COLLISION_DEBUG);
@@ -121,48 +124,19 @@ void IMGUI::ImGui_DrawMainBar()
 			ImGui::EndMenu();
 		}
 
-		/*int leftX = RendererUtil::GetViewportLeftX(1, Game::GetSplitscreenMode(), gBufferSize.x, gBufferSize.y);
-		int rightX = RendererUtil::GetViewportRightX(1, Game::GetSplitscreenMode(), gBufferSize.x, gBufferSize.y);
-		int bottomY = RendererUtil::GetViewportBottomY(1, Game::GetSplitscreenMode(), gBufferSize.x, gBufferSize.y);*/
-
-	/*	hell::ivec2 ammoSlashTextLocation = { 0,0 };
-		if (Game::GetSplitscreenMode() == SplitscreenMode::NONE)
-		{
-			ammoSlashTextLocation.x = rightX - (gBufferSize.x * 0.125f);
-			ammoSlashTextLocation.y = bottomY + (gBufferSize.x * 0.1f);
-		}
-		if (Game::GetSplitscreenMode() == SplitscreenMode::TWO_PLAYER)
-		{
-			ammoSlashTextLocation.x = rightX - (gBufferSize.x * 0.125f);
-			ammoSlashTextLocation.y = bottomY + (gBufferSize.x * 0.065f);
-		}
-		if (Game::GetSplitscreenMode() == SplitscreenMode::FOUR_PLAYER)
-		{
-			ammoSlashTextLocation.x = rightX - (gBufferSize.x * 0.08f);
-			ammoSlashTextLocation.y = bottomY + (gBufferSize.x * 0.065f);
-		}*/
-
-
-		std::vector<RenderItem2D> renderItems;
-
-		const static hell::ivec2 roundCounterSize = { 1920, 1080 };
-		const static hell::ivec2 testter = {480, 270};
-
-		//hell::ivec2 ammoTotalTextLocation = { ammoSlashTextLocation.x + int(TextBlitter::GetCharacterSize("/", BitmapFontType::AMMO_NUMBERS).x * 1.6f * ammoTextScale), ammoSlashTextLocation.y };
-
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Open"))
 			{
-				ImGui_AddToConsoleLog("File > Open Selected");
+				AddToConsoleLog("File > Open Selected");
 			}
 			if (ImGui::MenuItem("Save"))
 			{
-				ImGui_AddToConsoleLog("File > Save Selected");
+				AddToConsoleLog("File > Save Selected");
 			}
 			if (ImGui::MenuItem("Exit"))
 			{
-				ImGui_AddToConsoleLog("Exiting...");
+				AddToConsoleLog("Exiting...");
 				// Make a are you sure prompt pop up.
 				BackEnd::ForceCloseWindow();
 			}
@@ -173,11 +147,11 @@ void IMGUI::ImGui_DrawMainBar()
 		{
 			if (ImGui::MenuItem("Undo"))
 			{
-				ImGui_AddToConsoleLog("File > Undo Selected");
+				AddToConsoleLog("File > Undo Selected");
 			}
 			if (ImGui::MenuItem("Redo"))
 			{
-				ImGui_AddToConsoleLog("File > Redo Selected");
+				AddToConsoleLog("File > Redo Selected");
 			}
 			ImGui::EndMenu();
 		}
@@ -186,7 +160,7 @@ void IMGUI::ImGui_DrawMainBar()
 		{
 			if (ImGui::MenuItem("About"))
 			{
-				ImGui_AddToConsoleLog("Help > About Selected");
+				AddToConsoleLog("Help > About Selected");
 			}
 			ImGui::EndMenu();
 		}
@@ -195,61 +169,62 @@ void IMGUI::ImGui_DrawMainBar()
 	}
 }
 
-void IMGUI::ImGui_DrawMainCommandBox()
+void IMGUI::DrawF8Command()
 {
-	ImGui_StartFrame();
-
-	ImGui_DrawMainBar();
-
-	ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
-	ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
-
-	ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-
-	if (ImGui::BeginChild("CommandHistory", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true))
+	if (F8_TOGGLED)
 	{
-		for (const auto& line : commandHistory)
+		DrawMainBar();
+		ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
+
+		ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+
+		if (ImGui::BeginChild("CommandHistory", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true))
 		{
-			ImGui::TextUnformatted(line.c_str());
+			for (const auto& line : commandHistory)
+			{
+				ImGui::TextUnformatted(line.c_str());
+			}
+			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+			{
+				ImGui::SetScrollHereY(1.0f);
+			}
 		}
-		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+		ImGui::EndChild();
+
+		// Input box at the bottom of the window
+		static char inputBuffer[256] = "";
+		ImGui::PushItemWidth(-1);
+		if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
 		{
-			ImGui::SetScrollHereY(1.0f);
+			if (strlen(inputBuffer) > 0)
+			{
+				ExecuteCommand(inputBuffer);
+				//memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
+			}
 		}
+		ImGui::PopItemWidth();
+
+		ImGui::End();
 	}
-	ImGui::EndChild();
-
-	// Input box at the bottom of the window
-	static char inputBuffer[256] = "";
-	ImGui::PushItemWidth(-1);
-	if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
-	{
-		if (strlen(inputBuffer) > 0)
-		{
-			ImGui_ExecuteCommand(inputBuffer);
-			//memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
-		}
-	}
-	ImGui::PopItemWidth();
-
-	ImGui::End();
-
-	ImGui_RenderFrame();
 }
 
-void IMGUI::ImGui_MainLoop()
+void IMGUI::MainLoop()
 {
+	StartFrame();
 	if (ImGui_DEMO)
 	{
-		ImGui_DrawDemoWindow();
+		DrawDemoWindow();
 	}
 	else
 	{
-		ImGui_DrawMainCommandBox();
+		DrawF8Command();
+		DrawAllOverlays();
 	}
+	RenderFrame();
 }
 
-void IMGUI::ImGui_Destroy()
+void IMGUI::Destroy()
 {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
@@ -257,51 +232,51 @@ void IMGUI::ImGui_Destroy()
 	std::cout << "[CLEANUP] ImGui" << "\n";
 }
 
-bool IMGUI::ImGui_IsAnyWindowOpen()
+bool IMGUI::IsAnyWindowOpen()
 {
-	return ImGui_ShowDrawConsole;
+	return F8_TOGGLED;
 }
 
-void IMGUI::ImGui_AddToConsoleLog(std::string param)
+void IMGUI::AddToConsoleLog(std::string param)
 {
 	commandHistory.push_back(param);
 }
 
-void IMGUI::ImGui_ClearAllConsoleLogs()
+void IMGUI::ClearAllConsoleLogs()
 {
 	commandHistory.clear();
 }
 
-void IMGUI::ImGui_ExecuteCommand(const char* command)
+void IMGUI::ExecuteCommand(const char* command)
 {
 	// Handle specific commands or general processing
 	if (strcmp(command, "clear") == 0)
 	{
-		ImGui_ClearAllConsoleLogs();
+		ClearAllConsoleLogs();
 	}
 	else if (strcmp(command, "help") == 0)
 	{
-		ImGui_AddToConsoleLog("Available commands:\n- clear: Clears command history\n- help: Displays available commands");
+		AddToConsoleLog("Available commands:\n- clear: Clears command history\n- help: Displays available commands");
 	}
 	else if (strcmp(command, "increaseround") == 0)
 	{
 		int previousRound = GetCurrentRound();
 		IncreaseRound();
-		ImGui_AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) +" To " + std::to_string(GetCurrentRound()));
+		AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) +" To " + std::to_string(GetCurrentRound()));
 	}
 	else if (strcmp(command, "decreaseround") == 0)
 	{
 		int previousRound = GetCurrentRound();
 		DecreaseRound();
-		ImGui_AddToConsoleLog("Zombies: Decreased Round From " + std::to_string(previousRound) + " To " + std::to_string(GetCurrentRound()));
+		AddToConsoleLog("Zombies: Decreased Round From " + std::to_string(previousRound) + " To " + std::to_string(GetCurrentRound()));
 	}
 	else if (strcmp(command, "round") == 0)
 	{
 		SetCurrentRound(5);
-		ImGui_AddToConsoleLog("Zombies: Set Current Round: 5");
+		AddToConsoleLog("Zombies: Set Current Round: 5");
 	}
 	else
 	{
-		ImGui_AddToConsoleLog(command);
+		AddToConsoleLog(command);
 	}
 }

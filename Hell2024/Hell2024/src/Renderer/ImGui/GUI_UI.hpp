@@ -11,10 +11,10 @@ namespace IMGUI
 {
 	static bool ImGui_DEBUG = true;
 	static bool ImGui_DEMO = false;
-	static bool ImGui_ShowDrawConsole;
+	static bool F8_TOGGLED = false;
 
 	static bool OVERLAYS_SHOW_FPS = false;
-	static bool OVERLAYS_SHOW_FRAME_TIME = false;
+	static bool OVERLAYS_SHOW_DELTA_TIME = false;
 	static bool OVERLAYS_SHOW_MEMORY_USAGE = false;
 	static bool OVERLAYS_SHOW_BOUNDING_BOXES = false;
 	static bool OVERLAYS_SHOW_COLLISION_DEBUG = false;
@@ -26,31 +26,34 @@ namespace IMGUI
 	static std::vector<std::string> commandHistory;
 	static std::string commandBuffer;
 
-	void ImGui_Init(GLFWwindow* window);
+	void Init(GLFWwindow* window);
 
-	void ImGui_StartFrame();
+	void StartFrame();
 
-	void ImGui_RenderFrame();
+	void RenderFrame();
 
-	void ImGui_ToggleDebugConsole();
+	void ToggleDebugConsole();
 
-	void ImGui_DrawDemoWindow();
+	void DrawDemoWindow();
 
-	void ImGui_DrawMainBar();
+	void DrawMainBar();
 
-	void ImGui_DrawMainCommandBox();
+	void DrawF8Command();
 
-	void ImGui_MainLoop();
+	void MainLoop();
 
-	void ImGui_Destroy();
+	void Destroy();
 
-	void ImGui_AddToConsoleLog(std::string param);
+	void AddToConsoleLog(std::string param);
+	void ClearAllConsoleLogs();
+	void ExecuteCommand(const char* command);
 
-	void ImGui_ClearAllConsoleLogs();
+	bool IsAnyWindowOpen();
 
-	void ImGui_ExecuteCommand(const char* command);
+	// Overlays
+	void DrawAllOverlays();
 
-	void ImGui_DrawFPS(std::vector<RenderItem2D> *renderItems, hell::ivec2 debugTextLocation, hell::ivec2 presentSize);
+	void DrawFPS();
+	void DrawDeltaTime();
 
-	bool ImGui_IsAnyWindowOpen();
 }

@@ -68,12 +68,29 @@ namespace Game
         // Edgecase bug - we crash after game has created
 
         glfwShowWindow(BackEnd::GetWindowPointer());
-        BackEnd::ToggleFullscreen();
     }
 
     bool IsLoaded() 
     {
         return _isLoaded;
+    }
+
+    void CalculateDeltaTime()
+    {
+        // Delta Time
+        g_lastFrame = g_thisFrame;
+        g_thisFrame = glfwGetTime();
+
+        deltaTime = g_thisFrame - g_lastFrame;
+        //std::cout << g_lastFrame << ", " << g_thisFrame << ", " << deltaTime << std::endl;
+        _deltaTimeAccumulator += deltaTime;
+        g_time += deltaTime;
+    }
+
+    double GetDeltaTime() // Yay, a getter for delta time...
+    {
+        //std::cout << "Delta Time: " << deltaTime << std::endl;
+        return deltaTime;
     }
 
     void Update() 
@@ -86,16 +103,10 @@ namespace Game
 
         RapidHotload::Update();
 
-        // Delta Time
-        g_lastFrame = g_thisFrame;
-        g_thisFrame = glfwGetTime();
-
-        deltaTime = g_thisFrame - g_lastFrame;
-        _deltaTimeAccumulator += deltaTime;
-        g_time += deltaTime;
+        CalculateDeltaTime();
 
         // Constructive Solid Geometry (CSG)
-        if (Input::KeyPressed(HELL_KEY_O) && !IMGUI::ImGui_IsAnyWindowOpen()) 
+        if (Input::KeyPressed(HELL_KEY_O) && !IMGUI::IsAnyWindowOpen()) 
         {
             Physics::ClearCollisionLists();
             Scene::LoadDefaultScene();

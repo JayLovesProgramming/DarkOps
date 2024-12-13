@@ -56,7 +56,7 @@ GifData LoadGif(const char* filePath)
 	fclose(file);
 
 	int* delays = nullptr;
-	int x, y, z, comp;
+	int x = 0, y = 0, z = 0, comp = 0;
 	gifData.data = stbi_load_gif_from_memory(buffer, fileSize, &delays, &gifData.width, &gifData.height, &gifData.frames, &comp, 4);
 
 	if (gifData.data) 

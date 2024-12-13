@@ -160,7 +160,7 @@ public:
 	*/
 	PxReal mDampingRateFullThrottle;
 
-
+	
 	/**
 	\brief Damping rate of engine when full throttle is applied.
 	

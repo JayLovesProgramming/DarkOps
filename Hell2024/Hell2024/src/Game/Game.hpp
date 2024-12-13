@@ -25,6 +25,8 @@ namespace Game
     };
 
     static double deltaTime = 0.00;
+    void CalculateDeltaTime();
+    double GetDeltaTime();
 
     void Create();
     void CreatePlayers(unsigned int playerCount);

@@ -15,15 +15,15 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
 {
     renderItems.clear();
 
-    hell::ivec2 debugTextLocation;
+    hell::ivec2 debugTextLocation = {};
     debugTextLocation.x = RendererUtil::GetViewportLeftX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     debugTextLocation.y = RendererUtil::GetViewportTopY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
 
-    hell::ivec2 pickupTextLocation;
+    hell::ivec2 pickupTextLocation = {};
     pickupTextLocation.x = RendererUtil::GetViewportLeftX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     pickupTextLocation.y = RendererUtil::GetViewportBottomY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
 
-    hell::ivec2 viewportCenter;
+    hell::ivec2 viewportCenter = {};
     viewportCenter.x = RendererUtil::GetViewportCenterX(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
     viewportCenter.y = RendererUtil::GetViewportCenterY(m_playerIndex, Game::GetSplitscreenMode(), presentSize.x, presentSize.y);
 
@@ -54,8 +54,6 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
         //text += "Accuracy Modifier: " + std::to_string(m_accuracyModifer) + "\n";
         RendererUtil::AddRenderItems(renderItems, TextBlitter::CreateText(text, debugTextLocation, presentSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD));
     }
-
-    IMGUI::ImGui_DrawFPS(&renderItems, debugTextLocation, presentSize);
 
     WeaponInfo* weaponInfo = GetCurrentWeaponInfo();
 
