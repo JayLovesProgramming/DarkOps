@@ -10,7 +10,7 @@
  struct UIElements
 {
 	constexpr static int uiSpacing = 70;
-	 int positions[5];
+	int positions[5];
 
 	UIElements()
 	{
