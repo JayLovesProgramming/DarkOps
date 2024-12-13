@@ -72,5 +72,8 @@ namespace IMGUI
 
 	void DrawFPS();
 	void DrawDeltaTime();
+	void DrawMinimap();
+
+	int GetUIOverlayPosition(std::string type);
 
 }

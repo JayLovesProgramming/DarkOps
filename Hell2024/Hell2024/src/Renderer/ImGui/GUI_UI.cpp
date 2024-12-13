@@ -1,9 +1,12 @@
 #include "GUI_UI.hpp"
 
 #include "BackEnd/BackEnd.hpp"
+
 #include "Renderer/RendererUtil.hpp"
 #include "Renderer/TextBlitter.hpp"
+
 #include "Game/Round.hpp"
+#include "Renderer/Minimap.hpp"
 
 void IMGUI::Init(GLFWwindow* window)
 {
@@ -79,6 +82,23 @@ void IMGUI::DrawAllOverlays()
 	DrawDeltaTime();
 }
 
+int IMGUI::GetUIOverlayPosition(std::string type)
+{
+	if (type == "DeltaTime")
+	{
+		if (!OVERLAYS_SHOW_FPS)
+		{
+			return uiElements.positions[1];
+		}
+		else
+		{
+			return uiElements.positions[2];
+		}
+	}
+
+	return 0;
+}
+
 void IMGUI::DrawFPS()
 {
 	if (OVERLAYS_SHOW_FPS)
@@ -100,7 +120,7 @@ void IMGUI::DrawDeltaTime()
 		double deltaTime = Game::GetDeltaTime();
 		std::string deltaTimeText = "Delta Time: " + std::to_string(static_cast<double>(deltaTime));
 		ImGui::Begin("Delta Time Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::SetWindowPos(ImVec2(uiElements.positions[2], ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(GetUIOverlayPosition("DeltaTime"), ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
 		ImGui::TextUnformatted(deltaTimeText.c_str());
 		ImGui::End();
 		//std::cout << "Drawing Delta Time" << std::endl;wd
@@ -119,7 +139,7 @@ void IMGUI::DrawMainBar()
 			ImGui::Checkbox("Show Bounding Boxes", &OVERLAYS_SHOW_BOUNDING_BOXES);
 			ImGui::Checkbox("Show Collision Debug", &OVERLAYS_SHOW_COLLISION_DEBUG);
 			ImGui::Checkbox("Wireframe Mode", &OVERLAYS_WIREFRAME_MODE);
-			ImGui::Checkbox("Show Minimap", &OVERLAYS_SHOW_MINIMAP);
+			ImGui::Checkbox("Show Minimap", &Minimap::MINIMAP_ENABLED);
 			ImGui::EndMenu();
 		}
 

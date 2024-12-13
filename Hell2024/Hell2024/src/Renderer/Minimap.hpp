@@ -22,6 +22,11 @@ public:
 		MINIMAP_ENABLED = false;
 	}
 
+	static void MainLoop() // Implement a main loop for all the drawing
+	{
+
+	}
+
 	static void DrawMinimapPlaceholder(std::vector<RenderItem2D>* renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
 	{
 		renderItems->push_back(RendererUtil::CreateRenderItem2D("Minimap_Overlay", viewportCenter, roundCounterSize, Alignment::MINIMAP_CUSTOM_TEST, WHITE, hell::ivec2(MINIMAP_SIZE, MINIMAP_SIZE)));
