@@ -84,7 +84,7 @@ void IMGUI::DrawAllOverlays()
 
 int IMGUI::GetUIOverlayPosition(std::string type)
 {
-	if (type == "DeltaTime")
+	/*if (type == "DeltaTime")
 	{
 		if (!OVERLAYS_SHOW_FPS)
 		{
@@ -94,7 +94,7 @@ int IMGUI::GetUIOverlayPosition(std::string type)
 		{
 			return uiElements.positions[2];
 		}
-	}
+	}*/
 
 	return 0;
 }
@@ -106,7 +106,7 @@ void IMGUI::DrawFPS()
 		int fps = Util::GetFPS();
 		std::string fpsText = "FPS: " + std::to_string(static_cast<int>(fps));
 		ImGui::Begin("FPS Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::SetWindowPos(ImVec2(uiElements.positions[1], ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(10, ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
 		ImGui::TextUnformatted(fpsText.c_str());
 		ImGui::End();
 		//std::cout << "Drawing FPS" << std::endl;wd
@@ -120,7 +120,7 @@ void IMGUI::DrawDeltaTime()
 		double deltaTime = Game::GetDeltaTime();
 		std::string deltaTimeText = "Delta Time: " + std::to_string(static_cast<double>(deltaTime));
 		ImGui::Begin("Delta Time Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::SetWindowPos(ImVec2(GetUIOverlayPosition("DeltaTime"), ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(80, ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
 		ImGui::TextUnformatted(deltaTimeText.c_str());
 		ImGui::End();
 		//std::cout << "Drawing Delta Time" << std::endl;wd

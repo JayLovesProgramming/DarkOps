@@ -9,22 +9,21 @@
 
 struct UIElements
 {
-	constexpr static int uiSpacing = 70;
+	//constexpr static int uiSpacing = 70;
 	int positions[5];
 
 	UIElements()
 	{
 		positions[0] = 0; // Fuck off
 		positions[1] = 10;
-		positions[2] = positions[1] + uiSpacing;
-		positions[3] = positions[2] + uiSpacing;
-		positions[4] = positions[3] + uiSpacing;
+		positions[2] = 80;
+		positions[3] = 150;
+		positions[4] = 220;
 	}
 };
 
 namespace IMGUI
 {
-	UIElements uiElements;
 
 	static bool ImGui_DEBUG = true;
 	static bool ImGui_DEMO = false;

@@ -9,7 +9,7 @@
 #include "Renderer/Minimap.hpp"
 #include "Crosshair.hpp"
 #include "Inventory.hpp"
-#include "Renderer/ImGui/GUI_UI.hpp"
+//#include "Renderer/ImGui/GUI_UI.hpp"
 
 std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
 {
