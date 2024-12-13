@@ -285,17 +285,19 @@ void IMGUI::ImGui_ExecuteCommand(const char* command)
 	}
 	else if (strcmp(command, "increaseround") == 0)
 	{
-		RoundManager::IncreaseRound();
-		ImGui_AddToConsoleLog("Zombies: Increased round");
+		int previousRound = GetCurrentRound();
+		IncreaseRound();
+		ImGui_AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) +" To " + std::to_string(GetCurrentRound()));
 	}
 	else if (strcmp(command, "decreaseround") == 0)
 	{
-		RoundManager::DecreaseRound();
-		ImGui_AddToConsoleLog("Zombies: Decreased round");
+		int previousRound = GetCurrentRound();
+		DecreaseRound();
+		ImGui_AddToConsoleLog("Zombies: Decreased Round From " + std::to_string(previousRound) + " To " + std::to_string(GetCurrentRound()));
 	}
 	else if (strcmp(command, "round") == 0)
 	{
-		RoundManager::SetCurrentRound(5);
+		SetCurrentRound(5);
 		ImGui_AddToConsoleLog("Zombies: Set Current Round: 5");
 	}
 	else

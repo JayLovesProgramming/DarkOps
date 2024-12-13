@@ -67,7 +67,7 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     else if (IsAlive())
     {
         CrosshairManager::DrawCrosshair(viewportCenter, weaponInfo, &renderItems, m_crosshairCrossSize, presentSize);
-        RoundManager::DrawRounds(&renderItems, viewportCenter, presentSize);
+        DrawRounds(&renderItems, viewportCenter, presentSize);
         Minimap::DrawBackground(&renderItems, viewportCenter,  presentSize);
         //InventoryManager::DrawInventory(&renderItems, presentSize);
         //RoundManager::UpdateRoundAnimation(Game::deltaTime);
