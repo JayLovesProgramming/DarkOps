@@ -84,17 +84,18 @@ void IMGUI::DrawAllOverlays()
 
 int IMGUI::GetUIOverlayPosition(std::string type)
 {
+	UIElements uiElements = {};
 	if (type == "DeltaTime")
 	{
 		if (!OVERLAYS_SHOW_FPS)
 		{
-			return 10;
-			//return uiElements.positions[1];
+			//return 10;
+			return uiElements.positions[1];
 		}
 		else
 		{
-			return 80;
-			//return uiElements.positions[2];
+			//return 80;
+			return uiElements.positions[2];
 		}
 	}
 
@@ -137,11 +138,11 @@ void IMGUI::DrawMainBar()
 		{
 			ImGui::Checkbox("Show FPS", &OVERLAYS_SHOW_FPS);
 			ImGui::Checkbox("Show Frame Time", &OVERLAYS_SHOW_DELTA_TIME);
+			ImGui::Checkbox("Show Minimap", &Minimap::MINIMAP_ENABLED);
 			ImGui::Checkbox("Show Memory Usage", &OVERLAYS_SHOW_MEMORY_USAGE);
 			ImGui::Checkbox("Show Bounding Boxes", &OVERLAYS_SHOW_BOUNDING_BOXES);
 			ImGui::Checkbox("Show Collision Debug", &OVERLAYS_SHOW_COLLISION_DEBUG);
 			ImGui::Checkbox("Wireframe Mode", &OVERLAYS_WIREFRAME_MODE);
-			ImGui::Checkbox("Show Minimap", &Minimap::MINIMAP_ENABLED);
 			ImGui::EndMenu();
 		}
 

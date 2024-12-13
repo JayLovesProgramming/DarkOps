@@ -7,18 +7,18 @@
 #include "Game/Game.hpp"
 #include "Input/Input.hpp"
 
-struct UIElements
+ struct UIElements
 {
-	//constexpr static int uiSpacing = 70;
-	int positions[5];
+	constexpr static int uiSpacing = 70;
+	 int positions[5];
 
 	UIElements()
 	{
 		positions[0] = 0; // Fuck off
 		positions[1] = 10;
-		positions[2] = 80;
-		positions[3] = 150;
-		positions[4] = 220;
+		positions[2] = positions[1] + uiSpacing;
+		positions[3] = positions[2] + uiSpacing;
+		positions[4] = positions[3] + uiSpacing;
 	}
 };
 
