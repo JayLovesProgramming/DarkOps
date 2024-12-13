@@ -24,6 +24,7 @@ struct UIElements
 
 namespace IMGUI
 {
+	//UIElements uiElements;
 
 	static bool ImGui_DEBUG = true;
 	static bool ImGui_DEMO = false;

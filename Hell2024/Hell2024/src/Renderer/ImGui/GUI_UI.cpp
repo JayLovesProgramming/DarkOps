@@ -84,17 +84,19 @@ void IMGUI::DrawAllOverlays()
 
 int IMGUI::GetUIOverlayPosition(std::string type)
 {
-	/*if (type == "DeltaTime")
+	if (type == "DeltaTime")
 	{
 		if (!OVERLAYS_SHOW_FPS)
 		{
-			return uiElements.positions[1];
+			return 10;
+			//return uiElements.positions[1];
 		}
 		else
 		{
-			return uiElements.positions[2];
+			return 80;
+			//return uiElements.positions[2];
 		}
-	}*/
+	}
 
 	return 0;
 }
@@ -120,7 +122,7 @@ void IMGUI::DrawDeltaTime()
 		double deltaTime = Game::GetDeltaTime();
 		std::string deltaTimeText = "Delta Time: " + std::to_string(static_cast<double>(deltaTime));
 		ImGui::Begin("Delta Time Overlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::SetWindowPos(ImVec2(80, ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(GetUIOverlayPosition("DeltaTime"), ImGui::GetIO().DisplaySize.y - 30), ImGuiCond_Always);
 		ImGui::TextUnformatted(deltaTimeText.c_str());
 		ImGui::End();
 		//std::cout << "Drawing Delta Time" << std::endl;wd
