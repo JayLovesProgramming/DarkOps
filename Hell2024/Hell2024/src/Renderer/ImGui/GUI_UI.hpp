@@ -7,8 +7,25 @@
 #include "Game/Game.hpp"
 #include "Input/Input.hpp"
 
+struct UIElements
+{
+	constexpr static int uiSpacing = 70;
+	int positions[5];
+
+	UIElements()
+	{
+		positions[0] = 0; // Fuck off
+		positions[1] = 10;
+		positions[2] = positions[1] + uiSpacing;
+		positions[3] = positions[2] + uiSpacing;
+		positions[4] = positions[3] + uiSpacing;
+	}
+};
+
 namespace IMGUI
 {
+	UIElements uiElements;
+
 	static bool ImGui_DEBUG = true;
 	static bool ImGui_DEMO = false;
 	static bool F8_TOGGLED = false;
