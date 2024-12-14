@@ -24,8 +24,8 @@ namespace Input
 	void PreventRightMouseHold();
     int GetScrollWheelYOffset();
     void ResetScrollWheelYOffset();
-    //int GetCursorX();
-    //int GetCursorY();
+    int GetCursorX();
+    int GetCursorY();
     void DisableCursor();
     void HideCursor();
     void ShowCursor();

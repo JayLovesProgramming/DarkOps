@@ -3,6 +3,7 @@
 #include "HellCommon.hpp"
 #include "BackEnd/BackEnd.hpp"
 #include "Core/AssetManager.hpp"
+#include "Input/Input.hpp"
 
 namespace RendererUtil 
 {
@@ -270,6 +271,25 @@ namespace RendererUtil
             // DONE
             location.x = width;
             location.y = height;
+        }
+        else if (alignment == Alignment::CURSOR_POS)
+        {
+            //Input::
+            //float cursorX = (Input::GetCursorX() - (texWidth * 0.25)); // FIX
+            //float cursorY = (Input::GetCursorY() - texHeight); // DONE
+
+            ////std::cout << "Cursor X: " << Input::GetCursorX() << std::endl;
+            //std::cout << "Cursor Y: " << Input::GetCursorY() << std::endl;
+
+            //location.x = cursorX;
+            //location.y -= cursorY;
+
+            float testX = (texWidth * 0.5f);
+            float testY = (Input::GetCursorY() + texHeight);
+
+            location.x -= testX;
+            location.y -= testY;
+
         }
         else if (alignment == Alignment::MINIMAP_CUSTOM_TEST)
         {

@@ -266,6 +266,7 @@ namespace BackEnd
             _currentWindowWidth = _windowedWidth;
             _currentWindowHeight = _windowedHeight;
             glfwSetWindowMonitor(_window, nullptr, 0, 0, _windowedWidth, _windowedHeight, _mode->refreshRate);
+            glfwSetWindowPos(_window, _windowPositionX, _windowPositionY);
         }
         else if (windowedMode == WindowedMode::FULLSCREEN) 
         {
@@ -274,8 +275,6 @@ namespace BackEnd
             glfwSetWindowMonitor(_window, _monitor, 0, 0, _fullscreenWidth, _fullscreenHeight, _mode->refreshRate);
         }
         _windowedMode = windowedMode;
-
-        glfwSetWindowPos(_window, _windowPositionX, _windowPositionY);
     }
 
     void ToggleFullscreen() 

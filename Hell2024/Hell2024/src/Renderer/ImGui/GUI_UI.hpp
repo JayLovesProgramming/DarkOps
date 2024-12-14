@@ -28,7 +28,7 @@ namespace IMGUI
 {
 	//UIElements uiElements;
 
-	static bool ImGui_DEMO = true;
+	static bool ImGui_DEMO = false;
 	static bool F8_TOGGLED = false;
 
 	static bool OVERLAYS_SHOW_FPS = false;

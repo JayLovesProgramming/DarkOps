@@ -13,8 +13,8 @@
 // TODO: Rename these to resoultion something
 // RESOLUTION !! Oooo cool
 // can increase after optimizing shizzz
-constexpr static auto PRESENT_WIDTH = 1280; // 832
-constexpr static auto PRESENT_HEIGHT = 720; // 468
+constexpr static auto PRESENT_WIDTH = 1920; // 832
+constexpr static auto PRESENT_HEIGHT = 1080; // 468
 
 constexpr static auto POINT_CLOUD_SPACING = 0.4f;
 //#define PROBE_SPACING 0.375f
@@ -43,7 +43,8 @@ enum Alignment
     TOP_RIGHT,
     BOTTOM_LEFT,
     MINIMAP_CUSTOM_TEST,
-    BOTTOM_RIGHT
+    BOTTOM_RIGHT,
+    CURSOR_POS
 };
 
 struct ViewportInfo 

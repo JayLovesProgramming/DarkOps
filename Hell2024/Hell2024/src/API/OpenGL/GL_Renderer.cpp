@@ -877,7 +877,7 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
 
     LightCullingPass(renderData);
     LightingPass(renderData);
-    SSAOPass();
+    //SSAOPass();
     SkyBoxPass(renderData);
     DebugTileViewPass(renderData);
 
@@ -885,10 +885,10 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
     P90MagPass(renderData);
     MuzzleFlashPass(renderData);
     GlassPass(renderData);
-    EmissivePass(renderData);
+    //EmissivePass(renderData);
     WinstonPass(renderData);
     MuzzleFlashPass(renderData);
-    PostProcessingPass(renderData);
+    //PostProcessingPass(renderData);
 
     ProbeGridDebugPass();
 

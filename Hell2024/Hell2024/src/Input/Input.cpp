@@ -6,6 +6,7 @@
 #include <chrono>
 #include "Game/AnimatedGameObject.hpp"
 #include "Game/Player.hpp"
+#include "Cursor.hpp"
 
 namespace Input 
 {
@@ -251,31 +252,40 @@ namespace Input
         _scrollWheelYOffset = 0;
     }
 
-    /*int GetCursorX() {
+    int GetCursorX() 
+    {
         double xpos, ypos;
         glfwGetCursorPos(_window, &xpos, &ypos);
         return int(xpos);
     }
 
-    int GetCursorY() {
+    int GetCursorY() 
+    {
         double xpos, ypos;
         glfwGetCursorPos(_window, &xpos, &ypos);
         return int(ypos);
-    }*/
+    }
 
     void DisableCursor()
     {
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        //Cursor::ResetCursorPosition();
     }
 
     void HideCursor()
     {
+        //_cursorIsHidden = true;
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        Cursor::HideCustomCursor();
+        //Cursor::ResetCursorPosition();
     }
 
     void ShowCursor()
     {
+        //Cursor::_isCursorHidden = false;
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        Cursor::ShowCustomCursor();
+        //Cursor::ResetCursorPosition();
     }
 
     int GetCursorScreenX() 

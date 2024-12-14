@@ -9,6 +9,7 @@
 #include "Renderer/Minimap.hpp"
 #include "Crosshair.hpp"
 #include "Inventory.hpp"
+#include "Input/Cursor.hpp"
 //#include "Renderer/ImGui/GUI_UI.hpp"
 
 std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
@@ -66,6 +67,7 @@ std::vector<RenderItem2D> Player::GetHudRenderItems(hell::ivec2 presentSize)
     {
         CrosshairManager::DrawCrosshair(viewportCenter, weaponInfo, &renderItems, m_crosshairCrossSize, presentSize);
         DrawRounds(&renderItems, viewportCenter, presentSize);
+        Cursor::Draw(&renderItems, viewportCenter, presentSize);
         Minimap::DrawBackground(&renderItems, viewportCenter,  presentSize);
         //InventoryManager::DrawInventory(&renderItems, presentSize);
         //RoundManager::UpdateRoundAnimation(Game::deltaTime);
