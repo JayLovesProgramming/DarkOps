@@ -7,6 +7,8 @@
 #include "Game/Game.hpp"
 #include "Input/Input.hpp"
 
+namespace fs = std::filesystem;
+
  struct UIElements
 {
 	constexpr static int uiSpacing = 70;
@@ -26,8 +28,7 @@ namespace IMGUI
 {
 	//UIElements uiElements;
 
-	static bool ImGui_DEBUG = true;
-	static bool ImGui_DEMO = false;
+	static bool ImGui_DEMO = true;
 	static bool F8_TOGGLED = false;
 
 	static bool OVERLAYS_SHOW_FPS = false;
@@ -72,8 +73,8 @@ namespace IMGUI
 
 	void DrawFPS();
 	void DrawDeltaTime();
-	void DrawMinimap();
 
 	int GetUIOverlayPosition(std::string type);
 
+	// Assets Browser
 }

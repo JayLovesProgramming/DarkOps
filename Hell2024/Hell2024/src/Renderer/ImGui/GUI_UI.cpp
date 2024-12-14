@@ -69,10 +69,6 @@ void IMGUI::DrawDemoWindow()
 	if (ImGui_DEMO)
 	{
 		ImGui::ShowDemoWindow(&ImGui_DEMO);
-		if (ImGui_DEBUG)
-		{
-			std::cout << "[DRAWING] ImGui" << "\n";
-		}
 	}
 }
 
@@ -302,3 +298,5 @@ void IMGUI::ExecuteCommand(const char* command)
 		AddToConsoleLog(command);
 	}
 }
+
+// Assets Browser
