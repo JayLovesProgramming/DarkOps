@@ -269,12 +269,12 @@ namespace Input
     void DisableCursor()
     {
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        Cursor::HideCustomCursor();
         //Cursor::ResetCursorPosition();
     }
 
     void HideCursor()
     {
-        //_cursorIsHidden = true;
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         Cursor::HideCustomCursor();
         //Cursor::ResetCursorPosition();
@@ -282,7 +282,6 @@ namespace Input
 
     void ShowCursor()
     {
-        //Cursor::_isCursorHidden = false;
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         Cursor::ShowCustomCursor();
         //Cursor::ResetCursorPosition();
