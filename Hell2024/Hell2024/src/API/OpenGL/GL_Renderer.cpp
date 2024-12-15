@@ -1182,6 +1182,7 @@ void RenderShadowMapss(RenderData& renderData)
     }
 }
 
+#include "LoadingScreen/StartScreen.hpp"
 // User interface
 void RenderUI(std::vector<RenderItem2D>& renderItems, GLFrameBuffer& frameBuffer, bool clearScreen) 
 {
@@ -1203,6 +1204,7 @@ void RenderUI(std::vector<RenderItem2D>& renderItems, GLFrameBuffer& frameBuffer
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);
     }
+
     // Feed instance data to GPU
     OpenGLRenderer::g_shaders.UI.Use();
     glNamedBufferSubData(OpenGLRenderer::g_ssbos.renderItems2D, 0, renderItems.size() * sizeof(RenderItem2D), &renderItems[0]);

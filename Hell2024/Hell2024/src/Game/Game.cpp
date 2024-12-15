@@ -1,4 +1,5 @@
 ﻿#include "Game.hpp"
+
 #include "Scene.hpp"
 #include "BackEnd/BackEnd.hpp"
 #include "Core/Audio.hpp"
@@ -11,6 +12,7 @@
 #include "Renderer/ImGui/GUI_UI.hpp"
 #include "Pathfinding/Pathfinding2.hpp"
 #include "RapidHotload.hpp"
+#include "LoadingScreen/StartScreen.hpp"
 
 namespace Game
 {
@@ -93,17 +95,16 @@ namespace Game
         return deltaTime;
     }
 
-    void Update() 
+    void Update()
     {
         if (g_firstFrame)
         {
             g_thisFrame = glfwGetTime();
             g_firstFrame = false;
         }
-
         RapidHotload::Update();
-
         CalculateDeltaTime();
+
 
         // Constructive Solid Geometry (CSG)
         if (Input::KeyPressed(HELL_KEY_O) && !IMGUI::IsAnyWindowOpen()) 

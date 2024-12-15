@@ -3,8 +3,6 @@
 
 #include "HellCommon.hpp"
 #include "Core/AssetManager.hpp"
-
-#include "stb_image.h"
 #include "BackEnd/BackEnd.hpp"
 
 // GIF
@@ -78,32 +76,6 @@ GifData LoadGif(const char* filePath)
 	return gifData;
 }
 
-// LOAD
-GLuint LoadInitialWindowBackground(const char* filePath)
-{
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load(filePath, &width, &height, &nrChannels, 0);
-	if (!data)
-	{
-		std::cerr << "Failed to load texture: " << filePath << "\n";
-		return 0;
-	}
-
-	GLuint textureID;
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	stbi_image_free(data);
-	return textureID;
-}
 
 // DRAW
 void DrawInitialWindowBackground(GLuint textureID, float loadingProgress)
@@ -134,7 +106,6 @@ void DrawInitialWindowBackground(GLuint textureID, float loadingProgress)
 	glPopMatrix();
 	// Reset color
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
 }
 
 // DRAW
@@ -230,7 +201,7 @@ void InitLoadingScreen()
 
 	glViewport(0, 0, loadingScreenWidth, loadingScreenHeight);
 
-	GLuint backgroundImage = LoadInitialWindowBackground("res/icons/test.png");
+	GLuint backgroundImage = Util::LoadImage("res/icons/test.png");
 	if (!backgroundImage)
 	{
 		std::cerr << "Failed to load background texture" << "\n";

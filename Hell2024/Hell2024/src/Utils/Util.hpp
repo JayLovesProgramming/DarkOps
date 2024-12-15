@@ -21,6 +21,7 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/prettywriter.h>
 #include "RendererCommon.hpp"
+#include "stb_image.h"
 
 namespace Util 
 {
@@ -1565,6 +1566,69 @@ namespace Util
         }
         
         return fps;
+    }
+
+    inline GLuint LoadImage(const char* filePath)
+    {
+        int width, height, nrChannels;
+        unsigned char* data = stbi_load(filePath, &width, &height, &nrChannels, 0);
+        if (!data)
+        {
+            std::cerr << "Failed to load texture: " << filePath << "\n";
+            return 0;
+        }
+
+        GLuint textureID;
+        glGenTextures(1, &textureID);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+        return textureID;
+    }
+
+    inline void DrawImage(GLuint textureID, float loadingProgress)
+    {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, -1.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 1.0f);
+        glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_TEXTURE_2D);
+
+        // Draw loading circle
+        float centerX = 0.0f;
+        float centerY = -0.8f;
+        float radius = 0.1f;
+        int segments = 60;
+
+        glPushMatrix();
+        glTranslatef(centerX, centerY, 0.0f);
+        glRotatef(loadingProgress * 360.0f, 0.0f, 0.0f, 1.0f);
+
+        glPopMatrix();
+        // Reset color
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    inline void CleanupImage(GLuint textureID)
+    {
+        glDeleteTextures(1, &textureID);
+        //stbi_image_free(textureID.data);
+        //glDeleteTextures(1, &backgroundImage);
     }
 }
 

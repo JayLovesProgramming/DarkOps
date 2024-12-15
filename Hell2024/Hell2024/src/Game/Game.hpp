@@ -31,7 +31,9 @@ namespace Game
     void Create();
     void CreatePlayers(unsigned int playerCount);
     bool IsLoaded();
+
     void Update();
+
     void NextSplitScreenMode();
     void SetSplitscreenMode(SplitscreenMode mode);
     void SetPlayerKeyboardAndMouseIndex(int playerIndex, int keyboardIndex, int mouseIndex);

@@ -2,7 +2,7 @@
 #include "GL_texture.h"
 #include "Utils/Util.hpp"
 #include "../../vendor/DDS/DDS_Helpers.h"
-#include <stb_image.h>
+//#include <stb_image.h>
 #include "Tools/ImageTools.hpp"
 
 bool dontDoBindless = false;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Renderer/RendererUtil.hpp"
+#include "Renderer/ImGui/GUI_UI.hpp"
 
 namespace Cursor
 {
@@ -10,7 +11,8 @@ namespace Cursor
     {
         //if (!_isCursorHidden)
         {
-            renderItems->push_back(RendererUtil::CreateRenderItem2D("orange_cursor", viewportCenter, {PRESENT_WIDTH, PRESENT_HEIGHT}, Alignment::CURSOR_POS, WHITE, {50, 50}));
+            glEnable(GL_DEPTH_TEST);
+            renderItems->push_back(RendererUtil::CreateRenderItem2D("orange_cursor", viewportCenter, {PRESENT_WIDTH, PRESENT_HEIGHT}, Alignment::CURSOR_POS, WHITE, {20, 20}));
         }
     }
 

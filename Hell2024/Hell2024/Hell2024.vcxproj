@@ -313,6 +313,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Input\Cursor.hpp" />
     <ClInclude Include="src\LoadingScreen\InitialWindow.hpp" />
     <ClInclude Include="src\LoadingScreen\PreGameLoadingScreen.hpp" />
+    <ClInclude Include="src\LoadingScreen\StartScreen.hpp" />
     <ClInclude Include="src\LoadingScreen\TextRenderer.h" />
     <ClInclude Include="src\Math\Frustum.hpp" />
     <ClInclude Include="src\Renderer\ImGui\GUI_UI.hpp" />

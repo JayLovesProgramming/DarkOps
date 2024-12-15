@@ -31,6 +31,9 @@
 // RENDERER
 #include "Renderer/ImGui/GUI_UI.hpp"
 
+// START SCREEN
+#include "LoadingScreen/StartScreen.hpp"
+
 namespace BackEnd 
 {
     API _api = API::UNDEFINED;
@@ -152,9 +155,6 @@ namespace BackEnd
             AssetManager::FindAssetPaths();
         }
 
-        // ImGui init
-        IMGUI::Init(_window);
-
         // Init sub-systems
         Input::Init();
         Audio::Init();
@@ -163,9 +163,11 @@ namespace BackEnd
         CSG::Init();
         Pathfinding2::Init();
         WeaponManager::Init();
+        StartScreen::Init();
+        IMGUI::Init(_window);
         glfwHideWindow(_window);
 
-        std::cout << "BACKEND INIT" << std::endl;
+        std::cout << "[INIT] BACKEND" << std::endl;
     }
 
     void BeginFrame() 

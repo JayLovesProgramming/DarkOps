@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <numeric>
 #include <vector>
-#include <stb_image.h>
+//#include <stb_image.h>
 
 #include "tiny_obj_loader.h"
 #include "Utils/Convert/Slashes.hpp"

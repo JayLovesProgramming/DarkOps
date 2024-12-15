@@ -62,6 +62,7 @@ std::vector<glm::vec3> g_debugTriangleVertices = {
     glm::vec3(1.5f, 1.0f, 1.0f)
 };
 
+
 void Renderer::RenderFrame()
 {
     UpdateDebugPointsMesh();
@@ -80,6 +81,7 @@ void Renderer::RenderFrame()
 
     RendererData::CreateDrawCommands(renderData.playerCount);
     RendererData::UpdateGPULights();
+
 
     if (BackEnd::GetAPI() == API::OPENGL)
     {

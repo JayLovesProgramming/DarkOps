@@ -24,6 +24,7 @@ void IMGUI::Init(GLFWwindow* window)
 
 void IMGUI::StartFrame()
 {
+	glDisable(GL_DEPTH_TEST);
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -58,6 +59,8 @@ void IMGUI::RenderFrame()
 	ToggleDebugConsole();
 
 	ImGui::Render();
+
+	// Render cursor?
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	//std::cout << "Rendering" << F8_TOGGLED << std::endl;

@@ -274,21 +274,18 @@ namespace RendererUtil
         }
         else if (alignment == Alignment::CURSOR_POS)
         {
-            //Input::
-            //float cursorX = (Input::GetCursorX() - (texWidth * 0.25)); // FIX
-            //float cursorY = (Input::GetCursorY() - texHeight); // DONE
+            // Works in fullscreen, doesn't align in windowed
+            float testX = (Input::GetMouseX());
+            float testY = (BackEnd::GetCurrentWindowHeight() - Input::GetMouseY()) - texHeight;
 
-            ////std::cout << "Cursor X: " << Input::GetCursorX() << std::endl;
-            //std::cout << "Cursor Y: " << Input::GetCursorY() << std::endl;
+            //CameraData* viewportData = { 0 };
+            //float windowedTestX = testX;
+            //float windowedTestY = (viewportData->viewportHeight - Input::GetMouseY());
 
-            //location.x = cursorX;
-            //location.y -= cursorY;
+            location.x = testX;
+            location.y = testY;
 
-            float testX = (texWidth * 0.5f);
-            float testY = (Input::GetCursorY() + texHeight);
-
-            location.x -= testX;
-            location.y -= testY;
+            //std::cout << "viewportData.viewportHeight: " << viewportData->viewportHeight << std::endl;
 
         }
         else if (alignment == Alignment::MINIMAP_CUSTOM_TEST)
