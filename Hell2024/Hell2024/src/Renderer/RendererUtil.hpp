@@ -264,6 +264,7 @@ namespace RendererUtil
 
         float width = (1.0f / viewportSize.x) * texWidth;
         float height = (1.0f / viewportSize.y) * texHeight;
+        glm::vec3 rotation = { 0, 0, 0 };
 
         // Bottom
         if (alignment == Alignment::BOTTOM_LEFT) 
@@ -293,6 +294,14 @@ namespace RendererUtil
             float minimapMargin = 10.0f;
             location.x = (1920 - texWidth) - minimapMargin;
             location.y = (0) + minimapMargin;
+            //std::cout << location.x << ", " << location.y << "\n";
+        }
+        else if (alignment == Alignment::MINIMAP_PLAYER_MARKER)
+        {
+            float minimapMargin = 10.0f;
+            location.x = ((1920 - (texWidth * 0.5)) - minimapMargin) - 100;
+            location.y = (0) + 100;
+            rotation = { 0, 0, 0 };
             //std::cout << location.x << ", " << location.y << "\n";
         }
         else if (alignment == Alignment::BOTTOM_RIGHT)
@@ -330,7 +339,8 @@ namespace RendererUtil
         Transform transform;
         transform.position.x = finalX;
         transform.position.y = finalY;
-        transform.scale = glm::vec3(width, height * -1, 1);
+        transform.scale = glm::vec3(width, -height, 1);
+        transform.rotation = rotation;
 
         renderItem.modelMatrix = transform.to_mat4();
         renderItem.textureIndex = textureIndices[textureName];

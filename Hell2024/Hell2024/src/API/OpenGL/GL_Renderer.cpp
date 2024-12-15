@@ -1182,7 +1182,6 @@ void RenderShadowMapss(RenderData& renderData)
     }
 }
 
-#include "LoadingScreen/StartScreen.hpp"
 // User interface
 void RenderUI(std::vector<RenderItem2D>& renderItems, GLFrameBuffer& frameBuffer, bool clearScreen) 
 {

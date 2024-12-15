@@ -22,11 +22,6 @@ public:
 		MINIMAP_ENABLED = false;
 	}
 
-	static void MainLoop() // Implement a main loop for all the drawing
-	{
-
-	}
-
 	static void DrawMinimapPlaceholder(std::vector<RenderItem2D>* renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
 	{
 		renderItems->push_back(RendererUtil::CreateRenderItem2D("Minimap_Overlay", viewportCenter, roundCounterSize, Alignment::MINIMAP_CUSTOM_TEST, WHITE, hell::ivec2(MINIMAP_SIZE, MINIMAP_SIZE)));
@@ -34,17 +29,27 @@ public:
 
 	static void DrawBackground(std::vector<RenderItem2D>* renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
 	{
+		// TODO: Fix bottom left alignment so it works with all split screens?
+		////std::cout << "Drawing Minimap Background 1: " << roundCounterSize.x << roundCounterSize.y << std::endl;
+		//std::cout << "Drawing Minimap Background 2: " << storedMinimapViewportCenter.x << ", " << storedMinimapViewportCenter.y << std::endl;
+		storedMinimapViewportCenter = viewportCenter;
+		storedMinimapViewportCenter.x -= 20;
+		renderItems->push_back(RendererUtil::CreateRenderItem2D("Minimap_Background", storedMinimapViewportCenter, roundCounterSize, Alignment::MINIMAP_CUSTOM_TEST, WHITE, hell::ivec2(MINIMAP_SIZE, MINIMAP_SIZE)));
+		DrawMinimapPlaceholder(renderItems, storedMinimapViewportCenter, presentSize);
+
+		DrawPlayerMarker(renderItems, viewportCenter, presentSize);
+	}
+
+	static void DrawPlayerMarker(std::vector<RenderItem2D>* renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
+	{
+		renderItems->push_back(RendererUtil::CreateRenderItem2D("green_player_marker", viewportCenter, roundCounterSize, Alignment::MINIMAP_PLAYER_MARKER, WHITE, hell::ivec2(32, 32)));
+	}
+
+	static void DrawMinimap(std::vector<RenderItem2D>* renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
+	{
 		if (MINIMAP_ENABLED)
 		{
-			storedMinimapViewportCenter = viewportCenter;
-			storedMinimapViewportCenter.x -= 20;
-			// TODO: Fix bottom left alignment so it works with all split screens?
-			renderItems->push_back(RendererUtil::CreateRenderItem2D("Minimap_Background", storedMinimapViewportCenter, roundCounterSize, Alignment::MINIMAP_CUSTOM_TEST, WHITE, hell::ivec2(MINIMAP_SIZE, MINIMAP_SIZE)));
-
-			////std::cout << "Drawing Minimap Background 1: " << roundCounterSize.x << roundCounterSize.y << std::endl;
-			//std::cout << "Drawing Minimap Background 2: " << storedMinimapViewportCenter.x << ", " << storedMinimapViewportCenter.y << std::endl;
-
-			DrawMinimapPlaceholder(renderItems, storedMinimapViewportCenter, presentSize);
+			DrawBackground(renderItems, viewportCenter, presentSize);
 		}
 	}
 

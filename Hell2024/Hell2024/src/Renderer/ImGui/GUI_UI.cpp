@@ -4,9 +4,9 @@
 
 #include "Renderer/RendererUtil.hpp"
 #include "Renderer/TextBlitter.hpp"
+#include "Renderer/Minimap.hpp"
 
 #include "Game/Round.hpp"
-#include "Renderer/Minimap.hpp"
 
 void IMGUI::Init(GLFWwindow* window)
 {
@@ -281,19 +281,23 @@ void IMGUI::ExecuteCommand(const char* command)
 	}
 	else if (strcmp(command, "increaseround") == 0)
 	{
-		int previousRound = GetCurrentRound();
-		IncreaseRound();
-		AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) +" To " + std::to_string(GetCurrentRound()));
+		int previousRound = RoundManager::GetCurrentRound();
+		RoundManager::IncreaseRound();
+		AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) +" To " + std::to_string(RoundManager::GetCurrentRound()));
 	}
 	else if (strcmp(command, "decreaseround") == 0)
 	{
-		int previousRound = GetCurrentRound();
-		DecreaseRound();
-		AddToConsoleLog("Zombies: Decreased Round From " + std::to_string(previousRound) + " To " + std::to_string(GetCurrentRound()));
+		int previousRound = RoundManager::GetCurrentRound();
+		RoundManager::DecreaseRound();
+		AddToConsoleLog("Zombies: Decreased Round From " + std::to_string(previousRound) + " To " + std::to_string(RoundManager::GetCurrentRound()));
+	}
+	else if (strcmp(command, "quit") == 0 || strcmp(command, "exit") == 0)
+	{
+		BackEnd::ForceCloseWindow();
 	}
 	else if (strcmp(command, "round") == 0)
 	{
-		SetCurrentRound(5);
+		RoundManager::SetCurrentRound(5);
 		AddToConsoleLog("Zombies: Set Current Round: 5");
 	}
 	else

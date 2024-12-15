@@ -412,6 +412,7 @@ void MoveTowards(glm::vec2& position, const glm::vec2& target, glm::vec2& curren
 }
 
 // Render Data
+// Render a loading image instead of text...
 static std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
 {
     int desiredTotalLines = 40;
@@ -434,7 +435,6 @@ static std::vector<RenderItem2D> CreateLoadingScreenRenderItems()
     return TextBlitter::CreateText(text, location, viewportSize, Alignment::TOP_LEFT, BitmapFontType::STANDARD);
 }
 
-// Render a loading image instead of text...
 
 std::vector<RenderItem2D> CreateRenderItems2D(hell::ivec2 presentSize, int playerCount) 
 {
