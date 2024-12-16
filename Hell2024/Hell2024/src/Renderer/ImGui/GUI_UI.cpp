@@ -7,6 +7,7 @@
 #include "Renderer/Minimap.hpp"
 
 #include "Game/Round.hpp"
+#include "Game/MiscObjects.hpp"
 
 void IMGUI::Init(GLFWwindow* window)
 {
@@ -299,6 +300,11 @@ void IMGUI::ExecuteCommand(const char* command)
 	{
 		RoundManager::SetCurrentRound(5);
 		AddToConsoleLog("Zombies: Set Current Round: 5");
+	}
+	else if (strcmp(command, "spawn juggernog") == 0)
+	{
+		MiscObjectsManager::SpawnJuggernog();
+		AddToConsoleLog("Zombies: Spawned juggernog");
 	}
 	else
 	{

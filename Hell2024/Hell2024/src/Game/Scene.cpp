@@ -642,7 +642,6 @@ void Scene::LoadDefaultScene()
     //SofaManager::CreateSofa();
     //CushionManager::CreateAllCushions();
     //MiscObjectsManager::SpawnChristmasTree();
-    MiscObjectsManager::SpawnJuggernog();
     MiscObjectsManager::SpawnSpeedCola();
     //MiscObjectsManager::SpawnChristmasBoxPresents();
     //MiscObjectsManager::SpawnPictureFrame();
