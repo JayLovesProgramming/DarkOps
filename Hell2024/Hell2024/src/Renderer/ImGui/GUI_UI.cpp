@@ -9,6 +9,8 @@
 #include "Game/Round.hpp"
 #include "Game/MiscObjects.hpp"
 
+#include "AssetBrowser.hpp"
+
 void IMGUI::Init(GLFWwindow* window)
 {
 	F8_TOGGLED = false;
@@ -193,8 +195,10 @@ void IMGUI::DrawMainBar()
 
 void IMGUI::DrawF8Command()
 {
+
 	if (F8_TOGGLED)
 	{
+
 		DrawMainBar();
 		ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
@@ -240,6 +244,8 @@ void IMGUI::MainLoop()
 	}
 	else
 	{
+		//AssetBrowser assetBrowser;
+		AssetBrowser::Render();
 		DrawF8Command();
 		DrawAllOverlays();
 	}
