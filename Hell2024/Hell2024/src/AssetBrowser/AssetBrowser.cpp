@@ -131,8 +131,37 @@ void AssetBrowser::HandleDropOutsideWindow(const std::string& filePath, const Im
     }
 }
 
+void AssetBrowser::RenderMainDockspace()
+{
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->Pos);
+    ImGui::SetNextWindowSize(viewport->Size);
+    ImGui::SetNextWindowViewport(viewport->ID);
+
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+
+    ImGui::Begin("DockSpace", nullptr, window_flags);
+    ImGui::PopStyleVar(2);
+
+    ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+    ImGui::End();
+}
+
+
 void AssetBrowser::Render()
 {
+    RenderMainDockspace();
+
     if (Input::KeyPressed(HELL_KEY_F5))
     {
         ASSET_BROWSER_OPEN = !ASSET_BROWSER_OPEN;
@@ -152,14 +181,18 @@ void AssetBrowser::Render()
         return;
     }
 
-    RenderSidebar();
+    // Dockable window setup
+    ImGui::Begin("Asset Browser", nullptr,
+        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_MenuBar);
 
-    // Bottom area for the asset browser
-    ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - bottomHeight));
-    //ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, bottomHeight));
-    ImGui::Begin("##AssetBrowser", nullptr,
-        ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysHorizontalScrollbar |
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::MenuItem("Refresh"))
+        {
+            UpdateEntries();
+        }
+        ImGui::EndMenuBar();
+    }
 
     // "Up" Button and Path display
     if (ImGui::Button("Up"))
@@ -218,9 +251,7 @@ void AssetBrowser::Render()
             }
         }
 
-        //ImGui::TextWrapped(filename.c_str());
         ImGui::EndGroup();
-
         ImGui::NextColumn();
     }
 

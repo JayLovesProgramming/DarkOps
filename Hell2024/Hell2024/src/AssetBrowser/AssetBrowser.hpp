@@ -1,6 +1,7 @@
 #pragma once
 
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <string>
 #include <vector>
 #include <filesystem>
@@ -31,6 +32,7 @@ namespace AssetBrowser
     void Render();
 
     void RenderSidebar();
+    void RenderMainDockspace();
 
     bool IsAssetBrowserOpen();
 };
