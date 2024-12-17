@@ -7,7 +7,6 @@
 #include <iostream>
 #include "Editor/Editor.hpp"
 
-
 namespace AssetBrowser
 {
     inline std::string currentPath = "res/models/OBJ";

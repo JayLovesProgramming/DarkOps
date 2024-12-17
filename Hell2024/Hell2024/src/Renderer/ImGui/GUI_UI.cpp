@@ -9,7 +9,7 @@
 #include "Game/Round.hpp"
 #include "Game/MiscObjects.hpp"
 
-#include "AssetBrowser.hpp"
+#include "AssetBrowser/AssetBrowser.hpp"
 
 void IMGUI::Init(GLFWwindow* window)
 {
