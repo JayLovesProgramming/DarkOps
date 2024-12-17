@@ -15,6 +15,7 @@
 #include "Renderer/TextBlitter.hpp"
 #include "Timer.hpp"
 #include "Utils/Util.hpp"
+#include "AssetBrowser/AssetBrowser.hpp"
 
 constexpr static auto MENU_SELECT_AUDIO = "SELECT.wav";
 constexpr static auto MENU_SELECT_VOLUME  = 1.0f;
@@ -1076,6 +1077,8 @@ namespace Editor
         SetCurrentMenuType(MenuType::SELECTED_OBJECT);
         RebuildEverything();
         std::cout << "PUT DOWN A CSG ADDITIVE" << std::endl;
+
+        //AssetBrowser::SetSelectedCSGCubeAsset(csgShape);
     }
 
     void UpdateMenu()

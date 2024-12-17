@@ -141,10 +141,17 @@ void GameObject::SetScale(float scale)
 {
 	_transform.scale = glm::vec3(scale);
 }
+
 void GameObject::SetScaleX(float scale) 
 {
 	_transform.scale.x = scale;
 }
+
+glm::vec3 GameObject::GetScale()
+{
+    return _transform.scale;
+}
+
 
 glm::mat4 GameObject::GetModelMatrix() const
 {

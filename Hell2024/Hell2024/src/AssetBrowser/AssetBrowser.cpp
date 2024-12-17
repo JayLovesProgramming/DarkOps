@@ -2,7 +2,6 @@
 
 #include "Input/Input.hpp"
 #include "Renderer/ImGui/GUI_UI.hpp"
-#include "Game/Scene.hpp"
 
 bool AssetBrowser::IsAssetBrowserOpen()
 {
@@ -18,8 +17,59 @@ void AssetBrowser::UpdateEntries()
     }
 }
 
+void AssetBrowser::SetSelectedAsset(GameObject* newlySelectedAsset)
+{
+    selectedAsset = newlySelectedAsset;
+}
+
+void AssetBrowser::RenderSidebar()
+{
+    ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+    if (!selectedAsset)
+    {
+        ImGui::Text("No asset selected.");
+        ImGui::End();
+        return;
+    }
+
+     glm::vec3 position = selectedAsset->GetWorldPosition();
+     glm::quat rotation = selectedAsset->GetWorldRotation();
+     glm::vec3 scale = selectedAsset->GetScale();
+     std::string name = selectedAsset->GetName();
+    //std::cout << name << std::endl;
+    if (name.c_str())
+    {
+        ImGui::Text(name.c_str());
+        ImGui::Separator();
+
+    }
+    ImGui::Text("Transform");
+    ImGui::Separator();
+
+    if (ImGui::DragFloat3("Position", &position[0], 0.1f))
+    {
+        selectedAsset->SetPosition(position);
+    }
+
+    if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f))
+    {
+        //selectedAsset->SetRotation(rotation);
+    }
+
+    if (ImGui::DragFloat3("Scale", &scale[0], 0.1f, 0.01f, 10.0f))
+    {
+        selectedAsset->SetScale(scale);
+    }
+
+    ImGui::End();
+}
+
+
 void AssetBrowser::SpawnAssetBrowserModel(std::string name, glm::vec3 position, float scale)
 {
+    selectedAsset = nullptr;
+
     Transform shapeOffset;
     shapeOffset.position.y = 0.0f;
     shapeOffset.position.z = 0.0f;
@@ -33,11 +83,11 @@ void AssetBrowser::SpawnAssetBrowserModel(std::string name, glm::vec3 position, 
 
     Scene::CreateGameObject();
     GameObject* assetBrowserModel = Scene::GetGameObjectByIndex(Scene::GetGameObjectCount() - 1);
-
+    
     assetBrowserModel->SetPosition(position);
 
     assetBrowserModel->SetModel(name);
-    //assetBrowserModel->SetName("PERK_SPEEDCOLA");
+    assetBrowserModel->SetName(name);
     assetBrowserModel->SetMeshMaterial(name.c_str());
     assetBrowserModel->SetScale(scale);
     assetBrowserModel->SetKinematic(true);
@@ -53,6 +103,7 @@ void AssetBrowser::SpawnAssetBrowserModel(std::string name, glm::vec3 position, 
     assetBrowserModel->SetCollisionType(CollisionType::STATIC_ENVIROMENT);
     //PERK_SPEEDCOLA->
     //PERK_SPEEDCOLA->SetMeshMaterialByMeshName("Balls", "Gold");
+    selectedAsset = assetBrowserModel;
 }
 
 void AssetBrowser::HandleDropOutsideWindow(const std::string& filePath, const ImVec2& dropPos)
@@ -100,6 +151,8 @@ void AssetBrowser::Render()
     {
         return;
     }
+
+    RenderSidebar();
 
     // Bottom area for the asset browser
     ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - bottomHeight));

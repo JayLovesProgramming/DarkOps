@@ -145,6 +145,7 @@ public:
 	float GetRotationY() const;
 	float GetRotationZ() const;
 
+	glm::vec3 GetScale();
 	void SetScale(glm::vec3 scale);
 	void SetScale(float scale);
 	void SetScaleX(float scale);

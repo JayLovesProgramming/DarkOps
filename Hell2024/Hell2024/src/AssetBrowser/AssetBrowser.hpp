@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <iostream>
 #include "Editor/Editor.hpp"
+#include "Game/Scene.hpp"
 
 namespace AssetBrowser
 {
@@ -18,10 +19,18 @@ namespace AssetBrowser
     constexpr static float bottomHeight = 300.0f; // Height of the bottom asset browser
     static bool ASSET_BROWSER_OPEN = false;
 
+    static inline GameObject* selectedAsset = {};
+    void SetSelectedAsset(GameObject* newlySelectedAsset);
+
+    //static inline CSGCube* selectedCSGCubeAsset = {};
+    //void SetSelectedCSGCubeAsset(CSGCube* newlySelectedCSGCubeAsset);
+
     void UpdateEntries();
     void SpawnAssetBrowserModel(std::string name, glm::vec3 position, float scale);
     void HandleDropOutsideWindow(const std::string& filePath, const ImVec2& dropPos);
     void Render();
+
+    void RenderSidebar();
 
     bool IsAssetBrowserOpen();
 };
