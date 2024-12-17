@@ -16,7 +16,7 @@
 #include "RapidHotload.hpp"
 #include "Loadout.hpp"
 #include "Renderer/ImGui/GUI_UI.hpp"
-
+#include "AssetBrowser/AssetBrowser.hpp"
 
 Player::Player(int playerIndex)
 {
@@ -826,7 +826,7 @@ void Player::CheckForDebugKeyPresses()
 bool Player::HasControl() const
 {
     //std::cout << IMGUI::IsAnyWindowOpen() << std::endl;
-    return !m_ignoreControl && BackEnd::WindowHasFocus() && !IMGUI::IsAnyWindowOpen(); // Let's avoid having control when we are tabbed out coding and stuff...
+    return !m_ignoreControl && BackEnd::WindowHasFocus() && !IMGUI::IsAnyWindowOpen() && !AssetBrowser::IsAssetBrowserOpen(); // Let's avoid having control when we are tabbed out coding and stuff...
 }
 
 AnimatedGameObject* Player::GetCharacterAnimatedGameObject() const
