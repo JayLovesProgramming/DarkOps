@@ -312,6 +312,11 @@ void IMGUI::ExecuteCommand(const char* command)
 		MiscObjectsManager::SpawnJuggernog();
 		AddToConsoleLog("Zombies: Spawned juggernog");
 	}
+	else if (strcmp(command, "spawn speedcola") == 0)
+	{
+		MiscObjectsManager::SpawnSpeedCola();
+		AddToConsoleLog("Zombies: Spawned speedcola");
+	}
 	else
 	{
 		AddToConsoleLog(command);

@@ -31,7 +31,7 @@ public:
 
     static void DrawRounds(std::vector<RenderItem2D>* renderItems, hell::ivec2 viewportCenter, hell::ivec2 presentSize)
     {
-        std::cout << "Drawing round: " << ("round" + std::to_string(currentRound)).c_str() << "\n";
+        //std::cout << "Drawing round: " << ("round" + std::to_string(currentRound)).c_str() << "\n";
 
         RenderItem2D rounds = {};
         if (currentRound == 1)
@@ -92,6 +92,6 @@ public:
 
         renderItems->push_back(rounds);
 
-        std::cout << "Drawing round: " << ("round" + std::to_string(currentRound)).c_str() << "\n";
+        //std::cout << "Drawing round: " << ("round" + std::to_string(currentRound)).c_str() << "\n";
     }
 };
