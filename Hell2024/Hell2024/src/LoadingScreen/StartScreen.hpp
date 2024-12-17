@@ -5,7 +5,7 @@
 class StartScreen
 {
 public:
-	static inline bool pressedStart = false;
+	static inline bool pressedStart = true;
 
 	static void Init()
 	{

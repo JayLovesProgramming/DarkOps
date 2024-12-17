@@ -20,8 +20,6 @@ namespace AssetBrowser
     constexpr static float bottomHeight = 300.0f; // Height of the bottom asset browser
     static bool ASSET_BROWSER_OPEN = false;
 
-    static char searchBuffer[128] = "";
-
     static inline GameObject* selectedAsset = {};
     void SetSelectedAsset(GameObject* newlySelectedAsset);
 
@@ -35,9 +33,6 @@ namespace AssetBrowser
 
     void RenderSidebar();
     void RenderMainDockspace();
-
-    void HandleToggleAssetBrowser();
-    void HandleDragDrop();
 
     bool IsAssetBrowserOpen();
 };

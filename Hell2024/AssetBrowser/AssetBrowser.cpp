@@ -157,8 +157,11 @@ void AssetBrowser::RenderMainDockspace()
     ImGui::End();
 }
 
-void AssetBrowser::HandleToggleAssetBrowser()
+
+void AssetBrowser::Render()
 {
+    RenderMainDockspace();
+
     if (Input::KeyPressed(HELL_KEY_F5))
     {
         ASSET_BROWSER_OPEN = !ASSET_BROWSER_OPEN;
@@ -172,10 +175,92 @@ void AssetBrowser::HandleToggleAssetBrowser()
             Input::DisableCursor();
         }
     }
-}
 
-void AssetBrowser::HandleDragDrop()
-{
+    if (!ASSET_BROWSER_OPEN)
+    {
+        return;
+    }
+
+    // Dockable window setup
+    ImGui::Begin("Asset Browser", nullptr,
+        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_MenuBar);
+
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::MenuItem("Refresh"))
+        {
+            UpdateEntries();
+        }
+        ImGui::EndMenuBar();
+    }
+
+    // "Up" Button and Path display
+    if (ImGui::Button("Up"))
+    {
+        currentPath = std::filesystem::path(currentPath).parent_path().string();
+        UpdateEntries();
+    }
+
+    ImGui::SameLine();
+    ImGui::Text("Current Path: %s", currentPath.c_str());
+    ImGui::Separator();
+
+    // Grid Layout Calculation
+    float contentWidth = ImGui::GetContentRegionAvail().x;
+    int columns = static_cast<int>((contentWidth + padding) / (thumbnailSize + padding));
+    if (columns < 1) columns = 1;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(padding, padding));
+    ImGui::Columns(columns, nullptr, false);
+
+    // Render each entry in the grid
+    for (const auto& entry : entries)
+    {
+        const auto& path = entry.path();
+        std::string filename = path.filename().string();
+
+        ImGui::BeginGroup();
+
+        if (entry.is_directory())
+        {
+            if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick, ImVec2(thumbnailSize, thumbnailSize)))
+            {
+                if (ImGui::IsMouseDoubleClicked(0))
+                {
+                    currentPath = path.string();
+                    UpdateEntries();
+                }
+            }
+        }
+        else
+        {
+            if (ImGui::Selectable(filename.c_str(), false, 0, ImVec2(thumbnailSize, thumbnailSize)))
+            {
+                // Handle file selection
+            }
+
+            if (ImGui::BeginDragDropSource())
+            {
+                ImGui::SetDragDropPayload("ASSET_BROWSER_ITEM", path.string().c_str(), path.string().size() + 1);
+                ImGui::Text("Dragging %s", filename.c_str());
+
+                isDragging = true;
+                draggedFilePath = path.string();
+
+                ImGui::EndDragDropSource();
+            }
+        }
+
+        ImGui::EndGroup();
+        ImGui::NextColumn();
+    }
+
+    ImGui::Columns(1);
+    ImGui::PopStyleVar();
+
+    ImGui::End();
+
+    // Handle drag-drop outside the window
     if (isDragging && !ImGui::IsMouseDragging(0))
     {
         isDragging = false;
@@ -189,71 +274,4 @@ void AssetBrowser::HandleDragDrop()
 
         HandleDropOutsideWindow(fileName, mousePos);
     }
-}
-
-void AssetBrowser::Render()
-{
-    HandleToggleAssetBrowser();
-
-    if (!ASSET_BROWSER_OPEN)
-    {
-        return;
-    }
-
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(viewport->Pos, ImGuiCond_Always);
-    ImGui::SetNextWindowSize(viewport->Size, ImGuiCond_Always);
-    ImGui::SetNextWindowViewport(viewport->ID);
-
-    ImGui::Begin("Main Window", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove);
-
-    // DockSpace
-    ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
-    ImGui::DockSpace(dockspace_id, ImVec2(0, 0), ImGuiDockNodeFlags_None);
-
-    if (ImGui::BeginMenuBar()) 
-    {
-        if (ImGui::BeginMenu("File"))
-        {
-            if (ImGui::MenuItem("Exit")) 
-            {
-                // Handle exit logic here
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Edit")) 
-        {
-            ImGui::MenuItem("Settings");
-            ImGui::EndMenu();
-        }
-        ImGui::EndMenuBar();
-    }
-
-    // Scene Panel (LEFT)
-    ImGui::Begin("Scene Panel");
-        // Scene Hierachy
-        ImGui::Text("Scene");
-        ImGui::InputText("Search", searchBuffer, sizeof(searchBuffer));
-        ImGui::Separator();
-        ImGui::Text("Scene Object 1");
-        ImGui::Text("Scene Object 2");
-    ImGui::End();
-
-    // Viewport/Game Panel (CENTERED)
-    ImGui::Begin("Viewport");
-        ImGui::Text("Viewport area");
-        ImGui::Separator();
-        ImGui::TextWrapped("This is where your main scene content will be displayed");
-    ImGui::End();
-
-    // Content Browser Panel (BOTTOM)
-    ImGui::Begin("Content Broswer");
-        ImGui::Text("A column here plz.");
-        ImGui::Separator();
-        ImGui::TextWrapped("This is the bottom panel, used for the content browser");
-    ImGui::End();
-
-    //HandleDragDrop();
-
-    ImGui::End();
 }
