@@ -40,4 +40,7 @@ namespace Editor
     inline glm::mat4 g_gizmoMatrix = glm::mat4(1);
     inline glm::vec3 g_hoveredVertexPosition;
     inline glm::vec3 g_selectedVertexPosition;
+
+    // Asset Browser
+    void PutDownCSGAdditive();
 }

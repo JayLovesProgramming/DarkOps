@@ -17,6 +17,7 @@
 #include "Loadout.hpp"
 #include "Renderer/ImGui/GUI_UI.hpp"
 
+
 Player::Player(int playerIndex)
 {
     m_playerIndex = playerIndex;

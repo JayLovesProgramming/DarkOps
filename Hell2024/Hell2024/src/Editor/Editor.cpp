@@ -1056,6 +1056,28 @@ namespace Editor
         Scene::CreateBottomLevelAccelerationStructures();
     }
 
+    void PutDownCSGAdditive()
+    {
+        Player* player = Game::GetPlayerByIndex(0);
+        glm::vec3 spawnPos = player->GetViewPos() - (player->GetCameraForward() * glm::vec3(2));
+
+        Transform transform;
+        transform.position = spawnPos;
+
+        transform.scale = glm::vec3(1.0f);
+
+        CSGCube& csgShape = Scene::g_csgAdditiveCubes.emplace_back();
+        csgShape.SetTransform(transform);
+        csgShape.materialIndex = AssetManager::GetMaterialIndex("Ceiling2");
+        csgShape.m_brushShape = BrushShape::CUBE;
+
+        g_selectedObjectIndex = Scene::g_csgAdditiveCubes.size() - 1;
+        g_selectedObjectType = ObjectType::CSG_OBJECT_ADDITIVE_CUBE;
+        SetCurrentMenuType(MenuType::SELECTED_OBJECT);
+        RebuildEverything();
+        std::cout << "PUT DOWN A CSG ADDITIVE" << std::endl;
+    }
+
     void UpdateMenu()
     {
         g_menuItems.clear();
@@ -1289,19 +1311,7 @@ namespace Editor
 
             if (type == MenuItem::Type::INSERT_CSG_ADDITIVE) 
             {
-                Transform transform;
-                transform.position = spawnPos;
-                transform.scale = glm::vec3(1.0f);
-
-                CSGCube& csgShape = Scene::g_csgAdditiveCubes.emplace_back();
-                csgShape.SetTransform(transform);
-                csgShape.materialIndex = AssetManager::GetMaterialIndex("Ceiling2");
-                csgShape.m_brushShape = BrushShape::CUBE;
-
-                g_selectedObjectIndex = Scene::g_csgAdditiveCubes.size() - 1;
-                g_selectedObjectType = ObjectType::CSG_OBJECT_ADDITIVE_CUBE;
-                SetCurrentMenuType(MenuType::SELECTED_OBJECT);
-                RebuildEverything();
+                PutDownCSGAdditive();
             }
             else if (type == MenuItem::Type::INSERT_WALL_PLANE) 
             {
@@ -1326,6 +1336,7 @@ namespace Editor
                 RebuildEverything();
                 Scene::RecreateCeilingTrims();
                 Scene::RecreateFloorTrims();
+                std::cout << "PUT DOWN A WALL PLANE" << std::endl;
             }
             else if (type == MenuItem::Type::INSERT_CEILING_PLANE)
             {

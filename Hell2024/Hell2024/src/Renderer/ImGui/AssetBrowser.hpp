@@ -5,6 +5,8 @@
 #include <vector>
 #include <filesystem>
 #include <iostream>
+#include "Editor/Editor.hpp"
+
 
 namespace AssetBrowser
 {
@@ -12,6 +14,12 @@ namespace AssetBrowser
     inline std::vector<std::filesystem::directory_entry> entries;
     static bool isDragging = false; // Track whether a drag operation is active
     inline std::string draggedFilePath; // Store the path of the currently dragged file
+
+    constexpr static float thumbnailSize = 82.0f; // Size of each grid item
+    constexpr static float padding = 4.0f;       // Padding between grid items
+    constexpr static float bottomHeight = 300.0f; // Height of the bottom asset browser
+
+    bool ASSET_BROWSER_OPEN = false;
 
     void updateEntries()
     {
@@ -21,7 +29,6 @@ namespace AssetBrowser
             entries.push_back(entry);
         }
     }
-
 
     void SpawnAssetBrowserModel(std::string name, glm::vec3 position, float scale)
     {
@@ -78,12 +85,44 @@ namespace AssetBrowser
             SpawnAssetBrowserModel("Juggernog", { -0.1f, -0.2f, 3.8f }, 0.021f);
             IMGUI::AddToConsoleLog("Asset Browser: Spawned Juggernog (PERK)");
         }
+
+
+        else if (filePath == "Cube")
+        {
+            Editor::PutDownCSGAdditive();
+        }
     }
 
     void Render()
     {
-        ImGui::Begin("Asset Browser");
 
+        if (Input::KeyPressed(HELL_KEY_F5))
+        {
+            ASSET_BROWSER_OPEN = !ASSET_BROWSER_OPEN;
+            if (ASSET_BROWSER_OPEN)
+            {
+                Input::ShowCursor();
+            }
+            else
+            {
+                Input::HideCursor();
+                Input::DisableCursor();
+            }
+        }
+
+        if (!ASSET_BROWSER_OPEN)
+        {
+            return;
+        }
+
+        // Bottom area for the asset browser
+        ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - bottomHeight));
+        //ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, bottomHeight));
+        ImGui::Begin("##AssetBrowser", nullptr,
+            ImGuiWindowFlags_NoTitleBar  | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysHorizontalScrollbar |
+            ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+        // "Up" Button and Path display
         if (ImGui::Button("Up"))
         {
             currentPath = std::filesystem::path(currentPath).parent_path().string();
@@ -92,17 +131,27 @@ namespace AssetBrowser
 
         ImGui::SameLine();
         ImGui::Text("Current Path: %s", currentPath.c_str());
-
         ImGui::Separator();
 
+        // Grid Layout Calculation
+        float contentWidth = ImGui::GetContentRegionAvail().x;
+        int columns = static_cast<int>((contentWidth + padding) / (thumbnailSize + padding));
+        if (columns < 1) columns = 1;
+
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(padding, padding));
+        ImGui::Columns(columns, nullptr, false);
+
+        // Render each entry in the grid
         for (const auto& entry : entries)
         {
             const auto& path = entry.path();
             std::string filename = path.filename().string();
 
+            ImGui::BeginGroup();
+
             if (entry.is_directory())
             {
-                if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+                if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick, ImVec2(thumbnailSize, thumbnailSize)))
                 {
                     if (ImGui::IsMouseDoubleClicked(0))
                     {
@@ -113,14 +162,13 @@ namespace AssetBrowser
             }
             else
             {
-                if (ImGui::Selectable(filename.c_str()))
+                if (ImGui::Selectable(filename.c_str(), false, 0, ImVec2(thumbnailSize, thumbnailSize)))
                 {
-                    // Handle file selection here
+                    // Handle file selection
                 }
 
                 if (ImGui::BeginDragDropSource())
                 {
-                    // Set the drag payload and mark dragging as active
                     ImGui::SetDragDropPayload("ASSET_BROWSER_ITEM", path.string().c_str(), path.string().size() + 1);
                     ImGui::Text("Dragging %s", filename.c_str());
 
@@ -129,47 +177,33 @@ namespace AssetBrowser
 
                     ImGui::EndDragDropSource();
                 }
-
-                if (ImGui::BeginDragDropTarget())
-                {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_BROWSER_ITEM"))
-                    {
-                        std::string droppedFilename = static_cast<const char*>(payload->Data);
-                        std::cout << "Dropped: " << droppedFilename << std::endl;
-
-                        // Reset dragging state
-                        isDragging = false;
-                    }
-                    ImGui::EndDragDropTarget();
-                }
             }
+
+            //ImGui::TextWrapped(filename.c_str());
+            ImGui::EndGroup();
+
+            ImGui::NextColumn();
         }
+
+        ImGui::Columns(1);
+        ImGui::PopStyleVar();
 
         ImGui::End();
 
-        // Check if drag operation ended outside the window
+        // Handle drag-drop outside the window
         if (isDragging && !ImGui::IsMouseDragging(0))
         {
             isDragging = false;
-            // Mouse released outside the window
             ImVec2 mousePos = ImGui::GetMousePos();
-            //std::cout << "Dropped outside window at: (" << mousePos.x << ", " << mousePos.y << ")\n";
 
-            // Extract the filename from the path
             size_t lastSlash = draggedFilePath.find_last_of("/\\");
             std::string fileNameWithExtension = draggedFilePath.substr(lastSlash + 1);
 
-            // Remove the file extension
             size_t lastDot = fileNameWithExtension.find_last_of('.');
             std::string fileName = fileNameWithExtension.substr(0, lastDot);
 
-
-            // Perform your custom action here
             HandleDropOutsideWindow(fileName, mousePos);
         }
     }
-
-
-
 
 };
