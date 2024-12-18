@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-#include "API/OpenGL/Types/GL_texture.h"
+#include "API/OpenGL/Types/GL_Texture.hpp"
 #include "API/Vulkan/Types/VK_texture.h"
 
 class Texture

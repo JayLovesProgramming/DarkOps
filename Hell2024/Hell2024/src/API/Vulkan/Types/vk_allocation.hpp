@@ -2,7 +2,7 @@
 
 #include <vulkan/vulkan.h>
 #include "vk_mem_alloc.h"
-#include "Utils/ErrorHandling/ErrorChecking.hpp"
+#include "Utils/ErrorHandler.hpp"
 
 struct AllocatedImage 
 {

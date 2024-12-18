@@ -29,7 +29,7 @@
 #include "Pathfinding/Pathfinding2.hpp"
 
 // RENDERER
-#include "Renderer/ImGui/GUI_UI.hpp"
+#include "Renderer/ImGui/F8Console.hpp"
 
 // START SCREEN
 #include "LoadingScreen/StartScreen.hpp"
@@ -90,7 +90,12 @@ namespace BackEnd
     {
         _api = api;
 
-        if (_api == API::VULKAN)
+        if (_api == API::UNDEFINED)
+        {
+            std::cerr << "[error] API is undefined" << std::endl;
+            return;
+        }
+        else if (_api == API::VULKAN)
         {
             VulkanBackEnd::CreateVulkanInstance();
         }
@@ -99,7 +104,7 @@ namespace BackEnd
 
         glfwSetErrorCallback([](int error, const char* description) 
         { 
-            std::cout << "GLFW Error (" << std::to_string(error) << "): " << description << "/n";
+            std::cerr << "GLFW Error (" << std::to_string(error) << "): " << description << "/n";
         });
 
         InitWindowHints();
@@ -125,7 +130,7 @@ namespace BackEnd
 
         if (_window == NULL) 
         {
-            std::cout << "Failed to create GLFW window/n";
+            std::cerr << "Failed to create GLFW window" << "/n";
             glfwTerminate();
             return;
         }
@@ -167,7 +172,7 @@ namespace BackEnd
         IMGUI::Init(_window);
         glfwHideWindow(_window);
 
-        std::cout << "[INIT] BACKEND" << std::endl;
+        std::cout << "[init] Backend" << std::endl;
     }
 
     void BeginFrame() 

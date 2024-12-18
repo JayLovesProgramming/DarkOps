@@ -1,4 +1,4 @@
-#include "GL_presentBuffer.h"
+#include "GL_PresentBuffer.hpp"
 #include <glad/glad.h>
 #include <iostream>
 

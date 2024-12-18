@@ -15,12 +15,13 @@ namespace VulkanBackEnd
 
     void InitMinimum();
     bool StillLoading();
-    void LoadNextItem();
+    //void LoadNextItem();
     void ImmediateSubmit(std::function<void(VkCommandBuffer cmd)>&& function);
     void MarkFrameBufferAsResized();
     void HandleFrameBufferResized();
 
     void SetGLFWSurface();
+    void CheckForPhysicalDevice();
     void SelectPhysicalDevice();
     void CreateSwapchain();
     void CreateCommandBuffers();

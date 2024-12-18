@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include "GL_texture.h"
+#include "GL_Texture.hpp"
 #include "Utils/Util.hpp"
 #include "../../vendor/DDS/DDS_Helpers.h"
 //#include <stb_image.h>

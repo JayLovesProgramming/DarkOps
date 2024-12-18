@@ -1,6 +1,6 @@
 #include "GL_BackEnd.hpp"
 
-#include "Types/GL_vertexBuffer.hpp"
+#include "Types/GL_VertexBuffer.hpp"
 #include "Core/AssetManager.hpp"
 #include "Utils/Util.hpp"
 

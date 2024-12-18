@@ -1,4 +1,4 @@
-#include "GL_shadowMapArray.h"
+#include "GL_ShadowMapArray.hpp"
 #include <glad/glad.h>
 #include "Defines.hpp"
 

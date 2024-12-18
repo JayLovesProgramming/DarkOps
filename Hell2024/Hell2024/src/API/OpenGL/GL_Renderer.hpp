@@ -1,4 +1,3 @@
-// GL_renderer.hpp
 #pragma once
 
 #include "HellCommon.hpp"

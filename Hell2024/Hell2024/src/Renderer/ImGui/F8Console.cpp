@@ -1,4 +1,4 @@
-#include "GUI_UI.hpp"
+#include "F8Console.hpp"
 
 #include "BackEnd/BackEnd.hpp"
 
@@ -22,7 +22,7 @@ void IMGUI::Init(GLFWwindow* window)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
 	ImGui_ImplOpenGL3_Init();
 
-	std::cout << "[INIT] ImGui" << "\n";
+	std::cout << "[init] ImGui" << "\n";
 }
 
 void IMGUI::StartFrame()

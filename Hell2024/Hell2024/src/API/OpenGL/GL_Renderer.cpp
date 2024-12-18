@@ -1,12 +1,12 @@
 ﻿#include "GL_Renderer.hpp"
 
 #include "GL_BackEnd.hpp"
-#include "Types/GL_gBuffer.h"
+#include "Types/GL_gBuffer.hpp"
 #include "HellCommon.hpp"
-#include "Types/GL_shader.h"
-#include "Types/GL_shadowMap.h"
-#include "Types/GL_shadowMapArray.h"
-#include "Types/GL_ssbo.hpp"
+#include "Types/GL_Shader.hpp"
+#include "Types/GL_ShadowMap.hpp"
+#include "Types/GL_ShadowMapArray.hpp"
+#include "Types/GL_SSBO.hpp"
 #include "Types/GL_CubeMap2.h"
 #include "Types/GL_frameBuffer.hpp"
 #include "BackEnd/BackEnd.hpp"
@@ -206,7 +206,7 @@ void WinstonPass(RenderData& renderData);
 
 void OpenGLRenderer::HotloadShaders() 
 {
-    std::cout << "[LOADING] Shaders \n";
+    std::cout << "[init] Shaders \n";
     
     g_shaders.worldPosition.Load("res/shaders/OpenGL/GL_world_position.comp");
     g_shaders.ssaoBlur.Load("res/shaders/OpenGL/GL_ssaoBlur.comp");
@@ -429,7 +429,7 @@ void OpenGLRenderer::Init_OpenGL()
     int tileXCount = gBuffer.GetWidth() / 12;
     int tileYCount = gBuffer.GetHeight() / 12;
     int tileCount = tileXCount * tileYCount;
-    std::cout << "[INFO] Tile Count: " << tileCount << "\n";
+    std::cout << "[info] Tile Count: " << tileCount << "\n";
     g_ssbos.tileData.PreAllocate(tileCount * sizeof(TileData));   
 }
 
@@ -681,9 +681,10 @@ void SetViewport(ViewportInfo viewportInfo)
 
 void OpenGLRenderer::RenderLoadingScreen(std::vector<RenderItem2D>& renderItems) 
 {
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, g_ssbos.samplers);
-    RenderUI(renderItems, g_frameBuffers.loadingScreen, true);
-    BlitFrameBuffer(&g_frameBuffers.loadingScreen, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    // KEEP DISABLED CAUSE THIS BREAKS DEBUG MODE
+    //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, g_ssbos.samplers);
+    //RenderUI(renderItems, g_frameBuffers.loadingScreen, true);
+    //BlitFrameBuffer(&g_frameBuffers.loadingScreen, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 void OpenGLRenderer::UploadSSBOsGPU(RenderData& renderData)
@@ -2472,7 +2473,7 @@ void OutlinePass(RenderData& renderData)
         {
             cubeVolume = &Scene::g_csgAdditiveCubes[Editor::GetSelectedObjectIndex()];
         }
-        if (Editor::GetSelectedObjectType() == ObjectType::CSG_OBJECT_SUBTRACTIVE)
+        else if (Editor::GetSelectedObjectType() == ObjectType::CSG_OBJECT_SUBTRACTIVE)
         {
             cubeVolume = &Scene::g_csgSubtractiveCubes[Editor::GetSelectedObjectIndex()];
         }
@@ -2874,7 +2875,8 @@ void OpenGLRenderer::Triangle2DPass()
                         //player->_playerName = "OVERLAP WITH: " + gameObject.model->GetName();
 
 
-                        if (Input::KeyPressed(HELL_KEY_E)) {
+                        if (Input::KeyPressed(HELL_KEY_E))
+                        {
                             Scene::RemoveGameObjectByIndex(j);
                             Audio::PlayAudio("ItemPickUp.wav", 1.0f);
                         }
@@ -2904,7 +2906,8 @@ void OpenGLRenderer::Triangle2DPass()
 
 void OpenGLRenderer::CreateBlackBox(BlitDstCoords* blitDstCoords)
 {
-     if (g_frameBuffers.megaTexture.GetHandle() != 0) {
+     if (g_frameBuffers.megaTexture.GetHandle() != 0)
+     {
          blitDstCoords->dstX0 = 0;
          blitDstCoords->dstY0 = 0;
          blitDstCoords->dstX1 = BackEnd::GetCurrentWindowWidth() * 0.5;
@@ -3075,7 +3078,7 @@ void OpenGLRenderer::QueryAvaliability()
     glGetIntegerv(GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS, &maxSSBOBindings);
     std::cout << "Max SSBO bindings: " << maxSSBOBindings << "\n";
 
-    GLint maxWorkgroupSize[3];
+    GLint maxWorkgroupSize[3] = {};
     glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &maxWorkgroupSize[0]);
     glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &maxWorkgroupSize[1]);
     glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &maxWorkgroupSize[2]);
@@ -3138,9 +3141,12 @@ void WinstonPass(RenderData& renderData)
             };
         }
 
-        for (GameObject& gameObject : Scene::GetGamesObjects()) {
-           if (OpenGLRenderer::drawBlueAroundModels) {
-               for (RenderItem3D& renderItem : gameObject.GetRenderItems()) {
+        for (GameObject& gameObject : Scene::GetGamesObjects())
+        {
+           if (OpenGLRenderer::drawBlueAroundModels)
+           {
+               for (RenderItem3D& renderItem : gameObject.GetRenderItems()) 
+               {
                    shader.SetMat4("model", renderItem.modelMatrix);
                    Mesh* mesh = AssetManager::GetMeshByIndex(renderItem.meshIndex);
                    glDrawElementsBaseVertex(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->baseIndex), mesh->baseVertex);

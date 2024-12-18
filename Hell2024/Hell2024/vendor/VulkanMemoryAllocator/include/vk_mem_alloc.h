@@ -12846,8 +12846,10 @@ VkResult VmaBlockVector::CreateBlock(VkDeviceSize blockSize, size_t* pNewBlockIn
     VkMemoryAllocateFlagsInfoKHR allocFlagsInfo = { VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR };
     if (m_hAllocator->m_UseKhrBufferDeviceAddress)
     {
+        std::cout << "ERRor AAA" << std::endl;
         allocFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
         VmaPnextChainPushFront(&allocInfo, &allocFlagsInfo);
+        std::cout << "ERRor BBB" << std::endl;
     }
 #endif // VMA_BUFFER_DEVICE_ADDRESS
 

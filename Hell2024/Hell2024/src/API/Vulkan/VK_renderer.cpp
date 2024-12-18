@@ -143,8 +143,10 @@ namespace VulkanRenderer
     //      Shaders      //
     void CreateMinimumShaders() 
     {
+        std::cout << "Creating minimum shaders (Vulkan)" << std::endl;
         VkDevice device = VulkanBackEnd::GetDevice();
         _shaders.textBlitter.Load(device, "VK_ui.vert", "VK_ui.frag");
+        std::cout << "Created minimum shaders (Vulkan)" << std::endl;
     }
 
     void CreateShaders() 
@@ -419,8 +421,11 @@ namespace VulkanRenderer
     //      Render Targets      //
     void CreateRenderTargets() 
     {
+        std::cout << "Creating render targets (Vulkan)" << std::endl;
         VkDevice device = VulkanBackEnd::GetDevice();
+        std::cout << "Creating render targets 1 (Vulkan)" << std::endl;
         VmaAllocator allocator = VulkanBackEnd::GetAllocator();
+        std::cout << "Creating render targets 2 (Vulkan)" << std::endl;
 
         int desiredTotalLines = 40;
         float linesPerPresentHeight = (float)PRESENT_HEIGHT / (float)TextBlitter::GetLineHeight(BitmapFontType::STANDARD);
@@ -429,16 +434,21 @@ namespace VulkanRenderer
         uint32_t gBufferHeight = PRESENT_HEIGHT * 2;
         VkFormat format = VK_FORMAT_R8G8B8A8_UNORM;
         VkImageUsageFlags usageFlags;
+        std::cout << "Creating render targets 3 (Vulkan)" << std::endl;
 
         usageFlags = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        std::cout << "Creating render targets 4 (Vulkan)" << std::endl;
         _renderTargets.loadingScreen = Vulkan::RenderTarget(device, allocator, format, PRESENT_WIDTH * scaleRatio, PRESENT_HEIGHT * scaleRatio, usageFlags, "Loading Screen Render Target");
+        std::cout << "Creating render targets 5 (Vulkan)" << std::endl;
 
         //usageFlags = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         //_renderTargets.finalImage = Vulkan::RenderTarget(device, allocator, VK_FORMAT_R8G8B8A8_UNORM, PRESENT_WIDTH, PRESENT_HEIGHT, usageFlags, "Final Image Render Target");
 
         CreatePlayerRenderTargets(PRESENT_WIDTH, PRESENT_HEIGHT);
+        std::cout << "Creating render targets 6 (Vulkan)" << std::endl;
 
         RecreateBlurBuffers();
+        std::cout << "Created render targets (Vulkan)" << std::endl;
     }
 
     void CreatePlayerRenderTargets(int presentWidth, int presentHeight) 
@@ -576,6 +586,7 @@ namespace VulkanRenderer
     //      Descriptor Sets      //
     void CreateDescriptorSets() 
     {
+        std::cout << "Desc sets 1 " << std::endl;
         VkDevice device = VulkanBackEnd::GetDevice();
         VkSampler sampler = VulkanBackEnd::GetSampler();
         VkDescriptorPool descriptorPool = VulkanBackEnd::GetDescriptorPool();
@@ -614,7 +625,7 @@ namespace VulkanRenderer
         _descriptorSets.dynamic.AddBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 11, 1, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR); //muzzle flash instance data
         _descriptorSets.dynamic.BuildSetLayout(device);
         _descriptorSets.dynamic.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.dynamic.layout, "Dynamic Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.dynamic.layout, "Dynamic Descriptor Set Layout");
 
         // UI Hires
         _descriptorSets.uiHiRes.SetDebugName("uiHiRes Descriptor Set");
@@ -625,7 +636,7 @@ namespace VulkanRenderer
         _descriptorSets.uiHiRes.AddBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 4, 1, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR); // Lights
         _descriptorSets.uiHiRes.BuildSetLayout(device);
         _descriptorSets.uiHiRes.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.uiHiRes.layout, "UI HI Res Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.uiHiRes.layout, "UI HI Res Descriptor Set Layout");
 
         // All Textures
         _descriptorSets.allTextures.SetDebugName("All Textures Descriptor Set");
@@ -633,7 +644,7 @@ namespace VulkanRenderer
         _descriptorSets.allTextures.AddBinding(VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1, TEXTURE_ARRAY_SIZE, VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_FRAGMENT_BIT);	// all textures
         _descriptorSets.allTextures.BuildSetLayout(device);
         _descriptorSets.allTextures.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.allTextures.layout, "All Textures Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.allTextures.layout, "All Textures Descriptor Set Layout");
 
         // Render Targets
         _descriptorSets.renderTargets.SetDebugName("Render Targets Descriptor Set");
@@ -648,7 +659,7 @@ namespace VulkanRenderer
         _descriptorSets.renderTargets.AddBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 8, 1, VK_SHADER_STAGE_FRAGMENT_BIT);    // Emissive position texture
         _descriptorSets.renderTargets.BuildSetLayout(device);
         _descriptorSets.renderTargets.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.renderTargets.layout, "Render Targets Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.renderTargets.layout, "Render Targets Descriptor Set Layout");
 
         // Raytracing
         _descriptorSets.raytracing.SetDebugName("Raytracing Descriptor Set");
@@ -658,7 +669,7 @@ namespace VulkanRenderer
         _descriptorSets.raytracing.AddBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 3, 1, VK_SHADER_STAGE_COMPUTE_BIT); // All weighted vertices (MAYBE PUT THIS SOMEWHERE ELSE)
         _descriptorSets.raytracing.BuildSetLayout(device);
         _descriptorSets.raytracing.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.raytracing.layout, "Raytracing Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.raytracing.layout, "Raytracing Descriptor Set Layout");
 
         _descriptorSets.computeSkinning.SetDebugName("Compute Skinning Descriptor Set");
         _descriptorSets.computeSkinning.AddBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 0, 1, VK_SHADER_STAGE_COMPUTE_BIT); // Input vertex buffer
@@ -667,14 +678,14 @@ namespace VulkanRenderer
         _descriptorSets.computeSkinning.AddBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 3, 1, VK_SHADER_STAGE_COMPUTE_BIT); // Transform base indices
         _descriptorSets.computeSkinning.BuildSetLayout(device);
         _descriptorSets.computeSkinning.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.computeSkinning.layout, "Compute Skinning Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.computeSkinning.layout, "Compute Skinning Descriptor Set Layout");
 
         // Global illumination
         _descriptorSets.globalIllumination.SetDebugName("Global Illumination Descriptor Set");
         _descriptorSets.globalIllumination.AddBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 0, 1, VK_SHADER_STAGE_VERTEX_BIT); // Point cloud
         _descriptorSets.globalIllumination.BuildSetLayout(device);
         _descriptorSets.globalIllumination.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.globalIllumination.layout, "Global Illumination Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.globalIllumination.layout, "Global Illumination Descriptor Set Layout");
 
         // Player 1 blur targets
         _descriptorSets.blurTargetsP1.SetDebugName("Blur Target P1 Descriptor Set");
@@ -688,13 +699,24 @@ namespace VulkanRenderer
         _descriptorSets.blurTargetsP1.AddBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 7, 1, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT);
         _descriptorSets.blurTargetsP1.BuildSetLayout(device);
         _descriptorSets.blurTargetsP1.AllocateSet(device, descriptorPool);
-        VulkanBackEnd::AddDebugName(_descriptorSets.blurTargetsP1.layout, "Player 1 blur targets Descriptor Set Layout");
+        //VulkanBackEnd::AddDebugName(_descriptorSets.blurTargetsP1.layout, "Player 1 blur targets Descriptor Set Layout");
+        std::cout << "Desc sets 1 " << std::endl;
 
         // All textures UPDATE
+        // Assuming sampler is a VkSampler object
+        if (sampler == VK_NULL_HANDLE) {
+            std::cerr << "Invalid VkSampler object!" << std::endl;
+            return;
+        }
+
         VkDescriptorImageInfo samplerImageInfo = {};
         samplerImageInfo.sampler = sampler;
+
+        // Update descriptor set
         _descriptorSets.allTextures.Update(device, 0, 1, VK_DESCRIPTOR_TYPE_SAMPLER, &samplerImageInfo);
-        VulkanBackEnd::AddDebugName(_descriptorSets.allTextures.layout, "AllTextures Descriptor Set Layout");
+
+        std::cout << "Desc sets 4 " << std::endl;
+        //VulkanBackEnd::AddDebugName(_descriptorSets.allTextures.layout, "AllTextures Descriptor Set Layout");
     }
 
     DescriptorSet& VulkanRenderer::GetDynamicDescriptorSet()
@@ -1310,6 +1332,11 @@ namespace VulkanRenderer
 
     void VulkanRenderer::RenderFrame(RenderData& renderData)
     {
+        std::cout << "FUCKING FINALLY, WE ARE CAPABALE OF OPEN GL AND VULKAN NOW.... " << std::endl;
+
+
+
+
         if (BackEnd::WindowIsMinimized()) 
         {
             return;

@@ -1,7 +1,7 @@
 #include "AssetBrowser.hpp"
 
 #include "Input/Input.hpp"
-#include "Renderer/ImGui/GUI_UI.hpp"
+#include "Renderer/ImGui/F8Console.hpp"
 
 bool AssetBrowser::IsAssetBrowserOpen()
 {

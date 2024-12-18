@@ -8,7 +8,7 @@ inline void VK_CHECK(VkResult err)
 {
     if (err)
     {
-        std::cout << "Detected Vulkan error: " << err << "\n";
+        std::cout << "Detected Vulkan Error: " << err << "\n";
         abort();
     }
 }

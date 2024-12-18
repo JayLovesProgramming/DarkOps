@@ -9,7 +9,7 @@
 #include "Input/InputMulti.hpp"
 #include "Renderer/GlobalIllumination.hpp"
 #include "Renderer/Renderer.hpp"
-#include "Renderer/ImGui/GUI_UI.hpp"
+#include "Renderer/ImGui/F8Console.hpp"
 #include "Pathfinding/Pathfinding2.hpp"
 #include "RapidHotload.hpp"
 #include "LoadingScreen/StartScreen.hpp"
@@ -246,7 +246,7 @@ namespace Game
             shape->setFlag(PxShapeFlag::eVISUALIZATION, false);
         }
 
-        std::cout << "[INFO] Created " << g_players.size() << " Players" << "\n";
+        std::cout << "[info] Created " << g_players.size() << " Players" << "\n";
     }
 
     std::string Game::GetPlayerNameByIndex(int index)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "API/OpenGL/Types/GL_texture3D.h"
+#include "API/OpenGL/Types/GL_Texture3D.hpp"
 #include "API/Vulkan/Types/VK_texture3D.h"
 
 struct Texture3D 

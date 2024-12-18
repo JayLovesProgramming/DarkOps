@@ -15,7 +15,7 @@
 #include "BackEnd/BackEnd.hpp"
 #include "Core/AssetManager.hpp"
 #include "Game/Scene.hpp"
-#include "Utils/ErrorHandling/ErrorChecking.hpp"
+#include "Utils/ErrorHandler.hpp"
 
 namespace VulkanBackEnd
 {
@@ -161,9 +161,48 @@ void VulkanBackEnd::HandleFrameBufferResized()
     _frameBufferResized = false;
 }
 
+void VulkanBackEnd::CheckForPhysicalDevice()
+{
+    std::cout << "Checking physcial device" << std::endl;
+    uint32_t deviceCount = 0;
+    vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
+    if (deviceCount == 0) 
+    {
+        std::cout << "No Vulkan-compatible GPUs found" << std::endl;
+        throw std::runtime_error("No Vulkan-compatible GPUs found.");
+        return;
+    }
+
+    std::vector<VkPhysicalDevice> devices(deviceCount);
+    vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
+
+    std::cout << "Available Physical Devices:\n";
+    for (const auto& device : devices) {
+        VkPhysicalDeviceProperties properties;
+        vkGetPhysicalDeviceProperties(device, &properties);
+        std::cout << " - " << properties.deviceName << " (API Version: "
+            << VK_VERSION_MAJOR(properties.apiVersion) << "."
+            << VK_VERSION_MINOR(properties.apiVersion) << "."
+            << VK_VERSION_PATCH(properties.apiVersion) << ")\n";
+    }
+
+
+    std::cout << "Checked physcial device" << std::endl;
+}
+
 void VulkanBackEnd::InitMinimum()
 {
+    std::cout << "[VULKAN] Init Minimum" << std::endl;
+
+    //VkInstanceCreateInfo instanceCreateInfo = {};
+    //instanceCreateInfo.enabledLayerCount = 1;
+    //const char* validationLayers[] = { "VK_LAYER_KHRONOS_validation" };
+    //instanceCreateInfo.ppEnabledLayerNames = validationLayers;
+
     SetGLFWSurface();
+
+
+    CheckForPhysicalDevice();
     SelectPhysicalDevice();
     CreateSwapchain();
 
@@ -171,13 +210,19 @@ void VulkanBackEnd::InitMinimum()
     VulkanRenderer::CreateRenderTargets();
 
     CreateCommandBuffers();
+    std::cout << "[VULKAN] Init Minimum A" << std::endl;
     CreateSyncStructures();
+    std::cout << "[VULKAN] Init Minimum B" << std::endl;
     CreateSampler();
+    std::cout << "[VULKAN] Init Minimum C" << std::endl;
 
     VulkanRenderer::CreateDescriptorSets();
+    std::cout << "[VULKAN] Init Minimum D" << std::endl;
     VulkanRenderer::CreatePipelinesMinimum();
+    std::cout << "[VULKAN] Init Minimum E" << std::endl;
 
-    VulkanRenderer::CreateStorageBuffers();
+    //VulkanRenderer::CreateStorageBuffers();
+    std::cout << "[VULKAN] Init Minimum F" << std::endl;
 }
 
 void VulkanBackEnd::SetGLFWSurface()
@@ -187,213 +232,217 @@ void VulkanBackEnd::SetGLFWSurface()
 
 void VulkanBackEnd::CreateVulkanInstance() 
 {
-    std::cout << "Created Vulkan Instance" << "\n";
+    std::cout << "Creating Vulkan Instance" << "\n";
     vkb::InstanceBuilder builder;
-    builder.set_app_name((BackEnd::_windowName + " (Vulkan)").c_str());
+    builder.set_app_name("TESTING VULKAN");
+    //builder.set_app_name((BackEnd::_windowName + " (Vulkan)").c_str());
     builder.request_validation_layers(_enableValidationLayers);
     builder.use_default_debug_messenger();
     builder.require_api_version(1, 3, 0);
     _bootstrapInstance = builder.build().value();
     _instance = _bootstrapInstance.instance;
     _debugMessenger = _bootstrapInstance.debug_messenger;
+    std::cout << "Created Vulkan Instance" << "\n";
 }
 
-void VulkanBackEnd::SelectPhysicalDevice() 
+void VulkanBackEnd::SelectPhysicalDevice()
 {
-    vkb::PhysicalDeviceSelector selector{ _bootstrapInstance };
-    selector.add_required_extension(VK_KHR_MAINTENANCE_4_EXTENSION_NAME);					// Hides shader warnings for unused variables
-    selector.add_required_extension(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);				// Dynamic rendering
-    selector.add_required_extension(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);			// Ray tracing related extensions required by this sample
-    selector.add_required_extension(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);			// Ray tracing related extensions required by this sample
-    selector.add_required_extension(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);			// Required by VK_KHR_acceleration_structure
-    selector.add_required_extension(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);		// Required by VK_KHR_acceleration_structure
-    selector.add_required_extension(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);				// Required by VK_KHR_acceleration_structure
-    selector.add_required_extension(VK_KHR_SPIRV_1_4_EXTENSION_NAME);						// Required for VK_KHR_ray_tracing_pipeline
-    selector.add_required_extension(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);			// Required by VK_KHR_spirv_1_4
-    selector.add_required_extension(VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME);	// aftermath
-    selector.add_required_extension(VK_NV_DEVICE_DIAGNOSTICS_CONFIG_EXTENSION_NAME);		// aftermath
+    std::cout << "Selecting Physical Device (Vulkan)" << "\n";
 
-    selector.add_required_extension(VK_KHR_RAY_QUERY_EXTENSION_NAME);
+    // Query the physical devices using Vulkan API
+    uint32_t deviceCount = 0;
+    vkEnumeratePhysicalDevices(_bootstrapInstance.instance, &deviceCount, nullptr);
 
-    VkPhysicalDeviceRayTracingPipelineFeaturesKHR rayTracingPipelineFeatures{};
-    rayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-    rayTracingPipelineFeatures.rayTracingPipeline = VK_TRUE;
-    rayTracingPipelineFeatures.rayTraversalPrimitiveCulling = VK_TRUE;
-    rayTracingPipelineFeatures.pNext = nullptr;
-
-    VkPhysicalDeviceAccelerationStructureFeaturesKHR accelerationStructureFeatures{};
-    accelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-    accelerationStructureFeatures.accelerationStructure = VK_TRUE;
-    accelerationStructureFeatures.pNext = &rayTracingPipelineFeatures;
-
-    VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures{};
-    rayQueryFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR;
-    rayQueryFeatures.rayQuery = VK_TRUE;
-    rayQueryFeatures.pNext = &accelerationStructureFeatures;
-
-    VkPhysicalDeviceFeatures features = {};
-    features.samplerAnisotropy = true;
-    features.shaderInt64 = true;
-    features.multiDrawIndirect = true;
-    selector.set_required_features(features);
-
-    VkPhysicalDeviceVulkan12Features features12 = {};
-    features12.shaderSampledImageArrayNonUniformIndexing = true;
-    features12.runtimeDescriptorArray = true;
-    features12.descriptorBindingVariableDescriptorCount = true;
-    features12.descriptorBindingPartiallyBound = true;
-    features12.descriptorIndexing = true;
-    features12.bufferDeviceAddress = true;
-    features12.scalarBlockLayout = true;
-    selector.set_required_features_12(features12);
-
-    VkPhysicalDeviceVulkan13Features features13 = {};
-    features13.maintenance4 = true;
-    features13.dynamicRendering = true;
-    features13.pNext = &rayQueryFeatures;	// you probably want to confirm this chaining of pNexts works when shit goes wrong.
-    selector.set_required_features_13(features13);
-
-    selector.set_minimum_version(1, 3);
-    selector.set_surface(_surface);
-    vkb::PhysicalDevice physicalDevice = selector.select().value();
-    vkb::DeviceBuilder deviceBuilder{ physicalDevice };
-
-    // store these for some ray tracing stuff.
-    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &_memoryProperties);
-
-    // Query available device extensions
-    uint32_t extensionCount;
-    vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
-    std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-    vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, availableExtensions.data());
-
-    // Check if extension is supported
-    //bool maintenance4ExtensionSupported = false;
-    for (const auto& extension : availableExtensions)
+    if (deviceCount == 0)
     {
-        if (std::string(extension.extensionName) == VK_KHR_RAY_QUERY_EXTENSION_NAME) 
-        {
-            //maintenance4ExtensionSupported = true;
-            std::cout << "VK_KHR_RAY_QUERY_EXTENSION_NAME is supported\n";
-            break;
-        }
+        std::cerr << "No physical devices found!" << std::endl;
+        throw std::runtime_error("No physical devices found!");
     }
-    // Specify the extensions to enable
-    //std::vector<const char*> enabledExtensions = {
-    //    VK_KHR_MAINTENANCE_4_EXTENSION_NAME
-    //};
-    //if (!maintenance4ExtensionSupported) {
-    //    throw std::runtime_error("Required extension not supported");
-   // }
 
-    vkb::Device vkbDevice = deviceBuilder.build().value();
-    _device = vkbDevice.device;
-    _physicalDevice = physicalDevice.physical_device;
-    _graphicsQueue = vkbDevice.get_queue(vkb::QueueType::graphics).value();
-    _graphicsQueueFamily = vkbDevice.get_queue_index(vkb::QueueType::graphics).value();
+    std::vector<VkPhysicalDevice> physicalDevices(deviceCount);
+    vkEnumeratePhysicalDevices(_bootstrapInstance.instance, &deviceCount, physicalDevices.data());
 
-    // Initialize the memory allocator
-    VmaAllocatorCreateInfo allocatorInfo = {};
-    allocatorInfo.physicalDevice = _physicalDevice;
-    allocatorInfo.device = _device;
-    allocatorInfo.instance = _instance;
-    allocatorInfo.flags = VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
-    vmaCreateAllocator(&allocatorInfo, &_allocator);
-
-    vkGetPhysicalDeviceProperties(_physicalDevice, &_gpuProperties);
-
-    auto instanceVersion = VK_API_VERSION_1_0;
-    auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
-    //if (vkEnumerateInstanceVersion)
-    //{
-    //    vkEnumerateInstanceVersion(&instanceVersion);
-    //} Old but probably works, version below needs testing
-
-    assert(vkEnumerateInstanceVersion(&instanceVersion));
-
-    uint32_t major = VK_VERSION_MAJOR(instanceVersion);
-    uint32_t minor = VK_VERSION_MINOR(instanceVersion);
-    uint32_t patch = VK_VERSION_PATCH(instanceVersion);
-    std::cout << "Vulkan: " << major << "." << minor << "." << patch << "\n\n";
-
-    if (_printAvaliableExtensions) 
+    // Loop through devices and find a compatible one
+    for (const auto& physicalDevice : physicalDevices)
     {
-        uint32_t deviceExtensionCount = 0;
-        vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &deviceExtensionCount, nullptr);
-        std::vector<VkExtensionProperties> deviceExtensions(deviceExtensionCount);
-        vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &deviceExtensionCount, deviceExtensions.data());
-        std::cout << "Available device extensions:\n";
-        for (const auto& extension : deviceExtensions)
-        {
-            std::cout << ' ' << extension.extensionName << "\n";
-        }
-        std::cout << "\n";
+        VkPhysicalDeviceProperties deviceProperties;
+        vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
+        std::cout << "Inspecting device: " << deviceProperties.deviceName << "\n";
+
+        // Query supported extensions for this device
         uint32_t extensionCount = 0;
-        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-        std::vector<VkExtensionProperties> extensions(extensionCount);
-        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
-        std::cout << "Available instance extensions:\n";
-        for (const auto& extension : extensions)
+        vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
+        std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+        vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, availableExtensions.data());
+
+        // Prepare a list of required extensions
+        std::vector<const char*> requiredExtensions = {
+            VK_KHR_MAINTENANCE_4_EXTENSION_NAME,
+            VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
+            VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
+            VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
+            VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
+            VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
+            VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME,
+            VK_KHR_SPIRV_1_4_EXTENSION_NAME,
+            VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME,
+            VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME,
+            VK_NV_DEVICE_DIAGNOSTICS_CONFIG_EXTENSION_NAME,
+            //VK_KHR_RAY_QUERY_EXTENSION_NAME
+        };
+
+        // Filter required extensions based on availability
+        std::vector<const char*> compatibleExtensions;
+        for (const auto& required : requiredExtensions)
         {
-            std::cout << ' ' << extension.extensionName << "\n";
+            bool supported = std::any_of(
+                availableExtensions.begin(),
+                availableExtensions.end(),
+                [&](const VkExtensionProperties& ext) {
+                    return strcmp(ext.extensionName, required) == 0;
+                });
+
+            if (supported)
+            {
+                compatibleExtensions.push_back(required);
+                std::cout << "Extension supported: " << required << "\n";
+            }
+            else
+            {
+                std::cerr << "Extension not supported: " << required << "\n";
+            }
         }
-        std::cout << "\n";
+
+        // If all required extensions are not supported, try the next device
+        if (compatibleExtensions.size() < requiredExtensions.size())
+        {
+            std::cout << "Not all required extensions are supported on this device. Skipping.\n";
+            continue;
+        }
+
+        // Configure feature chains
+        //VkPhysicalDeviceRayQueryFeaturesKHR rayQueryFeatures{};
+        //rayQueryFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR;
+        //rayQueryFeatures.rayQuery = VK_TRUE;
+
+        VkPhysicalDeviceAccelerationStructureFeaturesKHR accelerationStructureFeatures{};
+        accelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+        accelerationStructureFeatures.accelerationStructure = VK_TRUE;
+        //accelerationStructureFeatures.pNext = &rayQueryFeatures;
+
+        VkPhysicalDeviceRayTracingPipelineFeaturesKHR rayTracingPipelineFeatures{};
+        rayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+        rayTracingPipelineFeatures.rayTracingPipeline = VK_TRUE;
+        rayTracingPipelineFeatures.rayTraversalPrimitiveCulling = VK_TRUE;
+        rayTracingPipelineFeatures.pNext = &accelerationStructureFeatures;
+
+        VkPhysicalDeviceVulkan13Features features13{};
+        features13.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES;
+        features13.dynamicRendering = VK_TRUE;
+        features13.maintenance4 = VK_TRUE;
+        features13.pNext = &rayTracingPipelineFeatures;
+
+        vkb::PhysicalDeviceSelector selector{ _bootstrapInstance };
+        selector.set_required_features_13(features13);
+        selector.set_surface(_surface);
+        selector.set_minimum_version(1, 3);
+        for (const auto& ext : compatibleExtensions)
+        {
+            selector.add_required_extension(ext);
+        }
+
+        vkb::PhysicalDevice physicalDevice = selector.select().value();
+        if (physicalDevice)
+        {
+            std::cout << "Selected physical device: " << deviceProperties.deviceName << "\n";
+            _physicalDevice = physicalDevice;
+
+            vkb::DeviceBuilder deviceBuilder{ physicalDevice };
+            vkb::Device vkbDevice = deviceBuilder.build().value();
+            _device = vkbDevice.device;
+            _graphicsQueue = vkbDevice.get_queue(vkb::QueueType::graphics).value();
+            _graphicsQueueFamily = vkbDevice.get_queue_index(vkb::QueueType::graphics).value();
+
+            VmaAllocatorCreateInfo allocatorInfo = {};
+            allocatorInfo.physicalDevice = _physicalDevice;
+            allocatorInfo.device = _device;
+            allocatorInfo.instance = _instance;
+            allocatorInfo.flags = VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
+            vmaCreateAllocator(&allocatorInfo, &_allocator);
+
+            vkGetPhysicalDeviceProperties(_physicalDevice, &_gpuProperties);
+
+            auto instanceVersion = VK_API_VERSION_1_0;
+            auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
+            if (vkEnumerateInstanceVersion) {
+                vkEnumerateInstanceVersion(&instanceVersion);
+            }
+
+            uint32_t major = VK_VERSION_MAJOR(instanceVersion);
+            uint32_t minor = VK_VERSION_MINOR(instanceVersion);
+            uint32_t patch = VK_VERSION_PATCH(instanceVersion);
+            std::cout << "Vulkan: " << major << "." << minor << "." << patch << "\n\n";
+            //std::cout << selectedDevice.value().name << std::endl;
+            return;
+        }
     }
 
-    // Get the ray tracing and acceleration structure related function pointers required by this sample
-    vkGetBufferDeviceAddressKHR = reinterpret_cast<PFN_vkGetBufferDeviceAddressKHR>(vkGetDeviceProcAddr(_device, "vkGetBufferDeviceAddressKHR"));
-    vkCmdBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkCmdBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(_device, "vkCmdBuildAccelerationStructuresKHR"));
-    vkBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(_device, "vkBuildAccelerationStructuresKHR"));
-    vkCreateAccelerationStructureKHR = reinterpret_cast<PFN_vkCreateAccelerationStructureKHR>(vkGetDeviceProcAddr(_device, "vkCreateAccelerationStructureKHR"));
-    //vkDestroyAccelerationStructureKHR = reinterpret_cast<PFN_vkDestroyAccelerationStructureKHR>(vkGetDeviceProcAddr(_device, "vkDestroyAccelerationStructureKHR"));
-    vkGetAccelerationStructureBuildSizesKHR = reinterpret_cast<PFN_vkGetAccelerationStructureBuildSizesKHR>(vkGetDeviceProcAddr(_device, "vkGetAccelerationStructureBuildSizesKHR"));
-    vkGetAccelerationStructureDeviceAddressKHR = reinterpret_cast<PFN_vkGetAccelerationStructureDeviceAddressKHR>(vkGetDeviceProcAddr(_device, "vkGetAccelerationStructureDeviceAddressKHR"));
-    //vkCmdTraceRaysKHR = reinterpret_cast<PFN_vkCmdTraceRaysKHR>(vkGetDeviceProcAddr(_device, "vkCmdTraceRaysKHR"));
-    VulkanRenderer::LoadRaytracingFunctionPointer();
-    vkGetRayTracingShaderGroupHandlesKHR = reinterpret_cast<PFN_vkGetRayTracingShaderGroupHandlesKHR>(vkGetDeviceProcAddr(_device, "vkGetRayTracingShaderGroupHandlesKHR"));
-    vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(_device, "vkCreateRayTracingPipelinesKHR"));
-
-    // Debug marker shit
-    vkSetDebugUtilsObjectNameEXT = reinterpret_cast<PFN_vkSetDebugUtilsObjectNameEXT>(vkGetDeviceProcAddr(_device, "vkSetDebugUtilsObjectNameEXT"));
-
-    // Get ray tracing pipeline properties, which will be used later on in the sample
-    _rayTracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
-    VkPhysicalDeviceProperties2 deviceProperties2{};
-    deviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-    deviceProperties2.pNext = &_rayTracingPipelineProperties;
-    vkGetPhysicalDeviceProperties2(_physicalDevice, &deviceProperties2);
-
-    // Get acceleration structure properties, which will be used later on in the sample
-    accelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-    VkPhysicalDeviceFeatures2 deviceFeatures2{};
-    deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-    deviceFeatures2.pNext = &accelerationStructureFeatures;
-    vkGetPhysicalDeviceFeatures2(_physicalDevice, &deviceFeatures2);
+    std::cerr << "Failed to find a suitable physical device!" << std::endl;
+    throw std::runtime_error("Failed to find a suitable physical device!");
 }
 
 void VulkanBackEnd::CreateSwapchain()
 {
+    std::cout << "Creating swapchain (Vulkan)" << std::endl;
+
+    // Get current window dimensions
     _currentWindowExtent.width = BackEnd::GetCurrentWindowWidth();
     _currentWindowExtent.height = BackEnd::GetCurrentWindowHeight();
 
+    // Desired format for swapchain
     VkSurfaceFormatKHR format = {};
-    format.colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-    format.format = VkFormat::VK_FORMAT_R8G8B8A8_UNORM;
+    format.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    format.format = VK_FORMAT_R8G8B8A8_UNORM;
 
+    // Initialize swapchain builder
     vkb::SwapchainBuilder swapchainBuilder(_physicalDevice, _device, _surface);
     swapchainBuilder.set_desired_format(format);
-    swapchainBuilder.set_desired_present_mode(VK_PRESENT_MODE_IMMEDIATE_KHR);
-    swapchainBuilder.set_desired_present_mode(VK_PRESENT_MODE_FIFO_KHR);
-    swapchainBuilder.set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR);
+    swapchainBuilder.set_desired_present_mode(VK_PRESENT_MODE_FIFO_KHR); // Fallback to FIFO if others fail
     swapchainBuilder.set_desired_extent(_currentWindowExtent.width, _currentWindowExtent.height);
-    swapchainBuilder.set_image_usage_flags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT); // added so you can blit into the swapchain
+    swapchainBuilder.set_image_usage_flags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT); // Keep usage simple
 
-    vkb::Swapchain vkbSwapchain = swapchainBuilder.build().value();
+    std::cout << "Creating swapchain A (Vulkan)" << std::endl;
+
+    // Build the swapchain
+    auto result = swapchainBuilder.build();
+    std::cout << "Creating swapchain BB (Vulkan)" << std::endl;
+
+    std::cout << result.has_value() << std::endl;
+    std::cout << "Creating swapchain BC (Vulkan)" << std::endl;
+    std::cout << result.value().device << std::endl;
+    std::cout << result.value().instance_version << std::endl;
+
+    if (!result.has_value())
+    {
+        std::cerr << "Failed to build swapchain: " << result.error().message() << std::endl;
+        throw std::runtime_error("Swapchain creation failed");
+    }
+
+    //VK_CHECK(result.vk_result());
+
+    // Extract swapchain details
+    vkb::Swapchain vkbSwapchain = result.value();
+    std::cout << "Creating swapchain B (Vulkan)" << std::endl;
     _swapchain = vkbSwapchain.swapchain;
+    std::cout << "Creating swapchain C (Vulkan)" << std::endl;
     _swapchainImages = vkbSwapchain.get_images().value();
+    std::cout << "Creating swapchain D (Vulkan)" << std::endl;
     _swapchainImageViews = vkbSwapchain.get_image_views().value();
+    std::cout << "Creating swapchain E (Vulkan)" << std::endl;
     _swachainImageFormat = vkbSwapchain.image_format;
+    std::cout << "Created swapchain (Vulkan)" << std::endl;
 }
+
 
 void VulkanBackEnd::CreateCommandBuffers()
 {
@@ -460,23 +509,46 @@ void VulkanBackEnd::CreateSyncStructures()
 
 void VulkanBackEnd::CreateSampler() 
 {
-    VkSamplerCreateInfo samplerInfo = {};
-    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerInfo.magFilter = VK_FILTER_LINEAR;
-    samplerInfo.minFilter = VK_FILTER_LINEAR;
-    samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-    samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerInfo.mipLodBias = 0.0f;
-    samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
-    samplerInfo.minLod = 0.0f;
-    samplerInfo.maxLod = 12.0f;
-    samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-    samplerInfo.maxAnisotropy = _gpuProperties.limits.maxSamplerAnisotropy;;
-    samplerInfo.anisotropyEnable = VK_TRUE;
-    samplerInfo.pNext = nullptr;
-    vkCreateSampler(_device, &samplerInfo, nullptr, &_sampler);
+    VkSamplerCreateInfo samplerCreateInfo = {};
+    samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerCreateInfo.magFilter = VK_FILTER_LINEAR; // Example
+    samplerCreateInfo.minFilter = VK_FILTER_LINEAR; // Example
+    samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR; // Example
+    samplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT; // Example
+    samplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT; // Example
+    samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT; // Example
+    samplerCreateInfo.mipLodBias = 0.0f;
+    samplerCreateInfo.anisotropyEnable = VK_FALSE; // Default to false unless anisotropy is supported
+    samplerCreateInfo.maxAnisotropy = 1.0f; // Default value
+    samplerCreateInfo.compareEnable = VK_FALSE;
+    samplerCreateInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    samplerCreateInfo.minLod = 0.0f;
+    samplerCreateInfo.maxLod = 1.0f;
+    samplerCreateInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    samplerCreateInfo.unnormalizedCoordinates = VK_FALSE;
+
+    // Query physical device features
+    VkPhysicalDeviceFeatures deviceFeatures;
+    vkGetPhysicalDeviceFeatures(_physicalDevice, &deviceFeatures);
+
+    VkPhysicalDeviceProperties physicalDeviceProperties;
+    vkGetPhysicalDeviceProperties(_physicalDevice, &physicalDeviceProperties);
+    samplerCreateInfo.maxAnisotropy = physicalDeviceProperties.limits.maxSamplerAnisotropy;
+
+    if (deviceFeatures.samplerAnisotropy) {
+        //samplerCreateInfo.anisotropyEnable = VK_TRUE;
+        //samplerCreateInfo.maxAnisotropy = physicalDeviceProperties.limits.maxSamplerAnisotropy;
+    }
+    else {
+        samplerCreateInfo.anisotropyEnable = VK_FALSE;
+        samplerCreateInfo.maxAnisotropy = 1.0f;
+    }
+
+    VkSampler sampler;
+    if (vkCreateSampler(_device, &samplerCreateInfo, nullptr, &sampler) != VK_SUCCESS) {
+        std::cerr << "Failed to create sampler!" << std::endl;
+        throw std::runtime_error("Failed to create sampler");
+    }
 }
 
 void VulkanBackEnd::AddDebugName(VkBuffer buffer, const char* name)
@@ -491,12 +563,31 @@ void VulkanBackEnd::AddDebugName(VkBuffer buffer, const char* name)
 
 void VulkanBackEnd::AddDebugName(VkDescriptorSetLayout descriptorSetLayout, const char* name)
 {
+    std::cout << "ADDING DEBUG NAME A" << std::endl;
+
+    // Check if device is valid
+    if (_device == VK_NULL_HANDLE) {
+        std::cerr << "Invalid Vulkan device!" << std::endl;
+        return;
+    }
+
     VkDebugUtilsObjectNameInfoEXT nameInfo = {};
+    std::cout << "ADDING DEBUG NAME B" << std::endl;
     nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+    std::cout << "ADDING DEBUG NAME C" << std::endl;
     nameInfo.objectType = VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT;
-    nameInfo.objectHandle = (uint64_t)descriptorSetLayout;
+    std::cout << "ADDING DEBUG NAME D" << std::endl;
+    nameInfo.objectHandle = reinterpret_cast<uint64_t>(descriptorSetLayout);
+    std::cout << "ADDING DEBUG NAME E" << std::endl;
     nameInfo.pObjectName = name;
-    vkSetDebugUtilsObjectNameEXT(_device, &nameInfo);
+    std::cout << "ADDING DEBUG NAME F" << std::endl;
+
+    VkResult result = vkSetDebugUtilsObjectNameEXT(_device, &nameInfo);
+    std::cout << "ADDING DEBUG NAME G" << std::endl;
+
+    if (result != VK_SUCCESS) {
+        std::cerr << "Failed to set debug name: " << result << std::endl;
+    }
 }
 
 uint64_t VulkanBackEnd::GetBufferDeviceAddress(VkBuffer buffer) 
@@ -509,6 +600,7 @@ uint64_t VulkanBackEnd::GetBufferDeviceAddress(VkBuffer buffer)
 
 void VulkanBackEnd::CreateAccelerationStructureBuffer(AccelerationStructure& accelerationStructure, VkAccelerationStructureBuildSizesInfoKHR buildSizeInfo)
 {
+    std::cout << "ERRor" << std::endl;
     VmaAllocationCreateInfo vmaallocInfo = {};
     vmaallocInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
     vmaallocInfo.usage = VMA_MEMORY_USAGE_AUTO;
@@ -519,11 +611,13 @@ void VulkanBackEnd::CreateAccelerationStructureBuffer(AccelerationStructure& acc
     bufferCreateInfo.usage = VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
     VK_CHECK(vmaCreateBuffer(_allocator, &bufferCreateInfo, &vmaallocInfo, &accelerationStructure.buffer._buffer, &accelerationStructure.buffer._allocation, nullptr));
     AddDebugName(accelerationStructure.buffer._buffer, "Acceleration Structure Buffer");
+    std::cout << "ERRor A" << std::endl;
 }
 
 
 RayTracingScratchBuffer VulkanBackEnd::CreateScratchBuffer(VkDeviceSize size)
 {
+    std::cout << "ERRor AA" << std::endl;
     RayTracingScratchBuffer scratchBuffer{};
 
     VmaAllocationCreateInfo vmaallocInfo = {};
@@ -541,6 +635,7 @@ RayTracingScratchBuffer VulkanBackEnd::CreateScratchBuffer(VkDeviceSize size)
     bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
     bufferDeviceAddressInfo.buffer = scratchBuffer.handle._buffer;
     scratchBuffer.deviceAddress = vkGetBufferDeviceAddressKHR(_device, &bufferDeviceAddressInfo);
+    std::cout << "ERRor BB" << std::endl;
 
     return scratchBuffer;
 }

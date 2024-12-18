@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../vendor/im3d/im3d.h"
-#include "API/OpenGL/Types/GL_shader.h"
+#include "API/OpenGL/Types/GL_Shader.hpp"
 #include "Input/Input.hpp"
 
 namespace Gizmo 

@@ -361,7 +361,7 @@ void Scene::LoadDefaultScene()
         if (heightMap.m_pxRigidStatic == NULL) 
         {
             heightMap.CreatePhysicsObject();
-            std::cout << "[INIT] Height Map Physics Stuff\n";
+            std::cout << "[init] Height Map Physics Stuff\n";
         }
     }
 
@@ -513,7 +513,7 @@ void Scene::LoadDefaultScene()
         }
     }
 
-    std::cout << "[INFO] Light Count: " << g_lights.size() << "\n";
+    std::cout << "[info] Light Count: " << g_lights.size() << "\n";
 
     // Dobermann spawn lab
     {

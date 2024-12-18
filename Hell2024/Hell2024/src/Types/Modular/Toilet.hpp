@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HellCommon.hpp"
-#include "API/OpenGL/Types/GL_shader.h"
+#include "API/OpenGL/Types/GL_Shader.hpp"
 #include "Core/AssetManager.hpp"
 #include "Game/GameObject.hpp"
 

@@ -179,7 +179,7 @@ namespace Pathfinding2
     void Init() 
     {
         g_ctx = new rcContext();
-        std::cout << "[INIT] Recast\n";
+        std::cout << "[init] Recast\n";
     }
 
     void Update(float deltaTime)

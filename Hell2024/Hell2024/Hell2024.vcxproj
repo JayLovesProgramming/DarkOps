@@ -63,7 +63,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>vendor\recast\include;vendor\gli\include;src\;src\Common;vendor\bvh\include;vendor\nlohmann_json\include;vendor\lz4\include;vendor\VulkanMemoryAllocator\include;vendor\Vulkan\include;vendor\tinyexr;vendor\compressonator\include;vendor\tinycsg\include;vendor\tracy\public;vendor\tinyobj;vendor\GLFW\include;vendor\glm;vendor\glad\include;vendor\stb_image;vendor\fmod\include;vendor\assimp\include;vendor\rapidjson\include;vendor\physx\include;vendor\thread_pool\include;vendor\VkBootstrap</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor/imgui;vendor\recast\include;vendor\gli\include;src\;src\Common;vendor\bvh\include;vendor\nlohmann_json\include;vendor\lz4\include;vendor\VulkanMemoryAllocator\include;vendor\Vulkan\include;vendor\tinyexr;vendor\compressonator\include;vendor\tinycsg\include;vendor\tracy\public;vendor\tinyobj;vendor\GLFW\include;vendor\glm;vendor\glad\include;vendor\stb_image;vendor\fmod\include;vendor\assimp\include;vendor\rapidjson\include;vendor\physx\include;vendor\thread_pool\include;vendor\VkBootstrap</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -137,9 +137,9 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
   <ItemGroup>
     <ClCompile Include="res\shaders\OpenGL\test.cpp" />
     <ClCompile Include="src\API\OpenGL\Types\GL_CubeMap2.cpp" />
-    <ClCompile Include="src\API\OpenGL\Types\GL_shadowMapArray.cpp" />
+    <ClCompile Include="src\API\OpenGL\Types\GL_ShadowMapArray.cpp" />
     <ClCompile Include="src\API\OpenGL\Types\GL_CubemapTexture.cpp" />
-    <ClCompile Include="src\API\OpenGL\Types\GL_texture.cpp" />
+    <ClCompile Include="src\API\OpenGL\Types\GL_Texture.cpp" />
     <ClCompile Include="src\API\Vulkan\Types\VK_texture.cpp" />
     <ClCompile Include="src\API\Vulkan\Types\VK_texture3D.cpp" />
     <ClCompile Include="src\AssetBrowser\AssetBrowser.cpp" />
@@ -160,7 +160,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClCompile Include="src\Game\Player_WeaponLogic.cpp" />
     <ClCompile Include="src\Game\WeaponManager.cpp" />
     <ClCompile Include="src\Pathfinding\NavMesh.cpp" />
-    <ClCompile Include="src\Renderer\ImGui\GUI_UI.cpp" />
+    <ClCompile Include="src\Renderer\ImGui\F8Console.cpp" />
     <ClCompile Include="src\Renderer\Raytracing\Raytracing.cpp" />
     <ClCompile Include="src\Renderer\RendererStorage.cpp" />
     <ClCompile Include="src\Renderer\Renderer_Debug.cpp" />
@@ -209,8 +209,8 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClCompile Include="src\API\OpenGL\GL_Renderer.cpp" />
     <ClCompile Include="src\API\OpenGL\Types\GL_PresentBuffer.cpp" />
     <ClCompile Include="src\API\OpenGL\Types\GL_Shader.cpp" />
-    <ClCompile Include="src\API\OpenGL\Types\GL_shadowMap.cpp" />
-    <ClCompile Include="src\API\OpenGL\Types\GL_texture3D.cpp" />
+    <ClCompile Include="src\API\OpenGL\Types\GL_ShadowMap.cpp" />
+    <ClCompile Include="src\API\OpenGL\Types\GL_Texture3D.cpp" />
     <ClCompile Include="src\API\Vulkan\VK_assetManager.cpp" />
     <ClCompile Include="src\API\Vulkan\VK_renderer.cpp" />
     <ClCompile Include="src\API\Vulkan\Types\VK_shader.hpp" />
@@ -265,12 +265,12 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
   <ItemGroup>
     <ClInclude Include="res\shaders\OpenGL\test.frag" />
     <ClInclude Include="src\API\OpenGL\Types\GL_Cubemap2.h" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_shadowMapArray.h" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_CubemapTexture.h" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_ShadowMapArray.hpp" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_CubemapTexture.hpp" />
     <ClInclude Include="src\API\OpenGL\Types\GL_DetachedMesh.hpp" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_ssbo.hpp" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_texture.h" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_vertexBuffer.hpp" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_SSBO.hpp" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_Texture.hpp" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_VertexBuffer.hpp" />
     <ClInclude Include="src\API\Vulkan\Types\vk_allocation.hpp" />
     <ClInclude Include="src\API\Vulkan\Types\VK_buffer.h" />
     <ClInclude Include="src\API\Vulkan\Types\VK_computePipeline.hpp" />
@@ -318,7 +318,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\LoadingScreen\TextRenderer.h" />
     <ClInclude Include="src\Math\Frustum.hpp" />
     <ClInclude Include="src\AssetBrowser\AssetBrowser.hpp" />
-    <ClInclude Include="src\Renderer\ImGui\GUI_UI.hpp" />
+    <ClInclude Include="src\Renderer\ImGui\F8Console.hpp" />
     <ClInclude Include="src\Renderer\Minimap.hpp" />
     <ClInclude Include="src\Renderer\RendererData.hpp" />
     <ClInclude Include="src\Renderer\SSAO.hpp" />
@@ -340,7 +340,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Renderer\RendererStorage.hpp" />
     <ClInclude Include="src\Renderer\Types\VertexBuffer.hpp" />
     <ClInclude Include="src\Utils\Convert\Slashes.hpp" />
-    <ClInclude Include="src\Utils\ErrorHandling\ErrorChecking.hpp" />
+    <ClInclude Include="src\Utils\ErrorHandler.hpp" />
     <ClInclude Include="src\Core\AssetManager.hpp" />
     <ClInclude Include="src\Common\Config.hpp" />
     <ClInclude Include="src\Core\DebugMenu.h" />
@@ -394,17 +394,17 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Math\Types.hpp" />
     <ClInclude Include="src\Physics\RigidBody.hpp" />
     <ClInclude Include="src\Physics\RigidStatic.hpp" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_gBuffer.h" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_gBuffer.hpp" />
     <ClInclude Include="src\Renderer\NumberBlitter.hpp" />
     <ClInclude Include="src\API\OpenGL\GL_Renderer.hpp" />
     <ClInclude Include="src\API\OpenGL\Types\GL_FrameBuffer.hpp" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_PresentBuffer.h" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_PresentBuffer.hpp" />
     <ClInclude Include="src\BackEnd\BackEnd.hpp" />
     <ClInclude Include="src\Common\RendererCommon.hpp" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_Shader.h" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_shadowMap.h" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_Shader.hpp" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_ShadowMap.hpp" />
     <ClInclude Include="src\Types\Texture.h" />
-    <ClInclude Include="src\API\OpenGL\Types\GL_texture3D.h" />
+    <ClInclude Include="src\API\OpenGL\Types\GL_Texture3D.hpp" />
     <ClInclude Include="src\API\Vulkan\VK_assetManager.h" />
     <ClInclude Include="src\API\Vulkan\Types\VK_pipeline.hpp" />
     <ClInclude Include="src\API\Vulkan\VK_renderer.h" />
@@ -415,9 +415,8 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Utils\GifHandler.hpp" />
     <ClInclude Include="src\Utils\Util.hpp" />
     <ClInclude Include="src\Editor\CSG.hpp" />
-    <ClInclude Include="src\Utils\ErrorHandling\LogErrors.hpp" />
-    <ClInclude Include="src\Utils\Float\RandomFloat.hpp" />
     <ClInclude Include="src\Utils\Normal\Normal_OpenGL.hpp" />
+    <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\lz4\include\lz4.h" />
     <ClInclude Include="vendor\lz4\include\lz4file.h" />
     <ClInclude Include="vendor\lz4\include\lz4frame.h" />

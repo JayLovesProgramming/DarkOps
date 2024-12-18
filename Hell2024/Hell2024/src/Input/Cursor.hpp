@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Renderer/RendererUtil.hpp"
-#include "Renderer/ImGui/GUI_UI.hpp"
+#include "Renderer/ImGui/F8Console.hpp"
 
 class Cursor
 {

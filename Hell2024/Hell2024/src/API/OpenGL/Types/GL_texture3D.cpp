@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "GL_texture3D.h"
+#include "GL_Texture3D.hpp"
 #include "Utils/Util.hpp"
 
 OpenGLTexture3D::OpenGLTexture3D() {}

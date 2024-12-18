@@ -418,7 +418,10 @@ namespace Util
         }
     }
 
-
+    inline float RandomFloatMinMax(float min, float max)
+    {
+        return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+    }
 
 	inline glm::vec3 PxVec3toGlmVec3(PxVec3 vec) {
 		return { vec.x, vec.y, vec.z };

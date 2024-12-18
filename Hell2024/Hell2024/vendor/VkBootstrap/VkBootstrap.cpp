@@ -1734,10 +1734,11 @@ SwapchainBuilder::SwapchainBuilder(VkPhysicalDevice const physical_device,
 	}
 }
 Result<Swapchain> SwapchainBuilder::build() const {
-	if (info.surface == VK_NULL_HANDLE) {
+	if (info.surface == VK_NULL_HANDLE) 
+	{
+		std::cout << "OH NO JAY, A ERROR" << std::endl;
 		return Error{ SwapchainError::surface_handle_not_provided };
 	}
-
 
 	auto desired_formats = info.desired_formats;
 	if (desired_formats.size() == 0) add_desired_formats(desired_formats);
@@ -1752,7 +1753,8 @@ Result<Swapchain> SwapchainBuilder::build() const {
     uint32_t image_count = info.min_image_count;
     if (info.required_min_image_count >= 1) {
 	    if (info.required_min_image_count < surface_support.capabilities.minImageCount)
-		    return make_error_code(SwapchainError::required_min_image_count_too_low);
+			std::cout << "SWAPCHAIN ERROR" << std::endl;
+			return make_error_code(SwapchainError::required_min_image_count_too_low);
 
 	    image_count = info.required_min_image_count;
     } else if (info.min_image_count == 0) {
@@ -1799,6 +1801,8 @@ Result<Swapchain> SwapchainBuilder::build() const {
 	VkSwapchainCreateInfoKHR swapchain_create_info = {};
 	swapchain_create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 	detail::setup_pNext_chain(swapchain_create_info, info.pNext_chain);
+
+
 #if !defined(NDEBUG)
 	for (auto& node : info.pNext_chain) {
 		assert(node->sType != VK_STRUCTURE_TYPE_APPLICATION_INFO);
@@ -1829,9 +1833,14 @@ Result<Swapchain> SwapchainBuilder::build() const {
 	Swapchain swapchain{};
 	PFN_vkCreateSwapchainKHR swapchain_create_proc;
 	detail::vulkan_functions().get_device_proc_addr(info.device, swapchain_create_proc, "vkCreateSwapchainKHR");
-	auto res = swapchain_create_proc(info.device, &swapchain_create_info, info.allocation_callbacks, &swapchain.swapchain);
+	if (!info.device) {
+		std::cerr << "Vulkan device is invalid!" << std::endl;
+		return Error{ SwapchainError::failed_create_swapchain };
+	}
 
+	auto res = swapchain_create_proc(info.device, &swapchain_create_info, info.allocation_callbacks, &swapchain.swapchain);
 	if (res != VK_SUCCESS) {
+		std::cout << "SWAPCHAIN EROR" << std::endl;
 		return Error{ SwapchainError::failed_create_swapchain, res };
 	}
 	swapchain.device = info.device;
@@ -1839,21 +1848,32 @@ Result<Swapchain> SwapchainBuilder::build() const {
 	swapchain.color_space = surface_format.colorSpace;
 	swapchain.image_usage_flags = info.image_usage_flags;
 	swapchain.extent = extent;
+	std::cout << "SWAPCHAIN A" << std::endl;
 	detail::vulkan_functions().get_device_proc_addr(
 	    info.device, swapchain.internal_table.fp_vkGetSwapchainImagesKHR, "vkGetSwapchainImagesKHR");
 	detail::vulkan_functions().get_device_proc_addr(info.device, swapchain.internal_table.fp_vkCreateImageView, "vkCreateImageView");
 	detail::vulkan_functions().get_device_proc_addr(info.device, swapchain.internal_table.fp_vkDestroyImageView, "vkDestroyImageView");
 	detail::vulkan_functions().get_device_proc_addr(
 	    info.device, swapchain.internal_table.fp_vkDestroySwapchainKHR, "vkDestroySwapchainKHR");
+	std::cout << "SWAPCHAIN B" << std::endl;
 	auto images = swapchain.get_images();
-	if (!images) {
+	std::cout << "SWAPCHAIN C" << std::endl;
+	if (!images) 
+	{
+		std::cout << "SWAPCHAIN ERROR" << std::endl;
 		return Error{ SwapchainError::failed_get_swapchain_images };
 	}
+	std::cout << "SWAPCHAIN D" << std::endl;
 	swapchain.requested_min_image_count = image_count;
+	std::cout << "SWAPCHAIN E" << std::endl;
 	swapchain.present_mode = present_mode;
+	std::cout << "SWAPCHAIN F" << std::endl;
 	swapchain.image_count = static_cast<uint32_t>(images.value().size());
+	std::cout << "SWAPCHAIN G" << std::endl;
 	swapchain.instance_version = info.instance_version;
+	std::cout << "SWAPCHAIN I" << std::endl;
 	swapchain.allocation_callbacks = info.allocation_callbacks;
+	std::cout << "SWAPCHAIN J" << std::endl;
 	return swapchain;
 }
 Result<std::vector<VkImage>> Swapchain::get_images() {

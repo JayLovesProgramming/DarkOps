@@ -18,7 +18,7 @@ void Player::PlayFireSound(WeaponInfo* weaponInfo)
 {
     int rand = std::rand() % weaponInfo->audioFiles.fire.size();
     assert(rand);
-    assert(weaponInfo->name);
+    assert(weaponInfo->name != "");
     //std::cout << weaponInfo->name << "\n";
     if (weaponInfo->name == "P90" || weaponInfo->name == "AKS74U")
     {
@@ -38,7 +38,7 @@ void Player::PlayerRevovlerCockSound(WeaponInfo* weaponInfo)
 {
     int rand = std::rand() % weaponInfo->audioFiles.fire.size();
     assert(rand);
-    assert(weaponInfo->name);
+    assert(weaponInfo->name != "");
     Audio::PlayAudio(weaponInfo->audioFiles.revolverCocks[rand], 0.5f);
 }
 

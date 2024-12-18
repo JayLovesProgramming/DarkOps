@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 #include "RapidHotload.hpp"
 #include "Loadout.hpp"
-#include "Renderer/ImGui/GUI_UI.hpp"
+#include "Renderer/ImGui/F8Console.hpp"
 #include "AssetBrowser/AssetBrowser.hpp"
 
 Player::Player(int playerIndex)

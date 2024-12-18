@@ -25,7 +25,7 @@
 #include "Renderer/TextBlitter.hpp"
 #include "Renderer/RendererUtil.hpp"
 #include "Renderer/Raytracing/Raytracing.hpp"
-#include "Renderer/ImGui/GUI_UI.hpp"
+#include "Renderer/ImGui/F8Console.hpp"
 
 #include "Effects/MuzzleFlash.hpp"
 
@@ -1041,17 +1041,18 @@ void Renderer::RenderLoadingScreen()
 {
     std::vector<RenderItem2D> renderItems = CreateLoadingScreenRenderItems();
 
-    if (!BackEnd::WindowIsMinimized())
-    {
+    //if (!BackEnd::WindowIsMinimized())
+    //{
         if (BackEnd::GetAPI() == API::OPENGL)
         {
             OpenGLRenderer::RenderLoadingScreen(renderItems);
         }
         else if (BackEnd::GetAPI() == API::VULKAN)
         {
+            //std::cout << "BBB" << std::endl;
             VulkanRenderer::RenderLoadingScreen(renderItems);
         }
-    }
+    //}
 
     //std::cout << "Present Final Image" << "\n";
     //PresentFinalImage();

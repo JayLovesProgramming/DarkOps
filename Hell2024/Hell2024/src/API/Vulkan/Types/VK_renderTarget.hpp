@@ -2,7 +2,7 @@
 
 #include <vulkan/vulkan.h>
 #include "vk_mem_alloc.h"
-#include "Utils/ErrorHandling/ErrorChecking.hpp"
+#include "Utils/ErrorHandler.hpp"
 
 namespace Vulkan {
 
@@ -20,31 +20,43 @@ namespace Vulkan {
 
         RenderTarget(VkDevice device, VmaAllocator allocator, VkFormat format, uint32_t width, uint32_t height, VkImageUsageFlags imageUsage, std::string debugName, VmaMemoryUsage memoryUsuage = VMA_MEMORY_USAGE_GPU_ONLY, VkMemoryPropertyFlags memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) {
 
+            std::cout << "MADE IT HERE AA" << std::endl;
             //_currentLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             //_currentAccessMask = VK_ACCESS_MEMORY_READ_BIT;
             //_currentStageFlags = VK_PIPELINE_STAGE_TRANSFER_BIT;
-
             _format = format;
             _extent = { width, height, 1 };
 
             VmaAllocationCreateInfo img_allocinfo = {};
-            img_allocinfo.usage = memoryUsuage;// VMA_MEMORY_USAGE_GPU_ONLY;
-            img_allocinfo.requiredFlags = memoryFlags;// VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+            img_allocinfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;// VMA_MEMORY_USAGE_GPU_ONLY;
+            //img_allocinfo.usage = memoryUsuage;// VMA_MEMORY_USAGE_GPU_ONLY;
+            img_allocinfo.requiredFlags = VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);// VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+            //img_allocinfo.requiredFlags = memoryFlags;// VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-            VkImageCreateInfo imageInfo = { };
+            VkImageCreateInfo imageInfo = {};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-            imageInfo.pNext = nullptr;
             imageInfo.imageType = VK_IMAGE_TYPE_2D;
-            imageInfo.format = format;
+            imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM; // Example format
             imageInfo.extent = _extent;
             imageInfo.mipLevels = 1;
             imageInfo.arrayLayers = 1;
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
             imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-            imageInfo.usage = imageUsage;
+            imageInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+            imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            //imageInfo.flags = VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
-            vmaCreateImage(allocator, &imageInfo, &img_allocinfo, &_image, &_allocation, nullptr);
+
+            if (!allocator) {
+                std::cerr << "Allocator is not initialized!" << std::endl;
+                throw std::runtime_error("Allocator is not initialized!");
+            }
+
+            VkResult result = vmaCreateImage(allocator, &imageInfo, &img_allocinfo, &_image, &_allocation, nullptr);
+            if (result != VK_SUCCESS) {
+                std::cerr << "Failed to create image: " << result << std::endl;
+                throw std::runtime_error("Image allocation failed");
+            }
+            std::cout << "MADE IT HERE I" << std::endl;
 
             VkImageViewCreateInfo viewInfo = {};
             viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -64,8 +76,11 @@ namespace Vulkan {
             nameInfo.objectType = VK_OBJECT_TYPE_IMAGE;
             nameInfo.objectHandle = (uint64_t)_image;
             nameInfo.pObjectName = debugName.c_str();
+            std::cout << "MADE IT HERE A" << std::endl;
             PFN_vkSetDebugUtilsObjectNameEXT vkSetDebugUtilsObjectNameEXT = reinterpret_cast<PFN_vkSetDebugUtilsObjectNameEXT>(vkGetDeviceProcAddr(device, "vkSetDebugUtilsObjectNameEXT"));
+            std::cout << "MADE IT HERE B" << std::endl;
             vkSetDebugUtilsObjectNameEXT(device, &nameInfo);
+            std::cout << "MADE IT HERE C" << std::endl;
         }
 
         VkRect2D GetRenderArea() {

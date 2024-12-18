@@ -16,8 +16,6 @@ std::string ExtractWeaponTypeByDirectory(std::string& str)
 {
     std::string stringToConvert(str);
 
-
-
     return "UNKNOWN";
 }
 

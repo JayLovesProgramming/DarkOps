@@ -3,14 +3,10 @@
 #include "Core/AssetManager.hpp"
 #include "Game/Game.hpp"
 #include "Renderer/Renderer.hpp"
-#include "Utils/ErrorHandling/LogErrors.hpp"
 #include "LoadingScreen/InitialWindow.hpp"
 
 void Engine::Run() 
 {
-    // TODO: Log all warnings in a txt file
-    //BuildWarningLogger logger;
-    //logger.monitorBuild("E:\\Hell2024\\Hell2024\\Hell2024.sln");
 
     std::cout << "Loading screen starting" << "\n";
 
