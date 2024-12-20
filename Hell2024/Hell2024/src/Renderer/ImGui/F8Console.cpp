@@ -11,6 +11,11 @@
 
 #include "AssetBrowser/AssetBrowser.hpp"
 
+namespace IMGUI
+{
+	ImFont* BoldFont;
+}
+
 void IMGUI::Init(GLFWwindow* window)
 {
 	F8_TOGGLED = false;
@@ -19,10 +24,13 @@ void IMGUI::Init(GLFWwindow* window)
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	BoldFont = io.Fonts->AddFontFromFileTTF("E:/DarkOpsProjects/Hell2024/Hell2024/Hell2024/res/fonts/consolefont.ttf", 16.0f);
+
 	ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
 	ImGui_ImplOpenGL3_Init();
 
-	std::cout << "[init] ImGui" << "\n";
+	std::cout << "[init] ImGui" << "/n";
 }
 
 void IMGUI::StartFrame()
@@ -195,44 +203,60 @@ void IMGUI::DrawMainBar()
 
 void IMGUI::DrawF8Command()
 {
+    if (F8_TOGGLED)
+    {
+        DrawMainBar();
+        ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
 
-	if (F8_TOGGLED)
-	{
+        ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
-		DrawMainBar();
-		ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
+        if (ImGui::BeginChild("CommandHistory", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true))
+        {
+            for (const auto& line : commandHistory)
+            {
+                if (line.rfind("[ERROR]", 0) == 0) // Check if the line starts with "ERROR"
+                {
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Set text color to red
+                    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.0f, 0.0f, 1.0f)); // Dark red background
 
-		ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+                    ImGui::PushFont(BoldFont);
+                    ImGui::TextUnformatted(line.c_str());
+                    ImGui::PopFont();
 
-		if (ImGui::BeginChild("CommandHistory", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true))
-		{
-			for (const auto& line : commandHistory)
-			{
-				ImGui::TextUnformatted(line.c_str());
-			}
-			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-			{
-				ImGui::SetScrollHereY(1.0f);
-			}
-		}
-		ImGui::EndChild();
+                    ImGui::PopStyleColor(2); // Restore both text and background colors
+                }
+                else
+                {
+                    ImGui::TextUnformatted(line.c_str());
+                }
+            }
+            if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+            {
+                ImGui::SetScrollHereY(1.0f);
+            }
+        }
+        ImGui::EndChild();
 
-		// Input box at the bottom of the window
-		static char inputBuffer[256] = "";
-		ImGui::PushItemWidth(-1);
-		if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			if (strlen(inputBuffer) > 0)
-			{
-				ExecuteCommand(inputBuffer);
-				//memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
-			}
-		}
-		ImGui::PopItemWidth();
+        // Input box at the bottom of the window
+        static char inputBuffer[256] = "";
+        ImGui::PushItemWidth(-1);
 
-		ImGui::End();
-	}
+        // Set keyboard focus to the input box
+        ImGui::SetKeyboardFocusHere();
+
+        if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            if (strlen(inputBuffer) > 0)
+            {
+                ExecuteCommand(inputBuffer);
+                memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
+            }
+        }
+        ImGui::PopItemWidth();
+
+        ImGui::End();
+    }
 }
 
 void IMGUI::MainLoop()
@@ -257,7 +281,7 @@ void IMGUI::Destroy()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-	std::cout << "[CLEANUP] ImGui" << "\n";
+	std::cout << "[CLEANUP] ImGui" << "/n";
 }
 
 bool IMGUI::IsAnyWindowOpen()
@@ -302,7 +326,7 @@ void IMGUI::ExecuteCommand(const char* command)
 	}
 	else if (mainCommand == "help")
 	{
-		AddToConsoleLog("Available commands:\n- clear: Clears command history\n- help: Displays available commands\n- increaseround: Increases the current round\n- decreaseround: Decreases the current round\n- quit/exit: Closes the game\n- round: Sets the current round to 5\n- spawn juggernog/speedcola: Spawns the respective perk\n- spawnammo <weapon> <amount>: Spawns ammo for the specified weapon");
+		AddToConsoleLog("Available commands:/n- clear: Clears command history/n- help: Displays available commands/n- increaseround: Increases the current round/n- decreaseround: Decreases the current round/n- quit/exit: Closes the game/n- round: Sets the current round to 5/n- spawn juggernog/speedcola: Spawns the respective perk/n- spawnammo <weapon> <amount>: Spawns ammo for the specified weapon");
 	}
 	else if (mainCommand == "increaseround")
 	{
@@ -361,7 +385,7 @@ void IMGUI::ExecuteCommand(const char* command)
 		}
 		else
 		{
-			AddToConsoleLog("Error: Usage: spawnammo <weapon> <amount>");
+			AddToConsoleLog("[ERROR] : spawnammo <weapon> <amount>");
 		}
 	}
 	else
