@@ -116,12 +116,12 @@ void AssetBrowser::HandleDropOutsideWindow(const std::string& filePath, const Im
     if (filePath == "Speedcola")
     {
         SpawnAssetBrowserModel("Speedcola", { -0.1f, -0.8f, 7.8f }, 1.3f);
-        IMGUI::AddToConsoleLog("Asset Browser: Spawned Speed Cola (PERK)");
+        //IMGUI::AddToConsoleLog("Asset Browser: Spawned Speed Cola (PERK)");
     }
     else if (filePath == "Juggernog")
     {
         SpawnAssetBrowserModel("Juggernog", { -0.1f, -0.2f, 3.8f }, 0.021f);
-        IMGUI::AddToConsoleLog("Asset Browser: Spawned Juggernog (PERK)");
+        //IMGUI::AddToConsoleLog("Asset Browser: Spawned Juggernog (PERK)");
     }
 
 

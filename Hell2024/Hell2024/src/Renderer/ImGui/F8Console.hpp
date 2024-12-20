@@ -41,6 +41,7 @@ namespace IMGUI
 
 	static int MainBarHeight = 18;
 
+
 	static std::vector<std::string> commandHistory;
 	static std::string commandBuffer;
 

@@ -158,7 +158,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClCompile Include="src\Game\Player_CharacterModelLogic.cpp" />
     <ClCompile Include="src\Game\Player_RenderItems.cpp" />
     <ClCompile Include="src\Game\Player_WeaponLogic.cpp" />
-    <ClCompile Include="src\Game\WeaponManager.cpp" />
+    <ClCompile Include="src\Weapon\WeaponManager.cpp" />
     <ClCompile Include="src\Pathfinding\NavMesh.cpp" />
     <ClCompile Include="src\Renderer\ImGui\F8Console.cpp" />
     <ClCompile Include="src\Renderer\Raytracing\Raytracing.cpp" />
@@ -328,7 +328,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Tools\ImageTools.hpp" />
     <ClInclude Include="src\Game\Dobermann.hpp" />
     <ClInclude Include="src\Pathfinding\Pathfinding2.hpp" />
-    <ClInclude Include="src\Game\WeaponManager.hpp" />
+    <ClInclude Include="src\Weapon\WeaponManager.hpp" />
     <ClInclude Include="src\Effects\BloodDecal.hpp" />
     <ClInclude Include="src\Math\Raycasting.hpp" />
     <ClInclude Include="src\Pathfinding\NavMesh.hpp" />
@@ -416,6 +416,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Utils\Util.hpp" />
     <ClInclude Include="src\Editor\CSG.hpp" />
     <ClInclude Include="src\Utils\Normal\Normal_OpenGL.hpp" />
+    <ClInclude Include="src\Weapon\Weapon.hpp" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\lz4\include\lz4.h" />
     <ClInclude Include="vendor\lz4\include\lz4file.h" />

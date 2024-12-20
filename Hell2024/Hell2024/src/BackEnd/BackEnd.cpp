@@ -16,7 +16,7 @@
 #include "Editor/Gizmo.hpp"
 
 // GAME
-#include "Game/WeaponManager.hpp"
+#include "Weapon/WeaponManager.hpp"
 
 // INPUT
 #include "Input/Input.hpp"

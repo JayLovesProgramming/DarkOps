@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/WeaponManager.hpp"
+#include "Weapon/WeaponManager.hpp"
 #include "Game/AnimatedGameObject.hpp"
 #include "Input/Keycodes.hpp"
 #include "Physics/Physics.hpp"
@@ -74,16 +74,6 @@ struct PlayerControls
     unsigned int DEBUG_FOUR = HELL_KEY_4;
     unsigned int MELEE = HELL_KEY_V;
     unsigned int FLASHLIGHT = HELL_KEY_F;
-};
-
-struct WeaponState 
-{
-    bool has = false;
-    bool useSlideOffset = false;
-    bool hasScope = false;
-    bool hasSilencer = false;
-    int ammoInMag = 0;
-    std::string name = UNDEFINED_STRING;
 };
 
 struct AmmoState 
@@ -170,9 +160,7 @@ public:
     void HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo);
     void HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime);
     void HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime);
-    bool WeaponMagIsEmpty(WeaponState* weaponState);
-    void PlayFireSound(WeaponInfo* weaponInfo);
-    void PlayerRevovlerCockSound(WeaponInfo* weaponInfo);
+    void PlayerRevolverCockSound(WeaponInfo* weaponInfo);
 
     WeaponInfo* GetCurrentWeaponInfo();
     WeaponState* GetWeaponStateByName(std::string name);

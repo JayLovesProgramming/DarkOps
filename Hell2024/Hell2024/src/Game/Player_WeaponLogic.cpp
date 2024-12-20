@@ -8,33 +8,10 @@
 #include "Utils/Util.hpp"
 #include "Timer.hpp"
 #include "Crosshair.hpp"
+#include "Weapon/Weapon.hpp"
 
-bool Player::WeaponMagIsEmpty(WeaponState* weaponState)
-{
-    return weaponState->ammoInMag <= 0;
-}
 
-void Player::PlayFireSound(WeaponInfo* weaponInfo)
-{
-    int rand = std::rand() % weaponInfo->audioFiles.fire.size();
-    assert(rand);
-    assert(weaponInfo->name != "");
-    //std::cout << weaponInfo->name << "\n";
-    if (weaponInfo->name == "P90" || weaponInfo->name == "AKS74U")
-    {
-        Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 0.2f);
-    }
-    else if (weaponInfo->name == "Smith & Wesson")
-    {
-        Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 0.45f);
-    }
-    else
-    {
-        Audio::PlayAudio(weaponInfo->audioFiles.fire[rand], 1.0f);
-    }
-}
-
-void Player::PlayerRevovlerCockSound(WeaponInfo* weaponInfo)
+void Player::PlayerRevolverCockSound(WeaponInfo* weaponInfo)
 {
     int rand = std::rand() % weaponInfo->audioFiles.fire.size();
     assert(rand);
@@ -79,7 +56,7 @@ void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
                 _weaponAction = FIRE;
                 if (weaponInfo->audioFiles.fire.size())
                 {
-                    PlayFireSound(weaponInfo); // Melee I think
+                    WeaponManager::PlayFireSound(weaponInfo); // Melee I think
                 }
                 if (weaponInfo->animationNames.fire.size())
                 {
@@ -157,7 +134,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
             float zoomSpeed = 0.075f;
 
             // Empty mag on pistol and automatic weapons
-            if (CanFire() && PressedFire() && WeaponMagIsEmpty(weaponState))
+            if (CanFire() && PressedFire() && WeaponManager::WeaponMagIsEmpty(weaponState))
             {
                 Audio::PlayAudio("Dry_Fire.wav", 0.8f);
             }
@@ -228,7 +205,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
 
         if (triggeredFire && CanFire() && InADS())
         {
-            if (!WeaponMagIsEmpty(weaponState))
+            if (!WeaponManager::WeaponMagIsEmpty(weaponState))
             {
                 _weaponAction = ADS_FIRE;
                 if (weaponInfo->animationNames.adsFire.size())
@@ -241,7 +218,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
                 {
                     if (weaponInfo->audioFiles.fire.size()) 
                     {
-                        PlayFireSound(weaponInfo);
+                        WeaponManager::PlayFireSound(weaponInfo);
                     }
                 }
                 else
@@ -304,7 +281,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
             m_revolverNeedsCocking &&
             viewWeapon->AnimationIsPastFrameNumber(weaponInfo->revolverCockFrameNumber))
         {
-            PlayerRevovlerCockSound(weaponInfo);
+            PlayerRevolverCockSound(weaponInfo);
             m_revolverNeedsCocking = false;
         }
 
@@ -329,7 +306,7 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
             {
                 if (weaponInfo->audioFiles.fire.size()) 
                 {
-                    PlayFireSound(weaponInfo);
+                    WeaponManager::PlayFireSound(weaponInfo);
                 }
             }
             else 
@@ -434,7 +411,7 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
         //std::cout << "Current weapon is: SHOTGUN" << "\n";
 
         // Empty
-        if (CanFire() && PressedFire() && WeaponMagIsEmpty(weaponState))
+        if (CanFire() && PressedFire() && WeaponManager::WeaponMagIsEmpty(weaponState))
         {
             Audio::PlayAudio("Dry_Fire.wav", 0.8f);
         }
@@ -1179,6 +1156,7 @@ void Player::GiveRedDotToWeapon(std::string name)
     if (state && weaponInfo && weaponInfo->type == WeaponType::PISTOL) 
     {
         state->hasScope = true;
+        // Do some flag for this instead
     }
 }
 

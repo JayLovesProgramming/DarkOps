@@ -3,6 +3,17 @@
 #include "Defines.hpp"
 #include <string>
 #include <unordered_map>
+#include "Core/Audio.hpp"
+
+struct WeaponState
+{
+    bool has = false;
+    bool useSlideOffset = false;
+    bool hasScope = false;
+    bool hasSilencer = false;
+    int ammoInMag = 0;
+    std::string name = UNDEFINED_STRING;
+};
 
 enum class WeaponType 
 { 
@@ -134,4 +145,7 @@ namespace WeaponManager
     AmmoInfo* GetAmmoInfoByIndex(int index);
     int GetWeaponCount();
     int GetAmmoTypeCount();
+
+    void PlayFireSound(WeaponInfo* weaponInfo);
+    bool WeaponMagIsEmpty(WeaponState* weaponState);
 }

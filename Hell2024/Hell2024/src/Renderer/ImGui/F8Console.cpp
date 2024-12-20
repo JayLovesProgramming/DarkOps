@@ -152,15 +152,15 @@ void IMGUI::DrawMainBar()
 		{
 			if (ImGui::MenuItem("Open"))
 			{
-				AddToConsoleLog("File > Open Selected");
+				//AddToConsoleLog("File > Open Selected");
 			}
 			if (ImGui::MenuItem("Save"))
 			{
-				AddToConsoleLog("File > Save Selected");
+				//AddToConsoleLog("File > Save Selected");
 			}
 			if (ImGui::MenuItem("Exit"))
 			{
-				AddToConsoleLog("Exiting...");
+				//AddToConsoleLog("Exiting...");
 				// Make a are you sure prompt pop up.
 				BackEnd::ForceCloseWindow();
 			}
@@ -171,11 +171,11 @@ void IMGUI::DrawMainBar()
 		{
 			if (ImGui::MenuItem("Undo"))
 			{
-				AddToConsoleLog("File > Undo Selected");
+				//AddToConsoleLog("File > Undo Selected");
 			}
 			if (ImGui::MenuItem("Redo"))
 			{
-				AddToConsoleLog("File > Redo Selected");
+				//AddToConsoleLog("File > Redo Selected");
 			}
 			ImGui::EndMenu();
 		}
@@ -184,7 +184,7 @@ void IMGUI::DrawMainBar()
 		{
 			if (ImGui::MenuItem("About"))
 			{
-				AddToConsoleLog("Help > About Selected");
+				//AddToConsoleLog("Help > About Selected");
 			}
 			ImGui::EndMenu();
 		}
@@ -277,49 +277,96 @@ void IMGUI::ClearAllConsoleLogs()
 
 void IMGUI::ExecuteCommand(const char* command)
 {
-	// Handle specific commands or general processing
-	if (strcmp(command, "clear") == 0)
+	std::istringstream stream(command);
+	std::vector<std::string> tokens;
+	std::string token;
+
+	// Tokenize the input command string
+	while (stream >> token)
+	{
+		tokens.push_back(token);
+	}
+
+	// Check if we have at least a command
+	if (tokens.empty())
+	{
+		AddToConsoleLog("Error: No command provided.");
+		return;
+	}
+
+	const std::string& mainCommand = tokens[0];
+
+	if (mainCommand == "clear")
 	{
 		ClearAllConsoleLogs();
 	}
-	else if (strcmp(command, "help") == 0)
+	else if (mainCommand == "help")
 	{
-		AddToConsoleLog("Available commands:\n- clear: Clears command history\n- help: Displays available commands");
+		AddToConsoleLog("Available commands:\n- clear: Clears command history\n- help: Displays available commands\n- increaseround: Increases the current round\n- decreaseround: Decreases the current round\n- quit/exit: Closes the game\n- round: Sets the current round to 5\n- spawn juggernog/speedcola: Spawns the respective perk\n- spawnammo <weapon> <amount>: Spawns ammo for the specified weapon");
 	}
-	else if (strcmp(command, "increaseround") == 0)
+	else if (mainCommand == "increaseround")
 	{
 		int previousRound = RoundManager::GetCurrentRound();
 		RoundManager::IncreaseRound();
-		AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) +" To " + std::to_string(RoundManager::GetCurrentRound()));
+		AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) + " To " + std::to_string(RoundManager::GetCurrentRound()));
 	}
-	else if (strcmp(command, "decreaseround") == 0)
+	else if (mainCommand == "decreaseround")
 	{
 		int previousRound = RoundManager::GetCurrentRound();
 		RoundManager::DecreaseRound();
 		AddToConsoleLog("Zombies: Decreased Round From " + std::to_string(previousRound) + " To " + std::to_string(RoundManager::GetCurrentRound()));
 	}
-	else if (strcmp(command, "quit") == 0 || strcmp(command, "exit") == 0)
+	else if (mainCommand == "quit" || mainCommand == "exit")
 	{
 		BackEnd::ForceCloseWindow();
 	}
-	else if (strcmp(command, "round") == 0)
+	else if (mainCommand == "round")
 	{
 		RoundManager::SetCurrentRound(5);
 		AddToConsoleLog("Zombies: Set Current Round: 5");
 	}
-	else if (strcmp(command, "spawn juggernog") == 0)
+	else if (mainCommand == "spawn")
 	{
-		MiscObjectsManager::SpawnJuggernog();
-		AddToConsoleLog("Zombies: Spawned juggernog");
+		if (tokens.size() > 1)
+		{
+			const std::string& spawnType = tokens[1];
+			if (spawnType == "juggernog")
+			{
+				MiscObjectsManager::SpawnJuggernog();
+				AddToConsoleLog("Zombies: Spawned juggernog");
+			}
+			else if (spawnType == "speedcola")
+			{
+				MiscObjectsManager::SpawnSpeedCola();
+				AddToConsoleLog("Zombies: Spawned speedcola");
+			}
+			else
+			{
+				AddToConsoleLog("Error: Unknown spawn type: " + spawnType);
+			}
+		}
+		else
+		{
+			AddToConsoleLog("Error: Missing argument for 'spawn' command.");
+		}
 	}
-	else if (strcmp(command, "spawn speedcola") == 0)
+	else if (mainCommand == "spawnammo")
 	{
-		MiscObjectsManager::SpawnSpeedCola();
-		AddToConsoleLog("Zombies: Spawned speedcola");
+		if (tokens.size() == 3)
+		{
+			const std::string& weapon = tokens[1];
+			int amount = std::stoi(tokens[2]);
+			Game::GetPlayerByIndex(0)->GiveAmmo(weapon.c_str(), amount);
+			AddToConsoleLog("Spawned ammo for " + weapon + ": " + std::to_string(amount));
+		}
+		else
+		{
+			AddToConsoleLog("Error: Usage: spawnammo <weapon> <amount>");
+		}
 	}
 	else
 	{
-		AddToConsoleLog(command);
+		AddToConsoleLog("Unknown command: " + mainCommand);
 	}
 }
 

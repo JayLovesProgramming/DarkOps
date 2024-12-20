@@ -2,7 +2,7 @@
 #include "AnimatedGameObject.hpp"
 #include "Game.hpp"
 #include "Scene.hpp"
-#include "WeaponManager.hpp"
+#include "Weapon/WeaponManager.hpp"
 #include "BackEnd/BackEnd.hpp"
 #include "Core/Audio.hpp"
 #include "Input/Input.hpp"
