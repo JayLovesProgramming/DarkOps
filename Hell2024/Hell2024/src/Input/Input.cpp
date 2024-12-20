@@ -133,14 +133,20 @@ namespace Input
         {
             BackEnd::ForceCloseWindow();
         }
+
+    /*    if (!Game::GetPlayerByIndex(0)->HasControl())
+        {
+            return;
+        }*/
+ 
         if (KeyPressed(HELL_KEY_G)) 
         {
             BackEnd::ToggleFullscreen();
         }
-        if (KeyPressed(HELL_KEY_H))
+    /*    if (KeyPressed(HELL_KEY_H))
         {
             Renderer::HotloadShaders();
-        }
+        }*/
 
         HandleMouseWheel();
         HandleKeyboardPresses();
