@@ -684,6 +684,18 @@ bool AnimatedGameObject::AnimationIsPastPercentage(float percent)
         return false;
 }
 
+float AnimatedGameObject::GetAnimationPercentage() const
+{
+    if (_currentAnimation)
+    {
+        float currentTicks = _currentAnimationTime * _currentAnimation->GetTicksPerSecond();
+        float durationTicks = _currentAnimation->m_duration;
+        return (currentTicks / durationTicks) * 100.0f;
+    }
+    return 0.0f; // Return 0 if no animation is set
+}
+
+
 void AnimatedGameObject::UpdateBoneTransformsFromBindPose()
 {
     // Traverse the tree

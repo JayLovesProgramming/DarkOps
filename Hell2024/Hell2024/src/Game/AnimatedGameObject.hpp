@@ -91,6 +91,7 @@ public:
 	const glm::mat4 GetModelMatrix();
     bool IsAnimationComplete() const;
     bool AnimationIsPastPercentage(float percent);
+    float GetAnimationPercentage() const;
     bool AnimationIsPastFrameNumber(int frameNumber);
     glm::vec3 GetScale();
 

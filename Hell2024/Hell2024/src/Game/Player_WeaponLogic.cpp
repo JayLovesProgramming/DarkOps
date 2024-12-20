@@ -96,6 +96,50 @@ void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
     }
 };
 
+void Player::ReloadWeapon(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState)
+{
+    if (!CanReload())
+    {
+        return;
+    }
+
+    // Revolver reload
+    if (weaponInfo->relolverStyleReload)
+    {
+        _weaponAction = RELOAD_REVOLVER_BEGIN;
+        viewWeapon->PlayAnimation(weaponInfo->animationNames.revolverReloadBegin, 1.0f);
+        _needsAmmoReloaded = true;
+        weaponState->ammoInMag = 0;
+        Audio::PlayAudio("Smith_ReloadBegin.wav", 1.0f);
+        m_revolverReloadIterations = 0;
+    }
+    // Non revolver reloads
+    else
+    {
+        if (GetCurrentWeaponMagAmmo() == 0)
+        {
+            if (weaponInfo->animationNames.reloadempty.size())
+            {
+                int rand = std::rand() % weaponInfo->animationNames.reloadempty.size();
+                viewWeapon->PlayAnimation(weaponInfo->animationNames.reloadempty[rand], weaponInfo->animationSpeeds.reloadempty);
+            }
+
+            //  viewWeapon->PlayAnimation(weaponInfo->animationNames.reloadempty, 1.0f);
+            std::cout << "C" << "\n";
+            Audio::PlayAudio(weaponInfo->audioFiles.reloadEmpty, 0.7f);
+            _weaponAction = RELOAD_FROM_EMPTY;
+        }
+        else
+        {
+            viewWeapon->PlayAnimation(weaponInfo->animationNames.reload, weaponInfo->animationSpeeds.reload);
+            std::cout << "D" << "\n";
+            Audio::PlayAudio(weaponInfo->audioFiles.reload, 0.8f);
+            _weaponAction = RELOAD;
+        }
+        _needsAmmoReloaded = true;
+    }
+}
+
 void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState, AmmoState* ammoState, AmmoInfo* ammoInfo, float deltaTime) // And automatic weapons for now. Make more modular
 {
     if (weaponInfo->type == WeaponType::PISTOL || weaponInfo->type == WeaponType::AUTOMATIC)
@@ -298,96 +342,80 @@ void Player::HandlePistols(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInf
                 viewWeapon->PlayAnimation(weaponInfo->animationNames.fire[rand], weaponInfo->animationSpeeds.fire);
             }
         }
+
         // Reload
-        if (PressedReload() && CanReload()) {
-
-            // Revolver reload
-            if (weaponInfo->relolverStyleReload) {
-                _weaponAction = RELOAD_REVOLVER_BEGIN;
-                viewWeapon->PlayAnimation(weaponInfo->animationNames.revolverReloadBegin, 1.0f);
-                _needsAmmoReloaded = true;
-                weaponState->ammoInMag = 0;
-                Audio::PlayAudio("Smith_ReloadBegin.wav", 1.0f);
-                m_revolverReloadIterations = 0;
-            }
-            // Non revolver reloads
-            else {
-                if (GetCurrentWeaponMagAmmo() == 0) {
-                    if (weaponInfo->animationNames.reloadempty.size()) {
-                        int rand = std::rand() % weaponInfo->animationNames.reloadempty.size();
-                        viewWeapon->PlayAnimation(weaponInfo->animationNames.reloadempty[rand], weaponInfo->animationSpeeds.reloadempty);
-                    }
-
-                    //  viewWeapon->PlayAnimation(weaponInfo->animationNames.reloadempty, 1.0f);
-                    std::cout << "C" << "\n";
-                    Audio::PlayAudio(weaponInfo->audioFiles.reloadEmpty, 0.7f);
-                    _weaponAction = RELOAD_FROM_EMPTY;
-                }
-                else {
-                    viewWeapon->PlayAnimation(weaponInfo->animationNames.reload, weaponInfo->animationSpeeds.reload);
-                    std::cout << "D" << "\n";
-                    Audio::PlayAudio(weaponInfo->audioFiles.reload, 0.8f);
-                    _weaponAction = RELOAD;
-                }
-                _needsAmmoReloaded = true;
-            }
+        if (PressedReload()) 
+        {
+            ReloadWeapon(viewWeapon, weaponInfo, weaponState);
         }
 
         // Revolver reload reloading logic
-        if (_weaponAction == RELOAD_REVOLVER_BEGIN && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == RELOAD_REVOLVER_BEGIN && viewWeapon->IsAnimationComplete()) 
+        {
             _weaponAction = RELOAD_REVOLVER_LOOP;
             viewWeapon->PlayAnimation(weaponInfo->animationNames.revolverReloadLoop, 1.0f);
             m_revolverReloadIterations++;
         }
 
         // Add next revolver bullet
-        if (_needsAmmoReloaded && _weaponAction == RELOAD_REVOLVER_LOOP && viewWeapon->AnimationIsPastFrameNumber(8)) {
+        if (_needsAmmoReloaded && _weaponAction == RELOAD_REVOLVER_LOOP && viewWeapon->AnimationIsPastFrameNumber(8)) 
+        {
             weaponState->ammoInMag++;
             ammoState->ammoOnHand--;
             _needsAmmoReloaded = false;
             Audio::PlayAudio("Smith_ReloadLoop0.wav", 1.0f);
         }
         // Continue revolver reload loop
-        if (_weaponAction == RELOAD_REVOLVER_LOOP && viewWeapon->IsAnimationComplete() && GetCurrentWeaponMagAmmo() < 6) {
+        if (_weaponAction == RELOAD_REVOLVER_LOOP && viewWeapon->IsAnimationComplete() && GetCurrentWeaponMagAmmo() < 6) 
+        {
             viewWeapon->PlayAnimation(weaponInfo->animationNames.revolverReloadLoop, 1.0f);
             _needsAmmoReloaded = true;
         }
         // Trigger the end of the revolver reload loop
-        if (_weaponAction == RELOAD_REVOLVER_LOOP && viewWeapon->IsAnimationComplete() && GetCurrentWeaponMagAmmo() >= 6) {
+        if (_weaponAction == RELOAD_REVOLVER_LOOP && viewWeapon->IsAnimationComplete() && GetCurrentWeaponMagAmmo() >= 6)
+        {
             viewWeapon->PlayAnimation(weaponInfo->animationNames.revolverReloadEnd, 1.0f);
             _weaponAction = RELOAD_REVOLVER_END;
             Audio::PlayAudio("Smith_ReloadEnd.wav", 1.0f);
             std::cout << " Audio::PlayAudio(\"Smith_ReloadEnd.wav\", 1.0f);\n";
         }
         // End the revolver loop
-        if (_weaponAction == RELOAD_REVOLVER_END && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == RELOAD_REVOLVER_END && viewWeapon->IsAnimationComplete())
+        {
             _weaponAction = IDLE;
         }
         // Return to idle
         if (_weaponAction == RELOAD && viewWeapon->IsAnimationComplete() ||
             _weaponAction == RELOAD_FROM_EMPTY && viewWeapon->IsAnimationComplete() ||
-            _weaponAction == SPAWNING && viewWeapon->IsAnimationComplete()) {
+            _weaponAction == SPAWNING && viewWeapon->IsAnimationComplete())
+        {
             _weaponAction = IDLE;
         }
-        if (weaponInfo->name != "Smith & Wesson" && _weaponAction == FIRE && viewWeapon->AnimationIsPastPercentage(50.0f)) {
+        if (weaponInfo->name != "Smith & Wesson" && _weaponAction == FIRE && viewWeapon->AnimationIsPastPercentage(50.0f)) 
+        {
             _weaponAction = IDLE;
         }
         //Idle
-        if (_weaponAction == IDLE) {
-            if (Player::IsMoving()) {
+        if (_weaponAction == IDLE)
+        {
+            if (Player::IsMoving()) 
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.walk, 1.0f);
             }
-            else {
+            else 
+            {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.idle, 1.0f);
             }
         }
         // Draw
-        if (_weaponAction == DRAW_BEGIN) {
+        if (_weaponAction == DRAW_BEGIN) 
+        {
             viewWeapon->PlayAnimation(weaponInfo->animationNames.draw, 1.125f);
             _weaponAction = DRAWING;
         }
         // Drawing
-        if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete()) {
+        if (_weaponAction == DRAWING && viewWeapon->IsAnimationComplete())
+        {
             _weaponAction = IDLE;
         }
     }
@@ -489,10 +517,16 @@ void Player::HandleShotguns(AnimatedGameObject* viewWeapon, WeaponInfo* weaponIn
         }
 
         // Reload
-        if (PressedReload() && CanReload() && (_weaponAction != RELOAD_SHOTGUN_SINGLE_SHELL)) {
-            std::cout << "Reloading shotgun" << "\n";
-            viewWeapon->PlayAnimation(weaponInfo->animationNames.shotgunReloadStart, weaponInfo->animationSpeeds.shotgunReloadStart);
-            _weaponAction = RELOAD_SHOTGUN_BEGIN;
+        if (PressedReload() && (_weaponAction != RELOAD_SHOTGUN_SINGLE_SHELL)) 
+        {
+            //ReloadWeapon(viewWeapon, weaponInfo, weaponState);
+            if (_weaponAction != RELOAD_SHOTGUN_SINGLE_SHELL)
+            {
+                std::cout << "Reloading shotgun" << "\n";
+                viewWeapon->PlayAnimation(weaponInfo->animationNames.shotgunReloadStart, weaponInfo->animationSpeeds.shotgunReloadStart);
+                _weaponAction = RELOAD_SHOTGUN_BEGIN;
+                //return;
+            }
         }
 
         // BEGIN RELOAD THING
@@ -868,7 +902,12 @@ bool Player::CanReload()
         return false;
     }
 
-    std::cout << viewWeaponModel->AnimationIsPastPercentage(50.0f) << "\n";
+
+    if (!viewWeaponModel->AnimationIsPastPercentage(40.0f))
+    {
+        return false;
+    }
+    //std::cout << viewWeaponModel->AnimationIsPastPercentage(weaponInfo->animationSpeeds.reload) << "\n";
    
 
     if (weaponState->ammoInMag < weaponInfo->magSize) 

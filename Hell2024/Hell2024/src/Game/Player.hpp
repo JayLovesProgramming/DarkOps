@@ -389,6 +389,7 @@ private:
 	void SpawnBullet(float variance, Weapon type);
 	bool CanFire();
 	bool CanReload();
+    void ReloadWeapon(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo, WeaponState* weaponState);
 	void CheckForItemPickOverlaps();
 
 	bool _needsToDropAKMag = false;
