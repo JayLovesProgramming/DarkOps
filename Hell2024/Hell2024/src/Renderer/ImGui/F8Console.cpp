@@ -14,6 +14,10 @@
 namespace IMGUI
 {
 	ImFont* BoldFont;
+	// Input box at the bottom of the window
+	static char inputBuffer[256] = "";
+	static int historyIndex = -1; // Index to keep track of history for up/down arrows
+
 }
 
 void IMGUI::Init(GLFWwindow* window)
@@ -30,7 +34,7 @@ void IMGUI::Init(GLFWwindow* window)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
 	ImGui_ImplOpenGL3_Init();
 
-	std::cout << "[init] ImGui" << "/n";
+	std::cout << "[init] ImGui" << std::endl;
 }
 
 void IMGUI::StartFrame()
@@ -203,61 +207,95 @@ void IMGUI::DrawMainBar()
 
 void IMGUI::DrawF8Command()
 {
-    if (F8_TOGGLED)
-    {
-        DrawMainBar();
-        ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
+	if (F8_TOGGLED)
+	{
+		DrawMainBar();
+		ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
 
-        ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("Command Prompt", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
-        if (ImGui::BeginChild("CommandHistory", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true))
-        {
-            for (const auto& line : commandHistory)
-            {
-                if (line.rfind("[ERROR]", 0) == 0) // Check if the line starts with "ERROR"
-                {
-                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Set text color to red
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.0f, 0.0f, 1.0f)); // Dark red background
+		if (ImGui::BeginChild("CommandHistory", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true))
+		{
+			for (const auto& line : commandHistory)
+			{
+				if (line.rfind("[ERROR]", 0) == 0) // Check if the line starts with "ERROR"
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // Set text color to red
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.0f, 0.0f, 1.0f)); // Dark red background
 
-                    ImGui::PushFont(BoldFont);
-                    ImGui::TextUnformatted(line.c_str());
-                    ImGui::PopFont();
+					ImGui::PushFont(BoldFont);
+					ImGui::TextUnformatted(line.c_str());
+					ImGui::PopFont();
 
-                    ImGui::PopStyleColor(2); // Restore both text and background colors
-                }
-                else
-                {
-                    ImGui::TextUnformatted(line.c_str());
-                }
-            }
-            if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-            {
-                ImGui::SetScrollHereY(1.0f);
-            }
-        }
-        ImGui::EndChild();
+					ImGui::PopStyleColor(2); // Restore both text and background colors
+				}
+				else
+				{
+					ImGui::TextUnformatted(line.c_str());
+				}
+			}
+			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+			{
+				ImGui::SetScrollHereY(1.0f);
+			}
+		}
+		ImGui::EndChild();
 
-        // Input box at the bottom of the window
-        static char inputBuffer[256] = "";
-        ImGui::PushItemWidth(-1);
 
-        // Set keyboard focus to the input box
-        ImGui::SetKeyboardFocusHere();
 
-        if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
-        {
-            if (strlen(inputBuffer) > 0)
-            {
-                ExecuteCommand(inputBuffer);
-                memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
-            }
-        }
-        ImGui::PopItemWidth();
+		ImGui::PushItemWidth(-1);
 
-        ImGui::End();
-    }
+		// Set keyboard focus to the input box
+		ImGui::SetKeyboardFocusHere();
+
+		if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			if (strlen(inputBuffer) > 0)
+			{
+				commandHistory.push_back(inputBuffer);
+				ExecuteCommand(inputBuffer);
+				memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear the input buffer
+				historyIndex = -1; // Reset history index when a new command is added
+			}
+		}
+
+		// Handle Up/Down arrow keys for command history
+		if (Input::KeyPressed(HELL_KEY_UP))
+		{
+			std::cout << "UP" << std::endl;
+			if (historyIndex < static_cast<int>(commandHistory.size()) - 1)
+			{
+				std::cout << "UP" << std::endl;
+				historyIndex++;
+				size_t length = 0;
+				strncpy_s(inputBuffer, commandHistory[commandHistory.size() - 1 - historyIndex].c_str(), sizeof(inputBuffer) - 1);
+				inputBuffer[sizeof(inputBuffer) - 1] = '\0'; // Ensure null termination
+			}
+		}
+		else if (Input::KeyPressed(HELL_KEY_DOWN))
+		{
+			std::cout << "DOWN" << std::endl;
+			if (historyIndex > 0)
+			{
+				historyIndex--;
+				size_t length = 0;
+				strncpy_s(inputBuffer, commandHistory[commandHistory.size() - 1 - historyIndex].c_str(), sizeof(inputBuffer) - 1);
+				inputBuffer[sizeof(inputBuffer) - 1] = '\0'; // Ensure null termination
+			}
+			else
+			{
+				memset(inputBuffer, 0, sizeof(inputBuffer)); // Clear input if no previous command
+				historyIndex = -1;
+			}
+		}
+
+		ImGui::PopItemWidth();
+
+		ImGui::End();
+	}
 }
+
 
 void IMGUI::MainLoop()
 {
