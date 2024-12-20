@@ -10,7 +10,6 @@
 #include "Crosshair.hpp"
 #include "Weapon/Weapon.hpp"
 
-
 void Player::PlayerRevolverCockSound(WeaponInfo* weaponInfo)
 {
     int rand = std::rand() % weaponInfo->audioFiles.fire.size();
@@ -19,17 +18,36 @@ void Player::PlayerRevolverCockSound(WeaponInfo* weaponInfo)
     Audio::PlayAudio(weaponInfo->audioFiles.revolverCocks[rand], 0.5f);
 }
 
+//void PlayMeleeIdle(WeaponAction* _weaponAction)
+//{
+//    if (_weaponAction == IDLE)
+//    {
+//        //Game::GetPlayer
+//        if (Player::IsMoving())
+//        {
+//            viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.walk, 1.0f);
+//        }
+//        else
+//        {
+//            viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.idle, 1.0f);
+//        }
+//    }
+//}
+
 void Player::HandleMelee(AnimatedGameObject* viewWeapon, WeaponInfo* weaponInfo)
 {
+    //std::cout << Game::GetCurrentPlayerInControlIndex() << std::endl;
+
     if (weaponInfo->type == WeaponType::MELEE)
     {
-        if (_weaponAction == IDLE) 
+        if (_weaponAction == IDLE)
         {
+            //Game::GetPlayer
             if (Player::IsMoving())
             {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.walk, 1.0f);
             }
-            else 
+            else
             {
                 viewWeapon->PlayAndLoopAnimation(weaponInfo->animationNames.idle, 1.0f);
             }

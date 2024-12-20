@@ -32,6 +32,8 @@ namespace Game
     bool g_takeDamageOutside = false;
     float g_time = 0;
 
+    int currentPlayerInputIndex = 0;
+
     void EvaluateDebugKeyPresses();
 
     void Create() 
@@ -56,7 +58,7 @@ namespace Game
             std:cout << mesh->name << "\n";
         }*/
         
-        std::cout << "\n";
+        //std::cout << "\n";
 
         WeaponManager::PreLoadWeaponPickUpConvexHulls();
 
@@ -388,7 +390,7 @@ namespace Game
         }
     }
 
-    static void SetPlayerControls(int keyPressed)
+    void SetPlayerControls(int keyPressed)
     {
         switch (keyPressed) 
         {
@@ -419,6 +421,15 @@ namespace Game
         default:
             break;
         }
+        if (keyPressed >= 0 && keyPressed <= 4)
+        {
+            currentPlayerInputIndex = keyPressed - 1;
+        }
+    }
+
+    int GetCurrentPlayerInControlIndex()
+    {
+        return currentPlayerInputIndex;
     }
 
     static void CheckInputAndSetPlayerControls() 

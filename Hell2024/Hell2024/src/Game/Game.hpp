@@ -28,6 +28,8 @@ namespace Game
     void CalculateDeltaTime();
     double GetDeltaTime();
 
+    int GetCurrentPlayerInControlIndex();
+
     void Create();
     void CreatePlayers(unsigned int playerCount);
     bool IsLoaded();
@@ -39,6 +41,7 @@ namespace Game
     void SetPlayerKeyboardAndMouseIndex(int playerIndex, int keyboardIndex, int mouseIndex);
     void SetPlayerGroundedStates();
     void GiveControlToPlayer1();
+    void SetPlayerControls(int keyPressed);
 
     int GetPlayerCount();
     constexpr int GetPlayerIndexFromPlayerPointer(Player* player);

@@ -214,7 +214,6 @@ namespace Input
     int GetMouseWheelValue()
     {
         return _mouseWheelValue;
-
     }
 
     void PreventRightMouseHold()
