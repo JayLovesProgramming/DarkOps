@@ -581,15 +581,17 @@ void Player::UpdateMouseLook(float deltaTime)
 {
     if (HasControl() && BackEnd::WindowHasFocus())
     {
-        float mouseSensitivity = 0.002f;
         if (InADS()) 
         {
-            mouseSensitivity = 0.001f;
+            Config::mouseSensitivity = 0.001f;
         }
+
         float xOffset = (float)InputMulti::GetMouseXOffset(m_mouseIndex);
         float yOffset = (float)InputMulti::GetMouseYOffset(m_mouseIndex);
-        _rotation.x += -yOffset * mouseSensitivity;
-        _rotation.y += -xOffset * mouseSensitivity;
+
+        _rotation.x += -yOffset * Config::mouseSensitivity;
+        _rotation.y += -xOffset * Config::mouseSensitivity;
+
         _rotation.x = std::min(_rotation.x, 1.5f);
         _rotation.x = std::max(_rotation.x, -1.5f);
     }
@@ -650,6 +652,7 @@ void Player::UpdateMovement(float deltaTime)
     // Jump
     if (PresingJump() && HasControl() && _isGrounded)
     {
+        // Put in config
         _yVelocity = 4.75f; // magic value for jump strength
         _yVelocity = 4.9f; // magic value for jump strength (had to change cause you could no longer jump thru window after fixing character controller height bug)
         _isGrounded = false;

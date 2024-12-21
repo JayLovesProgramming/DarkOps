@@ -9,4 +9,5 @@ namespace Config
 	inline float item_respawn_time = 3.0f;
 	inline float pickup_text_time = 2.5f;
 	constexpr static auto CROSSHAIR_GAP = 5;
+	inline float mouseSensitivity = 0.0005f;
 }

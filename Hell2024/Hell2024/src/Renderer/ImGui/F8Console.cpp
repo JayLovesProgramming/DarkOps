@@ -337,61 +337,61 @@ void IMGUI::ClearAllConsoleLogs()
 	commandHistory.clear();
 }
 
-void IMGUI::ExecuteCommand(const char* command)
+void IMGUI::ExecuteCommand(const char* inputCommand)
 {
-	std::istringstream stream(command);
-	std::vector<std::string> tokens;
-	std::string token;
+	std::istringstream stream(inputCommand);
+	std::vector<std::string> args;
+	std::string arg;
 
 	// Tokenize the input command string
-	while (stream >> token)
+	while (stream >> arg)
 	{
-		tokens.push_back(token);
+		args.push_back(arg);
 	}
 
 	// Check if we have at least a command
-	if (tokens.empty())
+	if (args.empty())
 	{
 		AddToConsoleLog("Error: No command provided.");
 		return;
 	}
 
-	const std::string& mainCommand = tokens[0];
+	const std::string& command = args[0];
 
-	if (mainCommand == "clear")
+	if (command == "clear")
 	{
 		ClearAllConsoleLogs();
 	}
-	else if (mainCommand == "help")
+	else if (command == "help")
 	{
 		AddToConsoleLog("Available commands:/n- clear: Clears command history/n- help: Displays available commands/n- increaseround: Increases the current round/n- decreaseround: Decreases the current round/n- quit/exit: Closes the game/n- round: Sets the current round to 5/n- spawn juggernog/speedcola: Spawns the respective perk/n- spawnammo <weapon> <amount>: Spawns ammo for the specified weapon");
 	}
-	else if (mainCommand == "increaseround")
+	else if (command == "increaseround")
 	{
 		int previousRound = RoundManager::GetCurrentRound();
 		RoundManager::IncreaseRound();
 		AddToConsoleLog("Zombies: Increased Round From " + std::to_string(previousRound) + " To " + std::to_string(RoundManager::GetCurrentRound()));
 	}
-	else if (mainCommand == "decreaseround")
+	else if (command == "decreaseround")
 	{
 		int previousRound = RoundManager::GetCurrentRound();
 		RoundManager::DecreaseRound();
 		AddToConsoleLog("Zombies: Decreased Round From " + std::to_string(previousRound) + " To " + std::to_string(RoundManager::GetCurrentRound()));
 	}
-	else if (mainCommand == "quit" || mainCommand == "exit")
+	else if (command == "quit" || command == "exit")
 	{
 		BackEnd::ForceCloseWindow();
 	}
-	else if (mainCommand == "round")
+	else if (command == "round")
 	{
 		RoundManager::SetCurrentRound(5);
 		AddToConsoleLog("Zombies: Set Current Round: 5");
 	}
-	else if (mainCommand == "spawn")
+	else if (command == "spawn")
 	{
-		if (tokens.size() > 1)
+		if (args.size() > 1)
 		{
-			const std::string& spawnType = tokens[1];
+			const std::string& spawnType = args[1];
 			if (spawnType == "juggernog")
 			{
 				MiscObjectsManager::SpawnJuggernog();
@@ -412,12 +412,12 @@ void IMGUI::ExecuteCommand(const char* command)
 			AddToConsoleLog("Error: Missing argument for 'spawn' command.");
 		}
 	}
-	else if (mainCommand == "spawnammo")
+	else if (command == "spawnammo")
 	{
-		if (tokens.size() == 3)
+		if (args.size() == 3)
 		{
-			const std::string& weapon = tokens[1];
-			int amount = std::stoi(tokens[2]);
+			const std::string& weapon = args[1];
+			int amount = std::stoi(args[2]);
 			Game::GetPlayerByIndex(0)->GiveAmmo(weapon.c_str(), amount);
 			AddToConsoleLog("Spawned ammo for " + weapon + ": " + std::to_string(amount));
 		}
@@ -426,9 +426,27 @@ void IMGUI::ExecuteCommand(const char* command)
 			AddToConsoleLog("[ERROR] : spawnammo <weapon> <amount>");
 		}
 	}
+	else if (command == "changesens")
+	{
+		if (args.size() == 2)
+		{
+			float sensitivity = std::stof(args[1]);
+			AddToConsoleLog("Changed sensitivity from " + std::to_string(Config::mouseSensitivity) + " to " + std::to_string(sensitivity));
+			Config::mouseSensitivity = sensitivity;
+
+		}
+		else
+		{
+			AddToConsoleLog("[ERROR] : changesensitivity <sensitivity>");
+		}
+	}
+	else if (command == "getsens")
+	{
+		AddToConsoleLog("[INFO] Sensitivity: " + std::to_string(Config::mouseSensitivity));
+	}
 	else
 	{
-		AddToConsoleLog("Unknown command: " + mainCommand);
+		AddToConsoleLog("Unknown command: " + command);
 	}
 }
 
