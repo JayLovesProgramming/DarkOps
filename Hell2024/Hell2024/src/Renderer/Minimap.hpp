@@ -9,7 +9,7 @@ public:
 
 	static inline hell::ivec2 storedMinimapViewportCenter = {};
 
-	static inline bool MINIMAP_ENABLED = true; // This will be set to false and init func will be called in the pre-game loading screen
+	static inline bool MINIMAP_ENABLED = false; // This will be set to false and init func will be called in the pre-game loading screen
 	constexpr static auto MINIMAP_SIZE = 200; // Original Size = 200
 
 	static void EnableMinimap()
