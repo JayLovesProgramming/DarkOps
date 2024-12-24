@@ -31,13 +31,13 @@ namespace IMGUI
 	static bool ImGui_DEMO = false;
 	static bool F8_TOGGLED = false;
 
-	static bool OVERLAYS_SHOW_FPS = false;
-	static bool OVERLAYS_SHOW_DELTA_TIME = false;
+	static bool OVERLAYS_SHOW_FPS = true;
+	static bool OVERLAYS_SHOW_DELTA_TIME = true;
+
 	static bool OVERLAYS_SHOW_MEMORY_USAGE = false;
 	static bool OVERLAYS_SHOW_BOUNDING_BOXES = false;
 	static bool OVERLAYS_SHOW_COLLISION_DEBUG = false;
 	static bool OVERLAYS_WIREFRAME_MODE = false;
-	static bool OVERLAYS_SHOW_MINIMAP = false;
 
 	static int MainBarHeight = 18;
 

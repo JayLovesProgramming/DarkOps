@@ -290,7 +290,7 @@ void AssetManager::FindAssetPaths()
 
 void AssetManager::AddItemToLoadLog(std::string item)
 {
-    g_loadLog.push_back(item);
+    //g_loadLog.push_back(item);
     std::cout << item << "\n";
 }
 

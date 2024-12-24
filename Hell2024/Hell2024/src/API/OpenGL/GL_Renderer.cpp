@@ -679,13 +679,13 @@ void SetViewport(ViewportInfo viewportInfo)
     glViewport(viewportInfo.xOffset, viewportInfo.yOffset, viewportInfo.width, viewportInfo.height);
 }
 
-void OpenGLRenderer::RenderLoadingScreen(std::vector<RenderItem2D>& renderItems) 
-{
-    // KEEP DISABLED CAUSE THIS BREAKS DEBUG MODE
-    //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, g_ssbos.samplers);
-    //RenderUI(renderItems, g_frameBuffers.loadingScreen, true);
-    //BlitFrameBuffer(&g_frameBuffers.loadingScreen, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST);
-}
+//void OpenGLRenderer::RenderLoadingScreen(std::vector<RenderItem2D>& renderItems) 
+//{
+//    // KEEP DISABLED CAUSE THIS BREAKS DEBUG MODE
+//    //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, g_ssbos.samplers);
+//    //RenderUI(renderItems, g_frameBuffers.loadingScreen, true);
+//    //BlitFrameBuffer(&g_frameBuffers.loadingScreen, 0, "Color", "", GL_COLOR_BUFFER_BIT, GL_NEAREST);
+//}
 
 void OpenGLRenderer::UploadSSBOsGPU(RenderData& renderData)
 {

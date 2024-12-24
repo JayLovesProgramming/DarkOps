@@ -1037,26 +1037,26 @@ IndirectDrawInfo CreateIndirectDrawInfo(std::vector<RenderItem3D>& potentialRend
 }
 
 // Misc
-void Renderer::RenderLoadingScreen() 
-{
-    std::vector<RenderItem2D> renderItems = CreateLoadingScreenRenderItems();
-
-    //if (!BackEnd::WindowIsMinimized())
-    //{
-        if (BackEnd::GetAPI() == API::OPENGL)
-        {
-            OpenGLRenderer::RenderLoadingScreen(renderItems);
-        }
-        else if (BackEnd::GetAPI() == API::VULKAN)
-        {
-            //std::cout << "BBB" << std::endl;
-            VulkanRenderer::RenderLoadingScreen(renderItems);
-        }
-    //}
-
-    //std::cout << "Present Final Image" << "\n";
-    //PresentFinalImage();
-}
+//void Renderer::RenderLoadingScreen() 
+//{
+//    std::vector<RenderItem2D> renderItems = CreateLoadingScreenRenderItems();
+//
+//    //if (!BackEnd::WindowIsMinimized())
+//    //{
+//        if (BackEnd::GetAPI() == API::OPENGL)
+//        {
+//            OpenGLRenderer::RenderLoadingScreen(renderItems);
+//        }
+//        else if (BackEnd::GetAPI() == API::VULKAN)
+//        {
+//            //std::cout << "BBB" << std::endl;
+//            VulkanRenderer::RenderLoadingScreen(renderItems);
+//        }
+//    //}
+//
+//    //std::cout << "Present Final Image" << "\n";
+//    //PresentFinalImage();
+//}
 
 void Renderer::HotloadShaders() 
 {

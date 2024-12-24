@@ -17,6 +17,7 @@
 
 namespace Game
 {
+    // Rename ALL these vars 
     GameMode _gameMode = {};
     MultiplayerMode _multiplayerMode = {};
     SplitscreenMode _splitscreenMode = {};
@@ -72,6 +73,9 @@ namespace Game
         // std::cout << "Game::Create() succeeded\n";
         // Edgecase bug - we crash after game has created
 
+        std::cout << "showing window" << std::endl;
+
+        glfwFocusWindow(BackEnd::GetWindowPointer());
         glfwShowWindow(BackEnd::GetWindowPointer());
     }
 

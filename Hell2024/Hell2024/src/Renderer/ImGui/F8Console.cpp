@@ -210,6 +210,7 @@ void IMGUI::DrawF8Command()
 	if (F8_TOGGLED)
 	{
 		DrawMainBar();
+
 		ImGui::SetNextWindowPos(ImVec2(0, MainBarHeight), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 3));
 
@@ -242,12 +243,13 @@ void IMGUI::DrawF8Command()
 		}
 		ImGui::EndChild();
 
-
-
-		ImGui::PushItemWidth(-1);
+		//ImGui::PushItemWidth(-1);
 
 		// Set keyboard focus to the input box
-		ImGui::SetKeyboardFocusHere();
+		if (ImGui::IsWindowFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0) || ImGui::IsKeyPressed(ImGuiKey_Tab))
+		{
+			ImGui::SetKeyboardFocusHere();
+		}
 
 		if (ImGui::InputText("##CommandInput", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue))
 		{
@@ -290,10 +292,11 @@ void IMGUI::DrawF8Command()
 			}
 		}
 
-		ImGui::PopItemWidth();
+		//ImGui::PopItemWidth();
 
 		ImGui::End();
 	}
+	DrawAllOverlays();
 }
 
 
@@ -307,9 +310,8 @@ void IMGUI::MainLoop()
 	else
 	{
 		//AssetBrowser assetBrowser;
-		AssetBrowser::Render();
+		//AssetBrowser::Render();
 		DrawF8Command();
-		DrawAllOverlays();
 	}
 	RenderFrame();
 }
@@ -433,7 +435,6 @@ void IMGUI::ExecuteCommand(const char* inputCommand)
 			float sensitivity = std::stof(args[1]);
 			AddToConsoleLog("Changed sensitivity from " + std::to_string(Config::mouseSensitivity) + " to " + std::to_string(sensitivity));
 			Config::mouseSensitivity = sensitivity;
-
 		}
 		else
 		{

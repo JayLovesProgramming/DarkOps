@@ -29,7 +29,7 @@ void Engine::Run()
         if (!AssetManager::LoadingComplete())
         {
             AssetManager::LoadNextItem();
-            Renderer::RenderLoadingScreen();
+            //Renderer::RenderLoadingScreen();
         }
         // Create game
         else if (!Game::IsLoaded())
