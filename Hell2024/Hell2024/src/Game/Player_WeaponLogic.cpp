@@ -1053,9 +1053,16 @@ void Player::DropWeapons()
 
 void Player::SwitchWeapon(std::string name, WeaponAction weaponAction)
 {
+    //if (!Game::PlayerActuallyHasInput())
+    //{
+    //    return;
+    //}
+
     WeaponState* state = GetWeaponStateByName(name);
     WeaponInfo* weaponInfo = WeaponManager::GetWeaponInfoByName(name);
     AnimatedGameObject* viewWeaponAnimatedGameObject = GetViewWeaponAnimatedGameObject();
+
+    std::cout << m_playerIndex << Game::GetCurrentPlayerInControlIndex() << std::endl;
 
     if (weaponInfo && state)
     {

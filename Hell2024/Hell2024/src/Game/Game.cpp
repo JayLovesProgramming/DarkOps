@@ -13,6 +13,7 @@
 #include "Pathfinding/Pathfinding2.hpp"
 #include "RapidHotload.hpp"
 #include "LoadingScreen/StartScreen.hpp"
+#include "ThirdPerson.hpp"
 
 namespace Game
 {
@@ -152,6 +153,7 @@ namespace Game
 
         // Debug key presses
         EvaluateDebugKeyPresses();
+        CameraPerspective::EvaluateCameraPerspectivePress();
 
         // Player update
         InputMulti::Update();
@@ -429,8 +431,22 @@ namespace Game
 
     int GetCurrentPlayerInControlIndex()
     {
+        // Returns a integer of who has the control/input active from 0 - 4
         return currentPlayerInputIndex;
     }
+
+    bool PlayerActuallyHasInput() // Splitscreen thing
+    {
+        //Player* currentPlayer = {};
+        //return (currentPlayer->m_playerIndex == GetCurrentPlayerInControlIndex());
+        // Return a bool 
+        return true;
+    }
+
+    //Player GetCurrentPlayer() // GetCurrentPlayerInControlIndex 
+    //{
+    //    return ;
+    //}
 
     static void CheckInputAndSetPlayerControls() 
     {

@@ -1,4 +1,5 @@
 #include "Engine.hpp"
+
 #include "BackEnd/BackEnd.hpp"
 #include "Core/AssetManager.hpp"
 #include "Game/Game.hpp"
@@ -7,7 +8,6 @@
 
 void Engine::Run() 
 {
-
     std::cout << "Loading screen starting" << "\n";
 
     InitLoadingScreen();

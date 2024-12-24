@@ -112,7 +112,10 @@ private:
     bool m_firedThisFrame = false;
 
 public:
-    int32_t m_playerIndex = -1;
+
+    int32_t m_playerIndex = -1; // Can this not be 0? Can it be static and/or inline? i really need to learn
+
+
     float m_crosshairCrossSize = 0;
     glm::mat4 m_weaponSwayMatrix = glm::mat4(1);
     bool m_pickUpInteractable = false;

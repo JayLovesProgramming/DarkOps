@@ -29,6 +29,7 @@ namespace Game
     double GetDeltaTime();
 
     int GetCurrentPlayerInControlIndex();
+    bool PlayerActuallyHasInput(); // Splitscreen thing
 
     void Create();
     void CreatePlayers(unsigned int playerCount);
