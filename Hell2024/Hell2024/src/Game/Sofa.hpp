@@ -27,7 +27,7 @@ public:
         CreateGameObject();
         GameObject* sofa = GetGameObjectByIndex(GetGameObjectCount() - 1);
         sofa->SetPosition(sofaX, 0.4f, 1.89f);
-        sofa->SetRotationY(HELL_PI * -0.5f);
+        sofa->SetRotationY(DARKOPS_PI * -0.5f);
         sofa->SetName("Sofa");
         sofa->SetModel("Sofa_Cushionless");
         sofa->SetMeshMaterial("Sofa");

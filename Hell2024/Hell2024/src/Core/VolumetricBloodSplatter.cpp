@@ -56,7 +56,7 @@ glm::mat4 VolumetricBloodSplatter::GetModelMatrix()
         bloodMeshOffset.position = glm::vec3(-0.0500000045f, -0.4149999917f, -0.1900000125f);
 
     Transform rotTransform;
-    rotTransform.rotation = glm::vec3(0, -HELL_PI / 2, 0);
+    rotTransform.rotation = glm::vec3(0, -DARKOPS_PI / 2, 0);
 
     Transform scaleTransform;
     scaleTransform.scale = glm::vec3(3);

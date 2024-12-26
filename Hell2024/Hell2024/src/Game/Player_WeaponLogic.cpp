@@ -1118,7 +1118,7 @@ void Player::SwitchWeapon(std::string name, WeaponAction weaponAction)
 void Player::SpawnMuzzleFlash() 
 {
     _muzzleFlashTimer = 0;
-    _muzzleFlashRotation = Util::RandomFloat(0, HELL_PI * 2);
+    _muzzleFlashRotation = Util::RandomFloat(0, DARKOPS_PI * 2);
 }
 
 int Player::GetCurrentWeaponMagAmmo()

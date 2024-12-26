@@ -416,7 +416,7 @@ void Scene::LoadDefaultScene()
  /*   {
         Staircase& stairCase3 = g_staircases.emplace_back();
         stairCase3.m_position = glm::vec3(-3.0f, 0, -3.1f);
-        stairCase3.m_rotation = -HELL_PI * 0.5f;
+        stairCase3.m_rotation = -DARKOPS_PI * 0.5f;
         stairCase3.m_stepCount = 18;
     }*/
 
@@ -526,7 +526,7 @@ void Scene::LoadDefaultScene()
         Dobermann::AddDobermann(createInfo);
 
         createInfo.position = glm::vec3(-2.46f, 0.0f, -3.08f);
-        createInfo.rotation = HELL_PI * 0.5f;
+        createInfo.rotation = DARKOPS_PI * 0.5f;
         createInfo.initalState = DobermannState::LAY;
         Dobermann::AddDobermann(createInfo);
 
@@ -665,9 +665,9 @@ void Scene::LoadDefaultScene()
             CreateGameObject();
             GameObject* cube = GetGameObjectByIndex(GetGameObjectCount() - 1);
             cube->SetPosition(x, y, z);
-            cube->SetRotationX(Util::RandomFloat(0, HELL_PI * 2));
-            cube->SetRotationY(Util::RandomFloat(0, HELL_PI * 2));
-            cube->SetRotationZ(Util::RandomFloat(0, HELL_PI * 2));
+            cube->SetRotationX(Util::RandomFloat(0, DARKOPS_PI * 2));
+            cube->SetRotationY(Util::RandomFloat(0, DARKOPS_PI * 2));
+            cube->SetRotationZ(Util::RandomFloat(0, DARKOPS_PI * 2));
             cube->SetModel("Cube");
             cube->SetScale(3.0f);
             cube->SetMeshMaterial("Ceiling2");
@@ -785,7 +785,7 @@ void Scene::RecreateCeilingTrims()
         glm::vec3 planeDir = glm::normalize(plane.m_veritces[BR] - plane.m_veritces[BL]);
         Transform transform;
         transform.position = plane.m_veritces[TL];
-        transform.rotation.y = Util::YRotationBetweenTwoPoints(plane.m_veritces[TR], plane.m_veritces[TL]) + HELL_PI;
+        transform.rotation.y = Util::YRotationBetweenTwoPoints(plane.m_veritces[TR], plane.m_veritces[TL]) + DARKOPS_PI;
         transform.scale = glm::vec3(1.0f);
         transform.scale.x = glm::distance(plane.m_veritces[TR], plane.m_veritces[TL]);
         g_ceilingTrims.push_back(transform.to_mat4());
@@ -835,11 +835,11 @@ void Scene::RecreateFloorTrims()
             {
                 Transform transform;
                 transform.position = searchBegin;
-                transform.rotation.y = Util::YRotationBetweenTwoPoints(plane.m_veritces[BR], plane.m_veritces[BL]) + HELL_PI;
+                transform.rotation.y = Util::YRotationBetweenTwoPoints(plane.m_veritces[BR], plane.m_veritces[BL]) + DARKOPS_PI;
                 transform.scale = glm::vec3(1.0f);
                 transform.scale.x = closestSegmentLength;
                 g_floorTrims.push_back(transform.to_mat4());
-                searchBegin += glm::vec3(planeDir * (DOOR_WIDTH + 0.001f));
+                searchBegin += glm::vec3(planeDir * (Door::DOOR_WIDTH + 0.001f));
                 searchedDistance += closestSegmentLength;
             }
             else
@@ -849,7 +849,7 @@ void Scene::RecreateFloorTrims()
         }        
         Transform transform;
         transform.position = searchBegin;
-        transform.rotation.y = Util::YRotationBetweenTwoPoints(plane.m_veritces[BR], plane.m_veritces[BL]) + HELL_PI;
+        transform.rotation.y = Util::YRotationBetweenTwoPoints(plane.m_veritces[BR], plane.m_veritces[BL]) + DARKOPS_PI;
         transform.scale = glm::vec3(1.0f);
         transform.scale.x = glm::distance(searchBegin, plane.m_veritces[BR]);;
         g_floorTrims.push_back(transform.to_mat4());         
@@ -867,7 +867,7 @@ void Scene::CreateDefaultSpawnPoints()
     {
         SpawnPoint& spawnPoint = g_spawnPoints.emplace_back();
         spawnPoint.position = glm::vec3(0, 2.00, -1);
-        spawnPoint.rotation = glm::vec3(-0.0, HELL_PI, 0);
+        spawnPoint.rotation = glm::vec3(-0.0, DARKOPS_PI, 0);
     }
     {
         SpawnPoint& spawnPoint = g_spawnPoints.emplace_back();
@@ -2028,7 +2028,7 @@ void Scene::ProcessBullets()
                         transform.position.x = rayResult.hitPosition.x;
                         transform.position.y = rayResult.hitPosition.y;
                         transform.position.z = rayResult.hitPosition.z;
-                        transform.rotation.y = bullet.parentPlayersViewRotation.y + HELL_PI;
+                        transform.rotation.y = bullet.parentPlayersViewRotation.y + DARKOPS_PI;
 
                         static int typeCounter = 0;
 
@@ -2247,7 +2247,7 @@ void Scene::LoadHardCodedObjects() {
     _volumetricBloodSplatters.clear();
 
     _toilets.push_back(Toilet(glm::vec3(8.3, 0.1, 2.8), 0));
-    _toilets.push_back(Toilet(glm::vec3(11.2f, 0.1f, 3.65f), HELL_PI * 0.5f));
+    _toilets.push_back(Toilet(glm::vec3(11.2f, 0.1f, 3.65f), DARKOPS_PI * 0.5f));
 
 
     if (true) {
@@ -2460,7 +2460,7 @@ void Scene::LoadHardCodedObjects() {
    /*   CreateGameObject();
         GameObject* glockAmmo = GetGameObjectByIndex(GetGameObjectCount() - 1);
         glockAmmo->SetPosition(0.40f, 0.78f, 4.45f);
-        glockAmmo->SetRotationY(HELL_PI * 0.4f);
+        glockAmmo->SetRotationY(DARKOPS_PI * 0.4f);
         glockAmmo->SetModel("GlockAmmoBox");
         glockAmmo->SetName("GlockAmmo_PickUp");
         glockAmmo->SetMeshMaterial("GlockAmmoBox");
@@ -2473,14 +2473,14 @@ void Scene::LoadHardCodedObjects() {
         glockAmmo->PutRigidBodyToSleep();
         glockAmmo->SetCollisionType(CollisionType::PICKUP);*/
 
-        Game::SpawnPickup(PickUpType::GLOCK_AMMO, glm::vec3(0.40f, 0.78f, 4.45f), glm::vec3(0, HELL_PI * 0.4f, 0), true);
+        Game::SpawnPickup(PickUpType::GLOCK_AMMO, glm::vec3(0.40f, 0.78f, 4.45f), glm::vec3(0, DARKOPS_PI * 0.4f, 0), true);
 
         for (int x = 0; x < 10; x++)
         {
             for (int z = 0; z < 10; z++)
             {
                 glm::vec3 position = glm::vec3(1 + x * 0.4f, 0.5f, 1 + z * 0.4f);
-                glm::vec3 rotation = glm::vec3(0, Util::RandomFloat(0, HELL_PI * 2), 0);
+                glm::vec3 rotation = glm::vec3(0, Util::RandomFloat(0, DARKOPS_PI * 2), 0);
 
                 int random_number = std::rand() % 2;
                 if (random_number == 0)
@@ -2509,7 +2509,7 @@ void Scene::LoadHardCodedObjects() {
             smallChestOfDrawers->SetMeshMaterial("Drawers");
             smallChestOfDrawers->SetName("SmallDrawersHis");
             smallChestOfDrawers->SetPosition(0.1f, 0.1f, 4.45f);
-            smallChestOfDrawers->SetRotationY(NOOSE_PI / 2);
+            smallChestOfDrawers->SetRotationY(DARKOPS_ROUNED_PI / 2);
             smallChestOfDrawers->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SmallChestOfDrawersFrame"));
             smallChestOfDrawers->SetOpenState(OpenState::NONE, 0, 0, 0);
             smallChestOfDrawers->SetAudioOnOpen("DrawerOpen.wav", 1.0f);
@@ -2532,7 +2532,7 @@ void Scene::LoadHardCodedObjects() {
             smallChestOfDrawers2->SetMeshMaterial("Drawers");
             smallChestOfDrawers2->SetName("SmallDrawersHers");
             smallChestOfDrawers2->SetPosition(8.9, 0.1f, 8.3f);
-            smallChestOfDrawers2->SetRotationY(NOOSE_PI);
+            smallChestOfDrawers2->SetRotationY(DARKOPS_ROUNED_PI);
             smallChestOfDrawers2->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("SmallChestOfDrawersFrame"));
             smallChestOfDrawers2->SetOpenState(OpenState::NONE, 0, 0, 0);
             smallChestOfDrawers2->SetAudioOnOpen("DrawerOpen.wav", 1.0f);
@@ -2567,7 +2567,7 @@ void Scene::LoadHardCodedObjects() {
             toilet.SetName("Toilet");
             toilet.SetMeshMaterial("Toilet");
             toilet.SetRaycastShapeFromModel(OpenGLAssetManager::GetModel("Toilet"));
-            toilet.SetRotationY(HELL_PI * 0.5f);
+            toilet.SetRotationY(DARKOPS_PI * 0.5f);
             toilet.SetKinematic(true);
             toilet.AddCollisionShapeFromConvexMesh(&OpenGLAssetManager::GetModel("Toilet_ConvexMesh")->_meshes[0], sofaFilterData);
             toilet.AddCollisionShapeFromConvexMesh(&OpenGLAssetManager::GetModel("Toilet_ConvexMesh1")->_meshes[0], sofaFilterData);
@@ -2739,7 +2739,7 @@ void Scene::LoadHardCodedObjects() {
     glock.SetAllMeshMaterials("Glock");
     glock.SetScale(0.01f);
     glock.SetPosition(glm::vec3(2.5f, 1.5f, 3));
-    glock.SetRotationY(HELL_PI * 0.5f);*/
+    glock.SetRotationY(DARKOPS_PI * 0.5f);*/
 
 
    /* auto glock = GetAnimatedGameObjectByName("Glock");
@@ -2765,7 +2765,7 @@ void Scene::LoadHardCodedObjects() {
     mp7.SetMeshMaterial("SK_FPSArms_Female", "FemaleArms");
     mp7.SetScale(0.01f);
     mp7.SetPosition(glm::vec3(2.5f, 1.5f, 4));
-    mp7.SetRotationY(HELL_PI * 0.5f);*/
+    mp7.SetRotationY(DARKOPS_PI * 0.5f);*/
 
 
     //////////////////////
@@ -2793,7 +2793,7 @@ void Scene::LoadHardCodedObjects() {
         aks.SetMeshMaterialByMeshIndex(9, "AKS74U_3"); // possibly incorrect.
         aks.SetScale(0.01f);
         aks.SetPosition(glm::vec3(2.5f, 1.5f, 3));
-        aks.SetRotationY(HELL_PI * 0.5f);
+        aks.SetRotationY(DARKOPS_PI * 0.5f);
     }*/
 
     /////////////////////
@@ -2810,7 +2810,7 @@ void Scene::LoadHardCodedObjects() {
         glock.SetAllMeshMaterials("Glock");
         glock.SetScale(0.01f);
         glock.SetPosition(glm::vec3(2.5f, 1.5f, 3));
-        glock.SetRotationY(HELL_PI * 0.5f);
+        glock.SetRotationY(DARKOPS_PI * 0.5f);
     }*/
 
     /*AnimatedGameObject& nurse = _animatedGameObjects.emplace_back(AnimatedGameObject());
@@ -2821,7 +2821,7 @@ void Scene::LoadHardCodedObjects() {
     nurse.SetMaterial("Glock");
     //  glock.SetScale(0.01f);
     nurse.SetPosition(glm::vec3(1.5f, 0.1f, 3));
-    // glock.SetRotationY(HELL_PI * 0.5f);
+    // glock.SetRotationY(DARKOPS_PI * 0.5f);
     */
 
     /*
@@ -2832,7 +2832,7 @@ void Scene::LoadHardCodedObjects() {
     dyingGuy.PlayAndLoopAnimation("DyingGuy_Death", 1.0f);
     dyingGuy.SetMaterial("Glock");
     dyingGuy.SetPosition(glm::vec3(1.5f, -10.1f, 3));
-    dyingGuy.SetRotationX(HELL_PI * 0.5f);
+    dyingGuy.SetRotationX(DARKOPS_PI * 0.5f);
     dyingGuy.SetMeshMaterial("CC_Base_Body", "UniSexGuyBody");
     dyingGuy.SetMeshMaterial("CC_Base_Eye", "UniSexGuyBody");
     dyingGuy.SetMeshMaterial("Biker_Jeans", "UniSexGuyJeans");
@@ -2851,7 +2851,7 @@ void Scene::LoadHardCodedObjects() {
     unisexGuy.PlayAndLoopAnimation("Character_Glock_Walk", 1.0f);
     //unisexGuy.PlayAndLoopAnimation("Character_Glock_Walk", 1.0f);
     //unisexGuy.PlayAndLoopAnimation("UnisexGuy_Death", 1.0f);
-    //unisexGuy.SetRotationX(HELL_PI * 0.5f);
+    //unisexGuy.SetRotationX(DARKOPS_PI * 0.5f);
     unisexGuy.SetMaterial("NumGrid");
     unisexGuy.SetPosition(glm::vec3(3.0f, 0.1f, 3));
     unisexGuy.SetMeshMaterial("CC_Base_Body", "UniSexGuyBody");
@@ -2910,7 +2910,7 @@ void Scene::LoadHardCodedObjects() {
     glock.SetMeshMaterial("SK_FPSArms_Female", "FemaleArms");
     glock.SetScale(0.01f);
     glock.SetPosition(glm::vec3(2.5f, 1.5f, 3));
-    glock.SetRotationY(HELL_PI * 0.5f);
+    glock.SetRotationY(DARKOPS_PI * 0.5f);
 
     */
 
@@ -2927,7 +2927,7 @@ void Scene::LoadHardCodedObjects() {
  //   glock.SetMeshMaterial("SK_FPSArms_Female", "FemaleArms");
     shotgun.SetScale(0.02f);
     shotgun.SetPosition(glm::vec3(2.5f, 1.5f, 4));
-    shotgun.SetRotationY(HELL_PI * 0.5f);
+    shotgun.SetRotationY(DARKOPS_PI * 0.5f);
     shotgun.SetMeshMaterialByIndex(2, "Shell");
     */
     /*
@@ -2959,7 +2959,7 @@ void Scene::LoadHardCodedObjects() {
 		aks74u.PlayAndLoopAnimation("AKS74U_Idle", 0.1f);
         aks74u.SetScale(0.01f);
         aks74u.SetPosition(glm::vec3(2.5f, 1.5f, 3));
-        aks74u.SetRotationY(HELL_PI * 0.5f);   */
+        aks74u.SetRotationY(DARKOPS_PI * 0.5f);   */
 
         /*
 
@@ -2974,7 +2974,7 @@ void Scene::LoadHardCodedObjects() {
         enemy2.PlayAndLoopAnimation("Character_Glock_Idle", 1.0f);
         enemy2.SetScale(0.01f);
         enemy2.SetPosition(glm::vec3(2.5f, 0.1f, 2));
-        enemy2.SetRotationX(HELL_PI / 2);
+        enemy2.SetRotationX(DARKOPS_PI / 2);
         */
         /*
 
@@ -3144,7 +3144,7 @@ void Scene::AddDoor(Door& door)
 
 void Scene::CreatePointCloud() 
 {
-    float pointSpacing = _pointCloudSpacing;
+    //float pointSpacing = _pointCloudSpacing;
     _cloudPoints.clear();
 }
 

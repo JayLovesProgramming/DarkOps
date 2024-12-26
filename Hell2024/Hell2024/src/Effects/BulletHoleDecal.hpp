@@ -20,7 +20,7 @@ public:
     BulletHoleDecal(glm::vec3 localPosition, glm::vec3 localNormal, PxRigidBody* parent, BulletHoleDecalType type)
     {
         float min = 0;
-        float max = HELL_PI * 2;
+        float max = DARKOPS_PI * 2;
         m_randomRotation = min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
         m_localPosition = localPosition;
         m_localNormal = localNormal;

@@ -2534,27 +2534,27 @@ void CSGSubtractivePass()
 
         // z back
         translation.position = glm::vec3(0, 0, -0.5f);
-        rotaton.rotation = glm::vec3(0, HELL_PI, 0);
+        rotaton.rotation = glm::vec3(0, DARKOPS_PI, 0);
         planeTransforms.push_back(cubeVolume.GetModelMatrix() * translation.to_mat4() * rotaton.to_mat4());
 
         // x front
         translation.position = glm::vec3(0.5f, 0, 0);
-        rotaton.rotation = glm::vec3(0, HELL_PI * 0.5f, 0);
+        rotaton.rotation = glm::vec3(0, DARKOPS_PI * 0.5f, 0);
         planeTransforms.push_back(cubeVolume.GetModelMatrix() * translation.to_mat4() * rotaton.to_mat4());
 
         // x back
         translation.position = glm::vec3(-0.5f, 0, 0);
-        rotaton.rotation = glm::vec3(0, HELL_PI * 1.5f, 0);
+        rotaton.rotation = glm::vec3(0, DARKOPS_PI * 1.5f, 0);
         planeTransforms.push_back(cubeVolume.GetModelMatrix() * translation.to_mat4() * rotaton.to_mat4());
 
         // y top
         translation.position = glm::vec3(0, 0.5f, 0);
-        rotaton.rotation = glm::vec3(HELL_PI * 1.5f, 0, 0);
+        rotaton.rotation = glm::vec3(DARKOPS_PI * 1.5f, 0, 0);
         planeTransforms.push_back(cubeVolume.GetModelMatrix() * translation.to_mat4() * rotaton.to_mat4());
 
         // y bottom
         translation.position = glm::vec3(0, -0.5f, 0);
-        rotaton.rotation = glm::vec3(HELL_PI * 0.5f, 0, 0);
+        rotaton.rotation = glm::vec3(DARKOPS_PI * 0.5f, 0, 0);
         planeTransforms.push_back(cubeVolume.GetModelMatrix() * translation.to_mat4() * rotaton.to_mat4());
     }
 

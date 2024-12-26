@@ -15,7 +15,7 @@ public:
         CreateGameObject();
         GameObject* cushion0 = GetGameObjectByIndex(GetGameObjectCount() - 1);
         cushion0->SetPosition(SofaManager::sofaX, 0.4f, 1.89f);
-        cushion0->SetRotationY(HELL_PI * -0.5f);
+        cushion0->SetRotationY(DARKOPS_PI * -0.5f);
         cushion0->SetModel("SofaCushion0");
         cushion0->SetMeshMaterial("Sofa");
         cushion0->SetName("SofaCushion0");
@@ -38,7 +38,7 @@ public:
         cushion1->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
         cushion1->UpdateRigidBodyMassAndInertia(cushionDensity);
         cushion1->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion1->SetRotationY(HELL_PI * -0.5f);
+        cushion1->SetRotationY(DARKOPS_PI * -0.5f);
 
         CreateGameObject();
         GameObject* cushion2 = GetGameObjectByIndex(GetGameObjectCount() - 1);
@@ -52,7 +52,7 @@ public:
         cushion2->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
         cushion2->UpdateRigidBodyMassAndInertia(cushionDensity);
         cushion2->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion2->SetRotationY(HELL_PI * -0.5f);
+        cushion2->SetRotationY(DARKOPS_PI * -0.5f);
 
         CreateGameObject();
         GameObject* cushion3 = GetGameObjectByIndex(GetGameObjectCount() - 1);
@@ -66,7 +66,7 @@ public:
         cushion3->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
         cushion3->UpdateRigidBodyMassAndInertia(cushionDensity);
         cushion3->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion3->SetRotationY(HELL_PI * -0.5f);
+        cushion3->SetRotationY(DARKOPS_PI * -0.5f);
 
         CreateGameObject();
         GameObject* cushion4 = GetGameObjectByIndex(GetGameObjectCount() - 1);
@@ -80,6 +80,6 @@ public:
         cushion4->SetModelMatrixMode(ModelMatrixMode::PHYSX_TRANSFORM);
         cushion4->UpdateRigidBodyMassAndInertia(15.0f);
         cushion4->SetCollisionType(CollisionType::BOUNCEABLE);
-        cushion4->SetRotationY(HELL_PI * -0.5f);
+        cushion4->SetRotationY(DARKOPS_PI * -0.5f);
 	}
 };

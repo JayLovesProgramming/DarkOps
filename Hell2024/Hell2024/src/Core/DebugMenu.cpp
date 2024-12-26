@@ -224,7 +224,7 @@ void DebugMenu::PressedEnter() {
 	else if (flag == MenuItemFlag::ADD_WINDOW) {
 		Window& windowA = Scene::g_windows.emplace_back();
 		//windowA.position = glm::vec3(3.15f, 0.1f, 3.6f);
-		windowA.rotation.y = HELL_PI * 0.5f;
+		windowA.rotation.y = DARKOPS_PI * 0.5f;
 		windowA.CreatePhysicsObjects();
 		_parentMenuItem = _currentMenuItem;
 		_currentMenuItem = &_windowMenu;

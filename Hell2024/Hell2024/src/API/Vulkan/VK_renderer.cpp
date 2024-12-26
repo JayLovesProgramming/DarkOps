@@ -818,7 +818,6 @@ namespace VulkanRenderer
         _descriptorSets.globalIllumination.Update(device, 0, 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VulkanBackEnd::GetPointCloudBuffer()->buffer);
     }
 
-    //      Storage Buffers      //
     void CreateStorageBuffers()
     {
         for (int i = 0; i < FRAME_OVERLAP; i++)

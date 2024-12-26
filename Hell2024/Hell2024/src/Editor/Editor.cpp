@@ -271,7 +271,7 @@ namespace Editor
                     Door* door = Scene::GetDoorByIndex(g_selectedObjectIndex);
                     if (door)
                     {
-                        door->SetPosition(glm::vec3(pos.x, pos.y - DOOR_HEIGHT / 2.0f, pos.z));
+                        door->SetPosition(glm::vec3(pos.x, pos.y - Door::DOOR_HEIGHT / 2.0f, pos.z));
                         g_gizmoMatrix = door->GetGizmoMatrix();
                     }
                 }
@@ -870,7 +870,7 @@ namespace Editor
         g_camPos = viewPos;
 
         glm::dvec3 delta = g_viewTarget - g_camPos;
-        g_yawAngle = std::atan2(delta.z, delta.x) + HELL_PI * 0.5f;
+        g_yawAngle = std::atan2(delta.z, delta.x) + DARKOPS_PI * 0.5f;
         g_pitchAngle = std::asin(delta.y / glm::length(delta));
 
         g_menuSelectionIndex = 0;
@@ -1126,7 +1126,7 @@ namespace Editor
                     g_menuItems.push_back({ "Pos X", MenuItem::Type::VALUE_FLOAT, &door->m_position.x, 0.1f, 1 });
                     g_menuItems.push_back({ "Pos Y", MenuItem::Type::VALUE_FLOAT, &door->m_position.y, 0.1f, 1 });
                     g_menuItems.push_back({ "Pos Z", MenuItem::Type::VALUE_FLOAT, &door->m_position.z, 0.1f, 1 });
-                    g_menuItems.push_back({ "Rot Y", MenuItem::Type::VALUE_FLOAT, &door->m_rotation, HELL_PI * 0.5f, 5 });
+                    g_menuItems.push_back({ "Rot Y", MenuItem::Type::VALUE_FLOAT, &door->m_rotation, DARKOPS_PI * 0.5f, 5 });
                     g_menuItems.push_back({ "OpenAtStart", MenuItem::Type::VALUE_BOOL, &door->m_openOnStart });
                 }
             }
@@ -1138,7 +1138,7 @@ namespace Editor
                     g_menuItems.push_back({ "Pos X", MenuItem::Type::VALUE_FLOAT, &window->m_position.x, 0.1f, 1 });
                     g_menuItems.push_back({ "Pos Y", MenuItem::Type::VALUE_FLOAT, &window->m_position.y, 0.1f, 1 });
                     g_menuItems.push_back({ "Pos Z", MenuItem::Type::VALUE_FLOAT, &window->m_position.z, 0.1f, 1 });
-                    g_menuItems.push_back({ "Rot Y", MenuItem::Type::VALUE_FLOAT, &window->m_rotationY, HELL_PI * 0.5f, 5 });
+                    g_menuItems.push_back({ "Rot Y", MenuItem::Type::VALUE_FLOAT, &window->m_rotationY, DARKOPS_PI * 0.5f, 5 });
                 }
             }
             else if (g_selectedObjectType == ObjectType::CSG_OBJECT_ADDITIVE_CUBE || g_selectedObjectType == ObjectType::CSG_OBJECT_SUBTRACTIVE && g_selectedObjectIndex != -1)
@@ -1388,7 +1388,7 @@ namespace Editor
             {
                 DoorCreateInfo createInfo;
                 createInfo.position = spawnPos * glm::vec3(1, 0, 1);
-                createInfo.rotation = HELL_PI * 0.5f;
+                createInfo.rotation = DARKOPS_PI * 0.5f;
                 createInfo.openAtStart = false;
                 Scene::CreateDoor(createInfo);
                 g_selectedObjectIndex = Scene::GetDoorCount() - 1;

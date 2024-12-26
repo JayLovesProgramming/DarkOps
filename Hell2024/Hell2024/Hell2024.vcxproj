@@ -148,6 +148,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClCompile Include="src\Core\DebugMenu.cpp" />
     <ClCompile Include="src\Editor\Brush.cpp" />
     <ClCompile Include="src\Editor\CSGCommon.hpp" />
+    <ClCompile Include="src\Editor\CSGPlane.cpp" />
     <ClCompile Include="src\Editor\CSGShape.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
     <ClCompile Include="src\Game\Dobermann.cpp" />

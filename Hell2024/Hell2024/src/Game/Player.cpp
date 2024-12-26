@@ -1374,8 +1374,8 @@ void Player::SpawnCasing(AmmoInfo* ammoInfo)
 
         Transform transform;
         transform.position = GetPistolCasingSpawnPostion();
-        transform.rotation.x = HELL_PI * 0.5f;
-        transform.rotation.y = _rotation.y + (HELL_PI * 0.5f);
+        transform.rotation.x = DARKOPS_PI * 0.5f;
+        transform.rotation.y = _rotation.y + (DARKOPS_PI * 0.5f);
 
         PhysicsFilterData filterData;
         filterData.raycastGroup = RaycastGroup::RAYCAST_DISABLED;
@@ -1534,7 +1534,7 @@ void Player::CreateItemPickupOverlapShape()
 		_itemPickupOverlapShape->release();
 	}
     float radius = PLAYER_CAPSULE_RADIUS + 0.075;
-    float halfHeight = PLAYER_CAPSULE_HEIGHT * 0.75f;
+    float halfHeight = PLAYER_CAPSULE_HEIGHT * 0.75f; // not half height 
     _itemPickupOverlapShape = Physics::GetPhysics()->createShape(PxCapsuleGeometry(radius, halfHeight), *Physics::GetDefaultMaterial(), true);
 
     // melee overlap shape

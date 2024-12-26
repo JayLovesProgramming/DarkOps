@@ -1344,8 +1344,8 @@ namespace Util
     }
 
     inline float NormalizeAngle(float angle) {
-        while (angle > HELL_PI) angle -= 2 * HELL_PI;
-        while (angle < -HELL_PI) angle += 2 * HELL_PI;
+        while (angle > DARKOPS_PI) angle -= 2 * DARKOPS_PI;
+        while (angle < -DARKOPS_PI) angle += 2 * DARKOPS_PI;
         return angle;
     }
 
@@ -1367,9 +1367,9 @@ namespace Util
             }
         }
         // Keep the rotation within the range [0, 2*pi]
-        objectYRotation = fmod(objectYRotation, 2 * HELL_PI);
+        objectYRotation = fmod(objectYRotation, 2 * DARKOPS_PI);
         if (objectYRotation < 0) {
-            objectYRotation += 2 * HELL_PI;
+            objectYRotation += 2 * DARKOPS_PI;
         }
     }
 
@@ -1492,14 +1492,14 @@ namespace Util
     }
 
     inline float CalculateAngleDifference(float angle1, float angle2) {
-        angle1 = fmod(angle1, 2 * HELL_PI);
-        angle2 = fmod(angle2, 2 * HELL_PI);
+        angle1 = fmod(angle1, 2 * DARKOPS_PI);
+        angle2 = fmod(angle2, 2 * DARKOPS_PI);
         float difference = angle1 - angle2;
-        if (difference > HELL_PI) {
-            difference -= 2 * HELL_PI;
+        if (difference > DARKOPS_PI) {
+            difference -= 2 * DARKOPS_PI;
         }
-        else if (difference < -HELL_PI) {
-            difference += 2 * HELL_PI;
+        else if (difference < -DARKOPS_PI) {
+            difference += 2 * DARKOPS_PI;
         }
         return difference;
     }

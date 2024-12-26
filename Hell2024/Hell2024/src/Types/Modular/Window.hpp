@@ -6,8 +6,10 @@
 class Window 
 {
 public:
+    constexpr static auto WINDOW_WIDTH = 0.85f;
+    constexpr static auto WINDOW_HEIGHT = 2.1f;
 
-	PxRigidStatic* raycastBody = NULL;
+    PxRigidStatic* raycastBody = NULL;
 	PxShape* raycastShape = NULL;
 
 	Window();

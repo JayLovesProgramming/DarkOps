@@ -27,9 +27,9 @@ void Dobermann::Init()
     PxMaterial* material = Physics::GetDefaultMaterial();
     PxCapsuleControllerDesc* desc = new PxCapsuleControllerDesc;
     desc->setToDefault();
-    desc->height = PLAYER_CAPSULE_HEIGHT;
-    desc->radius = PLAYER_CAPSULE_RADIUS;
-    desc->position = PxExtendedVec3(m_initialPosition.x, m_initialPosition.y + (PLAYER_CAPSULE_HEIGHT / 2) + (PLAYER_CAPSULE_RADIUS * 2), m_initialPosition.z);
+    desc->height = Player::PLAYER_CAPSULE_HEIGHT;
+    desc->radius = Player::PLAYER_CAPSULE_RADIUS;
+    desc->position = PxExtendedVec3(m_initialPosition.x, m_initialPosition.y + (Player::PLAYER_CAPSULE_HEIGHT / 2) + (Player::PLAYER_CAPSULE_RADIUS * 2), m_initialPosition.z);
     desc->material = material;
     desc->stepOffset = 0.3f;
     desc->contactOffset = 0.001;

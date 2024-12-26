@@ -542,7 +542,7 @@ const glm::mat4 AnimatedGameObject::GetModelMatrix()
         Transform correction;
         if (_skinnedModel->_filename == "AKS74U" || _skinnedModel->_filename == "Glock")
         {
-            correction.rotation.y = HELL_PI;
+            correction.rotation.y = DARKOPS_PI;
         }
         // THIS IS A HAAAAAAACK TO FIX THE MODELS BEING BACKWARDS 180 degrees.
         // Make it toggleable so not all animated models are flipped

@@ -32,12 +32,12 @@ void Door::Interact()
     if (state == CLOSED) 
     {
         state = OPENING;
-        Audio::PlayAudio("Door_Open.wav", DOOR_VOLUME);
+        Audio::PlayAudio("Door_Open.wav", Audio::DOOR_VOLUME);
     }
     else if (state == OPEN)
     {
         state = CLOSING;
-        Audio::PlayAudio("Door_Open.wav", DOOR_VOLUME);
+        Audio::PlayAudio("Door_Open.wav", Audio::DOOR_VOLUME);
     }
 }
 
@@ -130,7 +130,7 @@ void Door::CleanUp()
 glm::mat4 Door::GetGizmoMatrix() 
 {
     Transform frameTransform;
-    frameTransform.position = m_position + glm::vec3(0, DOOR_HEIGHT * 0.5f, 0);
+    frameTransform.position = m_position + glm::vec3(0, Door::DOOR_HEIGHT * 0.5f, 0);
     frameTransform.rotation.y = m_rotation;
     return frameTransform.to_mat4();
 }
@@ -153,27 +153,27 @@ glm::mat4 Door::GetDoorModelMatrix()
 
 glm::vec3 Door::GetFloorplanVertFrontLeft(float padding)
 {
-    return GetFrameModelMatrix() * glm::vec4(DOOR_EDITOR_DEPTH + padding, 0, (-DOOR_WIDTH / 2), 1.0f);
+    return GetFrameModelMatrix() * glm::vec4(DOOR_EDITOR_DEPTH + padding, 0, (-Door::DOOR_WIDTH / 2), 1.0f);
 }
 
 glm::vec3 Door::GetFloorplanVertFrontRight(float padding) 
 {
-    return GetFrameModelMatrix() * glm::vec4(DOOR_EDITOR_DEPTH + padding, 0, (DOOR_WIDTH / 2), 1.0f);
+    return GetFrameModelMatrix() * glm::vec4(DOOR_EDITOR_DEPTH + padding, 0, (Door::DOOR_WIDTH / 2), 1.0f);
 }
 
 glm::vec3 Door::GetFloorplanVertBackLeft(float padding)
 {
-    return GetFrameModelMatrix() * glm::vec4(-DOOR_EDITOR_DEPTH - padding, 0, (DOOR_WIDTH / 2), 1.0f);
+    return GetFrameModelMatrix() * glm::vec4(-DOOR_EDITOR_DEPTH - padding, 0, (Door::DOOR_WIDTH / 2), 1.0f);
 }
 
 glm::vec3 Door::GetFloorplanVertBackRight(float padding)
 {
-    return GetFrameModelMatrix() * glm::vec4(-DOOR_EDITOR_DEPTH - padding, 0, (-DOOR_WIDTH / 2), 1.0f);
+    return GetFrameModelMatrix() * glm::vec4(-DOOR_EDITOR_DEPTH - padding, 0, (-Door::DOOR_WIDTH / 2), 1.0f);
 }
 
 glm::vec3 Door::GetFrontLeftCorner() 
 {
-    return GetDoorModelMatrix() * glm::vec4(0, 0, -DOOR_WIDTH, 1.0f);
+    return GetDoorModelMatrix() * glm::vec4(0, 0, -Door::DOOR_WIDTH, 1.0f);
 }
 
 glm::vec3 Door::GetFrontRightCorner()
@@ -183,7 +183,7 @@ glm::vec3 Door::GetFrontRightCorner()
 
 glm::vec3 Door::GetBackLeftCorner() 
 {
-    return GetDoorModelMatrix() * glm::vec4(-DOOR_EDITOR_DEPTH, 0, -DOOR_WIDTH, 1.0f);
+    return GetDoorModelMatrix() * glm::vec4(-DOOR_EDITOR_DEPTH, 0, -Door::DOOR_WIDTH, 1.0f);
 }
 
 glm::vec3 Door::GetBackRightCorner() 
@@ -307,7 +307,7 @@ std::vector<RenderItem3D>& Door::GetRenderItems()
 
 void Door::Rotate90() 
 {
-    m_rotation += HELL_PI * 0.5f;
+    m_rotation += DARKOPS_PI * 0.5f;
     if (raycastBody) {
         PxMat44 worldMatrix = Util::GlmMat4ToPxMat44(GetFrameModelMatrix());
         PxTransform transform2 = PxTransform(worldMatrix);

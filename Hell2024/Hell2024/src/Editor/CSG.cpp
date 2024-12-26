@@ -184,9 +184,9 @@ namespace CSG
         // Doors
         for (Door& door : Scene::GetDoors()) {
             Transform transform;
-            transform.position = door.m_position + glm::vec3(0, DOOR_HEIGHT / 2, 0);
+            transform.position = door.m_position + glm::vec3(0, Door::DOOR_HEIGHT / 2, 0);
             transform.rotation = glm::vec3(0, door.m_rotation, 0);
-            transform.scale = glm::vec3(0.2f, DOOR_HEIGHT, 0.81f);
+            transform.scale = glm::vec3(0.2f, Door::DOOR_HEIGHT, 0.81f);
             transform.scale *= glm::vec3(0.5f);
             Brush& brush = g_subtractiveBrushes.emplace_back();
             brush.SetBrushType(AIR_BRUSH);

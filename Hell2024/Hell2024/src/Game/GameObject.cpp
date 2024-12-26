@@ -313,8 +313,8 @@ void GameObject::Update(float deltaTime) {
 
         // toilet hardcoded shit
 
-        float maxOpenValue = -(NOOSE_PI * 0.5f) - 0.12f;
-        float maxOpenValueSeat = (NOOSE_PI * 0.5f) + 0.12f;
+        float maxOpenValue = -(DARKOPS_ROUNED_PI * 0.5f) - 0.12f;
+        float maxOpenValueSeat = (DARKOPS_ROUNED_PI * 0.5f) + 0.12f;
         float speed = 12.0f;
         if (_openState == OpenState::OPENING && _openAxis == OpenAxis::ROTATION_POS_X) {
             _openTransform.rotation.x -= deltaTime * speed;

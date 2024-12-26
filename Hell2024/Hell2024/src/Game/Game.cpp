@@ -118,7 +118,7 @@ namespace Game
         {
             Physics::ClearCollisionLists();
             Scene::LoadDefaultScene();
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
         }
         CSG::Update();
         Pathfinding2::Update(deltaTime);
@@ -126,13 +126,13 @@ namespace Game
         // Editor
         if (Input::KeyPressed(HELL_KEY_F1) || Input::KeyPressed(HELL_KEY_F2) || Input::KeyPressed(HELL_KEY_F3)) 
         {
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
             Editor::EnterEditor();
         }
 
         if (Input::KeyPressed(HELL_KEY_TAB)) 
         {
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
             if (Editor::IsOpen()) 
             {
                 Editor::LeaveEditor();
@@ -491,22 +491,22 @@ namespace Game
 
         if (Input::KeyPressed(HELL_KEY_B))
         {
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
             Renderer::NextDebugLineRenderMode();
         }
         if (Input::KeyPressed(HELL_KEY_X))
         {
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
             Renderer::PreviousRenderMode();
         }
         if (Input::KeyPressed(HELL_KEY_Z)) 
         {
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
             Renderer::NextRenderMode();
         }
         if (Input::KeyPressed(HELL_KEY_Y))
         {
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
             Renderer::ToggleProbes();
         }
 
@@ -533,7 +533,7 @@ namespace Game
         if (Input::KeyPressed(HELL_KEY_GRAVE_ACCENT))
         {
             _showDebugText = !_showDebugText;
-            Audio::PlayAudio(AUDIO_SELECT, 1.00f);
+            Audio::PlayAudio(Audio::AUDIO_SELECT, 1.00f);
         }
     }
 

@@ -113,6 +113,9 @@ private:
 
 public:
 
+    constexpr static auto PLAYER_CAPSULE_HEIGHT = 0.4f;
+    constexpr static auto PLAYER_CAPSULE_RADIUS = 0.25f;
+
     int32_t m_playerIndex = -1; // Can this not be 0? Can it be static and/or inline? i really need to learn
 
 
@@ -389,7 +392,7 @@ private:
     float _footstepAudioLoopLength = 0.5;
 
 	glm::vec3 _position = glm::vec3(0);
-	glm::vec3 _rotation = glm::vec3(-0.1f, -HELL_PI * 0.5f, 0);
+	glm::vec3 _rotation = glm::vec3(-0.1f, -DARKOPS_PI * 0.5f, 0);
 	float _viewHeightStanding = 1.65f;
 	float _viewHeightCrouching = 1.15f;
 	float _crouchDownSpeed = 17.5f;

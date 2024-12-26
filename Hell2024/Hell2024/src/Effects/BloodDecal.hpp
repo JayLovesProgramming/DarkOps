@@ -22,7 +22,7 @@ struct BloodDecal
         }
         else 
         {
-            localOffset.rotation.y = Util::RandomFloat(0, HELL_PI * 2);
+            localOffset.rotation.y = Util::RandomFloat(0, DARKOPS_PI * 2);
             transform.scale = glm::vec3(1.5f);
         }
 

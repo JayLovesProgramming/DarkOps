@@ -121,9 +121,9 @@ public:
                     GameObject* cube = GetGameObjectByIndex(GetGameObjectCount() - 1);
                     float halfExtent = 0.1f;
                     cube->SetPosition(2.6f + x * spacing, 1.5f + y * spacing * 1.25f, 2.1f + z * spacing);
-                    cube->SetRotationX(Util::RandomFloat(0, HELL_PI * 2));
-                    cube->SetRotationY(Util::RandomFloat(0, HELL_PI * 2));
-                    cube->SetRotationZ(Util::RandomFloat(0, HELL_PI * 2));
+                    cube->SetRotationX(Util::RandomFloat(0, DARKOPS_PI * 2));
+                    cube->SetRotationY(Util::RandomFloat(0, DARKOPS_PI * 2));
+                    cube->SetRotationZ(Util::RandomFloat(0, DARKOPS_PI * 2));
                     cube->SetWakeOnStart(true);
                     cube->SetModel("ChristmasPresent");
                     cube->SetName("Present");
@@ -175,7 +175,7 @@ public:
         GameObject* pictureFrame = GetGameObjectByIndex(GetGameObjectCount() - 1);
         pictureFrame->SetPosition(1.1f, 1.9f, -0.85f);
         pictureFrame->SetScale(0.01f);
-        //pictureFrame->SetRotationY(HELL_PI / 2);
+        //pictureFrame->SetRotationY(DARKOPS_PI / 2);
         pictureFrame->SetModel("PictureFrame_1");
         pictureFrame->SetMeshMaterial("LongFrame");
         pictureFrame->SetName("PictureFrame");

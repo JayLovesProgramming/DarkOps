@@ -93,7 +93,7 @@ void Player::UpdateCharacterModelAnimation(float deltaTime)
 
         character->SetPosition(GetFeetPosition());// +glm::vec3(0.0f, 0.1f, 0.0f));
         character->Update(deltaTime);
-        character->SetRotationY(_rotation.y + HELL_PI);
+        character->SetRotationY(_rotation.y + DARKOPS_PI);
     }
 
     else 

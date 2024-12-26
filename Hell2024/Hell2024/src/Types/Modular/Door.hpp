@@ -22,6 +22,11 @@ struct Door
     float m_maxOpenRotation = 1.8f;
     bool m_openOnStart = false;
 
+    constexpr static auto INTERACT_DISTANCE = 2.5f;
+    constexpr static auto DOOR_WIDTH = 0.8f;
+    constexpr static auto DOOR_HEIGHT = 2.0f;
+    constexpr static auto DOOR_EDITOR_DEPTH = 0.05f;
+
     enum State 
     {
         CLOSED = 0,

@@ -172,5 +172,6 @@ namespace Scene
 
     void CreateVolumetricBlood(glm::vec3 position, glm::vec3 rotation, glm::vec3 front);
 
+    constexpr static auto _pointCloudSpacing = 0.4f;
     //Player* GetPlayerFromCharacterControler(PxController* characterController);
 }

@@ -106,7 +106,7 @@ namespace Gizmo
 
     inline float Radians(float _degrees)
     {
-        return _degrees * (HELL_PI / 180.0f);
+        return _degrees * (DARKOPS_PI / 180.0f);
     }
 
 

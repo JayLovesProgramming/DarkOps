@@ -30,6 +30,9 @@ namespace Audio
     inline std::vector<AudioHandle> g_activeAudio;
     inline float settingsVolume = 2.5f; // Default will eventually be 1.0f but for debugging let's not burst our ears
 
+    constexpr static auto AUDIO_SELECT = "SELECT_2.wav";
+    constexpr static auto DOOR_VOLUME = 1.0f;
+
 	inline bool SucceededOrWarn(const std::string& message, FMOD_RESULT result)
     {
 		if (result != FMOD_OK) 

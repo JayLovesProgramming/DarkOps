@@ -194,7 +194,7 @@ void Window::SetRotationY(float rotationY)
 
 void Window::Rotate90()
 {
-    SetRotationY(m_rotationY + HELL_PI * 0.5f);
+    SetRotationY(m_rotationY + DARKOPS_PI * 0.5f);
 }
 
 glm::vec3 Window::GetPosition()
