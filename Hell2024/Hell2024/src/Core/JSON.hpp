@@ -10,40 +10,20 @@ struct JSONObject
 {
     nlohmann::json data;
 
-    void WriteString(std::string elementName, std::string value)
-    {
-        data[elementName] = value;
-    }
+    void WriteString(std::string elementName, std::string value);
 
-    void WriteInt(std::string elementName, int value)
-    {
-        data[elementName] = value;
-    }
+    void WriteInt(std::string elementName, int value);
 
-    void WriteFloat(std::string elementName, float value)
-    {
-        data[elementName] = value;
-    }
+    void WriteFloat(std::string elementName, float value);
 
-    void WriteArray(std::string elementName, std::vector<std::string> value)
-    {
-        data[elementName] = value;
-    }
+    void WriteArray(std::string elementName, std::vector<std::string> value);
 
-    std::string GetJSONAsString()
-    {
-        int indent = 4;
-        return data.dump(indent);
-    }
+    std::string GetJSONAsString();
 
-    void SaveToFile(std::string filepath) 
-    {
-        std::ofstream out(filepath);
-        out << GetJSONAsString();
-        out.close();
-    }
+    void SaveToFile(std::string filepath);
 
-    void test() 
+    /* 
+    void test()
     {
         std::vector<int> arr = { 1, 2, 3 };
 
@@ -147,5 +127,5 @@ struct JSONObject
         {
             std::cout << e.what() << '\n';
         }
-    }
+    } */
 };

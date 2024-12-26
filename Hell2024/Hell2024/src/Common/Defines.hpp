@@ -10,7 +10,7 @@ constexpr static auto BR = 3;
 //constexpr static auto _propogationGridSpacing = 0.375f;
 //constexpr static auto _maxPropogationDistance = 2.6f;
 
-constexpr static auto inline PLAYER_COUNT = 4;
+constexpr static auto inline PLAYER_COUNT = 1;
 constexpr static auto inline UNDEFINED_STRING = "UNDEFINED_STRING";
 
 struct SkyBox

@@ -31,6 +31,7 @@ namespace Game
     bool PlayerActuallyHasInput(); // Splitscreen thing
 
     void Create();
+    bool PlayerCountCheck();
     void CreatePlayers(unsigned int playerCount);
     bool IsLoaded();
 

@@ -146,6 +146,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClCompile Include="src\Common\RapidHotload.cpp" />
     <ClCompile Include="src\Core\AssetManager.cpp" />
     <ClCompile Include="src\Core\DebugMenu.cpp" />
+    <ClCompile Include="src\Core\JSON.cpp" />
     <ClCompile Include="src\Editor\Brush.cpp" />
     <ClCompile Include="src\Editor\CSGCommon.hpp" />
     <ClCompile Include="src\Editor\CSGPlane.cpp" />

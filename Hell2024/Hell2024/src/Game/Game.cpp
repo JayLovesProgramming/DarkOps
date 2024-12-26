@@ -48,7 +48,7 @@ namespace Game
 
         GlobalIllumination::RecalculateGI();
 
-        CreatePlayers(3);
+        CreatePlayers(0);
 
         Scene::Init();
         //Audio::PlayAudio("INTRO_EVIL_LAUGH_02.wav", 0.6f);
@@ -191,6 +191,23 @@ namespace Game
         {
             g_playerData[i].flashlightOn = g_players[i].m_flashlightOn;
         }
+    }
+
+    #include <windows.h>
+    bool PlayerCountCheck()
+    {
+        if (PLAYER_COUNT <= 0)
+        {
+            BackEnd::ForceCloseWindow();
+            MessageBox(
+                nullptr, // Handle to the owner window, nullptr if there isn't one
+                L"Player count cannot be 0 or lower", // Message text (wide string literal)
+                L"Error", // Message box title (wide string literal)
+                MB_ICONERROR | MB_OK // Icon type and buttons
+            );
+            return true;
+        }
+        return false;
     }
 
     void CreatePlayers(unsigned int playerCount)

@@ -8,6 +8,8 @@
 
 void Engine::Run() 
 {
+
+
     InitLoadingScreen();
 
     while (!finishedLoading)
@@ -15,6 +17,11 @@ void Engine::Run()
     }
 
     BackEnd::Init(API::OPENGL);
+
+    if (!Game::PlayerCountCheck())
+    {
+        return;
+    }
 
     while (BackEnd::WindowIsOpen()) 
     {

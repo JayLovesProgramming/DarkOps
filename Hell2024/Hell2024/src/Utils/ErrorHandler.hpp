@@ -12,3 +12,4 @@ inline void VK_CHECK(VkResult err)
         abort();
     }
 }
+

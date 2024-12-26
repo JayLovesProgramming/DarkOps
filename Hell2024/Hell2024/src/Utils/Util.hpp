@@ -1633,5 +1633,17 @@ namespace Util
         //stbi_image_free(textureID.data);
         //glDeleteTextures(1, &backgroundImage);
     }
+
+    //inline void ThrowMessageBoxError(const std::string& message)
+    //{
+    //    std::wstring wideMessage(message.begin(), message.end()); // Convert std::string to std::wstring
+    //    MessageBox(
+    //        nullptr,
+    //        wideMessage.c_str(), // Message text (wide string)
+    //        L"ERROR", // Message box title (wide string literal)
+    //        MB_ICONERROR | MB_OK
+    //    );
+    //    //BackEnd::ForceCloseWindow();
+    //}
 }
 

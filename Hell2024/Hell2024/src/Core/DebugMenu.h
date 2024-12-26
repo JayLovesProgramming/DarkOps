@@ -1,11 +1,12 @@
 #pragma once
+
 #include <string>
 #include <vector>
 
-namespace DebugMenu {
-
-	enum class MenuItemFlag { 
-
+namespace DebugMenu 
+{
+	enum class MenuItemFlag
+	{ 
 		UNDEFINED, 
 		
 		// Data types
@@ -31,20 +32,24 @@ namespace DebugMenu {
 		LOAD_MAP
 	};
 
-	struct MenuItem {
-
+	struct MenuItem 
+	{
 		std::string name = "";
 		MenuItemFlag flag = MenuItemFlag::UNDEFINED;
 		void* ptr = nullptr;
 		std::vector<MenuItem> subMenu;
 
 		MenuItem() {}
-		MenuItem(std::string itemName, MenuItemFlag itemFlag, void* itemPtr) {
+
+		MenuItem(std::string itemName, MenuItemFlag itemFlag, void* itemPtr)
+		{
 			this->name = itemName;
 			this->flag = itemFlag;
 			this->ptr = itemPtr;
 		}
-		MenuItem& AddItem(std::string itemName, MenuItemFlag itemFlag, void* itemPtr) {
+
+		MenuItem& AddItem(std::string itemName, MenuItemFlag itemFlag, void* itemPtr)
+		{
 			return subMenu.emplace_back(MenuItem(itemName, itemFlag, itemPtr));
 		}
 	};
