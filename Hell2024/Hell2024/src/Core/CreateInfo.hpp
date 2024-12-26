@@ -24,8 +24,6 @@ struct LightCreateInfo
     int type;
 };
 
-
-
 struct CSGPlaneCreateInfo 
 {
     glm::vec3 vertexTL;
