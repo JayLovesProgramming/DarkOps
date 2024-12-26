@@ -21,7 +21,6 @@ namespace Game
     struct GameSettings
     {
         bool takeDamageOutside = false;
-        glm::vec3 skyBoxTint = glm::vec3(1);
     };
 
     static double deltaTime = 0.00;

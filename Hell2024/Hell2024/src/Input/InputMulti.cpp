@@ -131,7 +131,7 @@ void InputMulti::Init()
     }
     else
     {
-        std::cout << "[init] Dual Keyboard\n";
+        std::cout << "[INITIALIZED] Dual Keyboard\n";
     }
 
     RegisterDeviceOfType(HID_USAGE_GENERIC_MOUSE, eventWindow);

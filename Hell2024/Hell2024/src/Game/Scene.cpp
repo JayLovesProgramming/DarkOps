@@ -361,7 +361,7 @@ void Scene::LoadDefaultScene()
         if (heightMap.m_pxRigidStatic == NULL) 
         {
             heightMap.CreatePhysicsObject();
-            std::cout << "[init] Height Map Physics Stuff\n";
+            std::cout << "[INITIALIZED] Height Map Physics Stuff\n";
         }
     }
 

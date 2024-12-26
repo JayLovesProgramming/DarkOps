@@ -64,11 +64,11 @@ namespace Game
 
         WeaponManager::PreLoadWeaponPickUpConvexHulls();
 
-        g_gameSettings.takeDamageOutside = true;
-        g_gameSettings.skyBoxTint = glm::vec3(0.3, 0.15, 0.03);
+        //g_gameSettings.takeDamageOutside = true;
+        //g_gameSettings.skyBoxTint = glm::vec3(0.3, 0.15, 0.03);
 
-        g_gameSettings.takeDamageOutside = false;
-        g_gameSettings.skyBoxTint = glm::vec3(1);
+        //g_gameSettings.takeDamageOutside = false;
+        //g_gameSettings.skyBoxTint = glm::vec3(1);
 
         // std::cout << "Game::Create() succeeded\n";
         // Edgecase bug - we crash after game has created

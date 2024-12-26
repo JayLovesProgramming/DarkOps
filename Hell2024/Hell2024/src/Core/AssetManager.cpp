@@ -155,7 +155,7 @@ void AssetManager::LoadObjectModels()
 
 void AssetManager::FindAssetPaths()
 {
-    // Cubemap Textures
+    // Skybox Textures
     auto skyboxTexturePaths = std::filesystem::directory_iterator("res/textures/skybox/");
     for (const auto& entry : skyboxTexturePaths)
     {
@@ -165,7 +165,7 @@ void AssetManager::FindAssetPaths()
             if (info.filename.substr(info.filename.length() - 5) == "Right")
             {
                 // Loading skybox
-                g_cubemapTextures.emplace_back(info.fullpath);
+                g_cubemapTextures.emplace_back(info.fullpath); // What is a cubemap texture?
             }
         }
     }
@@ -291,7 +291,7 @@ void AssetManager::FindAssetPaths()
 void AssetManager::AddItemToLoadLog(std::string item)
 {
     //g_loadLog.push_back(item);
-    std::cout << item << "\n";
+    std::cout << "[LOADED] " << item << "\n";
 }
 
 std::vector<std::string>& AssetManager::GetLoadLog()
@@ -355,7 +355,7 @@ void AssetManager::LoadNextItem()
     //         return;
     //     }
     // }
-    // 
+
     // Skinned Models
     for (SkinnedModel& skinnedModel : g_skinnedModels)
     {

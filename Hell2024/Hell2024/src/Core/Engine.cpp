@@ -8,16 +8,11 @@
 
 void Engine::Run() 
 {
-    std::cout << "Loading screen starting" << "\n";
-
     InitLoadingScreen();
 
     while (!finishedLoading)
     {
-
     }
-
-    std::cout << "Loading screen finished" << "\n";
 
     BackEnd::Init(API::OPENGL);
 

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <glm/glm.hpp>
 
 constexpr static auto TL = 0;
@@ -20,8 +19,22 @@ constexpr static auto AUDIO_SELECT = "SELECT_2.wav";
 constexpr static auto DOOR_VOLUME = 1.0f;
 constexpr static auto INTERACT_DISTANCE = 2.5f;
 
-constexpr static auto NEAR_PLANE = 0.0025f;
-constexpr static auto FAR_PLANE = 200.0f;
+struct SkyBox
+{
+    inline static bool SKYBOX_ENABLED = true;
+    inline static glm::vec3 SKYBOX_TINT = glm::vec3(0.1);
+
+    struct Plane
+    {
+        inline static constexpr float VERY_NEAR_DISTANCE = 0.0005f;
+        inline static constexpr float NEAR_DISTANCE = 0.0025f;
+        inline static constexpr float FAR_DISTANCE = 200.0f;
+        inline static constexpr float VERY_FAR_DISTANCE = 500.0f;
+        inline static constexpr float EXTREMELY_FAR_DISTANCE = 900.0f;
+    };
+
+};
+
 
 constexpr static auto inline NOOSE_PI = 3.14159265359f;
 constexpr static auto inline NOOSE_HALF_PI = 1.57079632679f;

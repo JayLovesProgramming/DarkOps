@@ -1591,7 +1591,7 @@ glm::mat4 Player::GetProjectionMatrix() const
     {
         height *= 0.5f;
     }
-    return glm::perspective(_zoom, width / height, NEAR_PLANE, FAR_PLANE);
+    return glm::perspective(_zoom, width / height, SkyBox::Plane::NEAR_DISTANCE, SkyBox::Plane::FAR_DISTANCE);
 
     /*
     float fovY = _zoom;

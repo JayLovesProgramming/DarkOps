@@ -172,7 +172,7 @@ namespace BackEnd
         IMGUI::Init(_window);
         glfwHideWindow(_window);
 
-        std::cout << "[init] Backend" << std::endl;
+        std::cout << "[INITIALIZED] Backend" << std::endl;
     }
 
     void BeginFrame() 

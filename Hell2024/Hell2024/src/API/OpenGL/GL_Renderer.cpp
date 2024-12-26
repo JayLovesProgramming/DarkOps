@@ -206,8 +206,6 @@ void WinstonPass(RenderData& renderData);
 
 void OpenGLRenderer::HotloadShaders() 
 {
-    std::cout << "[init] Shaders \n";
-    
     g_shaders.worldPosition.Load("res/shaders/OpenGL/GL_world_position.comp");
     g_shaders.ssaoBlur.Load("res/shaders/OpenGL/GL_ssaoBlur.comp");
     g_shaders.ssao.Load("res/shaders/OpenGL/GL_ssao.comp");
@@ -937,7 +935,7 @@ void SkyBoxPass(RenderData& renderData)
 
     Transform skyBoxTransform;
     skyBoxTransform.position = player->GetViewPos();
-    skyBoxTransform.scale = glm::vec3(FAR_PLANE * 0.99);
+    skyBoxTransform.scale = glm::vec3(SkyBox::Plane::FAR_DISTANCE * 0.99);
 
     // Render target
     glEnable(GL_DEPTH_TEST);
@@ -946,7 +944,8 @@ void SkyBoxPass(RenderData& renderData)
 
     unsigned int attachments[2] = {
         gBuffer.GetColorAttachmentSlotByName("FinalLighting"),
-        gBuffer.GetColorAttachmentSlotByName("Normal") };
+        gBuffer.GetColorAttachmentSlotByName("Normal") 
+    };
     glDrawBuffers(2, attachments);
 
     for (int i = 0; i < renderData.playerCount; i++)
@@ -960,7 +959,8 @@ void SkyBoxPass(RenderData& renderData)
         shader.SetMat4("view", renderData.cameraData[0].view);
         shader.SetMat4("model", skyBoxTransform.to_mat4());
         shader.SetInt("playerIndex", i);
-        shader.SetVec3("skyboxTint", Game::GameSettings().skyBoxTint);
+        shader.SetVec3("skyboxTint", SkyBox::SKYBOX_TINT);
+
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture->GetGLTexture().GetID());
         glBindVertexArray(OpenGLBackEnd::GetVertexDataVAO());
@@ -3120,8 +3120,8 @@ void WinstonPass(RenderData& renderData)
         shader.SetVec3("color", { 0, 0.9f, 1 });
         shader.SetFloat("alpha", 0.01f);
         shader.SetVec2("screensize", glm::vec2(viewportInfo.width, viewportInfo.height));
-        shader.SetFloat("near", NEAR_PLANE);
-        shader.SetFloat("far", FAR_PLANE);
+        shader.SetFloat("near", SkyBox::Plane::NEAR_DISTANCE);
+        shader.SetFloat("far", SkyBox::Plane::FAR_DISTANCE);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, gBuffer.GetDepthAttachmentHandle());

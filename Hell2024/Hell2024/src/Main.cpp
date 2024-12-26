@@ -10,6 +10,6 @@ extern "C"
 
 int main() 
 {
-    std::cout << "[init] Main" << std::endl;
+    std::cout << "[INITIALIZED] Main" << std::endl;
     Engine::Run();
 }
