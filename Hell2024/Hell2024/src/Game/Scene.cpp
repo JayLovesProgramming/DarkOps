@@ -347,22 +347,22 @@ void Scene::LoadDefaultScene()
     CleanUp();
     CreateDefaultSpawnPoints();
 
-    HeightMap& heightMap = AssetManager::g_heightMap;
-    heightMap.m_transform.scale = glm::vec3(0.40f);
-    heightMap.m_transform.scale.y = 15;
-    heightMap.m_transform.position.x = heightMap.m_width * -0.5f * heightMap.m_transform.scale.x;
-    heightMap.m_transform.position.y = -2.75f;
-    heightMap.m_transform.position.z = heightMap.m_depth * -0.5f * heightMap.m_transform.scale.z;
+    //HeightMap& heightMap = AssetManager::g_heightMap;
+    //heightMap.m_transform.scale = glm::vec3(0.40f);
+    //heightMap.m_transform.scale.y = 15;
+    //heightMap.m_transform.position.x = heightMap.m_width * -0.5f * heightMap.m_transform.scale.x;
+    //heightMap.m_transform.position.y = -2.75f;
+    //heightMap.m_transform.position.z = heightMap.m_depth * -0.5f * heightMap.m_transform.scale.z;
 
     // Heightmap (OPEN GL ONLY ATM)
-    if (BackEnd::GetAPI() == API::OPENGL)
-    {
-        if (heightMap.m_pxRigidStatic == NULL) 
-        {
-            heightMap.CreatePhysicsObject();
-            std::cout << "[INITIALIZED] Height Map Physics Stuff\n";
-        }
-    }
+    //if (BackEnd::GetAPI() == API::OPENGL)
+    //{
+    //    if (heightMap.m_pxRigidStatic == NULL) 
+    //    {
+    //        //heightMap.CreatePhysicsObject();
+    //        std::cout << "[INITIALIZED] Height Map Physics Stuff\n";
+    //    }
+    //}
 
     g_doors.clear();
     g_doors.reserve(sizeof(Door) * 1000);
@@ -515,7 +515,7 @@ void Scene::LoadDefaultScene()
     std::cout << "[info] Light Count: " << g_lights.size() << "\n";
 
     // Dobermann spawn lab
-    {
+    /*{
         g_dobermann.clear();
 
         DobermannCreateInfo createInfo = {};
@@ -533,7 +533,7 @@ void Scene::LoadDefaultScene()
         createInfo.rotation = (1.3f);
         createInfo.initalState = DobermannState::LAY;
         Dobermann::AddDobermann(createInfo);
-     }
+     }*/
 
     if (false)
     {

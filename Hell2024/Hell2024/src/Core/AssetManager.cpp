@@ -533,9 +533,9 @@ void AssetManager::LoadNextItem()
     // Heightmap
     if (BackEnd::GetAPI() == API::OPENGL)
     {
-        g_treeMap.Load("res/textures/heightmaps/TreeMap.png");
+    /*    g_treeMap.Load("res/textures/heightmaps/TreeMap.png");
         g_heightMap.Load("res/textures/heightmaps/HeightMap.png", 20.0f);
-        g_heightMap.UploadToGPU();
+        g_heightMap.UploadToGPU();*/
         AddItemToLoadLog("Uploading Heightmap -> GPU");
     }
     else if (BackEnd::GetAPI() == API::VULKAN)

@@ -869,7 +869,7 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
     MegaTextureTestPass();
 
     GeometryPass(renderData);
-    HeightMapPass(renderData);
+    //HeightMapPass(renderData);
     DrawVATBlood(renderData);
     DrawBloodDecals(renderData);
     DrawBulletDecals(renderData);
@@ -884,10 +884,10 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
     P90MagPass(renderData);
     MuzzleFlashPass(renderData);
     GlassPass(renderData);
-    //EmissivePass(renderData);
+    EmissivePass(renderData);
     WinstonPass(renderData);
     MuzzleFlashPass(renderData);
-    //PostProcessingPass(renderData);
+    PostProcessingPass(renderData);
 
     ProbeGridDebugPass();
 

@@ -16,7 +16,7 @@ constexpr static auto inline UNDEFINED_STRING = "UNDEFINED_STRING";
 struct SkyBox
 {
     inline static bool SKYBOX_ENABLED = true;
-    inline static glm::vec3 SKYBOX_TINT = glm::vec3(0.1);
+    inline static glm::vec3 SKYBOX_TINT = glm::vec3(2.5);
 
     struct Plane
     {

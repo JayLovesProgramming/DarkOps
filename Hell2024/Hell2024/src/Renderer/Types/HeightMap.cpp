@@ -86,7 +86,7 @@ void HeightMap::Load(const std::string& filepath, float textureRepeat)
     // Normalize tangents
     for (Vertex& vertex : m_vertices)
     {
-        //vertex.tangent = glm::normalize(vertex.tangent);
+        vertex.tangent = glm::normalize(vertex.tangent);
     }
     std::cout << "[LOADED] Height Map: " << m_vertices.size() << " Vertices\n";
 }
