@@ -48,7 +48,7 @@ namespace Game
 
         GlobalIllumination::RecalculateGI();
 
-        CreatePlayers(0);
+        CreatePlayers(PLAYER_COUNT);
 
         Scene::Init();
         //Audio::PlayAudio("INTRO_EVIL_LAUGH_02.wav", 0.6f);

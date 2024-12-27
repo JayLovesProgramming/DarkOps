@@ -994,12 +994,7 @@ void Renderer::UpdatePointCloud()
 IndirectDrawInfo CreateIndirectDrawInfo(std::vector<RenderItem3D>& potentialRenderItems, int playerCount) 
 {
     IndirectDrawInfo drawInfo;
-    if (PLAYER_COUNT <= 0)
-    {
-        return drawInfo;
-    }
-
-    std::vector<std::vector<RenderItem3D>> playerRenderItems(PLAYER_COUNT);
+    std::vector<RenderItem3D> playerRenderItems[PLAYER_COUNT];
 
     // Allocate memory
     drawInfo.instanceData.reserve(MAX_RENDER_OBJECTS_3D * PLAYER_COUNT);

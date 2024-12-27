@@ -336,12 +336,11 @@ int Scene::AssignNextFreeShadowMapIndex(int lightIndex)
 
 void Scene::LoadDefaultScene()
 {
-    bool hardcoded = true;
-
-    bool createTestLights = true;
-    bool createTestCubes = false;
-    int testLightCount = 50;
-    int testCubeCount = 50;
+    bool hardcoded = true;// put in config
+    bool createTestLights = false; // put in config
+    bool createTestCubes = false;// put in config
+    int testLightCount = 50; // put in config
+    int testCubeCount = 50;// put in config
 
     std::cout << "[LOADED] Default Scene\n";
 

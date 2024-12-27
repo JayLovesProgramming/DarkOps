@@ -18,10 +18,10 @@ void Engine::Run()
 
     BackEnd::Init(API::OPENGL);
 
-    if (!Game::PlayerCountCheck())
+ /*   if (Game::PlayerCountCheck())
     {
         return;
-    }
+    }*/
 
     while (BackEnd::WindowIsOpen()) 
     {
