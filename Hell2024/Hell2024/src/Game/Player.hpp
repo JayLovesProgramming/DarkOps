@@ -354,10 +354,10 @@ public:
 
     glm::vec3 GetCameraRotation() const;
 
-    void HideKnifeMesh();
-    void HideGlockMesh();
-    void HideShotgunMesh();
-    void HideAKS74UMesh();
+    void HideKnifeMesh() const;
+    void HideGlockMesh() const;
+    void HideShotgunMesh() const;
+    void HideAKS74UMesh() const;
     void Kill();
     PxU32 _interactFlags;
     PxU32 _bulletFlags;

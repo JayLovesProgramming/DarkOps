@@ -2,10 +2,18 @@
 
 #include <glm/glm.hpp>
 
+#include "Game/SkyBox.hpp"
+
 constexpr static auto TL = 0;
 constexpr static auto TR = 1;
 constexpr static auto BL = 2;
 constexpr static auto BR = 3;
+
+constexpr static auto PROPOGATION_SPACING = 1;
+#define PROPOGATION_WIDTH (MAP_WIDTH / PROPOGATION_SPACING)
+#define PROPOGATION_HEIGHT (MAP_HEIGHT / PROPOGATION_SPACING)
+#define PROPOGATION_DEPTH (MAP_DEPTH / PROPOGATION_SPACING)
+
 
 //constexpr static auto _propogationGridSpacing = 0.375f;
 //constexpr static auto _maxPropogationDistance = 2.6f;
@@ -13,21 +21,7 @@ constexpr static auto BR = 3;
 constexpr static auto inline PLAYER_COUNT = 2;
 constexpr static auto inline UNDEFINED_STRING = "UNDEFINED_STRING";
 
-struct SkyBox
-{
-    inline static bool SKYBOX_ENABLED = true;
-    inline static glm::vec3 SKYBOX_TINT = glm::vec3(2.5);
-
-    struct Plane
-    {
-        inline static constexpr float VERY_NEAR_DISTANCE = 0.0005f;
-        inline static constexpr float NEAR_DISTANCE = 0.0025f;
-        inline static constexpr float FAR_DISTANCE = 200.0f;
-        inline static constexpr float VERY_FAR_DISTANCE = 500.0f;
-        inline static constexpr float EXTREMELY_FAR_DISTANCE = 900.0f;
-    };
-
-};
+constexpr static auto Y_DEATH_ALTITUDE_LIMIT = -15.0f;
 
 // Mathematic Helpers
 constexpr static auto inline DARKOPS_ROUNED_PI = 3.14159265359f;

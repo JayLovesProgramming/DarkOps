@@ -30,11 +30,6 @@
 #include "RTMesh.hpp"
 #include "RTInstance.hpp"
 
-constexpr static auto PROPOGATION_SPACING = 1;
-#define PROPOGATION_WIDTH (MAP_WIDTH / PROPOGATION_SPACING)
-#define PROPOGATION_HEIGHT (MAP_HEIGHT / PROPOGATION_SPACING)
-#define PROPOGATION_DEPTH (MAP_DEPTH / PROPOGATION_SPACING)
-
 namespace Scene
 {
     inline bool g_needToPlantTrees = true;
@@ -152,7 +147,7 @@ namespace Scene
 	void LoadMap(std::string mapPath);
 	void SaveMap(std::string mapPath);
     void CleanUp();
-    void Update_OLD(float deltaTime);
+    //void Update_OLD(float deltaTime);
     void LoadLightSetup(int index);
     //AnimatedGameObject* GetAnimatedGameObjectByName(std::string);
    // std::vector<AnimatedGameObject>& GetAnimatedGameObjects();

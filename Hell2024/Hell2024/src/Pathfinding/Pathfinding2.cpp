@@ -1,5 +1,6 @@
 
 #include "Pathfinding2.hpp"
+
 #include "recast/DebugDraw.h"
 #include "recast/RecastDebugDraw.h"
 #include <vector>

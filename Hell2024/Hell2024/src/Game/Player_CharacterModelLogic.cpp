@@ -8,122 +8,108 @@ void Player::UpdateCharacterModelAnimation(float deltaTime)
 
     character->EnableDrawingForAllMesh();
 
-    if (IsAlive())
-    {
-        if (weaponInfo->type == WeaponType::MELEE)
-        {
-            HideAKS74UMesh();
-            HideGlockMesh();
-            HideShotgunMesh();
-
-            if (IsMoving())
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Knife_Walk", 1.0f);
-            }
-            else
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Knife_Idle", 1.0f);
-            }
-
-            if (IsCrouching()) 
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Knife_Crouch", 1.0f);
-            }
-        }
-
-        if (weaponInfo->type == WeaponType::PISTOL)
-        {
-            HideAKS74UMesh();
-            HideShotgunMesh();
-            HideKnifeMesh();
-
-            if (IsMoving())
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Glock_Walk", 1.0f);
-            }
-            else
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Glock_Idle", 1.0f);
-            }
-
-            if (IsCrouching()) 
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Glock_Crouch", 1.0f);
-            }
-        }
-
-        if (weaponInfo->type == WeaponType::AUTOMATIC)
-        {
-            HideShotgunMesh();
-            HideKnifeMesh();
-            HideGlockMesh();
-
-            if (IsMoving()) 
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_AKS74U_Walk", 1.0f);
-            }
-            else 
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_AKS74U_Idle", 1.0f);
-            }
-            if (IsCrouching()) 
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_AKS74U_Crouch", 1.0f);
-            }
-        }
-
-        if (weaponInfo->type == WeaponType::SHOTGUN)
-        {
-            HideAKS74UMesh();
-            HideKnifeMesh();
-            HideGlockMesh();
-
-            if (IsMoving())
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Shotgun_Walk", 1.0f);
-            }
-            else {
-                character->PlayAndLoopAnimation("UnisexGuy_Shotgun_Idle", 1.0f);
-            }
-            if (IsCrouching()) 
-            {
-                character->PlayAndLoopAnimation("UnisexGuy_Shotgun_Crouch", 1.0f);
-            }
-        }
-
-        character->SetPosition(GetFeetPosition());// +glm::vec3(0.0f, 0.1f, 0.0f));
-        character->Update(deltaTime);
-        character->SetRotationY(_rotation.y + DARKOPS_PI);
-    }
-
-    else 
+    if (IsDead())
     {
         HideKnifeMesh();
         HideGlockMesh();
         HideShotgunMesh();
         HideAKS74UMesh();
+        return;
     }
+
+    if (weaponInfo->type == WeaponType::MELEE)
+    {
+        // Hide all unnecessary weapon meshes
+        HideAKS74UMesh();
+        HideGlockMesh();
+        HideShotgunMesh();
+
+        character->PlayAndLoopAnimation(
+            IsMoving() ? "UnisexGuy_Knife_Walk" : "UnisexGuy_Knife_Idle", // If we are moving, apply the walk animation
+            1.0f
+        );
+
+        if (IsCrouching()) 
+        {
+            character->PlayAndLoopAnimation("UnisexGuy_Knife_Crouch", 1.0f);
+        }
+    }
+
+    if (weaponInfo->type == WeaponType::PISTOL)
+    {
+        HideAKS74UMesh();
+        HideShotgunMesh();
+        HideKnifeMesh();
+
+        character->PlayAndLoopAnimation(
+            IsMoving() ? "UnisexGuy_Glock_Walk" : "UnisexGuy_Glock_Idle", // If we are moving, apply the walk animation
+            1.0f
+        );
+
+        if (IsCrouching()) 
+        {
+            character->PlayAndLoopAnimation("UnisexGuy_Glock_Crouch", 1.0f);
+        }
+    }
+
+    if (weaponInfo->type == WeaponType::AUTOMATIC)
+    {
+        HideShotgunMesh();
+        HideKnifeMesh();
+        HideGlockMesh();
+
+        character->PlayAndLoopAnimation(
+            IsMoving() ? "UnisexGuy_AKS74U_Walk" : "UnisexGuy_AKS74U_Idle", // If we are moving, apply the walk animation
+            1.0f
+        );
+    
+        if (IsCrouching()) 
+        {
+            character->PlayAndLoopAnimation("UnisexGuy_AKS74U_Crouch", 1.0f);
+        }
+    }
+
+    if (weaponInfo->type == WeaponType::SHOTGUN)
+    {
+        HideAKS74UMesh();
+        HideKnifeMesh();
+        HideGlockMesh();
+
+        character->PlayAndLoopAnimation(
+            IsMoving() ? "UnisexGuy_Shotgun_Walk" : "UnisexGuy_Shotgun_Idle", // If we are moving, apply the walk animation
+            1.0f
+        );
+
+        if (IsCrouching()) 
+        {
+            character->PlayAndLoopAnimation("UnisexGuy_Shotgun_Crouch", 1.0f);
+        }
+    }
+
+    character->SetPosition(GetFeetPosition());// +glm::vec3(0.0f, 0.1f, 0.0f));
+    character->Update(deltaTime);
+    character->SetRotationY(_rotation.y + DARKOPS_PI);
 }
 
-void Player::HideKnifeMesh()
+void Player::HideKnifeMesh() const
 {
     AnimatedGameObject* character = GetCharacterAnimatedGameObject();
     character->DisableDrawingForMeshByMeshName("SM_Knife_01");
 }
 
-void Player::HideGlockMesh()
+void Player::HideGlockMesh() const
 {
     AnimatedGameObject* character = GetCharacterAnimatedGameObject();
     character->DisableDrawingForMeshByMeshName("Glock");
 }
 
-void Player::HideShotgunMesh() 
+void Player::HideShotgunMesh() const
 {
     AnimatedGameObject* character = GetCharacterAnimatedGameObject();
     character->DisableDrawingForMeshByMeshName("Shotgun_Mesh");
 }
 
-void Player::HideAKS74UMesh() 
+void Player::HideAKS74UMesh() const
 {
     AnimatedGameObject* character = GetCharacterAnimatedGameObject();
     character->DisableDrawingForMeshByMeshName("FrontSight_low");

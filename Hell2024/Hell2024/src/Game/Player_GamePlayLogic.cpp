@@ -5,12 +5,12 @@ void Player::CheckForSuicide()
 {
     if (IsAlive())
     {
-        if (GetFeetPosition().y < -15)
+        if (GetFeetPosition().y < Y_DEATH_ALTITUDE_LIMIT)
         {
             Kill();
             m_suicideCount++;
             m_killCount--;
-            std::cout << "KILL D" << "\n";
+            std::cout << "Fell into a black hole meaning you are now dead... (" << _playerName << ")" << "\n";
         }
     }
 }

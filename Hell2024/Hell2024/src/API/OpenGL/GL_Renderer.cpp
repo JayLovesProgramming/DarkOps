@@ -927,6 +927,11 @@ void ClearRenderTargets()
 
 void SkyBoxPass(RenderData& renderData)
 {
+    if (!SkyBox::SKYBOX_ENABLED)
+    {
+        return;
+    }
+
     static CubemapTexture* cubemapTexture = AssetManager::GetCubemapTextureByIndex(AssetManager::GetCubemapTextureIndexByName("NightSky"));
     static Mesh* mesh = AssetManager::GetMeshByIndex(AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName("Cube"))->GetMeshIndices()[0]);
 
