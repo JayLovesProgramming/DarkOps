@@ -1517,44 +1517,43 @@ void ComputeSkin(RenderData& renderData)
 
     // Calculate total amount of vertices to skin and allocate space
     int totalVertexCount = 0;
-    for (AnimatedGameObject* animatedGameObject : renderData.animatedGameObjectsToSkin)
+    for (const AnimatedGameObject* animatedGameObject : renderData.animatedGameObjectsToSkin)
     {
         SkinnedModel* skinnedModel = animatedGameObject->_skinnedModel;
         for (int i = 0; i < skinnedModel->GetMeshCount(); i++)
         {
-            int meshindex = skinnedModel->GetMeshIndices()[i];
-            SkinnedMesh* mesh = AssetManager::GetSkinnedMeshByIndex(meshindex);
+            int meshIndex = skinnedModel->GetMeshIndices()[i];
+            const SkinnedMesh* mesh = AssetManager::GetSkinnedMeshByIndex(meshIndex);
             totalVertexCount += mesh->vertexCount;
         }
     }
     OpenGLBackEnd::AllocateSkinnedVertexBufferSpace(totalVertexCount);
 
     // Skin
-    int j = 0;
     int baseOutputVertex = 0;
-    for (AnimatedGameObject* animatedGameObject : renderData.animatedGameObjectsToSkin)
+    for (int j = 0; j < renderData.animatedGameObjectsToSkin.size(); j++)
     {
+        AnimatedGameObject* animatedGameObject = renderData.animatedGameObjectsToSkin[j];
         SkinnedModel* skinnedModel = animatedGameObject->_skinnedModel;
 
-        for (int i = 0; i < skinnedModel->GetMeshCount(); i++) 
+        for (int i = 0; i < skinnedModel->GetMeshCount(); i++)
         {
-            int meshindex = skinnedModel->GetMeshIndices()[i];
-            SkinnedMesh* mesh = AssetManager::GetSkinnedMeshByIndex(meshindex);
+            int meshIndex = skinnedModel->GetMeshIndices()[i];
+            const SkinnedMesh* mesh = AssetManager::GetSkinnedMeshByIndex(meshIndex);
+
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, OpenGLBackEnd::GetSkinnedVertexDataVBO());
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 7, OpenGLBackEnd::GetWeightedVertexDataVBO());
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 8, OpenGLRenderer::g_ssbos.skinningTransforms);
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 9, OpenGLRenderer::g_ssbos.baseAnimatedTransformIndices);
+
             computeShader.SetInt("vertexCount", mesh->vertexCount);
             computeShader.SetInt("baseInputVertex", mesh->baseVertexGlobal);
             computeShader.SetInt("baseOutputVertex", baseOutputVertex);
             computeShader.SetInt("animatedGameObjectIndex", j);
-            computeShader.SetInt("vertexCount", mesh->vertexCount);
-            //GLuint numGroups = (mesh->vertexCount + 32 - 1) / 32;
-            //glDispatchCompute(numGroups, 1, 1);
+
             glDispatchCompute(mesh->vertexCount, 1, 1);
             baseOutputVertex += mesh->vertexCount;
         }
-        j++;
     }
 }
 
