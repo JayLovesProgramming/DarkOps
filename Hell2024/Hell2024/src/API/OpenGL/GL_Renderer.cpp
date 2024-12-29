@@ -188,7 +188,7 @@ void DrawVATBlood(RenderData& renderData);
 void DrawBloodDecals(RenderData& renderData);
 void DrawBulletDecals(RenderData& renderData);
 void RenderUI(std::vector<RenderItem2D>& renderItems, GLFrameBuffer& frameBuffer, bool clearScreen);
-void RenderShadowMapss(RenderData& renderData);
+void RenderShadowMaps(RenderData& renderData);
 void DebugPass(RenderData& renderData);
 void MuzzleFlashPass(RenderData& renderData);
 void GlassPass(RenderData& renderData);
@@ -877,7 +877,7 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 21, g_ssbos.playerData.GetHandle());
 
     ClearRenderTargets();    
-    RenderShadowMapss(renderData);
+    RenderShadowMaps(renderData);
     LightVolumePrePass(renderData);
     ComputeSkin(renderData);
 
@@ -1127,7 +1127,7 @@ MultiDrawIndirectDrawInfo CreateMultiDrawIndirectDrawInfo2(std::vector<RenderIte
     return drawInfo;
 }
 
-void RenderShadowMapss(RenderData& renderData)
+void RenderShadowMaps(RenderData& renderData)
 {
     glDepthMask(true);
     glDisable(GL_BLEND);
@@ -1137,7 +1137,7 @@ void RenderShadowMapss(RenderData& renderData)
     glBindFramebuffer(GL_FRAMEBUFFER, OpenGLRenderer::g_shadowMapArray.m_ID);
     glBindVertexArray(OpenGLBackEnd::GetVertexDataVAO());
 
-    // Regular geometry
+    // Regular Geometry
     Shader& shader = OpenGLRenderer::g_shaders.shadowMap;
     shader.Use();
 
