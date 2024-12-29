@@ -687,13 +687,18 @@ void SetViewport(ViewportInfo viewportInfo)
 
 void OpenGLRenderer::UploadSSBOsGPU(RenderData& renderData)
 {
-    glNamedBufferSubData(g_ssbos.lights, 0, RendererData::g_gpuLights.size() * sizeof(GPULight), &RendererData::g_gpuLights[0]);
-    glNamedBufferSubData(g_ssbos.glassRenderItems, 0, renderData.glassDrawInfo.renderItems.size() * sizeof(RenderItem3D), &renderData.glassDrawInfo.renderItems[0]);
-    glNamedBufferSubData(g_ssbos.skinningTransforms, 0, renderData.skinningTransforms.size() * sizeof(glm::mat4), &renderData.skinningTransforms[0]);
-    glNamedBufferSubData(g_ssbos.baseAnimatedTransformIndices, 0, renderData.baseAnimatedTransformIndices.size() * sizeof(uint32_t), &renderData.baseAnimatedTransformIndices[0]);
+    //renderData.playerCount Should player count be a member of this object????
+    auto uploadDataSize = [](auto& container) { return container.size() * sizeof(decltype(container[0]));};
+
+    glNamedBufferSubData(g_ssbos.lights, 0, uploadDataSize(RendererData::g_gpuLights), &RendererData::g_gpuLights[0]);
+    glNamedBufferSubData(g_ssbos.glassRenderItems, 0, uploadDataSize(renderData.glassDrawInfo.renderItems), &renderData.glassDrawInfo.renderItems[0]);
+    glNamedBufferSubData(g_ssbos.skinningTransforms, 0, uploadDataSize(renderData.skinningTransforms), &renderData.skinningTransforms[0]);
+    glNamedBufferSubData(g_ssbos.baseAnimatedTransformIndices, 0, uploadDataSize(renderData.baseAnimatedTransformIndices), &renderData.baseAnimatedTransformIndices[0]);
+    
     glNamedBufferSubData(g_ssbos.cameraData, 0, 4 * sizeof(CameraData), &renderData.cameraData[0]);
     glNamedBufferSubData(g_ssbos.skinnedMeshInstanceData, 0, sizeof(SkinnedRenderItem) * renderData.allSkinnedRenderItems.size(), &renderData.allSkinnedRenderItems[0]);
     glNamedBufferSubData(g_ssbos.muzzleFlashData, 0, sizeof(MuzzleFlashData) * 4, &renderData.muzzleFlashData[0]);    
+    
     g_ssbos.bloodDecalRenderItems.Update(renderData.bloodDecalDrawInfo.renderItems.size() * sizeof(RenderItem3D), renderData.bloodDecalDrawInfo.renderItems.data());
     g_ssbos.bloodVATRenderItems.Update(renderData.bloodVATDrawInfo.renderItems.size() * sizeof(RenderItem3D), renderData.bloodVATDrawInfo.renderItems.data());
     g_ssbos.materials.Update(AssetManager::GetGPUMaterials().size() * sizeof(GPUMaterial), &AssetManager::GetGPUMaterials()[0]);
@@ -705,120 +710,140 @@ void OpenGLRenderer::UploadSSBOsGPU(RenderData& renderData)
     g_ssbos.playerData.Update(Game::g_playerData.size() * sizeof(PlayerData), &Game::g_playerData[0]);
 }
 
-void MegaTextureTestPass()
+//void MegaTextureTestPass()
+//{
+//    glClipControl(GL_LOWER_LEFT, GL_NEGATIVE_ONE_TO_ONE);
+//
+//    GLFrameBuffer& megaTextureFBO = OpenGLRenderer::g_frameBuffers.megaTexture;
+//    HeightMap& heightMap = AssetManager::g_heightMap;
+//
+//    // Create FBO and render target
+//    if (megaTextureFBO.GetHandle() == 0) 
+//    {
+//        int width = heightMap.m_width * 100;
+//        int height = heightMap.m_depth * 100;
+//        megaTextureFBO.Create("MegaTextureFBO", width, height);
+//        megaTextureFBO.CreateAttachment("Color", GL_R8);
+//        megaTextureFBO.Bind();
+//        megaTextureFBO.SetViewport();
+//        glDrawBuffer(megaTextureFBO.GetColorAttachmentSlotByName("Color"));
+//        glClearColor(0.0, 0.0, 0.0, 0.0);
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    }
+//
+//    megaTextureFBO.Bind();
+//    megaTextureFBO.SetViewport(); 
+//    glDrawBuffer(megaTextureFBO.GetColorAttachmentSlotByName("Color"));
+//    //glClearColor(0.25, 0.25, 0.25, 1);
+//    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    //glEnable(GL_DEPTH_TEST);
+//    glDisable(GL_CULL_FACE);
+//    
+//    glm::vec3 centerPoint = heightMap.GetWorldSpaceCenter();
+//    float width = heightMap.m_width * heightMap.m_transform.scale.x;
+//    float height = heightMap.m_depth * heightMap.m_transform.scale.z;
+//    float nearPlane = 0.1f;
+//    float farPlane = 5000.0f;
+//    float left = centerPoint.x - width / 2.0f;
+//    float right = centerPoint.x + width / 2.0f;
+//    float bottom = centerPoint.z + height / 2.0f;
+//    float top = centerPoint.z - height / 2.0f;
+//    glm::vec3 cameraPosition = centerPoint + glm::vec3(0.0f, 50.0f, 0.0f);
+//    glm::vec3 cameraTarget = centerPoint;
+//    glm::vec3 upVector = glm::vec3(0.0f, 0.0f, -1.0f);
+//
+//    glm::mat4 projection = glm::ortho(left, right, bottom, top, nearPlane, farPlane);
+//    glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, upVector);
+//  
+//    // Render decals
+//    glm::mat4 model = heightMap.m_transform.to_mat4();
+//    Shader& shader = OpenGLRenderer::g_shaders.megaTextureBloodDecals;
+//    shader.Use();
+//    shader.SetMat4("projection", projection);
+//    shader.SetMat4("view", view);
+//    shader.SetMat4("model", model);
+//    shader.SetFloat("heightMapWidth", heightMap.m_width);
+//    shader.SetFloat("heightMapDepth", heightMap.m_depth);
+//    shader.SetBool("useUniformColor", true);
+//    shader.SetVec3("uniformColor", RED);
+//
+//    glBindVertexArray(heightMap.m_VAO);
+//    //glDrawElements(GL_TRIANGLE_STRIP, heightMap.m_indices.size(), GL_UNSIGNED_INT, 0);
+//    glBindVertexArray(0);
+//
+//    static int textureIndexType0 = AssetManager::GetTextureIndexByName("blood_decal_4");
+//    static int textureIndexType1 = AssetManager::GetTextureIndexByName("blood_decal_6");
+//    static int textureIndexType2 = AssetManager::GetTextureIndexByName("blood_decal_7");
+//    static int textureIndexType3 = AssetManager::GetTextureIndexByName("blood_decal_9");
+//
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_ONE, GL_ONE);
+//
+//    for (BloodDecal& bloodDecal : Scene::g_bloodDecalsForMegaTexture) 
+//    {
+//        shader.SetMat4("model", bloodDecal.modelMatrix);
+//        shader.SetMat4("normalMatrix", glm::transpose(glm::inverse(heightMap.m_transform.to_mat4())));
+//        if (bloodDecal.type == 0) 
+//        {
+//            shader.SetInt("textureIndex", textureIndexType0);
+//        }
+//        else if (bloodDecal.type == 1)
+//        {
+//            shader.SetInt("textureIndex", textureIndexType1);
+//        }
+//        else if (bloodDecal.type == 2) 
+//        {
+//            shader.SetInt("textureIndex", textureIndexType2);
+//        }
+//        else if (bloodDecal.type == 3) 
+//        {
+//            shader.SetInt("textureIndex", textureIndexType3);
+//        }
+//
+//        Mesh* mesh = AssetManager::GetMeshByIndex(AssetManager::GetUpFacingPlaneMeshIndex());
+//        glBindVertexArray(OpenGLBackEnd::GetVertexDataVAO());
+//        glDrawElementsInstancedBaseVertex(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->baseIndex), 1, mesh->baseVertex);      
+//    }
+//    Scene::g_bloodDecalsForMegaTexture.clear();
+///*
+//    Player* player = Game::GetPlayerByIndex(0);
+//
+//    if (Input::KeyPressed(HELL_KEY_SPACE)) {
+//
+//        Transform transform;
+//        transform.position = player->GetFeetPosition();
+//        transform.scale = glm::vec3(1);
+//        model = transform.to_mat4();
+//        shader.SetMat4("model", model);
+//        shader.SetMat4("normalMatrix", glm::transpose(glm::inverse(heightMap.m_transform.to_mat4())));
+//
+//        static int cubeMeshIndex = AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName("Cube"))->GetMeshIndices()[0];
+//        Mesh* mesh = AssetManager::GetMeshByIndex(cubeMeshIndex);
+//        glBindVertexArray(OpenGLBackEnd::GetVertexDataVAO());
+//        glDrawElementsInstancedBaseVertex(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->baseIndex), 1, mesh->baseVertex);
+//    }*/
+//
+//    glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+//}
+
+void OpenGLRenderer::UpdateGlobalIllumination()
 {
-    glClipControl(GL_LOWER_LEFT, GL_NEGATIVE_ONE_TO_ONE);
-
-    GLFrameBuffer& megaTextureFBO = OpenGLRenderer::g_frameBuffers.megaTexture;
-    HeightMap& heightMap = AssetManager::g_heightMap;
-
-    // Create FBO and render target
-    if (megaTextureFBO.GetHandle() == 0) 
-    {
-        int width = heightMap.m_width * 100;
-        int height = heightMap.m_depth * 100;
-        megaTextureFBO.Create("MegaTextureFBO", width, height);
-        megaTextureFBO.CreateAttachment("Color", GL_R8);
-        megaTextureFBO.Bind();
-        megaTextureFBO.SetViewport();
-        glDrawBuffer(megaTextureFBO.GetColorAttachmentSlotByName("Color"));
-        glClearColor(0.0, 0.0, 0.0, 0.0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-
-    megaTextureFBO.Bind();
-    megaTextureFBO.SetViewport(); 
-    glDrawBuffer(megaTextureFBO.GetColorAttachmentSlotByName("Color"));
-    //glClearColor(0.25, 0.25, 0.25, 1);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glEnable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
+    // Update Global Illumination
+    // We could actually just have a bool like SetGlobalIllumination and if its false then do what we need to do and dont do it again
+    // Something to do with lighting and objects? not sure, more research required..
     
-    glm::vec3 centerPoint = heightMap.GetWorldSpaceCenter();
-    float width = heightMap.m_width * heightMap.m_transform.scale.x;
-    float height = heightMap.m_depth * heightMap.m_transform.scale.z;
-    float nearPlane = 0.1f;
-    float farPlane = 5000.0f;
-    float left = centerPoint.x - width / 2.0f;
-    float right = centerPoint.x + width / 2.0f;
-    float bottom = centerPoint.z + height / 2.0f;
-    float top = centerPoint.z - height / 2.0f;
-    glm::vec3 cameraPosition = centerPoint + glm::vec3(0.0f, 50.0f, 0.0f);
-    glm::vec3 cameraTarget = centerPoint;
-    glm::vec3 upVector = glm::vec3(0.0f, 0.0f, -1.0f);
-
-    glm::mat4 projection = glm::ortho(left, right, bottom, top, nearPlane, farPlane);
-    glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, upVector);
-  
-    // Render decals
-    glm::mat4 model = heightMap.m_transform.to_mat4();
-    Shader& shader = OpenGLRenderer::g_shaders.megaTextureBloodDecals;
-    shader.Use();
-    shader.SetMat4("projection", projection);
-    shader.SetMat4("view", view);
-    shader.SetMat4("model", model);
-    shader.SetFloat("heightMapWidth", heightMap.m_width);
-    shader.SetFloat("heightMapDepth", heightMap.m_depth);
-    shader.SetBool("useUniformColor", true);
-    shader.SetVec3("uniformColor", RED);
-
-    glBindVertexArray(heightMap.m_VAO);
-    //glDrawElements(GL_TRIANGLE_STRIP, heightMap.m_indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-
-    static int textureIndexType0 = AssetManager::GetTextureIndexByName("blood_decal_4");
-    static int textureIndexType1 = AssetManager::GetTextureIndexByName("blood_decal_6");
-    static int textureIndexType2 = AssetManager::GetTextureIndexByName("blood_decal_7");
-    static int textureIndexType3 = AssetManager::GetTextureIndexByName("blood_decal_9");
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
-
-    for (BloodDecal& bloodDecal : Scene::g_bloodDecalsForMegaTexture) 
+    // std::cout << GlobalIllumination::GetFrameCounter() << std::endl;
+    // if (GlobalIllumination::GetFrameCounter() < 20) // Why was this previously 20? It just makes us lag on startup and also doesn't seem to provde any benefit
+    
+    //if (GlobalIllumination::GetFrameCounter() <= 0)
+    if (!setupGlobalIllumination)
     {
-        shader.SetMat4("model", bloodDecal.modelMatrix);
-        shader.SetMat4("normalMatrix", glm::transpose(glm::inverse(heightMap.m_transform.to_mat4())));
-        if (bloodDecal.type == 0) 
-        {
-            shader.SetInt("textureIndex", textureIndexType0);
-        }
-        else if (bloodDecal.type == 1)
-        {
-            shader.SetInt("textureIndex", textureIndexType1);
-        }
-        else if (bloodDecal.type == 2) 
-        {
-            shader.SetInt("textureIndex", textureIndexType2);
-        }
-        else if (bloodDecal.type == 3) 
-        {
-            shader.SetInt("textureIndex", textureIndexType3);
-        }
-
-        Mesh* mesh = AssetManager::GetMeshByIndex(AssetManager::GetUpFacingPlaneMeshIndex());
-        glBindVertexArray(OpenGLBackEnd::GetVertexDataVAO());
-        glDrawElementsInstancedBaseVertex(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->baseIndex), 1, mesh->baseVertex);      
+        UpdatePointCloud();
+        IndirectLightingPass();
+        setupGlobalIllumination = true;
+        //GlobalIllumination::IncrementFrameCounter();
+        std::cout << "[UPDATING] Global Illumination" << std::endl;
     }
-    Scene::g_bloodDecalsForMegaTexture.clear();
-/*
-    Player* player = Game::GetPlayerByIndex(0);
-
-    if (Input::KeyPressed(HELL_KEY_SPACE)) {
-
-        Transform transform;
-        transform.position = player->GetFeetPosition();
-        transform.scale = glm::vec3(1);
-        model = transform.to_mat4();
-        shader.SetMat4("model", model);
-        shader.SetMat4("normalMatrix", glm::transpose(glm::inverse(heightMap.m_transform.to_mat4())));
-
-        static int cubeMeshIndex = AssetManager::GetModelByIndex(AssetManager::GetModelIndexByName("Cube"))->GetMeshIndices()[0];
-        Mesh* mesh = AssetManager::GetMeshByIndex(cubeMeshIndex);
-        glBindVertexArray(OpenGLBackEnd::GetVertexDataVAO());
-        glDrawElementsInstancedBaseVertex(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->baseIndex), 1, mesh->baseVertex);
-    }*/
-
-    glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
 }
 
 void OpenGLRenderer::RenderFrame(RenderData& renderData)
@@ -828,17 +853,7 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
 
     OpenGLRenderer::UploadSSBOsGPU(renderData);
 
-    // Update GI 
-    if (GlobalIllumination::GetFrameCounter() < 20) 
-    {
-        if (GlobalIllumination::GetFrameCounter() < 20) 
-        {
-            UpdatePointCloud();
-        }
-        IndirectLightingPass();
-        GlobalIllumination::IncrementFrameCounter();
-        //std::cout << "Updating GI\n";
-    }
+    UpdateGlobalIllumination();
 
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, g_ssbos.samplers);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, g_ssbos.geometryRenderItems.GetHandle());
@@ -911,6 +926,7 @@ void ClearRenderTargets()
     GLFrameBuffer& gBuffer = OpenGLRenderer::g_frameBuffers.gBuffer;
     gBuffer.Bind();
     gBuffer.SetViewport();
+
     unsigned int attachments[8] = {
         GL_COLOR_ATTACHMENT0,
         GL_COLOR_ATTACHMENT1,
@@ -919,7 +935,9 @@ void ClearRenderTargets()
         GL_COLOR_ATTACHMENT7,
         gBuffer.GetColorAttachmentSlotByName("Glass"),
         gBuffer.GetColorAttachmentSlotByName("EmissiveMask"),
-        gBuffer.GetColorAttachmentSlotByName("P90MagSpecular") };
+        gBuffer.GetColorAttachmentSlotByName("P90MagSpecular") 
+    };
+
     glDrawBuffers(7, attachments);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
