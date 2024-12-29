@@ -1476,6 +1476,8 @@ namespace Editor
         UpdateRenderItems(gHoveredRenderItems, InteractionType::HOVERED, g_hoveredObjectIndex);
         UpdateRenderItems(gSelectedRenderItems, InteractionType::SELECTED, g_selectedObjectIndex);
 
+        //std::cout << gSelectedRenderItems.size() <<  std::endl;
+
         // Bail if there is no menu to generate
         if (g_selectedObjectType != ObjectType::UNDEFINED || GetCurrentMenuType() != MenuType::NONE)
         {
