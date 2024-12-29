@@ -309,8 +309,7 @@ void IMGUI::MainLoop()
 	}
 	else
 	{
-		//AssetBrowser assetBrowser;
-		//AssetBrowser::Render();
+		AssetBrowser::Render();
 		DrawF8Command();
 	}
 	RenderFrame();

@@ -167,7 +167,7 @@ namespace OpenGLRenderer
     void Triangle2DPass();
     void ProbeGridDebugPass();
     void IndirectLightingPass();
-    void HeightMapPass(RenderData& renderData);
+    //void HeightMapPass(RenderData& renderData);
     void UploadSSBOsGPU(RenderData& renderData);
 }
 
@@ -220,7 +220,7 @@ void OpenGLRenderer::HotloadShaders()
     g_shaders.lightVolumeFromCubeMap.Load("res/shaders/OpenGL/GL_lightvolume_aabb_from_cubemap.comp");
     g_shaders.lightVolumeFromPositionAndRadius.Load("res/shaders/OpenGL/GL_lightvolume_aabb_from_pos_radius.comp");
     g_shaders.lightVolumePrePassGeometry.Load("GL_lightvolume_prepass_geometry.vert", "GL_lightvolume_prepass_geometry.frag", "GL_lightvolume_prepass_geometry.geom");
-    g_shaders.heightMap.Load("GL_heightmap.vert", "GL_heightmap.frag");
+    //g_shaders.heightMap.Load("GL_heightmap.vert", "GL_heightmap.frag");
     //g_shaders.triangles2D.Load("GL_triangles_2D.vert", "GL_triangles_2D.frag");
     g_shaders.csgSubtractive.Load("GL_csg_subtractive.vert", "GL_csg_subtractive.frag");
     g_shaders.csg.Load("GL_csg_test.vert", "GL_csg_test.frag");
@@ -866,7 +866,7 @@ void OpenGLRenderer::RenderFrame(RenderData& renderData)
     LightVolumePrePass(renderData);
     ComputeSkin(renderData);
 
-    MegaTextureTestPass();
+    //MegaTextureTestPass();
 
     GeometryPass(renderData);
     //HeightMapPass(renderData);
@@ -3023,54 +3023,54 @@ void OpenGLRenderer::ProbeGridDebugPass()
     */
 }
 
-void OpenGLRenderer::HeightMapPass(RenderData& renderData)
-{
-    glDisable(GL_BLEND);
-
-    HeightMap& heightMap = AssetManager::g_heightMap;
-    GLFrameBuffer& gBuffer = OpenGLRenderer::g_frameBuffers.gBuffer;
-    GLFrameBuffer& megaTextureFBO = OpenGLRenderer::g_frameBuffers.megaTexture;
-
-    gBuffer.Bind();
-
-    unsigned int attachments[3] = {
-        GL_COLOR_ATTACHMENT0,
-        GL_COLOR_ATTACHMENT1,
-        GL_COLOR_ATTACHMENT2 };
-    glDrawBuffers(3, attachments);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("Ground_MudVeg_ALB")->GetGLTexture().GetID());
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("Ground_MudVeg_NRM")->GetGLTexture().GetID());
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("Ground_MudVeg_RMA")->GetGLTexture().GetID());
-    glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, megaTextureFBO.GetColorAttachmentHandleByName("Color"));
-    glActiveTexture(GL_TEXTURE4);
-    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("TreeMap")->GetGLTexture().GetID());
-       
-    for (int i = 0; i < renderData.playerCount; i++) 
-    {
-        Player* player = Game::GetPlayerByIndex(i);
-
-        ViewportInfo viewportInfo = RendererUtil::CreateViewportInfo(i, Game::GetSplitscreenMode(), gBuffer.GetWidth(), gBuffer.GetHeight());
-        SetViewport(viewportInfo);
-        glViewport(viewportInfo.xOffset, viewportInfo.yOffset, viewportInfo.width, viewportInfo.height);
-
-        Shader& shader = OpenGLRenderer::g_shaders.heightMap;
-        shader.Use();
-        shader.SetMat4("mvp", player->GetProjectionMatrix() * player->GetViewMatrix() * heightMap.m_transform.to_mat4());
-        shader.SetMat4("normalMatrix", glm::transpose(glm::inverse(heightMap.m_transform.to_mat4())));
-        shader.SetInt("playerIndex", i);
-        shader.SetFloat("heightMapWidth", heightMap.m_width);
-        shader.SetFloat("heightMapDepth", heightMap.m_depth);
-
-        glBindVertexArray(heightMap.m_VAO);
-        glDrawElements(GL_TRIANGLE_STRIP, heightMap.m_indices.size(), GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
-    }
-}
+//void OpenGLRenderer::HeightMapPass(RenderData& renderData)
+//{
+//    glDisable(GL_BLEND);
+//
+//    HeightMap& heightMap = AssetManager::g_heightMap;
+//    GLFrameBuffer& gBuffer = OpenGLRenderer::g_frameBuffers.gBuffer;
+//    GLFrameBuffer& megaTextureFBO = OpenGLRenderer::g_frameBuffers.megaTexture;
+//
+//    gBuffer.Bind();
+//
+//    unsigned int attachments[3] = {
+//        GL_COLOR_ATTACHMENT0,
+//        GL_COLOR_ATTACHMENT1,
+//        GL_COLOR_ATTACHMENT2 };
+//    glDrawBuffers(3, attachments);
+//
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("Ground_MudVeg_ALB")->GetGLTexture().GetID());
+//    glActiveTexture(GL_TEXTURE1);
+//    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("Ground_MudVeg_NRM")->GetGLTexture().GetID());
+//    glActiveTexture(GL_TEXTURE2);
+//    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("Ground_MudVeg_RMA")->GetGLTexture().GetID());
+//    glActiveTexture(GL_TEXTURE3);
+//    glBindTexture(GL_TEXTURE_2D, megaTextureFBO.GetColorAttachmentHandleByName("Color"));
+//    glActiveTexture(GL_TEXTURE4);
+//    glBindTexture(GL_TEXTURE_2D, AssetManager::GetTextureByName("TreeMap")->GetGLTexture().GetID());
+//       
+//    for (int i = 0; i < renderData.playerCount; i++) 
+//    {
+//        Player* player = Game::GetPlayerByIndex(i);
+//
+//        ViewportInfo viewportInfo = RendererUtil::CreateViewportInfo(i, Game::GetSplitscreenMode(), gBuffer.GetWidth(), gBuffer.GetHeight());
+//        SetViewport(viewportInfo);
+//        glViewport(viewportInfo.xOffset, viewportInfo.yOffset, viewportInfo.width, viewportInfo.height);
+//
+//        Shader& shader = OpenGLRenderer::g_shaders.heightMap;
+//        shader.Use();
+//        shader.SetMat4("mvp", player->GetProjectionMatrix() * player->GetViewMatrix() * heightMap.m_transform.to_mat4());
+//        shader.SetMat4("normalMatrix", glm::transpose(glm::inverse(heightMap.m_transform.to_mat4())));
+//        shader.SetInt("playerIndex", i);
+//        shader.SetFloat("heightMapWidth", heightMap.m_width);
+//        shader.SetFloat("heightMapDepth", heightMap.m_depth);
+//
+//        glBindVertexArray(heightMap.m_VAO);
+//        glDrawElements(GL_TRIANGLE_STRIP, heightMap.m_indices.size(), GL_UNSIGNED_INT, 0);
+//        glBindVertexArray(0);
+//    }
+//}
 
 void OpenGLRenderer::QueryAvaliability()
 {

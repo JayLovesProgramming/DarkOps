@@ -92,25 +92,20 @@ void AssetBrowser::SpawnAssetBrowserModel(std::string name, glm::vec3 position, 
     assetBrowserModel->SetScale(scale);
     assetBrowserModel->SetKinematic(true);
 
-    //PERK_SPEEDCOLA->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("Sofa_Cushionless"));
+    //assetBrowserModel->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("Sofa_Cushionless"));
     assetBrowserModel->AddCollisionShape(physics, physicsData);
-
-    //PERK_SPEEDCOLA->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaBack_ConvexMesh"));
-    //PERK_SPEEDCOLA->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaLeftArm_ConvexMesh"));
-    //PERK_SPEEDCOLA->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaRightArm_ConvexMesh"));
-
+    //assetBrowserModel->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaBack_ConvexMesh"));
+    //assetBrowserModel->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaLeftArm_ConvexMesh"));
+    //assetBrowserModel->AddCollisionShapeFromModelIndex(AssetManager::GetModelIndexByName("SofaRightArm_ConvexMesh"));
     assetBrowserModel->SetModelMatrixMode(ModelMatrixMode::GAME_TRANSFORM);
     assetBrowserModel->SetCollisionType(CollisionType::STATIC_ENVIROMENT);
-    //PERK_SPEEDCOLA->
-    //PERK_SPEEDCOLA->SetMeshMaterialByMeshName("Balls", "Gold");
+    //assetBrowserModel->SetMeshMaterialByMeshName("Balls", "Gold");
     selectedAsset = assetBrowserModel;
 }
 
 void AssetBrowser::HandleDropOutsideWindow(const std::string& filePath, const ImVec2& dropPos)
 {
-    // Your custom logic for handling drops outside the window
     //std::cout << "File '" << filePath << "' was dropped outside the window at position: (" << dropPos.x << ", " << dropPos.y << ")\n";
-    // Example: Move the file, log it, or perform an application-specific action
     std::cout << "Dropped file: " << filePath << std::endl;
 
     if (filePath == "Speedcola")
@@ -123,7 +118,6 @@ void AssetBrowser::HandleDropOutsideWindow(const std::string& filePath, const Im
         SpawnAssetBrowserModel("Juggernog", { -0.1f, -0.2f, 3.8f }, 0.021f);
         //IMGUI::AddToConsoleLog("Asset Browser: Spawned Juggernog (PERK)");
     }
-
 
     else if (filePath == "Cube")
     {
@@ -191,6 +185,18 @@ void AssetBrowser::HandleDragDrop()
     }
 }
 
+std::vector<std::string> sceneObjects = { 
+    "Scene Object 1", 
+    "Scene Object 2",
+    "TEST Object 2",
+    "Scene TEST 2",
+    "Scene TEWT 2",
+    "Scene Object 3" 
+};
+
+char searchBuffer[128] = "";
+
+
 void AssetBrowser::Render()
 {
     HandleToggleAssetBrowser();
@@ -211,17 +217,17 @@ void AssetBrowser::Render()
     ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
     ImGui::DockSpace(dockspace_id, ImVec2(0, 0), ImGuiDockNodeFlags_None);
 
-    if (ImGui::BeginMenuBar()) 
+    if (ImGui::BeginMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Exit")) 
+            if (ImGui::MenuItem("Exit"))
             {
                 // Handle exit logic here
             }
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Edit")) 
+        if (ImGui::BeginMenu("Edit"))
         {
             ImGui::MenuItem("Settings");
             ImGui::EndMenu();
@@ -230,27 +236,42 @@ void AssetBrowser::Render()
     }
 
     // Scene Panel (LEFT)
+    float scenePanelWidth = viewport->Size.x * 0.3f; // Adjust width as a percentage of the viewport
+    ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y), ImGuiCond_Always); // Position at the left edge
+    ImGui::SetNextWindowSize(ImVec2(scenePanelWidth, viewport->Size.y), ImGuiCond_Always); // Full height
+
     ImGui::Begin("Scene Panel");
-        // Scene Hierachy
-        ImGui::Text("Scene");
-        ImGui::InputText("Search", searchBuffer, sizeof(searchBuffer));
-        ImGui::Separator();
-        ImGui::Text("Scene Object 1");
-        ImGui::Text("Scene Object 2");
+    // Scene Hierarchy
+    ImGui::Text("Scene");
+    ImGui::InputText("Search", searchBuffer, sizeof(searchBuffer));
+    ImGui::Separator();
+
+    // Display objects dynamically
+    for (const auto& obj : sceneObjects) {
+        // Check if the object name matches the search buffer
+        if (std::string(obj).find(searchBuffer) != std::string::npos) {
+            ImGui::Text("%s", obj.c_str());
+        }
+    }
+
     ImGui::End();
 
     // Viewport/Game Panel (CENTERED)
+    float viewportWidth = viewport->Size.x - scenePanelWidth; // Remaining width after scene panel
+    ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x + scenePanelWidth, viewport->Pos.y), ImGuiCond_Always); // Start after scene panel
+    ImGui::SetNextWindowSize(ImVec2(viewportWidth, viewport->Size.y), ImGuiCond_Always);
+
     ImGui::Begin("Viewport");
-        ImGui::Text("Viewport area");
-        ImGui::Separator();
-        ImGui::TextWrapped("This is where your main scene content will be displayed");
+    ImGui::Text("Viewport area");
+    ImGui::Separator();
+    ImGui::TextWrapped("This is where your main scene content will be displayed");
     ImGui::End();
 
     // Content Browser Panel (BOTTOM)
-    ImGui::Begin("Content Broswer");
-        ImGui::Text("A column here plz.");
-        ImGui::Separator();
-        ImGui::TextWrapped("This is the bottom panel, used for the content browser");
+    ImGui::Begin("Content Browser");
+    ImGui::Text("A column here plz.");
+    ImGui::Separator();
+    ImGui::TextWrapped("This is the bottom panel, used for the content browser");
     ImGui::End();
 
     //HandleDragDrop();
