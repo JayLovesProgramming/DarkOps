@@ -69,7 +69,7 @@ void Renderer::RenderFrame()
     UpdateDebugLinesMesh();
     UpdateDebugLinesMesh2D();
     UpdateDebugTrianglesMesh();
-    Editor::UpdateRenderItems();
+    Editor::UpdateRenderItemsPlease();
 
     if (Input::KeyPressed(HELL_KEY_C) && !Editor::IsOpen() && !IMGUI::IsAnyWindowOpen()) 
     {

@@ -139,6 +139,11 @@ namespace Input
             return;
         }*/
  
+        if (ImGui::IsAnyItemActive())
+        {
+            return;
+        }
+
         if (KeyPressed(HELL_KEY_G)) 
         {
             BackEnd::ToggleFullscreen();

@@ -835,10 +835,10 @@ namespace Util
         }
     }*/
 
-    inline float MapRange(float inValue, float minInRange, float maxInRange, float minOutRange, float maxOutRange) {
-        float x = (inValue - minInRange) / (maxInRange - minInRange);
-        return minOutRange + (maxOutRange - minOutRange) * x;
-    }
+    //inline float MapRange(float inValue, float minInRange, float maxInRange, float minOutRange, float maxOutRange) {
+    //    float x = (inValue - minInRange) / (maxInRange - minInRange);
+    //    return minOutRange + (maxOutRange - minOutRange) * x;
+    //}
 
     /*inline int MapRange(int inValue, int minInRange, int maxInRange, int minOutRange, int maxOutRange) {
         float x = (inValue - minInRange) / (float)(maxInRange - minInRange);
@@ -1633,6 +1633,12 @@ namespace Util
         //stbi_image_free(textureID.data);
         //glDeleteTextures(1, &backgroundImage);
     }
+
+     inline long MapRange(long x, long in_min, long in_max, long out_min, long out_max)
+     {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+     }
+
 
     //inline void ThrowMessageBoxError(const std::string& message)
     //{

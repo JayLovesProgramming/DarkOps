@@ -8,6 +8,76 @@ constexpr static auto MENU_SELECT_VOLUME = 1.0f;
 
 namespace Editor 
 {
+    enum class InteractionType
+    {
+        HOVERED,
+        SELECTED
+    };
+
+    struct MenuItem
+    {
+        std::string name;
+        enum class Type
+        {
+            // Do these VALUE_ members need to be here? Doesn't really make sense to me
+            VALUE_INT,
+            VALUE_FLOAT,
+            VALUE_STRING,
+            VALUE_BOOL,
+
+            INSERT_CSG_ADDITIVE,
+            INSERT_WALL_PLANE,
+            INSERT_CEILING_PLANE,
+            INSERT_FLOOR_PLANE,
+            INSERT_CSG_SUBTRACTIVE,
+            INSERT_DOOR,
+            INSERT_WINDOW,
+            INSERT_LIGHT,
+
+            CLOSE_MENU,
+
+            FILE_NEW_MAP,
+            FILE_LOAD_MAP,
+            FILE_SAVE_MAP,
+
+            RECALCULATE_NAV_MESH,
+            RECALCULATE_GI
+        } type;
+
+        // We need to learn what this ptr variable is doing?
+        void* ptr;
+
+        float increment = 1.0f;
+        int precision = 2;
+    };
+
+    static struct ClipBoard
+    {
+        int materialIndex = -1;
+        float textureScale = 0;
+        float textureOffsetX = 0;
+        float textureOffsetY = 0;
+    } g_clipBoard;
+
+    static ObjectType g_hoveredObjectType = ObjectType::UNDEFINED;
+    static ObjectType g_selectedObjectType = ObjectType::UNDEFINED;
+    static std::vector<RenderItem3D> gHoveredRenderItems;
+    static std::vector<RenderItem3D> gSelectedRenderItems;
+    static std::vector<RenderItem2D> gMenuRenderItems;
+    static std::vector<RenderItem2D> gEditorUIRenderItems;
+    static std::vector<MenuItem> g_menuItems;
+
+    static std::string g_debugText = "";
+    static int g_menuSelectionIndex = 0;
+    //bool g_insertMenuOpen = false;
+    //bool g_fileMenuOpen = false;
+    static MenuType g_currentMenuType = MenuType::NONE;
+    static bool g_isDraggingMenu = false;
+    static hell::ivec2 g_menuLocation = hell::ivec2(76, 460);
+    static hell::ivec2 g_backgroundLocation = hell::ivec2(0, 0);
+    static hell::ivec2 g_backgroundSize = hell::ivec2(0, 0);
+    static hell::ivec2 g_dragOffset = hell::ivec2(0, 0);
+
     // Not a big deal but really figure out why these global variables below need to be static
     static glm::mat4 g_editorViewMatrix;
     static glm::dvec3 g_viewTarget;
@@ -52,9 +122,18 @@ namespace Editor
 
     MenuType GetCurrentMenuType();
     void SetCurrentMenuType(MenuType type);
+    void HideGizmo();
+    void CheckVertexHover(glm::mat4 mvp);
+    void CheckForVertexSelection();
+    void UpdateSelectedObjectGizmo();
+    void UpdateSelectedVertexPosition();
+    bool FloatWithinRange(float a, float b, float threshold);
+    void UpdateVertexObjectGizmo();
+    void EvaluateCopyAndPaste();
 
     // Rendering
-    void UpdateRenderItems();
+    void ClearRenderItems();
+    void UpdateRenderItemsPlease();
     std::vector<RenderItem3D>& GetHoveredRenderItems();
     std::vector<RenderItem3D>& GetSelectedRenderItems();
     std::vector<RenderItem2D>& GetMenuRenderItems();
@@ -62,4 +141,12 @@ namespace Editor
 
     // Asset Browser
     void PutDownCSGAdditive();
+
+    glm::dvec3 Rot3D(glm::dvec3 v, glm::dvec2 rot);
+    void UpdateRenderItems(std::vector<RenderItem3D>& renderItems, InteractionType interactionType, int index);
+    void RebuildEverything();
+    void UpdateMenu();
+    //void UpdateDebugText();
+    bool MenuHasHover();
+
 }

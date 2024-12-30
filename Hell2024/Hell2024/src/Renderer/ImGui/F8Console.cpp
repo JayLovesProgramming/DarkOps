@@ -10,6 +10,8 @@
 #include "Game/MiscObjects.hpp"
 
 #include "AssetBrowser/AssetBrowser.hpp"
+#include "Game/Sofa.hpp"
+#include "Game/Cushions.hpp"
 
 namespace IMGUI
 {
@@ -402,6 +404,30 @@ void IMGUI::ExecuteCommand(const char* inputCommand)
 			{
 				MiscObjectsManager::SpawnSpeedCola();
 				AddToConsoleLog("Zombies: Spawned speedcola");
+			}
+			else if (spawnType == "sofa")
+			{
+				SofaManager::CreateSofa();
+			}
+			else if (spawnType == "xmastree")
+			{
+				MiscObjectsManager::SpawnChristmasTree();
+			}
+			else if (spawnType == "xmaspresents")
+			{
+				MiscObjectsManager::SpawnChristmasBoxPresents();
+			}
+			else if (spawnType == "pictureframe")
+			{
+				MiscObjectsManager::SpawnPictureFrame();
+			}
+			else if (spawnType == "houserailings")
+			{
+				MiscObjectsManager::LoadHouseRailings();
+			}
+			else if (spawnType == "cushions")
+			{
+				CushionManager::CreateAllCushions();
 			}
 			else
 			{

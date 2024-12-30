@@ -19,105 +19,23 @@
 
 namespace Editor 
 {
-    ObjectType g_hoveredObjectType = ObjectType::UNDEFINED;
-    ObjectType g_selectedObjectType = ObjectType::UNDEFINED;
-
-    std::vector<RenderItem3D> gHoveredRenderItems;
-    std::vector<RenderItem3D> gSelectedRenderItems;
-    std::vector<RenderItem2D> gMenuRenderItems;
-    std::vector<RenderItem2D> gEditorUIRenderItems;
-
-    std::string g_debugText = "";
-    int g_menuSelectionIndex = 0;
-    //bool g_insertMenuOpen = false;
-    //bool g_fileMenuOpen = false;
-    MenuType g_currentMenuType = MenuType::NONE;
-    bool g_isDraggingMenu = false;
-    hell::ivec2 g_menuLocation = hell::ivec2(76, 460);
-    hell::ivec2 g_backgroundLocation = hell::ivec2(0, 0);
-    hell::ivec2 g_backgroundSize = hell::ivec2(0, 0);
-    hell::ivec2 g_dragOffset = hell::ivec2(0, 0);
-
-    enum class InteractionType 
-    { 
-        HOVERED, 
-        SELECTED 
-    };
-
-    struct MenuItem 
-    {
-        std::string name;
-        enum class Type 
-        {
-            // Do these VALUE_ members need to be here? Doesn't really make sense to me
-            VALUE_INT,
-            VALUE_FLOAT,
-            VALUE_STRING,
-            VALUE_BOOL,
-
-            INSERT_CSG_ADDITIVE,
-            INSERT_WALL_PLANE,
-            INSERT_CEILING_PLANE,
-            INSERT_FLOOR_PLANE,
-            INSERT_CSG_SUBTRACTIVE,
-            INSERT_DOOR,
-            INSERT_WINDOW,
-            INSERT_LIGHT,
-
-            CLOSE_MENU,
-
-            FILE_NEW_MAP,
-            FILE_LOAD_MAP,
-            FILE_SAVE_MAP,
-
-            RECALCULATE_NAV_MESH,
-            RECALCULATE_GI
-        } type;
-
-        // We need to learn what this ptr variable is doing?
-        void* ptr;
-
-        float increment = 1.0f;
-        int precision = 2;
-    };
-
-    struct ClipBoard 
-    {
-        int materialIndex = -1;
-        float textureScale = 0;
-        float textureOffsetX = 0;
-        float textureOffsetY = 0;
-    } g_clipBoard;
-
-    // This global cannot be moved from here just yet, we need to read the struct first
-    std::vector<MenuItem> g_menuItems;
-
+    // A getter for the current "MenuType"
     MenuType GetCurrentMenuType()
     {
         return g_currentMenuType;
     }
 
+    // A setter for the g_currentMenuType using the "MenuType" enum class
     void SetCurrentMenuType(MenuType type) 
     {
         g_currentMenuType = type;
         std::cout << "Set Current Menu Type To " << Util::MenuTypeToString(type) << "\n";
     }
 
-    // Forward Declarations
-    glm::dvec3 Rot3D(glm::dvec3 v, glm::dvec2 rot);
-    void UpdateRenderItems(std::vector<RenderItem3D>& renderItems, InteractionType interactionType, int index);
-    void RebuildEverything();
-    void UpdateMenu();
-    void UpdateDebugText();
-    bool MenuHasHover();
-
-    long MapRange(long x, long in_min, long in_max, long out_min, long out_max) 
-    {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
-
+    // Hides the gizmo by setting it so far into the earths core it's not visible. Gets triggered when a new object is selected
     void HideGizmo()
     {
+        //std::cout << "[INFO] Hidden Gizmo" << std::endl;
         Transform gizmoTransform;
         gizmoTransform.position.y = -1000.0f;
         g_gizmoMatrix = gizmoTransform.to_mat4();
@@ -132,14 +50,16 @@ namespace Editor
 
         if (g_selectedObjectType == ObjectType::CSG_OBJECT_ADDITIVE_WALL_PLANE)
         {
+            //std::cout << "[INFO] Hovering over CSG_OBJECT_ADDITIVE_WALL_PLANE" << std::endl;
+
+            // This is where the CSGplanes are stored
             CSGPlane& csgPlane = Scene::g_csgAdditiveWallPlanes[g_selectedObjectIndex];
-            for (int i = 0; i < 4; i++
-                ) {
+
+            for (int i = 0; i < 4; i++) 
+            {
                 glm::vec3 worldPos = csgPlane.m_veritces[i];
                 glm::ivec2 screenPos = Util::CalculateScreenSpaceCoordinates(worldPos, mvp, PRESENT_WIDTH, PRESENT_HEIGHT, true);
-                if (mouseX < screenPos.x + threshold &&
-                    mouseX > screenPos.x - threshold &&
-                    mouseY < screenPos.y + threshold &&
+                if (mouseX < screenPos.x + threshold && mouseX > screenPos.x - threshold && mouseY < screenPos.y + threshold &&
                     mouseY > screenPos.y - threshold) 
                 {
                     g_hoveredVertexIndex = i;
@@ -234,8 +154,8 @@ namespace Editor
             glm::mat4 view = g_editorViewMatrix;
             int viewportWidth = PRESENT_WIDTH;
             int viewportHeight = PRESENT_HEIGHT;
-            float mouseX = MapRange(Input::GetMouseX(), 0, BackEnd::GetCurrentWindowWidth(), 0, viewportWidth);
-            float mouseY = MapRange(Input::GetMouseY(), 0, BackEnd::GetCurrentWindowHeight(), 0, viewportHeight);
+            float mouseX = Util::MapRange(Input::GetMouseX(), 0, BackEnd::GetCurrentWindowWidth(), 0, viewportWidth);
+            float mouseY = Util::MapRange(Input::GetMouseY(), 0, BackEnd::GetCurrentWindowHeight(), 0, viewportHeight);
             Transform gizmoTransform = Gizmo::Update(viewPos, viewDir, mouseX, mouseY, projection, view, Input::LeftMouseDown(), viewportWidth, viewportHeight, g_gizmoMatrix);
             glm::vec3 pos = gizmoTransform.position;
 
@@ -366,8 +286,8 @@ namespace Editor
             glm::mat4 view = g_editorViewMatrix;
             int viewportWidth = PRESENT_WIDTH;
             int viewportHeight = PRESENT_HEIGHT;
-            float mouseX = MapRange(Input::GetMouseX(), 0, BackEnd::GetCurrentWindowWidth(), 0, viewportWidth);
-            float mouseY = MapRange(Input::GetMouseY(), 0, BackEnd::GetCurrentWindowHeight(), 0, viewportHeight);
+            float mouseX = Util::MapRange(Input::GetMouseX(), 0, BackEnd::GetCurrentWindowWidth(), 0, viewportWidth);
+            float mouseY = Util::MapRange(Input::GetMouseY(), 0, BackEnd::GetCurrentWindowHeight(), 0, viewportHeight);
             Transform updateGizmoTransform = Gizmo::Update(viewPos, viewDir, mouseX, mouseY, projection, view, Input::LeftMouseDown(), viewportWidth, viewportHeight, g_gizmoMatrix);
             g_gizmoMatrix = updateGizmoTransform.to_mat4();
             glm::vec3 updatedGizmoPosition = updateGizmoTransform.position;
@@ -487,7 +407,6 @@ namespace Editor
             }
 
         }
-
     }
 
     void EvaluateCopyAndPaste()
@@ -504,7 +423,7 @@ namespace Editor
                 g_clipBoard.textureScale = csgPlane->textureScale;
                 g_clipBoard.textureOffsetX = csgPlane->textureOffsetX;
                 g_clipBoard.textureOffsetY = csgPlane->textureOffsetY;
-                std::cout << "copied plane: " << g_selectedObjectIndex << "\n";
+                std::cout << "Copied CSG Plane: " << g_selectedObjectIndex << "\n";
             }
             else if (csgCube) 
             {
@@ -513,10 +432,11 @@ namespace Editor
                 g_clipBoard.textureScale = csgCube->textureScale;
                 g_clipBoard.textureOffsetX = csgCube->textureOffsetX;
                 g_clipBoard.textureOffsetY = csgCube->textureOffsetY;
-                std::cout << "copied cube: " << g_selectedObjectIndex << "\n";
+                std::cout << "Copied CSG Cube: " << g_selectedObjectIndex << "\n";
             }
-            else {
-                std::cout << "copied nothing\n";
+            else 
+            {
+                std::cout << "Copied Nothing" << "\n";
             }
         }
         // Paste
@@ -530,7 +450,7 @@ namespace Editor
                 csgPlane->textureScale = g_clipBoard.textureScale;
                 csgPlane->textureOffsetX = g_clipBoard.textureOffsetX;
                 csgPlane->textureOffsetY = g_clipBoard.textureOffsetY;
-                std::cout << "pasted plane: " << g_selectedObjectIndex << "\n";
+                std::cout << "Pasted CSG Plane: " << g_selectedObjectIndex << "\n";
             }
             else if (csgCube)
             {
@@ -538,11 +458,11 @@ namespace Editor
                 csgCube->textureScale = g_clipBoard.textureScale;
                 csgCube->textureOffsetX = g_clipBoard.textureOffsetX;
                 csgCube->textureOffsetY = g_clipBoard.textureOffsetY;
-                std::cout << "pasted cube: " << g_selectedObjectIndex << "\n";
+                std::cout << "Pasted CSG Cube: " << g_selectedObjectIndex << "\n";
             }
             else 
             {
-                std::cout << "pasted nothing\n";
+                std::cout << "Pasted Nothing" << "\n";
             }
             RebuildEverything();
         }
@@ -559,8 +479,9 @@ namespace Editor
 
         if (Input::KeyDown(HELL_KEY_LEFT_CONTROL_GLFW) && Input::KeyPressed(HELL_KEY_S))
         {
-            Scene::SaveMapData("mappp.txt");
-            std::cout << "SAVED MAP!\n";
+            std::string mapSaveFileName = "mappp";
+            Scene::SaveMapData(mapSaveFileName + ".txt");
+            std::cout << "[SAVE] Saved map to " + mapSaveFileName + ".txt \n";
         }
 
         // Camera Orbit
@@ -603,7 +524,6 @@ namespace Editor
         player->ForceSetViewMatrix(g_editorViewMatrix);
 
         // Check for hover
-        //g_hoveredObjectType == ObjectType::UNDEFINED;
         g_hoveredObjectType = ObjectType::UNDEFINED;
         g_hoveredObjectIndex = -1;
         glm::mat4 projection = player->GetProjectionMatrix();
@@ -615,11 +535,13 @@ namespace Editor
         // Hover found?
         if (hitResult.hitFound)
         {
+            std::cout << "Hover has been found for this object" << std::endl;
             g_hoveredObjectType = hitResult.objectType;
 
             if (hitResult.objectType == ObjectType::GAME_OBJECT)
             {
                 // To do
+                std::cout << "HITTING GAME OBJECT OOO" << std::endl;
             }
 
             // CSG additives
@@ -753,7 +675,7 @@ namespace Editor
                     g_selectedObjectType = g_hoveredObjectType;
                     g_menuSelectionIndex = 0;
                     Audio::PlayAudio(MENU_SELECT_AUDIO, MENU_SELECT_VOLUME);
-                    std::cout << "Selected an editor object\n";
+                    std::cout << "Selected an valid editor object" << "\n";
                     SetCurrentMenuType(MenuType::SELECTED_OBJECT);
                     HideGizmo();
                 }
@@ -767,7 +689,7 @@ namespace Editor
                     //gizmoMatrix = gizmoTransform.to_mat4();
                     //g_selectedObjectType = ObjectType::UNDEFINED;
                     SetCurrentMenuType(MenuType::NONE);
-                    std::cout << "Unelected an editor object\n";
+                    std::cout << "Unselected an editor object" << "\n";
                 }
             }
         }
@@ -802,7 +724,7 @@ namespace Editor
         }
 
         UpdateMenu();
-        UpdateDebugText();
+        //UpdateDebugText();
     }
 
     bool MenuHasHover() 
@@ -1456,14 +1378,19 @@ namespace Editor
         }
     }
 
-    void UpdateRenderItems() 
+    void ClearRenderItems()
     {
         gHoveredRenderItems.clear();
         gSelectedRenderItems.clear();
         gEditorUIRenderItems.clear();
         gMenuRenderItems.clear();
+    }
 
-        //if (GetCurrentMenuType() == MenuType::NONE) {
+    void UpdateRenderItemsPlease()
+    {
+        ClearRenderItems();
+        //if (GetCurrentMenuType() == MenuType::NONE) 
+        // {
         //    return;
         //}
 
@@ -1668,46 +1595,46 @@ namespace Editor
         }
     }
 
-    void UpdateDebugText() 
-    {
-        g_debugText = "";
-        if (MenuHasHover())
-        {
-            g_debugText += "Menu HAS HOVER!!!!!!!!!\n";
-        }
+    //void UpdateDebugText() 
+    //{
+    //    g_debugText = "";
+    //    if (MenuHasHover())
+    //    {
+    //        g_debugText += "Menu HAS HOVER!!!!!!!!!\n";
+    //    }
 
-        /*
-        g_debugText += "MouseX: " + std::to_string(Input::GetMouseX()) + "\n";
-        g_debugText += "MouseY: " + std::to_string(Input::GetMouseY()) + "\n";
-        g_debugText += "Mapped MouseX: " + std::to_string(Input::GetViewportMappedMouseX(PRESENT_WIDTH)) + "\n";
-        g_debugText += "Mapped MouseY: " + std::to_string(Input::GetViewportMappedMouseY(PRESENT_HEIGHT)) + "\n";
-        g_debugText += "Menu location: " + std::to_string(g_menuLocation.x) + ", " + std::to_string(g_menuLocation.y) + "\n";
-        g_debugText += "Background location: " + std::to_string(g_backgroundLocation.x) + ", " + std::to_string(g_backgroundLocation.y) + "\n";
-        g_debugText += "Background size: " + std::to_string(g_backgroundSize.x) + ", " + std::to_string(g_backgroundSize.y) + "\n";
-        g_debugText += "Offset X: " + std::to_string(g_dragOffset.x) + "\n";
-        g_debugText += "Offset Y: " + std::to_string(g_dragOffset.y) + "\n";
-        */
-        /* g_debugText = "g_fileMenuOpen: " + std::to_string(g_fileMenuOpen) + "\n";
-         g_debugText += "g_insertMenuOpen: " + std::to_string(g_insertMenuOpen) + "\n";
-         g_debugText += "g_selectedObjectType: " + Util::PhysicsObjectTypeToString(g_selectedObjectType) + "\n";
-         */
+    //    /*
+    //    g_debugText += "MouseX: " + std::to_string(Input::GetMouseX()) + "\n";
+    //    g_debugText += "MouseY: " + std::to_string(Input::GetMouseY()) + "\n";
+    //    g_debugText += "Mapped MouseX: " + std::to_string(Input::GetViewportMappedMouseX(PRESENT_WIDTH)) + "\n";
+    //    g_debugText += "Mapped MouseY: " + std::to_string(Input::GetViewportMappedMouseY(PRESENT_HEIGHT)) + "\n";
+    //    g_debugText += "Menu location: " + std::to_string(g_menuLocation.x) + ", " + std::to_string(g_menuLocation.y) + "\n";
+    //    g_debugText += "Background location: " + std::to_string(g_backgroundLocation.x) + ", " + std::to_string(g_backgroundLocation.y) + "\n";
+    //    g_debugText += "Background size: " + std::to_string(g_backgroundSize.x) + ", " + std::to_string(g_backgroundSize.y) + "\n";
+    //    g_debugText += "Offset X: " + std::to_string(g_dragOffset.x) + "\n";
+    //    g_debugText += "Offset Y: " + std::to_string(g_dragOffset.y) + "\n";
+    //    */
+    //    /* g_debugText = "g_fileMenuOpen: " + std::to_string(g_fileMenuOpen) + "\n";
+    //     g_debugText += "g_insertMenuOpen: " + std::to_string(g_insertMenuOpen) + "\n";
+    //     g_debugText += "g_selectedObjectType: " + Util::PhysicsObjectTypeToString(g_selectedObjectType) + "\n";
+    //     */
 
-        /*  if (ObjectIsHoverered()) {
-               g_debugText += "Hovered: " + Util::PhysicsObjectTypeToString(g_hoveredObjectType) + "\n";
-           }
-           else {
-               g_debugText += "Hovered: NONE_FOUND " + std::to_string(g_hoveredObjectIndex) + "\n";
-           }
-           if (ObjectIsSelected()) {
-               g_debugText += "Selected: " + Util::PhysicsObjectTypeToString(g_selectedObjectType) + "\n";
-           }
-           else {
-               g_debugText += "Selected: NONE_FOUND " + std::to_string(g_selectedObjectIndex) + "\n";
-           }
-           g_debugText = "";
+    //    /*  if (ObjectIsHoverered()) {
+    //           g_debugText += "Hovered: " + Util::PhysicsObjectTypeToString(g_hoveredObjectType) + "\n";
+    //       }
+    //       else {
+    //           g_debugText += "Hovered: NONE_FOUND " + std::to_string(g_hoveredObjectIndex) + "\n";
+    //       }
+    //       if (ObjectIsSelected()) {
+    //           g_debugText += "Selected: " + Util::PhysicsObjectTypeToString(g_selectedObjectType) + "\n";
+    //       }
+    //       else {
+    //           g_debugText += "Selected: NONE_FOUND " + std::to_string(g_selectedObjectIndex) + "\n";
+    //       }
+    //       g_debugText = "";
 
-           // g_debugText += "Gizmo Has Hover: " + std::to_string(Gizmo::HasHover());
+    //       // g_debugText += "Gizmo Has Hover: " + std::to_string(Gizmo::HasHover());
 
-           */
-    }
+    //       */
+    //}
 }

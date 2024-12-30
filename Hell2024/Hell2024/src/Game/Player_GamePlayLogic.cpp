@@ -17,7 +17,7 @@ void Player::CheckForSuicide()
 
 void Player::CheckForAndEvaluateFlashlight(float deltaTime)
 {
-    if (PressedFlashlight())
+    if (PressedFlashlight() && Player::HasControl())
     {
         Audio::PlayAudio("Flashlight.wav", 1.0f);
         m_flashlightOn = !m_flashlightOn;

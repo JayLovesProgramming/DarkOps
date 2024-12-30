@@ -34,8 +34,8 @@ public:
         PxShape* JuggernogPhysics = Physics::CreateBoxShape(0.75f, 0.75f, 0.75f, shapeOffset);
         
         PhysicsFilterData JuggernogPhysicsData;
-        JuggernogPhysicsData.raycastGroup = RAYCAST_DISABLED;
-        JuggernogPhysicsData.collisionGroup = CollisionGroup::ENVIROMENT_OBSTACLE;
+        JuggernogPhysicsData.raycastGroup = RAYCAST_ENABLED;
+        JuggernogPhysicsData.collisionGroup = CollisionGroup::GENERTIC_INTERACTBLE; // ENVIROMENT_OBSTACLE
         JuggernogPhysicsData.collidesWith = (CollisionGroup)(GENERIC_BOUNCEABLE | BULLET_CASING | PLAYER | RAGDOLL);
 
         CreateGameObject();
@@ -46,7 +46,8 @@ public:
         PERK_JUGGERNOG->SetName("PERK_JUGGERNOG");
         PERK_JUGGERNOG->SetMeshMaterial("Juggernog");
         PERK_JUGGERNOG->SetScale(0.021f);
-        PERK_JUGGERNOG->SetKinematic(true);
+        //PERK_JUGGERNOG->SetKinematic(true);
+        PERK_JUGGERNOG->EnableRaycasting();
 
         //PERK_JUGGERNOG->SetRaycastShapeFromModelIndex(AssetManager::GetModelIndexByName("Sofa_Cushionless"));
         PERK_JUGGERNOG->AddCollisionShape(JuggernogPhysics, JuggernogPhysicsData);
