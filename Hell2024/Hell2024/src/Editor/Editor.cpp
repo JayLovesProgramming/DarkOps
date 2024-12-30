@@ -22,54 +22,11 @@ constexpr static auto MENU_SELECT_VOLUME  = 1.0f;
 
 namespace Editor 
 {
-    enum class InteractionType 
-    { 
-        HOVERED, 
-        SELECTED 
-    };
-
-    struct MenuItem 
-    {
-        std::string name;
-        enum class Type 
-        {
-            VALUE_INT,
-            VALUE_FLOAT,
-            VALUE_STRING,
-            VALUE_BOOL,
-            INSERT_CSG_ADDITIVE,
-            INSERT_WALL_PLANE,
-            INSERT_CEILING_PLANE,
-            INSERT_FLOOR_PLANE,
-            INSERT_CSG_SUBTRACTIVE,
-            INSERT_DOOR,
-            INSERT_WINDOW,
-            INSERT_LIGHT,
-            CLOSE_MENU,
-            FILE_NEW_MAP,
-            FILE_LOAD_MAP,
-            FILE_SAVE_MAP,
-            RECALCULATE_NAV_MESH,
-            RECALCULATE_GI
-        } type;
-        void* ptr;
-        float increment = 1.0f;
-        int percision = 2;
-    };
-
     // Editor Constants
     constexpr double g_orbitRadius = 2.5f;
     constexpr double g_orbiteSpeed = 0.003f;
     constexpr double g_zoomSpeed = 0.5f;
     constexpr double g_panSpeed = 0.004f;
-
-    struct ClipBoard 
-    {
-        int materialIndex = -1;
-        float textureScale = 0;
-        float textureOffsetX = 0;
-        float textureOffsetY = 0;
-    } g_clipBoard;
 
     // Editor Globals
     glm::mat4 g_editorViewMatrix;
@@ -81,12 +38,13 @@ namespace Editor
     //bool g_objectIsSelected = false;
     ObjectType g_hoveredObjectType = ObjectType::UNDEFINED;
     ObjectType g_selectedObjectType = ObjectType::UNDEFINED;
+
     std::vector<RenderItem3D> gHoveredRenderItems;
     std::vector<RenderItem3D> gSelectedRenderItems;
     std::vector<RenderItem2D> gMenuRenderItems;
     std::vector<RenderItem2D> gEditorUIRenderItems;
+
     std::string g_debugText = "";
-    std::vector<MenuItem> g_menuItems;
     int g_menuSelectionIndex = 0;
     //bool g_insertMenuOpen = false;
     //bool g_fileMenuOpen = false;
@@ -96,6 +54,60 @@ namespace Editor
     hell::ivec2 g_backgroundLocation = hell::ivec2(0, 0);
     hell::ivec2 g_backgroundSize = hell::ivec2(0, 0);
     hell::ivec2 g_dragOffset = hell::ivec2(0, 0);
+
+    enum class InteractionType 
+    { 
+        HOVERED, 
+        SELECTED 
+    };
+
+    struct MenuItem 
+    {
+        std::string name;
+        enum class Type 
+        {
+            // Do these VALUE_ members need to be here? Doesn't really make sense to me
+            VALUE_INT,
+            VALUE_FLOAT,
+            VALUE_STRING,
+            VALUE_BOOL,
+
+            INSERT_CSG_ADDITIVE,
+            INSERT_WALL_PLANE,
+            INSERT_CEILING_PLANE,
+            INSERT_FLOOR_PLANE,
+            INSERT_CSG_SUBTRACTIVE,
+            INSERT_DOOR,
+            INSERT_WINDOW,
+            INSERT_LIGHT,
+
+            CLOSE_MENU,
+
+            FILE_NEW_MAP,
+            FILE_LOAD_MAP,
+            FILE_SAVE_MAP,
+
+            RECALCULATE_NAV_MESH,
+            RECALCULATE_GI
+        } type;
+
+        // We need to learn what this ptr variable is doing?
+        void* ptr;
+
+        float increment = 1.0f;
+        int precision = 2;
+    };
+
+    struct ClipBoard 
+    {
+        int materialIndex = -1;
+        float textureScale = 0;
+        float textureOffsetX = 0;
+        float textureOffsetY = 0;
+    } g_clipBoard;
+
+    // This global cannot be moved from here just yet, we need to read the struct first
+    std::vector<MenuItem> g_menuItems;
 
     MenuType GetCurrentMenuType()
     {
@@ -1225,10 +1237,14 @@ namespace Editor
 
         if (g_menuItems.size()) 
         {
+
+            /// HERE WE ARE !! 
             MenuItem::Type& type = g_menuItems[g_menuSelectionIndex].type;
+
+
             const std::string& name = g_menuItems[g_menuSelectionIndex].name;
             void* ptr = g_menuItems[g_menuSelectionIndex].ptr;
-            int percision = g_menuItems[g_menuSelectionIndex].percision;
+            int precision = g_menuItems[g_menuSelectionIndex].precision;
             float increment = g_menuItems[g_menuSelectionIndex].increment;
             bool modified = false;
 
@@ -1537,7 +1553,7 @@ namespace Editor
                 MenuItem::Type& type = g_menuItems[i].type;
                 const std::string& name = g_menuItems[i].name;
                 void* ptr = g_menuItems[i].ptr;
-                int percision = g_menuItems[i].percision;
+                int precision = g_menuItems[i].precision;
                 menuText += (i == g_menuSelectionIndex) ? "  " : "  ";
                 std::string valueText = "";
                 //if (!g_insertMenuOpen && !g_fileMenuOpen) {
@@ -1546,7 +1562,7 @@ namespace Editor
                     menuText += name + ": ";
                     if (type == MenuItem::Type::VALUE_FLOAT)
                     {
-                        valueText = Util::FloatToString(*static_cast<float*>(ptr), percision);
+                        valueText = Util::FloatToString(*static_cast<float*>(ptr), precision);
                     }
                     if (type == MenuItem::Type::VALUE_INT) 
                     {
