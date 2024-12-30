@@ -17,25 +17,14 @@
 #include "Utils/Util.hpp"
 #include "AssetBrowser/AssetBrowser.hpp"
 
-constexpr static auto MENU_SELECT_AUDIO = "SELECT.wav";
-constexpr static auto MENU_SELECT_VOLUME  = 1.0f;
-
 namespace Editor 
 {
-    // Editor Constants
-    constexpr double g_orbitRadius = 2.5f;
-    constexpr double g_orbiteSpeed = 0.003f;
-    constexpr double g_zoomSpeed = 0.5f;
-    constexpr double g_panSpeed = 0.004f;
-
-    // Editor Globals
-    glm::mat4 g_editorViewMatrix;
-    glm::dvec3 g_viewTarget;
-    glm::dvec3 g_camPos;
     double g_yawAngle = 0.0;
     double g_pitchAngle = 0.0;
+
     bool g_editorOpen = false;
     //bool g_objectIsSelected = false;
+
     ObjectType g_hoveredObjectType = ObjectType::UNDEFINED;
     ObjectType g_selectedObjectType = ObjectType::UNDEFINED;
 
