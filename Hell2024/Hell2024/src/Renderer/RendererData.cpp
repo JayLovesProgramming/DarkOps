@@ -3,14 +3,14 @@
 #include "Game/Scene.hpp"
 #include "Timer.hpp"
 
-namespace RendererData {
-
+namespace RendererData 
+{
     std::vector<DrawIndexedIndirectCommand> CreateMultiDrawIndirectCommands(std::vector<RenderItem3D>& renderItems, int firstInstance, int instanceCount);
     void CalculateAbsentAABBs(std::vector<RenderItem3D>& renderItems);
     void CalculateAABB(RenderItem3D& renderItem);
 
-    void CreateDrawCommands(int playerCount) {
-
+    void CreateDrawCommands(int playerCount)
+    {
         //Timer timer("CreateDrawCommands");
 
         g_geometryRenderItems.clear();
@@ -26,14 +26,17 @@ namespace RendererData {
 
         CalculateAbsentAABBs(g_sceneGeometryRenderItems);
 
-        for (int i = 0; i < playerCount; i++) {
+        for (int i = 0; i < playerCount; i++)
+        {
             Frustum& frustum = Game::GetPlayerByIndex(i)->m_frustum;
 
             // Geometry
             g_geometryDrawInfo[i].baseInstance = g_geometryRenderItems.size();
             g_geometryDrawInfo[i].instanceCount = 0;
-            for (auto& renderItem : g_sceneGeometryRenderItems) {
-                if (frustum.IntersectsAABBFast(renderItem)) {
+            for (auto& renderItem : g_sceneGeometryRenderItems) 
+            {
+                if (frustum.IntersectsAABBFast(renderItem))
+                {
                     g_geometryRenderItems.push_back(renderItem);
                     g_geometryDrawInfo[i].instanceCount++;
                 }
@@ -43,11 +46,13 @@ namespace RendererData {
             // Bullet decals
             g_bulletDecalDrawInfo[i].baseInstance = g_bulletDecalRenderItems.size();
             g_bulletDecalDrawInfo[i].instanceCount = 0;
-            for (auto& renderItem : g_sceneBulletDecalRenderItems) {
+            for (auto& renderItem : g_sceneBulletDecalRenderItems) 
+            {
                 Sphere sphere;
                 sphere.radius = 0.015;
                 sphere.origin = Util::GetTranslationFromMatrix(renderItem.modelMatrix);
-                if (frustum.IntersectsSphere(sphere)) {
+                if (frustum.IntersectsSphere(sphere))
+                {
                     g_bulletDecalRenderItems.push_back(renderItem);
                     g_bulletDecalDrawInfo[i].instanceCount++;
                 }
@@ -56,17 +61,22 @@ namespace RendererData {
         }
 
         // Shadow map render draw commands
-        for (Light& light : Scene::g_lights) {
-            if (light.m_shadowCasting && light.m_shadowMapIsDirty) {
+        for (Light& light : Scene::g_lights) 
+        {
+            if (light.m_shadowCasting && light.m_shadowMapIsDirty) 
+            {
                 int i = light.m_shadowMapIndex;
                 light.UpdateMatricesAndFrustum();
-                for (int face = 0; face < 6; face++) {
+                for (int face = 0; face < 6; face++) 
+                {
                     Frustum& frustum = light.m_frustum[face];
                     // Geometry
                     g_shadowMapGeometryDrawInfo[i][face].baseInstance = g_shadowMapGeometryRenderItems.size();
                     g_shadowMapGeometryDrawInfo[i][face].instanceCount = 0;
-                    for (auto& renderItem : g_sceneGeometryRenderItems) {
-                        if (renderItem.castShadow && frustum.IntersectsAABBFast(renderItem)) {
+                    for (auto& renderItem : g_sceneGeometryRenderItems) 
+                    {
+                        if (renderItem.castShadow && frustum.IntersectsAABBFast(renderItem))
+                        {
                             g_shadowMapGeometryRenderItems.push_back(renderItem);
                             g_shadowMapGeometryDrawInfo[i][face].instanceCount++;
                         }
@@ -77,20 +87,24 @@ namespace RendererData {
         }
     }
 
-    std::vector<DrawIndexedIndirectCommand> CreateMultiDrawIndirectCommands(std::vector<RenderItem3D>& renderItems, int firstInstance, int instanceCount) {
+    std::vector<DrawIndexedIndirectCommand> CreateMultiDrawIndirectCommands(std::vector<RenderItem3D>& renderItems, int firstInstance, int instanceCount) 
+    {
         std::vector<DrawIndexedIndirectCommand> commands;
         std::unordered_map<int, DrawIndexedIndirectCommand*> commandMap;
         int baseInstance = 0;
-        for (int i = firstInstance; i < firstInstance + instanceCount; i++) {
+        for (int i = firstInstance; i < firstInstance + instanceCount; i++) 
+        {
             RenderItem3D& renderItem = renderItems[i];
             Mesh* mesh = AssetManager::GetMeshByIndex(renderItem.meshIndex);
             int baseVertex = mesh->baseVertex;
-            if (commandMap.find(baseVertex) != commandMap.end()) {
+            if (commandMap.find(baseVertex) != commandMap.end())
+            {
                 // Command exists, increment the instance count
                 commandMap[baseVertex]->instanceCount++;
                 baseInstance++;
             }
-            else {
+            else 
+            {
                 // Create new command and add it to the vector and map
                 auto& cmd = commands.emplace_back();
                 cmd.indexCount = mesh->indexCount;
@@ -105,15 +119,19 @@ namespace RendererData {
         return commands;
     }
 
-    void CalculateAbsentAABBs(std::vector<RenderItem3D>& renderItems) {
-        for (RenderItem3D& renderItem : renderItems) {
-            if (renderItem.aabbMin == glm::vec3(0) && renderItem.aabbMax == glm::vec3(0)) {
+    void CalculateAbsentAABBs(std::vector<RenderItem3D>& renderItems)
+    {
+        for (RenderItem3D& renderItem : renderItems) 
+        {
+            if (renderItem.aabbMin == glm::vec3(0) && renderItem.aabbMax == glm::vec3(0)) 
+            {
                 CalculateAABB(renderItem);
             }
         }
     }
 
-    void CalculateAABB(RenderItem3D& renderItem) {
+    void CalculateAABB(RenderItem3D& renderItem) 
+    {
         Mesh* mesh = AssetManager::GetMeshByIndex(renderItem.meshIndex);
         glm::vec3 obbCenter = (mesh->aabbMin + mesh->aabbMax) * 0.5f;
         glm::vec3 obbExtent = (mesh->aabbMax - mesh->aabbMin) * 0.5f;
@@ -126,9 +144,11 @@ namespace RendererData {
         renderItem.aabbMax = worldCenter + worldExtent;
     }
 
-    void UpdateGPULights() {
+    void UpdateGPULights() 
+    {
         g_gpuLights.resize(Scene::g_lights.size());
-        for (int i = 0; i < Scene::g_lights.size(); i++) {
+        for (int i = 0; i < Scene::g_lights.size(); i++)
+        {
             Light& light = Scene::g_lights[i];
             g_gpuLights[i].posX = light.position.x;
             g_gpuLights[i].posY = light.position.y;

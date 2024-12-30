@@ -28,8 +28,6 @@ namespace Renderer
         BOUNDING_BOXES,
     };
 
-
-
     //void RenderLoadingScreen();
     void RenderFrame();
     void HotloadShaders();

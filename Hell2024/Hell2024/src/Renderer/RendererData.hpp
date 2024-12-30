@@ -1,15 +1,17 @@
 #pragma once
+
 #include "HellCommon.hpp"
 #include "RenderData.hpp" // remove me later
 
-struct DrawInfo {
+struct DrawInfo 
+{
     std::vector<DrawIndexedIndirectCommand> commands;
     uint32_t baseInstance;
     uint32_t instanceCount;
 };
 
-namespace RendererData {
-
+namespace RendererData 
+{
     inline std::vector<GPULight> g_gpuLights;
 
     inline std::vector<RenderItem3D> g_sceneGeometryRenderItems;

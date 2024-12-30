@@ -340,7 +340,6 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\Renderer\Raytracing\BLAS.hpp" />
     <ClInclude Include="src\Renderer\Raytracing\Raytracing.hpp" />
     <ClInclude Include="src\Renderer\Raytracing\TLAS.hpp" />
-    <ClInclude Include="src\Renderer\Render.hpp" />
     <ClInclude Include="src\Renderer\RendererStorage.hpp" />
     <ClInclude Include="src\Renderer\Types\VertexBuffer.hpp" />
     <ClInclude Include="src\Utils\Convert\Slashes.hpp" />
