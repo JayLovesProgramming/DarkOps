@@ -19,12 +19,6 @@
 
 namespace Editor 
 {
-    double g_yawAngle = 0.0;
-    double g_pitchAngle = 0.0;
-
-    bool g_editorOpen = false;
-    //bool g_objectIsSelected = false;
-
     ObjectType g_hoveredObjectType = ObjectType::UNDEFINED;
     ObjectType g_selectedObjectType = ObjectType::UNDEFINED;
 

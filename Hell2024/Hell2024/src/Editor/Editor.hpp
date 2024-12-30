@@ -8,10 +8,16 @@ constexpr static auto MENU_SELECT_VOLUME = 1.0f;
 
 namespace Editor 
 {
-    // Not a big deal but really figure out why these 3 global variables below need to be static
+    // Not a big deal but really figure out why these global variables below need to be static
     static glm::mat4 g_editorViewMatrix;
     static glm::dvec3 g_viewTarget;
     static glm::dvec3 g_camPos;
+
+    static double g_yawAngle = 0.0;
+    static double g_pitchAngle = 0.0;
+
+    static bool g_editorOpen = false;
+    //bool g_objectIsSelected = false;
 
     inline int g_hoveredObjectIndex = 0;
     inline int g_selectedObjectIndex = 0;
