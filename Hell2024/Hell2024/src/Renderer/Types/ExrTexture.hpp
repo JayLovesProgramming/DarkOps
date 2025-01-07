@@ -10,8 +10,8 @@ public:
     ExrTexture() = default;
 	void Load(std::string filepath);
 
-	bool GetEXRLayers(const char* filename);
-    bool LoadEXRRGBA(float** rgba, int* w, int* h, const char* filename, const char* layername);
+	//bool GetEXRLayers(const char* filename);
+    //bool LoadEXRRGBA(float** rgba, int* w, int* h, const char* filename, const char* layername);
 
     std::string& GetFilename();
     std::string& GetFiletype();

@@ -152,10 +152,13 @@ namespace Editor
             glm::vec3 viewPos = glm::inverse(g_editorViewMatrix)[3];
             glm::vec3 viewDir = glm::vec3(glm::inverse(g_editorViewMatrix)[2]) * glm::vec3(-1);
             glm::mat4 view = g_editorViewMatrix;
+
             int viewportWidth = PRESENT_WIDTH;
             int viewportHeight = PRESENT_HEIGHT;
+
             float mouseX = Util::MapRange(Input::GetMouseX(), 0, BackEnd::GetCurrentWindowWidth(), 0, viewportWidth);
             float mouseY = Util::MapRange(Input::GetMouseY(), 0, BackEnd::GetCurrentWindowHeight(), 0, viewportHeight);
+
             Transform gizmoTransform = Gizmo::Update(viewPos, viewDir, mouseX, mouseY, projection, view, Input::LeftMouseDown(), viewportWidth, viewportHeight, g_gizmoMatrix);
             glm::vec3 pos = gizmoTransform.position;
 
@@ -302,21 +305,21 @@ namespace Editor
                 gizmoTransform.position.y == updatedGizmoPosition.y &&
                 gizmoTransform.position.z == updatedGizmoPosition.z)
             {
-                std::cout << "moving on X\n";
+                std::cout << "Moving On X" << "\n";
                 moveAxis = Axis::X;
             }
             if (gizmoTransform.position.x == updatedGizmoPosition.x &&
                 gizmoTransform.position.y != updatedGizmoPosition.y &&
                 gizmoTransform.position.z == updatedGizmoPosition.z)
             {
-                std::cout << "moving on Y\n";
+                std::cout << "Moving On Y" << "\n";
                 moveAxis = Axis::Y;
             }
             if (gizmoTransform.position.x == updatedGizmoPosition.x &&
                 gizmoTransform.position.y == updatedGizmoPosition.y &&
                 gizmoTransform.position.z != updatedGizmoPosition.z)
             {
-                std::cout << "moving on Z\n";
+                std::cout << "Moving On Z" << "\n";
                 moveAxis = Axis::Z;
             }
 
@@ -481,7 +484,7 @@ namespace Editor
         {
             std::string mapSaveFileName = "mappp";
             Scene::SaveMapData(mapSaveFileName + ".txt");
-            std::cout << "[SAVE] Saved map to " + mapSaveFileName + ".txt \n";
+            std::cout << "[SAVE] Saved Map To " + mapSaveFileName + ".txt \n";
         }
 
         // Camera Orbit
