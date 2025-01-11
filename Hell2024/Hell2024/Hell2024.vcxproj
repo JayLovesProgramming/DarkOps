@@ -72,7 +72,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>vendor\GLFW\lib\Release;vendor\fmod\lib;vendor\physx\lib\Debug;vendor\assimp\lib;vendor\compressonator\lib;vendor\DDS;vendor\Vulkan;vendor\lz4\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>vendor/cef;vendor\GLFW\lib\Release;vendor\fmod\lib;vendor\physx\lib\Debug;vendor\assimp\lib;vendor\compressonator\lib;vendor\DDS;vendor\Vulkan;vendor\lz4\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;fmod_vc.lib;assimp-vc143-mt.lib;Compressonator_MD_DLL.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_64.lib;PhysXTask_static_64.lib;PhysXPvdSDK_static_64.lib;PVDRuntime_64.lib;PhysXCharacterKinematic_static_64.lib;vulkan-1.lib;shaderc_combinedd.lib;liblz4_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
     </Link>
@@ -99,7 +99,7 @@ copy /Y "$(ProjectDir)vendor\dll_debug\PVDRuntime_64.dll" "$(TargetDir)PVDRuntim
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;TRACY_ENABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>vendor/imgui;vendor\gli\include;src\;src\Common;vendor\bvh\include;vendor\recast\include;vendor\nlohmann_json\include;vendor\lz4\include;vendor\VkBootstrap;vendor\VulkanMemoryAllocator\include;vendor\Vulkan\include;vendor\tinyexr;vendor\compressonator\include;vendor\tracy\public;vendor\tinyobj;vendor\GLFW\include;vendor\glm;vendor\glad\include;vendor\stb_image;vendor\fmod\include;vendor\assimp\include;vendor\rapidjson\include;vendor\physx\include;vendor\thread_pool\include;vendor\tinycsg\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor/cef;vendor/imgui;vendor\gli\include;src\;src\Common;vendor\bvh\include;vendor\recast\include;vendor\nlohmann_json\include;vendor\lz4\include;vendor\VkBootstrap;vendor\VulkanMemoryAllocator\include;vendor\Vulkan\include;vendor\tinyexr;vendor\compressonator\include;vendor\tracy\public;vendor\tinyobj;vendor\GLFW\include;vendor\glm;vendor\glad\include;vendor\stb_image;vendor\fmod\include;vendor\assimp\include;vendor\rapidjson\include;vendor\physx\include;vendor\thread_pool\include;vendor\tinycsg\include</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -114,8 +114,8 @@ copy /Y "$(ProjectDir)vendor\dll_debug\PVDRuntime_64.dll" "$(TargetDir)PVDRuntim
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>vendor/imgui;vendor\compressonator\lib;vendor\GLFW\lib\Release;vendor\fmod\lib;vendor\assimp\lib;vendor\physx\lib\Release;vendor\Vulkan;vendor\DDS;vendor\lz4\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;assimp-vc143-mt.lib;Compressonator_MD_DLL.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXFoundation_64.lib;PhysXTask_static_64.lib;PhysXPvdSDK_static_64.lib;PVDRuntime_64.lib;PhysXExtensions_static_64.lib;PhysXCharacterKinematic_static_64.lib;vulkan-1.lib;shaderc_combined.lib;liblz4_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor/cef/lib;vendor/imgui;vendor\compressonator\lib;vendor\GLFW\lib\Release;vendor\fmod\lib;vendor\assimp\lib;vendor\physx\lib\Release;vendor\Vulkan;vendor\DDS;vendor/cef/include;vendor\lz4\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;assimp-vc143-mt.lib;Compressonator_MD_DLL.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXFoundation_64.lib;PhysXTask_static_64.lib;PhysXPvdSDK_static_64.lib;PVDRuntime_64.lib;PhysXExtensions_static_64.lib;PhysXCharacterKinematic_static_64.lib;vulkan-1.lib;shaderc_combined.lib;liblz4_static.lib;libcef.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
@@ -266,6 +266,281 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClCompile Include="vendor\VkBootstrap\VkBootstrap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_atomic_flag.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_atomic_ref_count.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_auto_reset.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_bind.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_build.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_callback.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_callback_forward.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_callback_helpers.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_callback_list.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_cancelable_callback.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_compiler_specific.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_dump_without_crashing.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_lock.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_logging.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_macros.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_platform_thread.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_ref_counted.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_scoped_refptr.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_thread_checker.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_trace_event.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_tuple.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\cef_weak_ptr.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_bind_internal.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_callback_internal.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_lock_impl.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_net_error_list.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_raw_scoped_refptr_mismatch_checker.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_scoped_policy.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_thread_checker_impl.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_accessibility_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_app_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_audio_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_auth_callback_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_base_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_browser_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_browser_process_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_callback_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_client_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_command_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_command_line_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_context_menu_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_cookie_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_crash_util_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_devtools_message_observer_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_dialog_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_display_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_dom_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_download_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_download_item_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_drag_data_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_drag_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_file_util_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_find_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_focus_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_frame_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_frame_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_i18n_util_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_image_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_jsdialog_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_keyboard_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_life_span_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_load_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_media_router_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_menu_model_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_menu_model_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_navigation_entry_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_origin_whitelist_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_parser_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_path_util_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_permission_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_preference_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_print_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_print_settings_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_process_message_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_process_util_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_registration_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_render_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_render_process_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_request_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_request_context_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_request_context_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_request_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_resource_bundle_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_resource_bundle_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_resource_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_resource_request_handler_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_response_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_response_filter_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_scheme_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_server_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_shared_memory_region_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_shared_process_message_builder_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_ssl_info_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_ssl_status_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_stream_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_string_visitor_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_task_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_task_manager_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_thread_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_trace_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_unresponsive_process_callback_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_urlrequest_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_v8_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_values_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_waitable_event_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_x509_certificate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_xml_reader_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\cef_zip_reader_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\test\cef_test_helpers_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\test\cef_test_server_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\test\cef_translator_test_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_box_layout_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_browser_view_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_browser_view_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_button_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_button_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_display_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_fill_layout_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_label_button_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_layout_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_menu_button_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_menu_button_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_overlay_controller_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_panel_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_panel_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_scroll_view_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_textfield_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_textfield_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_view_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_view_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_window_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\capi\views\cef_window_delegate_capi.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_accessibility_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_api_hash.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_app.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_audio_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_auth_callback.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_base.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_browser.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_browser_process_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_callback.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_client.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_color_ids.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_command_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_command_ids.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_command_line.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_config.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_context_menu_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_cookie.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_crash_util.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_devtools_message_observer.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_dialog_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_display_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_dom.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_download_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_download_item.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_drag_data.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_drag_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_file_util.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_find_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_focus_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_frame.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_frame_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_i18n_util.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_image.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_jsdialog_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_keyboard_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_life_span_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_load_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_media_router.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_menu_model.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_menu_model_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_navigation_entry.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_origin_whitelist.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_pack_resources.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_pack_strings.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_parser.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_path_util.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_permission_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_preference.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_print_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_print_settings.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_process_message.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_process_util.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_registration.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_render_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_render_process_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_request.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_request_context.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_request_context_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_request_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_resource_bundle.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_resource_bundle_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_resource_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_resource_request_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_response.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_response_filter.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_sandbox_win.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_scheme.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_server.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_shared_memory_region.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_shared_process_message_builder.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_ssl_info.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_ssl_status.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_stream.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_string_visitor.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_task.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_task_manager.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_thread.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_trace.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_unresponsive_process_callback.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_urlrequest.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_v8.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_values.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_version.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_waitable_event.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_x509_certificate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_xml_reader.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\cef_zip_reader.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_app_win.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_dump_without_crashing_internal.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_export.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_logging_internal.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_ptr.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_string.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_string_list.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_string_map.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_string_multimap.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_string_types.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_string_wrappers.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_thread_internal.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_time.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_time_wrappers.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_trace_event_internal.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_types.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_types_color.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_types_content_settings.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_types_geometry.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_types_runtime.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_types_win.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_types_wrappers.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\internal\cef_win.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\test\cef_test_helpers.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\test\cef_test_server.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\test\cef_translator_test.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_box_layout.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_browser_view.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_browser_view_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_button.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_button_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_display.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_fill_layout.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_label_button.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_layout.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_menu_button.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_menu_button_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_overlay_controller.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_panel.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_panel_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_scroll_view.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_textfield.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_textfield_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_view.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_view_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_window.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\views\cef_window_delegate.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_byte_read_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_closure_task.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_helpers.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_message_router.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_resource_manager.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_scoped_temp_dir.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_stream_resource_handler.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_xml_object.h" />
+    <ClInclude Include="C:\Users\jayxw\Downloads\cef\wrapper\cef_zip_archive.h" />
     <ClInclude Include="res\shaders\OpenGL\test.frag" />
     <ClInclude Include="src\API\OpenGL\Types\GL_Cubemap2.h" />
     <ClInclude Include="src\API\OpenGL\Types\GL_ShadowMapArray.hpp" />
@@ -322,6 +597,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="src\LoadingScreen\TextRenderer.h" />
     <ClInclude Include="src\Math\Frustum.hpp" />
     <ClInclude Include="src\AssetBrowser\AssetBrowser.hpp" />
+    <ClInclude Include="src\Renderer\CEF\CEF.h" />
     <ClInclude Include="src\Renderer\ImGui\F8Console.hpp" />
     <ClInclude Include="src\Renderer\Minimap.hpp" />
     <ClInclude Include="src\Renderer\RendererData.hpp" />
@@ -465,6 +741,7 @@ copy /Y "$(ProjectDir)vendor\dll\PVDRuntime_64.dll" "$(TargetDir)PVDRuntime_64.d
     <ClInclude Include="vendor\VulkanMemoryAllocator\include\vk_mem_alloc.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="C:\Users\jayxw\Downloads\cef\base\internal\cef_color_id_macros.inc" />
     <None Include="Contols.MD" />
     <None Include="res\shaders\OpenGL\GL_compute_test.comp" />
     <None Include="res\shaders\OpenGL\GL_debug_light_volume_aabb.frag" />
