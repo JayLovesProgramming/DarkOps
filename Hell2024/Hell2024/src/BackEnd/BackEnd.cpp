@@ -34,6 +34,9 @@
 // START SCREEN
 #include "LoadingScreen/StartScreen.hpp"
 
+// CEF
+//#include "Renderer/CEF/CEF.h"
+
 namespace BackEnd 
 {
     API _api = API::UNDEFINED;
@@ -171,6 +174,18 @@ namespace BackEnd
         StartScreen::Init();
         IMGUI::Init(_window);
         glfwHideWindow(_window);
+
+        //HINSTANCE hInstance = GetModuleHandle(NULL);
+
+       /* if (!InitCEF(hInstance))
+        {
+            std::cerr << "[ERROR] CEF Init Failed" << std::endl;
+            return;
+        }
+        else
+        {
+            std::cout << "[INITIALIZED] CEF" << std::endl;
+        }*/
 
         std::cout << "[INITIALIZED] Backend" << std::endl;
     }

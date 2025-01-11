@@ -8,8 +8,6 @@
 
 void Engine::Run() 
 {
-
-
     InitLoadingScreen();
 
     while (!finishedLoading)
