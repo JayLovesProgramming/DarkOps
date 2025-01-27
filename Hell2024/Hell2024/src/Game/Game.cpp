@@ -40,17 +40,19 @@ namespace Game
 
     void Create() 
     {
+        std::cout << "Creating Game" << std::endl;
         _gameMode = GameMode::GAME;
         _multiplayerMode = MultiplayerMode::LOCAL;
         _splitscreenMode = SplitscreenMode::NONE;
         _isLoaded = true;
         g_firstFrame = true;
-
+        std::cout << "Creating Game A" << std::endl;
         GlobalIllumination::RecalculateGI();
-
+        std::cout << "Creating Game B" << std::endl;
         CreatePlayers(PLAYER_COUNT);
-
+        std::cout << "Creating Game C" << std::endl;
         Scene::Init();
+        std::cout << "Creating Game D" << std::endl;
         //Audio::PlayAudio("INTRO_EVIL_LAUGH_02.wav", 0.6f);
 
   /*      Model* model = AssetManager::GetModelByName("SPAS_Isolated");
@@ -77,6 +79,7 @@ namespace Game
 
         glfwFocusWindow(BackEnd::GetWindowPointer());
         glfwShowWindow(BackEnd::GetWindowPointer());
+        std::cout << "Created Game" << std::endl;
     }
 
     bool IsLoaded() 
@@ -232,11 +235,14 @@ namespace Game
 
         AnimatedGameObject* p1characterModel = Scene::GetAnimatedGameObjectByIndex(Game::g_players[0].GetCharacterModelAnimatedGameObjectIndex(), "p1characterModel");
         AnimatedGameObject* p2characterModel = Scene::GetAnimatedGameObjectByIndex(Game::g_players[1].GetCharacterModelAnimatedGameObjectIndex(), "p2characterModel");
-        AnimatedGameObject* p3characterModel = Scene::GetAnimatedGameObjectByIndex(Game::g_players[2].GetCharacterModelAnimatedGameObjectIndex(), "p3characterModel");
-        AnimatedGameObject* p4characterModel = Scene::GetAnimatedGameObjectByIndex(Game::g_players[3].GetCharacterModelAnimatedGameObjectIndex(), "p4characterModel");
+        std::cout << "Creating players A" << std::endl;
+       /* AnimatedGameObject* p3characterModel = Scene::GetAnimatedGameObjectByIndex(Game::g_players[2].GetCharacterModelAnimatedGameObjectIndex(), "p3characterModel");
+        AnimatedGameObject* p4characterModel = Scene::GetAnimatedGameObjectByIndex(Game::g_players[3].GetCharacterModelAnimatedGameObjectIndex(), "p4characterModel");*/
+        std::cout << "Creating players B" << std::endl;
 
         p1characterModel->LoadRagdoll("UnisexGuy3.rag", p1RagdollCollisionGroupFlags);
         p2characterModel->LoadRagdoll("UnisexGuy3.rag", p2RagdollCollisionGroupFlags);
+        std::cout << "Creating players C" << std::endl;
 
         Game::g_players[0]._interactFlags = RaycastGroup::RAYCAST_ENABLED;
         Game::g_players[1]._interactFlags = RaycastGroup::RAYCAST_ENABLED;
@@ -252,8 +258,8 @@ namespace Game
 
         if (g_players.size() == 4)
         {
-            p3characterModel->LoadRagdoll("UnisexGuy3.rag", p3RagdollCollisionGroupFlags);
-            p4characterModel->LoadRagdoll("UnisexGuy3.rag", p4RagdollCollisionGroupFlags);
+           /* p3characterModel->LoadRagdoll("UnisexGuy3.rag", p3RagdollCollisionGroupFlags);
+            p4characterModel->LoadRagdoll("UnisexGuy3.rag", p4RagdollCollisionGroupFlags);*/
             Game::g_players[2]._interactFlags = RaycastGroup::RAYCAST_ENABLED;
             Game::g_players[2]._interactFlags &= ~RaycastGroup::PLAYER_3_RAGDOLL;
             Game::g_players[3]._interactFlags = RaycastGroup::RAYCAST_ENABLED;

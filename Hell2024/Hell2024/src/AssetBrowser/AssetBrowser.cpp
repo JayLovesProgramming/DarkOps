@@ -211,7 +211,7 @@ void AssetBrowser::Render()
     ImGui::SetNextWindowSize(viewport->Size, ImGuiCond_Always);
     ImGui::SetNextWindowViewport(viewport->ID);
 
-    ImGui::Begin("Main Window", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove);
+    ImGui::Begin("Main Window", nullptr, ImGuiWindowFlags_NoBackground |  ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove);
 
     // DockSpace
     ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
@@ -257,17 +257,24 @@ void AssetBrowser::Render()
     ImGui::End();
 
     // Viewport/Game Panel (CENTERED)
-    float viewportWidth = viewport->Size.x - scenePanelWidth; // Remaining width after scene panel
-    ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x + scenePanelWidth, viewport->Pos.y), ImGuiCond_Always); // Start after scene panel
-    ImGui::SetNextWindowSize(ImVec2(viewportWidth, viewport->Size.y), ImGuiCond_Always);
+    //float viewportWidth = viewport->Size.x - scenePanelWidth; // Remaining width after scene panel
+    //ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x + scenePanelWidth, viewport->Pos.y), ImGuiCond_Always); // Start after scene panel
+    //ImGui::SetNextWindowSize(ImVec2(viewportWidth, viewport->Size.y), ImGuiCond_Always);
 
-    ImGui::Begin("Viewport");
-    ImGui::Text("Viewport area");
-    ImGui::Separator();
-    ImGui::TextWrapped("This is where your main scene content will be displayed");
-    ImGui::End();
+  /*  ImGui::Begin("Viewport", nullptr,
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoDecoration |
+        ImGuiWindowFlags_NoInputs |
+        ImGuiWindowFlags_NoBringToFrontOnFocus
+    );
+    ImGui::End();*/
+
 
     // Content Browser Panel (BOTTOM)
+    float contentBrowserHeight = viewport->Size.y * 0.25f; // Adjust height as a percentage of the viewport
+    ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y + viewport->Size.y - contentBrowserHeight), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, contentBrowserHeight), ImGuiCond_Always);
+
     ImGui::Begin("Content Browser");
     ImGui::Text("A column here plz.");
     ImGui::Separator();

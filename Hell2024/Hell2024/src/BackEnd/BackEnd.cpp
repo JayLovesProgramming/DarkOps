@@ -197,7 +197,7 @@ namespace BackEnd
 
     void EndFrame()
     {
-        IMGUI::MainLoop();
+        //IMGUI::MainLoop();
 
         // OpenGL
         if (GetAPI() == API::OPENGL) 

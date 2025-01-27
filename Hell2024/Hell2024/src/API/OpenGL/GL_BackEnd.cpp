@@ -425,14 +425,14 @@ void OpenGLBackEnd::UploadWeightedVertexData(std::vector<WeightedVertex>& vertic
     std::cout << "UPLOADED UploadWeightedVertexData" << "\n";
     assert(!indices.empty());
     assert(!vertices.empty());
-    assert(_weightedVertexDataVAO != 0);
+    //assert(_weightedVertexDataVAO != 0);
 
-    //if (_weightedVertexDataVAO != 0) // Assert?
-    //{
-    //    glDeleteVertexArrays(1, &_weightedVertexDataVAO);
-    //    glDeleteBuffers(1, &_weightedVertexDataVBO);
-    //    glDeleteBuffers(1, &_weightedVertexDataEBO);
-    //}
+    if (_weightedVertexDataVAO != 0) // Assert?
+    {
+        glDeleteVertexArrays(1, &_weightedVertexDataVAO);
+        glDeleteBuffers(1, &_weightedVertexDataVBO);
+        glDeleteBuffers(1, &_weightedVertexDataEBO);
+    }
 
     glGenVertexArrays(1, &_weightedVertexDataVAO);
     glGenBuffers(1, &_weightedVertexDataVBO);
@@ -472,11 +472,11 @@ void OpenGLBackEnd::CreatePointCloudVertexBuffer(std::vector<CloudPoint>& pointC
         glGenBuffers(1, &g_pointCloudVBO);
     }
 
-    assert(pointCloud.empty());
-    //if (pointCloud.empty())
-    //{
-    //    return;
-    //}
+    //assert(pointCloud.empty());
+    if (pointCloud.empty())
+    {
+        return;
+    }
 
     // Bind the Vertex Array Object (VAO) for the point cloud
     glBindVertexArray(g_pointCloudVAO);

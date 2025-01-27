@@ -340,7 +340,7 @@ void Ragdoll::LoadFromJSON(std::string filename, PxU32 collisionGroup)
             joint.swing2,
             angularSpring
         };
-        joint.pxD6->setSwingLimit(swingLimit);
+        //joint.pxD6->setSwingLimit(swingLimit);
 
         if (joint.limit.x > 0) joint.pxD6->setMotion(PxD6Axis::eX, PxD6Motion::eLIMITED);
         if (joint.limit.y > 0) joint.pxD6->setMotion(PxD6Axis::eY, PxD6Motion::eLIMITED);
